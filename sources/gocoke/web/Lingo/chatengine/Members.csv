@@ -1,0 +1,7 @@
+Number,Type,Name,Registration Point,Filename
+1,bitmap,cc.bubble.left,"(0, 0)",
+2,bitmap,cc.bubble.right,"(0, 0)",
+3,script,ChatRenderer,"(0, 0)",
+4,text,CHATobject.textholder,"(-200, 0)",
+5,font,Verdana *,"(3, 3)",
+6,bitmap,chatimg,"(380, 67)",

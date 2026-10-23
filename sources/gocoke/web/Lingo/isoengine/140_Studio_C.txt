@@ -1,0 +1,61 @@
+<Studio xOff="-304" yOff="106" layoutType="2">
+
+<Background member="studio_model_c" x="147" y="88" ink="41" blend="100"/>
+
+<Hiliter member="hiliter_studio"  ink="36"/>
+
+<Floor>
+    
+    <Shape member="floor_shape_c" media="vectorShape" x="382" y="324" ink="36" blend="70"/>
+
+    <FloorTiles member="studiofloor_1" ink="8" blend="30" palette="floor_orgun">
+        <FloorTile row="14" col="9"/>
+        <FloorTile row="12" col="9"/>
+     	<FloorTile row="10" col="9"/>
+
+        <FloorTile row="14" col="11"/>
+        <FloorTile row="12" col="11"/>
+     	<FloorTile row="10" col="11"/>
+
+        <FloorTile row="14" col="13"/>
+        <FloorTile row="12" col="13"/>
+     	<FloorTile row="10" col="13"/>
+    </FloorTiles>
+</Floor>
+
+<Door row="8" col="10">
+	<FloorTile member="studiofloor_door_1" ink="8" blend="60" palette="floor_orgun" yoff="0"/>
+	<Exit member="studio_exitshape" ink="8" blend="0" yoff="0"/>
+	<DoorMask xoff="1" yoff="0" blend="0"/>
+</Door>
+
+<Wall>
+
+	<WallTile row="14" col="8" dir="left"/>
+	<WallTile row="13" col="8" dir="left"/>
+	<WallTile row="12" col="8" dir="left"/>
+	<WallTile row="11" col="8" dir="left"/>
+	<WallTile row="10" col="8" dir="left"/>
+	<WallTile row="9" col="8" dir="left" corner="true" yoff="1"/>
+
+	<WallTile row="8" col="9" dir="right" corner="true" yoff="1"/>
+	<WallTile row="8" col="11" dir="right" yoff="0"/>
+	<WallTile row="8" col="12" dir="right" yoff="0"/>
+	<WallTile row="8" col="13" dir="right" yoff="0"/>
+	<WallTile row="8" col="14" dir="right" yoff="0"/>
+</Wall>
+
+<Window row="10" col="6" imageBase="london"/>
+
+<Furniture>
+
+</Furniture>
+
+<WallItems>
+
+</WallItems>
+
+</Studio>
+
+
+

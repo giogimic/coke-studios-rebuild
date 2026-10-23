@@ -1,0 +1,18 @@
+[Unit]
+Description=Coke Music / Coke Studios Recovery Services
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/coke-studios
+ExecStart=/usr/bin/node /opt/coke-studios/tools/serve-local.cjs
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+Environment=NODE_ENV=production
+Environment=PORT=24902
+
+[Install]
+WantedBy=multi-user.target

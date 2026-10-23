@@ -1,0 +1,1 @@
+<Sequence name="Test" author="Alan">        <Track volume="100" asset="popOne_beatz00">            <Event beat="8" loopCount="3"/>        </Track>        <Track volume="100" asset="popTwo_bass00">            <Event beat="0" loopCount="4"/>        </Track>    </Sequence>

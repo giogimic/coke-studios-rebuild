@@ -1,0 +1,1 @@
+function packExample(){const a="Example - Mark Hughes";Packs.setSoundPath(a,"assets/packs/example/sounds/"),Packs.addSound({pack_id:a,label:"Schoolbell",file:"example_markhughes_schoolbell.mp3",icon:"assets/packs/default/icons/bell.png"}),Packs.addSound({pack_id:a,label:"Bip",file:"example_markhughes_bip.mp3",icon:"assets/packs/default/icons/fx.png"})}packExample();

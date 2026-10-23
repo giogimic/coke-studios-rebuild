@@ -1,0 +1,6 @@
+[#floorStyle:1, #startcolor: rgb("#ff99ff"), #endcolor: rgb("#bb33aa"), #shapeBlend: 60, #palette: "orgun", #texturecolor: rgb ("#FFFF00") ,#textureBlend: 40, #indexNum: 1501]
+[#floorStyle:1, #startcolor: rgb("#99bbcc"), #endcolor: rgb("#335577"), #shapeBlend: 60, #palette: "orgun", #texturecolor: rgb ("#FFFF00") ,#textureBlend: 40, #indexNum: 1501]
+[#floorStyle:1, #startcolor: rgb("#33cc00"), #endcolor: rgb("#082200"), #shapeBlend: 60, #palette: "orgun", #texturecolor: rgb ("#FFFF00") ,#textureBlend: 40, #indexNum: 1501]
+[#floorStyle:1, #startcolor: rgb("#99bbcc"), #endcolor: rgb("#335577"), #shapeBlend: 60, #palette: "orgun", #texturecolor: rgb ("#FFFFFF") ,#textureBlend: 40, #indexNum: 1501]
+[#floorStyle:1, #startcolor: rgb("#ff6600"), #endcolor: rgb("#663300"), #shapeBlend: 60, #palette: "orgun", #texturecolor: rgb ("#FFFFFF") ,#textureBlend: 30, #indexNum: 1501]
+[#floorStyle:1, #startcolor: rgb("#999966"), #endcolor: rgb("#111100"), #shapeBlend: 60, #palette: "orgun", #texturecolor: rgb ("#FFFFFF") ,#textureBlend: 40, #indexNum: 1501]

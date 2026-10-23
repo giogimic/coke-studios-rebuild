@@ -1,0 +1,85 @@
+name: Build
+
+# Every push builds all three; pushing a tag like v1.0 also publishes them
+# as a release, which is where the website's download buttons point.
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build (Windows 95 to 11, one .exe)
+        shell: cmd
+        run: build.bat
+      - name: Check it still starts on Windows 95
+        shell: pwsh
+        run: tools/check-imports.ps1 build/CokeCacheFinder.exe
+      - name: Smoke test
+        shell: pwsh
+        run: |
+          build/CokeCacheFinder.exe --version
+          New-Item -ItemType Directory out | Out-Null
+          build/CokeCacheFinder.exe --yes --out out src
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: build/CokeCacheFinder.exe
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build (Intel and Apple Silicon)
+        run: make universal
+      - name: Smoke test
+        run: |
+          ./CokeCacheFinder --version
+          mkdir out && ./CokeCacheFinder --yes --out out src
+      - name: Package
+        # a zip keeps the "executable" permission, which a bare download loses
+        run: zip CokeCacheFinder-mac.zip CokeCacheFinder
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mac
+          path: CokeCacheFinder-mac.zip
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build (static, runs on any x86-64 Linux)
+        run: make static
+      - name: Smoke test
+        run: |
+          ./CokeCacheFinder --version
+          mkdir out && ./CokeCacheFinder --yes --out out src
+      - name: Package
+        run: tar czf CokeCacheFinder-linux.tar.gz CokeCacheFinder
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: CokeCacheFinder-linux.tar.gz
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [windows, macos, linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            CokeCacheFinder.exe
+            CokeCacheFinder-mac.zip
+            CokeCacheFinder-linux.tar.gz

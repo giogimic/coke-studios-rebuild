@@ -1,0 +1,1 @@
+# This field is used for automatic# initialization of a thread.thread.id       = catalogueinterface.class = Catalogue Interface Classcomponent.class = Catalogue Component Classhandler.class   = Catalogue Handler Classparser.class    = Catalogue Parser Class

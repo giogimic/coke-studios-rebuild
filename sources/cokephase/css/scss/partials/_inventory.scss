@@ -1,0 +1,235 @@
+#inventory {
+	position: absolute;
+	z-index: 10;
+	background-image: url('../assets/ui/backpack.png');
+	width: 238px;
+	height: 336px;
+	right: 238px;
+	top: 999px;
+
+	.i-move {
+		position: absolute;
+		height: 44px;
+		width: 100%;
+		top: 30px;
+		left: 0;
+		text-align: center;
+		z-index: 1;
+
+		.title {
+			margin-top: 24px;
+			font-weight: bold;
+			font-size: $inventory-title-font-size;
+			color: $inventory-title-font-color;
+		}
+
+		a {
+			position: absolute;
+		    right: 45px;
+		    top: 22px;
+		}
+	}
+
+	.inventory-navigation {
+		color: #efefef;
+		font-size: 12px;
+		text-align: center;
+
+		.i-page-display {
+			padding: 0 7px;
+		}
+	}
+
+	.inventory-data {
+		position: relative;
+		height: 89%;
+
+		> li:not(:first-child) {
+			display: none;
+		}
+
+		li {
+			.items {
+				li {
+					position: absolute;
+					left: 30px;
+					top: 112px;
+					width: 32px;
+					height: 32px;
+					text-align: center;
+					@include no-select();
+
+					a {
+						display: block;
+						width: $inventory-icon-size;
+						height: $inventory-icon-size;
+						@include no-select();
+
+						img {
+							max-width: $inventory-icon-size;
+    						max-height: $inventory-icon-size;
+							padding: $inventory-icon-padding;
+							@include no-select();
+
+							&:hover {
+								cursor: pointer;
+							}
+						}
+
+						&:hover {
+							cursor: pointer;
+
+							img {
+								opacity: .25;
+							}
+						}
+					}
+
+					a.active {
+						img {
+							opacity: .25;
+						}
+					}
+				}
+
+				li:nth-child(1) { left: 30px; }
+
+				li:nth-child(2) { left: 67px; }
+
+				li:nth-child(3) { left: 105px; }
+
+				li:nth-child(4) { left: 142px; }
+
+				li:nth-child(5) { left: 179px; }
+
+				li:nth-child(6) { top: 149px; left: 30px; }
+
+				li:nth-child(7) { top: 149px; left: 67px; }
+
+				li:nth-child(8) { top: 149px; left: 105px; }
+
+				li:nth-child(9) { top: 149px; left: 142px; }
+
+				li:nth-child(10) { top: 149px; left: 179px; }
+
+				li:nth-child(11) { top: 186px; left: 30px; }
+
+				li:nth-child(12) { top: 186px; left: 67px; }
+
+				li:nth-child(13) { top: 186px; left: 105px; }
+
+				li:nth-child(14) { top: 186px; left: 142px; }
+
+				li:nth-child(15) { top: 186px; left: 179px; }
+
+				li:nth-child(16) { top: 223px; left: 30px; }
+
+				li:nth-child(17) { top: 223px; left: 67px; }
+
+				li:nth-child(18) { top: 223px; left: 105px; }
+
+				li:nth-child(19) { top: 223px; left: 142px; }
+
+				li:nth-child(20) { top: 223px; left: 179px; }
+
+				li:nth-child(21) { top: 260px; left: 30px; }
+
+				li:nth-child(22) { top: 260px; left: 67px; }
+
+				li:nth-child(23) { top: 260px; left: 105px; }
+
+				li:nth-child(24) { top: 260px; left: 142px; }
+
+				li:nth-child(25) { top: 260px; left: 179px; }
+			}
+		}
+	}
+}
+
+.infostand-wrapper {
+	pointer-events: none;
+	position: absolute;
+	bottom: 100px;
+	left: 0;
+	width: 100%;
+	height: 100px;
+}
+
+#infostand {
+	pointer-events: none;
+	width: 1024px;
+    height: 100px;
+    margin: 0 auto;
+    position: relative;
+    display: none;
+
+    .infostand-contain {
+    	position: absolute;
+    	right: 0;
+    	top: -12px;
+    }
+
+	.infostand-wrapper-inner {
+		//position: absolute;
+		width: 56px;
+		height: 56px;
+		right: 0;
+		top: 0;
+	}
+
+	.stand {
+		background-image: url('../assets/ui/infostand.png');
+		background-repeat: no-repeat;
+		width: 56px;
+		height: 32px;
+		position: absolute;
+		top: 14px;
+		right: 0;
+		text-align: center;
+	}
+
+	.furniture {
+		position: absolute;
+		margin-left: auto;
+		margin-right: auto;
+		left: 0;
+		right: 0;
+		top: -12px;
+	}
+
+	.infostand-wrapper-text {
+		//position: absolute;
+		top: 56px;
+		right: 0;
+		text-align: right;
+		width: 190px;
+		float: right;
+		margin-bottom: 9px;
+
+		.title, .description {
+			color: $furni-title-color;
+			font-size: $furni-title-size;
+		}
+
+		.title {
+			font-weight: bold;
+			margin-bottom: 2px;
+		}
+
+		.description {
+
+		}
+	}
+
+	.infostand-wrapper-actions {
+		ul {
+			list-style-type: none;
+			text-align: right;
+
+			li {
+				pointer-events: all;
+				display: inline-block;
+			}
+		}
+	}
+}

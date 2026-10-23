@@ -1,0 +1,532 @@
+FEATURE_DISABLED=This feature will be available soon!
+LOCAL_SCREEN_NAME=Aslan
+LOCAL_GAME_SERVER=sf1dev.cokemusic.com
+
+[ Loading ]
+LOADER_TITLE=Loading Coke Studios...
+LOADING=Loading...
+
+[ Control bar button text ]
+JUKEBOX=Jukebox
+NAVIGATOR=Navigator
+MESSENGER=Messenger
+BALANCE=Decibels
+YOUR_ITEMS=Backpack
+CATALOGUE=Catalogue
+SOUND=Sound
+CALL_FOR_ASSISTANCE=Call for Assistance
+
+[ Chat Input text ]
+SPEAK=Speak
+SHOUT=Shout
+
+[ SAFETY TIPS ]
+SAFETY_TIP=Welcome to Coke Studios. Take a minute to review our safety tips.
+SAFETY_TIP=If you encounter any problems, please use the Call for Assistance button to gain the assistance of an online monitor.
+SAFETY_TIP=DO have fun! :)
+SAFETY_TIP=Do NOT engage in sexual discussions.
+SAFETY_TIP=Do NOT talk to people who make you feel uncomfortable.
+SAFETY_TIP=DO call for assistance if you need to.
+SAFETY_TIP=Do NOT make arrangements to meet in real life.
+SAFETY_TIP=Do NOT give out your personal details such as your name, address, or email address.
+SAFETY_TIP=DO tell your parents or guardians what you are doing.
+SAFETY_TIP=Do NOT give out passwords or credit card information.
+
+[ Navigator main title ]
+NAV_TITLE=Coke Studios Navigation
+
+[ Navigator main content tab titles ]
+NAV_WORLD_VIEW_TITLE=Public View
+NAV_USER_VIEW_TITLE=User Studios
+NAV_VEGOS_VIEW_TITLE=V-egos
+
+[ Navigator detail content help tab ( default ) ]
+NAV_DTL_DEF_TITLE=Help
+NAV_DTL_DEF_HDLN=Welcome to Coke Studios!
+NAV_DTL_DEF_DESC=Select one of the destinations or navigate into User Studios section by clicking the tab above.
+
+[ Navigator detail content destination info tab ]
+NAV_DTL_DEST_TITLE=Destination Info
+
+[ Navigator detail content people tab ]
+NAV_DTL_PEOPLE_TITLE=People
+
+[ Navigator Room display go button ]
+GO=Go!
+
+[ Navigator User view ]
+NAV_USER_ST_ACTIVE_ST_BUTTON=Show Active Studios
+NAV_USER_ST_MY_ST_BUTTON=Show My Studios
+NAV_USER_ST_NO_ROOMS_FOUND=No Rooms Found
+
+[ Navigator User View help tab ]
+NAV_DTL_HELP_USER_ST_HDLN=Need a studio of your own?
+NAV_DTL_HELP_USER_ST_DESC=Click the button below to set up your own studio and get ready to make some music!
+NAV_DTL_HELP_CREATE_BUTTON=Setup your own studio
+
+[ Navigator User view destination info tab ]
+NAV_DTL_DEST_OWNER=owner
+
+[ Navigator V-Ego Tab ]
+NAV_VEGOS_SEARCH=Search
+NAV_VEGOS_LAST_ACCESS=Last Access:
+NAV_VEGOS_LAST_SEEN=Last seen:
+NAV_VEGOS_LOCATION=V-ego Location
+NAV_VEGOS_NOT_FOUND=V-ego not found
+NAV_VEGOS_CURRENTLY=Currently
+NAV_VEGOS_OFFLINE=Offline
+NAV_VEGOS_LOBBY=Front Page
+NAV_VEGOS_ASK_FRIEND=Ask to become a friend
+NAV_VEGOS_TITLE=Welcome to V-ego Search!
+NAV_VEGOS_DESC=Type a name in the search field to start searching for your friends!!!
+
+[ Navigator Create Studio ]
+
+NAV_CREATE_ST_TITLE=Set up your own studio
+NAV_CREATE_ST_NAME=Studio name
+NAV_CREATE_ST_DESC=Studio description
+NAV_CREATE_ST_LAYOUT=Studio layout
+NAV_CREATE_ST_LOCATION=Location
+
+NAV_CREATE_ST_OK=Ok
+NAV_CREATE_ST_CANCEL=Cancel
+
+NAV_CREATE_ST_SUCCESS=Congratulations, you have set up your own studio:
+NAV_CREATE_ST_GO=Go to your studio
+
+[ Navigator Modify Studio ]
+NAV_MODIFY_ST_BUTTON=Modify
+NAV_MODIFY_ST_TITLE=Change your studio information
+NAV_MODIFY_ST_DELETE_1=Delete this studio
+NAV_MODIFY_ST_DELETE_2=Delete room
+
+NAV_MODIFY_ST_DELETE_WARN_2=Are you sure you want to delete this room? Please note:  all of the items in the room will be placed in your backpack.
+NAV_MODIFY_ST_DELETE_WARN_1=Last chance! Are you absolutely sure you want to delete this room?
+NAV_MODIFY_ST_DELETED=Your room has been deleted.
+
+[ ALERTS ]
+
+ALERT_TITLE=Attention
+ALERT_OK=Ok
+
+ALERT_GENERIC=Sorry, there's been a problem with the server. Please try again.
+ALERT_FULL=Each venue holds 25 V-egos and this one is full. Please try another.
+ALERT_ST_NAME=You have to give a name to your studio.
+ALERT_OVER_LIMIT=You can only have ten personal studios.
+ALERT_ST_NAME_LANG=Sorry, your studio name was a little too creative. Enter another.
+ALERT_ST_DESC_LANG=Sorry, your studio description was a little too creative. Enter another.
+ALERT_MESSENGER_LANG=Sorry, your message was a little too creative. Enter another.
+
+ALERT_BANNED=Sorry, you have been temporarily banned from using Coke Studios.
+
+ALERT_STATE_CLOSED=Coke Studios is now closed. Coke Studios is open everyday from 10:00AM to 2:00AM EST.
+ALERT_STATE_FULL=Sorry Coke Studios is currently full. Please try again later.
+
+ALERT_NO_CONNECTION=A connection with the server could not be established.
+ALERT_DROPPED_CONNECTION=Sorry, the connection with the server was dropped. Close this window and try again.
+ALERT_USER_NOT_FOUND=You could not be authenticated with the server.
+ALERT_DUPLICATE_LOGIN=There is already a connection established with your username.
+ALERT_ROOM_NOT_EXIST=The room does not exist.
+
+
+ALERT_MOD_MESSAGE=Online moderator message:
+
+ALERT_THANK_YOU=Thank you.
+ALERT_MESSAGE_SENT=Your call for assistance has been sent.
+
+ALERT_INSUFFICIENT_BALANCE=Sorry, you don't have enough decibels.
+
+ALERT_MAX_ITEMS_EXCEEDED=You have too many items in your studio.
+
+ALERT_NO_BLANK_CDS=Sorry, you don't have any blank CDs. You can buy new ones from the online catalogue.
+
+ALERT_STUDIO_NOT_EMPTY=The studio must be empty before deleting.
+
+ALERT_PENDING_PURCHASE=You currently have a purchase pending. Please wait.
+
+ALERT_COKE_LIMIT=You have reached your daily free Coke limit. Maybe you need a REAL Coke now?
+
+ALERT_NO_SERVER_AVAILABLE=Sorry, there was a problem locating this studio. Please try another.
+
+[ LOCATIONS ]
+LOCATION_1=London
+LOCATION_2=Miami
+LOCATION_3=Mombasa
+LOCATION_4=New York
+LOCATION_5=Rio de Janeiro
+LOCATION_6=Seattle
+LOCATION_7=Sydney
+LOCATION_8=Tokyo
+LOCATION_9=Goa
+LOCATION_10=Alaska
+LOCATION_11=Moscow
+LOCATION_12=Red Room
+
+[ DATE FORMAT ]
+DATE_FORMAT=mm/dd/yyyy
+
+[ TIME FORMAT ]
+TIME_FORMAT=12
+
+[ BALANCE DISPLAY WINDOW ]
+BALANCE_TITLE=Your Decibels
+BALANCE_DISPLAY=You have {balance} decibels.
+BALANCE_DISPLAY_FAILED=Could not get your decibel balance.\nThe server returned an error.\nPlease try again later.
+BALANCE_DESC_TITLE=You can get decibels...
+BALANCE_DESC=-by making your own songs, performing and getting positive feedback on your songs.\n-from every Coke bottle cap.
+
+[ USER ITEMS ]
+USER_ITEMS_TITLE=Your items
+USER_ITEMS_CDS={cds} Blank CDs
+USER_ITEMS_PAGE=Page {num1} of {num2}
+USER_ITEMS_NEXT=next
+USER_ITEMS_PREV=prev
+
+[ CALL FOR HELP ]
+HELP_TITLE=Coke Studios Help
+HELP_TOPICS=Help Topics
+
+HELP_TOPIC_1_TITLE=Coke Studios Instructions
+HELP_TOPIC_1_DESC=Confused? Don't know how to do stuff? Click here for all the answers!
+HELP_TOPIC_1_LINK=external:openHelpInstructions();
+
+HELP_TOPIC_2_TITLE=Report a Technical Problem
+HELP_TOPIC_2_DESC=If something isn't working right, click here to find out what to do next.
+HELP_TOPIC_2_LINK=external:openHelpTechnicalProblems();
+
+HELP_TOPIC_3_TITLE=How to Avoid Scams
+HELP_TOPIC_3_DESC=Is someone stealing your decibels or furniture? Click here to learn how to avoid scam attempts!
+HELP_TOPIC_3_LINK=external:openHelpWatchForScams();
+
+HELP_TOPIC_4_TITLE=Report Harassment
+HELP_TOPIC_4_DESC=Is someone bothering you? Click here and let us know!
+HELP_TOPIC_4_LINK=internal:MODERATOR_HELP
+
+[ MODERATOR HELP ]
+MODERATOR_HELP_TITLE=Coke Studios Help
+MODERATOR_HELP_DESC1=Have you been harassed by other V-egos?
+MODERATOR_HELP_DESC2=Send a message to online moderators to ask for assistance. Please describe your problem as clearly as possible.
+MODERATOR_HELP_SEND=Send
+MODERATOR_HELP_CANCEL=Cancel
+
+[ Purchase Window ]
+
+PURCHASE_TITLE=Purchase Info
+PURCHASE_PRICE={item} costs {price} decibels
+PURCHASE_BALANCE=You have {balance} decibels in your account.
+PURCHASE_OK=Ok
+PURCHASE_CANCEL=Cancel
+
+[ WHALE_WASH ]
+WHALE_WASH=You are now being redirected to the Whale Wash Activity.
+WHALE_WASH_CANCEL=Cancel
+WHALE_WASH_OK=Ok
+
+
+[ ** BEGIN Online Catalogue **************************************************** ]
+
+[ GENERIC CATALOGUE TEXTS ]
+
+CAT_TITLE=Online Catalogue
+
+CAT_PAGE=Page
+CAT_NEXT=Next
+CAT_PREV=Previous
+
+CAT_PRICE=Price
+CAT_CURRENCY=db
+
+CAT_BUY=Buy
+
+CAT_PREVIEW=Preview
+CAT_PREVIEW_INFO=Click an icon on the left.
+
+[ Cover page, Category 00 ]
+
+CAT_0_TITLE=Coke Studios\nOnline Catalogue
+CAT_0_DESC=Turn your decibels into items.
+
+CAT_0_TEXT1=Pages and pages of furniture and other goods to make your studio stand out.
+CAT_0_TEXT2=Walls and Floors
+CAT_0_TEXT3=Premier
+CAT_0_TEXT4=Studio gear
+
+[ Walls And Floors, Category 01 ]
+
+CAT_1_TITLE=Walls and Floors
+CAT_1_Desc=You can customize the way your Studio looks with these wall and floor variations. Be sure to pick matching colors!
+
+CAT_1_TEXTURE=Texture
+CAT_1_COLOR=Color
+
+CAT_1_WALLS_SELECTOR=Walls Selector
+CAT_1_WALLS_INSTRUCTION=Use the arrows to select your wall design
+
+CAT_1_FLOOR_SELECTOR=Floor Selector
+CAT_1_FLLOR_INSTRUCTION=Use the arrows to select your floor design
+
+
+
+[ Premiere, Category 02 ]
+
+CAT_2_TITLE=Premier
+CAT_2_Desc=Our exclusive furniture provides you with moments of slick heavyweight comfort. Enjoy it while the prices are low!
+
+[ 5001 Collection, Category 03 ]
+
+CAT_3_TITLE=5001 Collection
+CAT_3_Desc=The 5001 product range is the closest you'll get to comfort!
+
+[ Studio Essentials, Category 04 ]
+
+CAT_4_TITLE=Studio Essentials
+CAT_4_Desc=Authentic-looking fake vintage studio equipment helps you look more professional and gets your creative juices flowing.
+
+[ Necessities1, Category 05 ]
+
+CAT_5_TITLE=Necessities
+CAT_5_Desc=With this stuff you can really make your Studio breathe and create groovy spaces.
+
+[ Necessities2, Category 06 ]
+
+CAT_6_TITLE=Necessities
+CAT_6_Desc=With these ultra-cool separators that double as bar desks you can arrange your Studio the way you want to!
+
+[ Coke Collection, Category 07 ]
+
+CAT_7_TITLE=Coke Collection
+CAT_7_Desc=Oodles of authentic Coke items. Come and get a polar bear statue of your own!
+
+[ For Walls, Category 08 ]
+
+CAT_8_TITLE=For Walls
+CAT_8_Desc=Add a final touch to your studio decoration with these instruments and posters.
+
+[ Necessities3, Category 09 ]
+
+CAT_9_TITLE=Necessities
+CAT_9_Desc=More cool stuff for your studio!
+
+[ Necessities4, Category 10 ]
+
+CAT_10_TITLE=Necessities
+CAT_10_Desc=Even more cool stuff for your studio!
+
+[ Necessities5, Category 11 ]
+
+CAT_11_TITLE=Necessities
+CAT_11_Desc=Dorm room style beats. Makeshift furni for better lounging!
+
+
+[ Necessities6, Category 13 ]
+
+CAT_13_TITLE=Necessities
+CAT_13_Desc=More cool stuff.
+
+[ Necessities7, Category 14 ]
+
+CAT_14_TITLE=Necessities
+CAT_14_Desc=Household needs.
+
+[ Necessities8, Category 15 ]
+
+CAT_15_TITLE=Necessities
+CAT_15_Desc=Create your own game.
+
+
+[WALL PATTERNS]
+wall_tile=Classic Bricks
+wall_graythreedo=Homework
+wall_threegrid=Sonar
+wall_zalmiag=Classic Lineup
+wall_plottr=Silent
+wall_disnej=Fat Controller
+wall_lilacgrandma=Low Rent
+wall_plates=Plate Reverb
+wall_bighstripe=Shack
+wall_dithastriperh=Softer Shell
+
+[FLOOR PATTERNS]
+floor_orgun=Old World Organs
+floor_karpyt=Hard Carpets
+floor_indjun=Grand Mother
+floor_ditlines=Liner
+floor_ditgrid=Mothership
+floor_basic=Basic Floor
+floor_twirlee=Twirly Psychedelic
+floor_phunk=Phono
+floor_wooddither=Time Stretch
+floor_oceanliner=Ocean Liner
+floor_cahya=Mouse Pad
+floor_purplecarpetswirl=Carpet Tunnel
+floor_bluecarpet=Hotel Style
+floor_drija=Octave
+floor_woodswirl=Wooden Swirl
+
+[ ** END Online Catalogue **************************************************** ]
+
+
+
+[ Choose Song ]
+
+CHOOSE_SONG_TITLE=Choose Your Song
+cd_choosetitle=You have the following songs on your CDs:
+CHOOSE_SONG_LOADING=loading...
+CHOOSE_SONG_NAME=Name
+CHOOSE_SONG_AUTHOR=Author
+CHOOSE_SONG_PLAY=Play!
+CHOOSE_SONG_CANCEL=Cancel
+CHOOSE_SONG_SECS=secs
+CHOOSE_SONG_WAIT_TURN=There's a song already playing. Wait for your turn.
+
+[ Loading of external cast files ]
+
+Gateway=Gateway
+Entry=Entry
+Interface=Interface
+Navigator=Navigator
+People=People
+Messenger=Messenger
+Studio=Studio
+ChatEngine=Chat
+Room=Room
+Furniture=Furniture
+FurnitureSmall=Furniture
+Catalogue=Catalogue
+Items=Wall Items
+IsoEngine=IsoMetric Engine
+AvatarEngine=AvatarEngine
+AudioLib=Audio Library
+
+[ Loading of external text files ]
+
+StudioData=Studio Data
+TextManagerText=Text Data
+Catalog=Catalogue Data
+
+[ MESSENGER TEXT IDS ]
+
+MESSENGER_START=Front Page
+MESSENGER_NEW_MESSAGES=new message(s)
+MESSENGER_FRIEND_REQUESTS=Friend Request(s)
+
+MESSENGER_FRIENDS=Friends
+MESSENGER_MSGS=msgs
+MESSENGER_CURRENTLY=Currently
+MESSENGER_LAST_ACCESS=Last Access
+MESSENGER_COMPOSE=Compose
+MESSENGER_REMOVE=Remove
+
+MESSENGER_COMPOSE_TITLE=Compose a Message
+MESSENGER_RECIPIENT=Recipient: 
+MESSENGER_RECIPIENTS=Multiple Recipients
+MESSENGER_CANCEL=Cancel
+MESSENGER_SEND=Send
+
+MESSENGER_READ_MESSAGE=Read a Message
+MESSENGER_READ_FROM=From:
+MESSENGER_REPLY=Reply
+MESSENGER_DELETE_MESSAGE=DeleteMessage
+
+MESSENGER_FRIEND_REQUEST=Friend Request
+
+MESSENGER_INVITE_DISPLAY=asks you to become his/her friend
+MESSENGER_INVITE_ACCEPT_DISPLAY=(S)he will be added to your Friend List if your invitation is accepted.
+MESSENGER_REJECT=Reject
+MESSENGER_ACCEPT=Accept
+
+
+MESSSENGER_REMOVE_FRIEND=Remove a friend
+MESSENGER_REMOVE_CONFIRM1=Are you sure you want to remove
+MESSENGER_REMOVE_CONFIRM2=from your friends?
+
+MESSENGER_NO_FRIENDS=You currently have no V-egos on your list. You can ask others to become your friend either by using the V-ego search in the Navigator or by selecting them in venues and clicking the "Ask to become a Friend" button.
+
+MESSENGER_REQUEST_SENT=(S)he will be added into your Friends list if (s)he accepts it.
+
+MESSENGER_ALREADY_FRIEND=This person is already your friend.
+MESSENGER_ALREADY_INVITED=You have already invited this person to be your friend.
+MESSENGER_CANT_INVITE_SELF=You can't invite yourself to be a friend ;)
+
+[ MUSIC MIXER ]
+
+MIXER_TITLE=CC-3001 DELUXE - Five Slot Mixer CD Burner Device
+MIXER_DESC=Welcome to the CC-3001 Deluxe. To make your own music, click one of the "Edit" buttons.
+MIXER_PLAY=PLAY
+MIXER_EDIT=EDIT
+MIXER_BURN=BURN
+MIXER_EMPTY=< Slot {mixNumber} empty >
+MIXER_LOADING=Loading...
+MIXER_PLAY_ROLLOVER=Play the song
+MIXER_EDIT_ROLLOVER=Edit the song in this slot - ( Opens up a new window )
+MIXER_BURN_ROLLOVER=Burn the song on CD
+MIXER_NOW_PLAYING=Now playing...
+MIXER_NOW_EDITING=Editing...
+
+MIXER_NOT_OWNER=Sorry, only the owner of the studio can use this mixer.
+
+[ BURN WINDOW ]
+BURN_TITLE=Ready to burn?
+BURN_DESC=You have {blankCds} blank CDs in your backpack. Would you like to use one of them?
+BURN_OK=Ok
+BURN_CANCEL=Cancel
+BURN_CD_BURNT=CD burnt.
+
+[ PAUSED WINDOW ]
+
+PAUSED_TITLE=Coke Studios Paused
+PAUSED_DESC=Click OK to return to Coke Studios.
+PAUSED_OK=OK
+
+[ TRADE WINDOW ]
+
+TRADE_TITLE=Safe Trade
+TRADER_BOX_DESC={Tradername} offers:
+TRADEE_BOX_DESC=You offer:
+TRADER_AGREES={Tradername} agrees
+TRADEE_AGREES=You agree.
+TRADE_CANCEL=Cancel
+TRADE_DESC=To trade or give items, drag them from your backpack into the "You offer:" area.
+BOX_ROLL=Add items to box
+CANCEL_ROLL=Cancel trading
+SCAM_WARNING=There are no cheat codes. Beware of scammers. Click here to find out how to avoid scams.
+
+[ VOTE RESULTS]
+RESULTS_TITLE=Your performance results:
+THUMBS_UP_VOTES=Thumbs up votes: {voteupnum}
+THUMBS_DOWN_VOTES=Thumbs down votes: {votedownnum}
+DECIBEL_RESULT=You receive {numdecibel} decibels.
+
+[ DRINK COKE ]
+DRINK_COKE=You got {points} decibels.
+
+[ DISPENSE ITEM ]
+DISPENSE_ITEM_SUCCESS=A Batman Begins countdown poster will be in your backpack the next time you sign into Coke Studios. Enjoy this new poster until the Batman Begins promotion ends!
+DISPENSE_ITEM_FAIL=Ooops!  You can only take two posters per day!� Come back tomorrow!
+
+[CD PLAYER]
+NOCD_TITLE=You need a CD to perform
+NOCD_DESC=You need to create a CD in your personal studio before you can perform here.
+
+[REPLACE WALL/FLOOR]
+REPLACE_TITLE=Confirm
+REPLACE_CANCEL=Cancel
+REPLACE_OK=OK
+REPLACE_WALL=Replace your current wall texture with this model? (Note that the new walls replace the old.)
+REPLACE_FLOOR=Replace your current floor texture with this model? (Note that the new floor replaces the old.)
+DELETE_ITEM_TITLE=Delete item?
+DELETE_ITEM_HEADLINE=Confirm delete
+DELETE_ITEM_DESC=Are you absolutely sure you want to delete this item?
+DELETE_ITEM_OK=OK
+DELETE_ITEM_CANCEL=Cancel
+
+[INFINITE JUKEBOX ERRORS]
+ALERT_IJ_0=The song was added to your playlist.
+ALERT_IJ_1=This song is already on your playlist.
+ALERT_IJ_2=You have reached the maximum number of songs allowed in your playlist.
+ALERT_IJ_3=Invalid song ID.
+ALERT_IJ_4=Song not on playlist.
+ALERT_IJ_5=You must be a member in order to add this song.
+ALERT_IJ_PLAYLIST=You need to add songs to your playlist to stream music.
+ALERT_IJ_TOKENS=You've used all your tokens, please try again later.
+ALERT_LEAVE_SF=You are being redirected to FreshTracksMusic.com.  Do you want to continue?

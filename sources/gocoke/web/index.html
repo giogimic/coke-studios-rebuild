@@ -1,0 +1,245 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <title>GoCoke</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #000;
+        color: #fff;
+        touch-action: none;
+        overscroll-behavior: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: block;
+      }
+      #fsBtn {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 16px;
+        padding: 10px 14px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.25);
+        border-radius: 8px;
+        font: 600 14px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        cursor: pointer;
+        z-index: 10;
+      }
+      #fsBtn:active { transform: translateX(-50%) scale(0.98); }
+      #fsBtn.hidden { display: none; }
+      #log { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; padding: 8px; }
+    </style>
+  </head>
+  <body>
+    <button id="fsBtn" type="button" aria-label="Enter fullscreen">⛶ Fullscreen</button>
+    <script src="wasm_exec.js"></script>
+    <script>
+      // Optional: Configure WebSocket bridge endpoint
+      // If hosting WASM on decibel.fun but bridge elsewhere, set this:
+      // window.bridgeEndpoint = "wss://your-bridge-server.com";
+      
+      // Configure SW1 (Base64-encoded screen name) and SW2 (session secret)
+      // These will be passed to the WASM client automatically
+      
+      // Try to read SW1 and SW2 from URL parameters, with fallback to username
+      const urlParams = new URLSearchParams(window.location.search);
+      let sw1 = urlParams.get('sw1');
+      let sw2 = urlParams.get('sw2');
+      const user = urlParams.get('user') || urlParams.get('name') || urlParams.get('screenName');
+
+      if (!sw1) {
+        const defaultName = user || "Adam";
+        try {
+          sw1 = btoa(defaultName);
+        } catch (_) {
+          sw1 = "QWRhbQ==";
+        }
+      }
+
+      if (!sw2) {
+        let decodedName = "Adam";
+        try {
+          decodedName = atob(sw1);
+        } catch (_) {}
+        const randHex = Math.random().toString(36).substring(2, 8);
+        sw2 = decodedName + "_" + randHex;
+      }
+
+      window.sw1 = sw1;
+      window.sw2 = sw2;
+
+      console.log('[GoCoke] Session configured:', {
+        screenName: (() => { try { return atob(sw1); } catch (_) { return sw1; } })(),
+        sw1: window.sw1,
+        sw2: window.sw2
+      });
+      
+      const go = new Go();
+
+      if (!WebAssembly.instantiateStreaming) {
+        WebAssembly.instantiateStreaming = async (response, importObject) => {
+          const source = await (await response).arrayBuffer();
+          return await WebAssembly.instantiate(source, importObject);
+        };
+      }
+
+      WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject)
+        .then((result) => go.run(result.instance))
+        .catch((err) => {
+          console.error("Failed to load WASM:", err);
+          const el = document.createElement("pre");
+          el.id = "log";
+          el.textContent = String(err && err.stack ? err.stack : err);
+          document.body.appendChild(el);
+        });
+    </script>
+    <script>
+      (function () {
+        const btn = document.getElementById('fsBtn');
+        const isTouch = ("ontouchstart" in window) || (navigator.maxTouchPoints || 0) > 0;
+
+        function inFullscreen() {
+          return !!(document.fullscreenElement || document.webkitFullscreenElement);
+        }
+
+        function canRequestFullscreen() {
+          const el = document.documentElement;
+          return !!(el.requestFullscreen || el.webkitRequestFullscreen || document.body.requestFullscreen || document.body.webkitRequestFullscreen);
+        }
+
+        async function enterFullscreen() {
+          const el = document.documentElement;
+          try {
+            if (el.requestFullscreen) await el.requestFullscreen({ navigationUI: 'hide' });
+            else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+          } catch (_) {}
+          try { if (screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape'); } catch (_) {}
+        }
+
+        function updateBtn() {
+          if (!isTouch || !canRequestFullscreen()) {
+            btn.classList.add('hidden');
+            return;
+          }
+          if (inFullscreen()) btn.classList.add('hidden');
+          else btn.classList.remove('hidden');
+        }
+
+        btn.addEventListener('click', enterFullscreen);
+        document.addEventListener('fullscreenchange', updateBtn);
+        document.addEventListener('webkitfullscreenchange', updateBtn);
+        window.addEventListener('orientationchange', updateBtn);
+        window.addEventListener('resize', updateBtn);
+        updateBtn();
+      })();
+    </script>
+    <script>
+      (function () {
+        console.log('[touch-shim] enabled');
+        let activeTarget = null;
+        let lastPos = { x: 0, y: 0 };
+        let startTime = 0;
+        let moved = false;
+        const MOVE_TOLERANCE_PX = 6;
+
+        function synthesizeMouse(type, target, x, y) {
+          if (!target) return;
+          const ev = new MouseEvent(type, {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+            clientX: x,
+            clientY: y,
+            screenX: x,
+            screenY: y,
+            button: 0,
+            buttons: type === 'mouseup' ? 0 : 1
+          });
+          target.dispatchEvent(ev);
+        }
+
+        function onTouchStart(e) {
+          if (e.touches.length !== 1) return;
+          if (e.cancelable) e.preventDefault();
+          const t = e.touches[0];
+          const x = t.clientX;
+          const y = t.clientY;
+          lastPos.x = x;
+          lastPos.y = y;
+          startTime = Date.now();
+          moved = false;
+          activeTarget = document.elementFromPoint(x, y) || e.target;
+          synthesizeMouse('mousemove', activeTarget, x, y);
+          synthesizeMouse('mousedown', activeTarget, x, y);
+        }
+
+        function onTouchMove(e) {
+          if (e.touches.length !== 1) return;
+          if (e.cancelable) e.preventDefault();
+          const t = e.touches[0];
+          const x = t.clientX;
+          const y = t.clientY;
+          if (Math.abs(x - lastPos.x) > MOVE_TOLERANCE_PX || Math.abs(y - lastPos.y) > MOVE_TOLERANCE_PX) {
+            moved = true;
+          }
+          lastPos.x = x;
+          lastPos.y = y;
+          const target = activeTarget || document.elementFromPoint(x, y) || e.target;
+          synthesizeMouse('mousemove', target, x, y);
+        }
+
+        function onTouchEnd(e) {
+          if (e.cancelable) e.preventDefault();
+          const x = lastPos.x;
+          const y = lastPos.y;
+          const target = activeTarget || document.elementFromPoint(x, y) || e.target;
+          synthesizeMouse('mouseup', target, x, y);
+          const shortTap = Date.now() - startTime < 500 && !moved;
+          if (shortTap) {
+            const clickEv = new MouseEvent('click', {
+              bubbles: true,
+              cancelable: true,
+              view: window,
+              clientX: x,
+              clientY: y,
+              screenX: x,
+              screenY: y,
+              button: 0
+            });
+            target && target.dispatchEvent(clickEv);
+          }
+          activeTarget = null;
+        }
+
+        function onTouchCancel(e) {
+          if (e.cancelable) e.preventDefault();
+          activeTarget = null;
+        }
+
+        window.addEventListener('touchstart', onTouchStart, { passive: false });
+        window.addEventListener('touchmove', onTouchMove, { passive: false });
+        window.addEventListener('touchend', onTouchEnd, { passive: false });
+        window.addEventListener('touchcancel', onTouchCancel, { passive: false });
+      })();
+    </script>
+  </body>
+  </html>
+
+

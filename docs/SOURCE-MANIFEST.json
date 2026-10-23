@@ -1,0 +1,231 @@
+{
+  "captured": "2026-10-23",
+  "sources": [
+    {
+      "repo": "michaelowens/cokemusic-cokephase",
+      "branch": "master",
+      "folder": "cokephase",
+      "status": "downloaded",
+      "role": "Browser remake with room/catalogue fixtures; local launch configured",
+      "missingFileCount": 0,
+      "commit": "94539b8c15a630e8504615c15e995ae308bbbc66"
+    },
+    {
+      "repo": "bolognesandwiches/GoCoke",
+      "branch": "main",
+      "folder": "gocoke",
+      "status": "downloaded",
+      "role": "Most substantial released client found; backend is external; local offline preview configured",
+      "missingFileCount": 0,
+      "commit": "227be2c17c1409e3eeb85321c633bfa3459d7ed0"
+    },
+    {
+      "repo": "markhughes/CSMusicMixer",
+      "branch": "main",
+      "folder": "music-mixer",
+      "status": "downloaded",
+      "snapshotFolder": null,
+      "treeRef": "c285b73404f8c9d4aa42bb0a145b91b2489af0a4",
+      "totalFiles": 219,
+      "savedFiles": 0,
+      "missingFileCount": 0,
+      "commit": "c285b73404f8c9d4aa42bb0a145b91b2489af0a4"
+    },
+    {
+      "repo": "jtieri/Coke-Studios-Source",
+      "branch": "main",
+      "folder": "original-client-source",
+      "status": "downloaded",
+      "snapshotFolder": null,
+      "treeRef": "4d29246497bd07443eb3e0ed8ff9eff4b0db430a",
+      "totalFiles": 2994,
+      "savedFiles": 0,
+      "missingFileCount": 0,
+      "commit": "4d29246497bd07443eb3e0ed8ff9eff4b0db430a"
+    },
+    {
+      "repo": "markhughes/CSAvatarAssets",
+      "branch": "master",
+      "folder": "avatar-assets",
+      "status": "downloaded",
+      "snapshotFolder": null,
+      "treeRef": "59fa4322a2e8e84de367671d3fc7bb4c208872c5",
+      "totalFiles": 1318,
+      "savedFiles": 0,
+      "missingFileCount": 0,
+      "commit": "59fa4322a2e8e84de367671d3fc7bb4c208872c5"
+    },
+    {
+      "repo": "markhughes/CSAvatarEngine",
+      "branch": "master",
+      "folder": "avatar-engine",
+      "status": "downloaded",
+      "snapshotFolder": "reference-source/avatar-engine",
+      "treeRef": "109fdbe1a4eb09d70344a2e2c0746ec1de3b4b42",
+      "totalFiles": 4,
+      "savedFiles": 4,
+      "missingFileCount": 0,
+      "commit": "109fdbe1a4eb09d70344a2e2c0746ec1de3b4b42"
+    },
+    {
+      "repo": "markhughes/CSUI",
+      "branch": "master",
+      "folder": "cs-ui",
+      "status": "downloaded",
+      "snapshotFolder": "reference-source/cs-ui",
+      "treeRef": "b32adf79d91f156694b72970e2904544762bb6fb",
+      "totalFiles": 3,
+      "savedFiles": 3,
+      "missingFileCount": 0,
+      "commit": "b32adf79d91f156694b72970e2904544762bb6fb"
+    },
+    {
+      "repo": "markhughes/CSChat",
+      "branch": "master",
+      "folder": "cs-chat",
+      "status": "downloaded",
+      "snapshotFolder": "reference-source/cs-chat",
+      "treeRef": "3ebc3e8e2766fe28cd65045e5b7abe455f765f31",
+      "totalFiles": 8,
+      "savedFiles": 4,
+      "missingFileCount": 0,
+      "commit": "3ebc3e8e2766fe28cd65045e5b7abe455f765f31"
+    },
+    {
+      "repo": "markhughes/CSWebsite",
+      "branch": "master",
+      "folder": "cs-website",
+      "status": "downloaded",
+      "snapshotFolder": null,
+      "treeRef": "da7eb3a127d322006ee9fdfbc1802b1a8b76ea15",
+      "totalFiles": 154,
+      "savedFiles": 0,
+      "missingFileCount": 0,
+      "commit": "da7eb3a127d322006ee9fdfbc1802b1a8b76ea15"
+    },
+    {
+      "repo": "markhughes/CSCatalogueParser",
+      "branch": "main",
+      "folder": "catalogue-parser",
+      "status": "downloaded",
+      "snapshotFolder": "reference-source/catalogue-parser",
+      "treeRef": "98a78da76a865d5848c2599280a147386e25d5d7",
+      "totalFiles": 5,
+      "savedFiles": 5,
+      "missingFileCount": 0,
+      "commit": "98a78da76a865d5848c2599280a147386e25d5d7"
+    },
+    {
+      "repo": "markhughes/CSScreenSavers",
+      "branch": "main",
+      "folder": "screensavers",
+      "status": "downloaded",
+      "snapshotFolder": null,
+      "treeRef": "5c0b2044635c0bfb252a295c3f2f98b8b8c36c2b",
+      "totalFiles": 9,
+      "savedFiles": 0,
+      "missingFileCount": 0,
+      "commit": "5c0b2044635c0bfb252a295c3f2f98b8b8c36c2b"
+    },
+    {
+      "repo": "markhughes/uncover-the-music",
+      "branch": "main",
+      "folder": "uncover-the-music",
+      "status": "downloaded",
+      "snapshotFolder": null,
+      "treeRef": "affc581d50dd846a8a3cbf9b908f1f84240735da",
+      "totalFiles": 7225,
+      "savedFiles": 0,
+      "missingFileCount": 0,
+      "commit": "affc581d50dd846a8a3cbf9b908f1f84240735da"
+    },
+    {
+      "repo": "YeomansIII/cokemusic",
+      "branch": "master",
+      "folder": "yeomans-client",
+      "status": "downloaded",
+      "snapshotFolder": null,
+      "treeRef": "45eea3b61c526fcd4a72b42b9347ab165bea6805",
+      "totalFiles": 463,
+      "savedFiles": 0,
+      "missingFileCount": 0,
+      "commit": "45eea3b61c526fcd4a72b42b9347ab165bea6805"
+    },
+    {
+      "repo": "reowens/cokemusic-extractor",
+      "branch": "main",
+      "folder": "cokemusic-extractor",
+      "status": "downloaded",
+      "snapshotFolder": "reference-source/cokemusic-extractor",
+      "treeRef": "f7e7e27d9e95a1956b530827c57f0fb7516ce289",
+      "totalFiles": 18,
+      "savedFiles": 18,
+      "missingFileCount": 0,
+      "commit": "f7e7e27d9e95a1956b530827c57f0fb7516ce289"
+    },
+    {
+      "repo": "bolognesandwiches/cokeitems",
+      "branch": "master",
+      "folder": "cokeitems",
+      "status": "downloaded",
+      "snapshotFolder": null,
+      "treeRef": "1742a99bd437a054f7dfb9e7c2c2678c754516b8",
+      "totalFiles": 238,
+      "savedFiles": 0,
+      "missingFileCount": 0,
+      "commit": "1742a99bd437a054f7dfb9e7c2c2678c754516b8"
+    },
+    {
+      "repo": "Lost-Media-Hunt/Coke-Studios",
+      "branch": "master",
+      "folder": "cache-finder",
+      "status": "downloaded",
+      "snapshotFolder": "reference-source/cache-finder",
+      "treeRef": "172b0d1ab82c9c79f2ee1fa8e32cad2fb6ad4a05",
+      "totalFiles": 54,
+      "savedFiles": 32,
+      "missingFileCount": 0,
+      "commit": "172b0d1ab82c9c79f2ee1fa8e32cad2fb6ad4a05"
+    },
+    {
+      "repo": "jtieri/shockrays",
+      "branch": "main",
+      "folder": "shockrays",
+      "status": "downloaded",
+      "snapshotFolder": "reference-source/shockrays",
+      "treeRef": "af9dde58b6dfc2e943c37b304ba5d63ebdff92f4",
+      "totalFiles": 12,
+      "savedFiles": 12,
+      "missingFileCount": 0,
+      "commit": "af9dde58b6dfc2e943c37b304ba5d63ebdff92f4"
+    },
+    {
+      "repo": "NewyorkDev/cokemusic",
+      "branch": "master",
+      "folder": "cokephase-upstream",
+      "status": "downloaded",
+      "role": "Original CokePhase repository",
+      "missingFileCount": 0,
+      "commit": "d0b70240588b24d2ae558708cac45e40053a3591"
+    },
+    {
+      "repo": "ProjectorRays/ProjectorRays",
+      "branch": "master",
+      "folder": "projector-rays",
+      "status": "downloaded",
+      "role": "Director/Shockwave decompiler referenced by original client archive",
+      "missingFileCount": 0,
+      "commit": "6f9bcebf626b43719abe2affcbbcb041d154d666"
+    },
+    {
+      "repo": "reowens/dirplayer-rs",
+      "branch": "cokemusic",
+      "folder": "dirplayer-rs",
+      "pin": "cfd73293e610ba61cbf58c1b0dd037bf9d041a5c",
+      "status": "downloaded",
+      "role": "Extraction backend pinned by cokemusic-extractor",
+      "missingFileCount": 0,
+      "commit": "cfd73293e610ba61cbf58c1b0dd037bf9d041a5c"
+    }
+  ]
+}

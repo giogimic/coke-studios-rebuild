@@ -1,0 +1,39 @@
+<room>
+
+	<version>
+		1.0
+	</version>
+
+	<name>
+		"model_c"
+	</name>
+
+	<elements>
+		[#member: "studio_model_c", #media: #bitmap, #locH: 0, #locV: 0, #ink: 41, #blend: 100, #width: 470, #height: 380, #id: "floor", #locZ: -1000000]
+		[#member: "floor_shape_c", #media: #bitmap, #locH: 235, #locV: 236, #ink: 36, #blend: 0, #width: 431, #height: 216, #id: "floorshape", #locZ: -50001]
+		[#member: "studiofloor_1", #media: #bitmap, #locH: 307, #locV: 237, #ink: 8, #blend: 60, #width: 144, #height: 71, #palette: "floor_orgun", #id: "floortexture1", #locZ: -50000]
+		[#member: "studiofloor_1", #media: #bitmap, #locH: 235, #locV: 273, #ink: 8, #blend: 60, #width: 144, #height: 71, #palette: "floor_orgun", #id: "floortexture2", #locZ: -50000]
+		[#member: "studiofloor_1", #media: #bitmap, #locH: 163, #locV: 309, #ink: 8, #blend: 60, #width: 144, #height: 71, #palette: "floor_orgun", #id: "floortexture3", #locZ: -50000]
+		[#member: "studiofloor_1", #media: #bitmap, #locH: 235, #locV: 201, #ink: 8, #blend: 60, #width: 144, #height: 71, #palette: "floor_orgun", #id: "floortexture4", #locZ: -50000]
+		[#member: "studiofloor_1", #media: #bitmap, #locH: 163, #locV: 165, #ink: 8, #blend: 60, #width: 144, #height: 71, #palette: "floor_orgun", #id: "floortexture5", #locZ: -50000]
+		[#member: "studiofloor_1", #media: #bitmap, #locH: 163, #locV: 237, #ink: 8, #blend: 60, #width: 144, #height: 71, #palette: "floor_orgun", #id: "floortexture6", #locZ: -50000]
+		[#member: "studiofloor_1", #media: #bitmap, #locH: 91, #locV: 201, #ink: 8, #blend: 60, #width: 144, #height: 71, #palette: "floor_orgun", #id: "floortexture7", #locZ: -50000]
+		[#member: "studiofloor_1", #media: #bitmap, #locH: 91, #locV: 273, #ink: 8, #blend: 60, #width: 144, #height: 71, #palette: "floor_orgun", #id: "floortexture8", #locZ: -50000]
+		[#member: "studiofloor_1", #media: #bitmap, #locH: 19, #locV: 237, #ink: 8, #blend: 60, #width: 144, #height: 71, #palette: "floor_orgun", #id: "floortexture9", #locZ: -50000]
+		[#member: "studiofloor_door_1", #media: #bitmap, #locH: 271, #locV: 147, #ink: 8, #blend: 60, #width: 38, #height: 36, #palette: "floor_orgun", #id: "doorfloortexture", #locZ: -50000]
+		[#member: "studio_exitshape", #media: #bitmap, #locH: 272, #locV: 149, #ink: 8, #blend: 0, #width: 36, #height: 132, #bgColor: "#003366", #palette: #systemMac, #id: "command: GOAWAY", #Active: 1]
+		[#member: "hiliter_studio", #media: #bitmap, #locH: 128, #locV: 327, #ink: 36, #blend: 100, #width: 62, #height: 34, #palette: #systemMac, #type: "hiliter", #id: "hiliter"]
+		[#member: "studio.window.london.1", #media: #bitmap, #locH: 67, #locV: 115, #ink: 8, #blend: 100, #width: 36, #height: 84, #locZ: 11952, #id: "studio.window.1", #Active: 0]
+		[#member: "studio.window.london.2", #media: #bitmap, #locH: 67, #locV: 115, #ink: 8, #blend: 100, #width: 36, #height: 84, #locZ: 10952, #id: "studio.window.2", #Active: 0]
+		[#member: "studio.window.london.3", #media: #bitmap, #locH: 67, #locV: 115, #ink: 8, #blend: 100, #width: 9, #height: 70, #locZ: 9952, #id: "studio.window.3", #Active: 0]
+	</elements>
+
+	<rect>
+		[145, 82, 615, 462]
+	</rect>
+
+	<roomdata>
+		[#offsetx: 343, #offsety: 85, #factorx: 72, #factory: 36, #factorh: 36]
+	</roomdata>
+
+</room>

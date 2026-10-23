@@ -1,0 +1,46 @@
+<PublicStudios>
+<Studio studioId="$SYSTEM$1" name="London I" description="For relaxed chatting... and intense performing." userCount="0" capacity="25" location="1" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$2" name="London II" description="For relaxed chatting... and intense performing." userCount="0" capacity="25" location="1" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$3" name="Miami I" description="Cool drinks, hot sun and gorgeous yachts." userCount="0" capacity="25" location="2" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$4" name="Miami II" description="Cool drinks, hot sun and gorgeous yachts." userCount="0" capacity="25" location="2" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$5" name="Mombasa I" description="A sunset party between mongrove forests, plains and overhanging cliffs." userCount="0" capacity="25" location="3" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$6" name="Mombasa II" description="A sunset party between mongrove forests, plains and overhanging cliffs." userCount="0" capacity="25" location="3" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$7" name="New York I" description="The heart of urban culture." userCount="0" capacity="25" location="4" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$8" name="New York II" description="The heart of urban culture." userCount="0" capacity="25" location="4" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$9" name="Rio de Janeiro I" description="For beach-party lovers." userCount="0" capacity="25" location="5" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$10" name="Rio de Janeiro II" description="For beach-party lovers." userCount="0" capacity="25" location="5" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$11" name="Seattle I" description="High level west coast party. It might get a bit windy sometimes." userCount="0" capacity="25" location="6" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$12" name="Seattle II" description="High level west coast party. It might get a bit windy sometimes." userCount="0" capacity="25" location="6" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$13" name="Sydney I" description="Chillin' by the bay with the amenities of modern living." userCount="0" capacity="25" location="7" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$14" name="Sydney II" description="Chillin' by the bay with the amenities of modern living." userCount="0" capacity="25" location="7" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$15" name="Tokyo I" description="Big Bear Disco Dancing!" userCount="0" capacity="25" location="8" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$16" name="Tokyo II" description="Big Bear Disco Dancing!" userCount="0" capacity="25" location="8" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$17" name="Goa I" description="A Mystical Dance Extravaganza!" userCount="0" capacity="25" location="9" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$18" name="Goa II" description="A Mystical Dance Extravaganza!" userCount="0" capacity="25" location="9" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$19" name="Alaska I" description="A cool party by the Hot Springs!" userCount="0" capacity="25" location="10" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$20" name="Alaska II" description="A cool party by the Hot Springs!" userCount="0" capacity="25" location="10" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$21" name="Moscow I" description="A sunset party over the Red Square." userCount="0" capacity="25" location="11" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$22" name="Moscow II" description="A sunset party over the Red Square." userCount="0" capacity="25" location="11" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$23" name="Coca-Cola Red Room I" description="Earn double decibels with every vote!" userCount="0" capacity="25" location="30" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$24" name="Coca-Cola Red Room II" description="Earn double decibels with every vote!" userCount="0" capacity="25" location="12" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$25" name="San Francisco I" description="Chic Cali nights." userCount="0" capacity="25" location="13" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$26" name="San Francisco II" description="Chic Cali nights." userCount="0" capacity="25" location="13" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$27" name="Central Park I" description="Catch some rays in the Park." userCount="0" capacity="25" location="14" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$28" name="Central Park II" description="Catch some rays in the Park." userCount="0" capacity="25" location="14" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$29" name="New Orleans I" description="Feel the street party vibe!" userCount="0" capacity="25" location="15" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$30" name="New Orleans II" description="Feel the street party vibe!" userCount="0" capacity="25" location="15" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$31" name="Mexico I" description="A relaxing getaway." userCount="0" capacity="25" location="16" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$32" name="Mexico II" description="A relaxing getaway." userCount="0" capacity="25" location="16" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$33" name="Neptune I" description="Dive into the deep blue." userCount="0" capacity="25" location="17" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$34" name="Neptune II" description="Dive into the deep blue." userCount="0" capacity="25" location="29" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$35" name="Casting Call Room I" description="" userCount="0" capacity="25" location="19" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$36" name="Casting Call Room II" description="" userCount="0" capacity="25" location="19" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$37" name="Casting Call Room III" description="" userCount="0" capacity="25" location="19" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$38" name="Casting Call Room IV" description="" userCount="0" capacity="25" location="19" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$39" name="Whale wash" description="" userCount="0" capacity="25" location="18" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$40" name="Audition gold" description="" userCount="0" capacity="25" location="20" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$41" name="mycoke Arena" description="" userCount="0" capacity="25" location="22" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$42" name="Club Cherry" description="" userCount="0" capacity="25" location="23" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$43" name="Ray's Rooftop Party" description="" userCount="0" capacity="25" location="26" layout="5" owner="$SYSTEM$" server=""/>
+<Studio studioId="$SYSTEM$44" name="Audition red" description="" userCount="0" capacity="25" location="27" layout="5" owner="$SYSTEM$" server=""/>
+</PublicStudios>

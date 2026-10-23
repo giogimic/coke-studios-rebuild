@@ -1,0 +1,17 @@
+services:
+  coke-studios:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: coke-studios-recovery
+    restart: unless-stopped
+    ports:
+      - "24902:24902"  # Master Recovery Portal & Gateway (Default Entry Point)
+      - "8080:8080"    # Standalone GoCoke Backend (Direct WebSocket & AMF)
+      - "8081:8081"    # CokePhase HTML5 Engine
+      - "8082:8082"    # CSMusicMixer Standalone
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=production
+      - PORT=24902

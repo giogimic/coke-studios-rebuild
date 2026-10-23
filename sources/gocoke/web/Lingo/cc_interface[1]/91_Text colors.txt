@@ -1,0 +1,1 @@
+Navigator text color: #6C472D, rgb( 108, 71, 45 )Navigator title text color: #FCEDD9, rgb( 252, 237, 217 )Navigator location rollover text color: #000000Button text default color: #F3E5D5, rgb( 243, 229, 213 )Button text mousedown color: #4E627ABottom bar info text color: #2B190A

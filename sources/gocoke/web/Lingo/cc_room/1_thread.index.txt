@@ -1,0 +1,1 @@
+# This field is used for automatic# initialization of a thread.# Room thread defines the# engine used for creating # environments.thread.id       = roominterface.class = Room Interface Classcomponent.class = Room Component Classhandler.class   = Room Handler Classparser.class    = Room Parser Class

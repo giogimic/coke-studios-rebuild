@@ -1,0 +1,146 @@
+<Studio xOff="-345" yOff="260" layoutType="1" avatarXOff="-5" avatarYOff="19">
+
+<Background member="cc.london.bg" x="0" y="-50" ink="0" />
+
+<Hiliter member="london_hiliter" ink="36" />
+
+<Furniture castLib="Studio">
+
+<Item ink="8" dir="2" gridX="15" gridZ="19" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="8" dir="0" gridX="16" gridZ="19" imageBase="london_table" Action="Default" type="Table" />
+
+<Item ink="36" dir="6" gridX="17" gridZ="19" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="8" dir="2" gridX="19" gridZ="19" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="8" dir="0" gridX="19" gridZ="19" imageBase="london_table" Action="Default" type="Table" />
+
+<Item ink="36" dir="6" gridX="19" gridZ="19" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="36" dir="0" gridX="20" gridZ="20" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="8" dir="2" gridX="17" gridZ="22" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="8" dir="0" gridX="18" gridZ="22" imageBase="london_table" Action="Default" type="Table" />
+
+<Item ink="36" dir="6" gridX="19" gridZ="22" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="36" dir="4" gridX="18" gridZ="21" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="8" dir="2" gridX="13" gridZ="22" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="8" dir="0" gridX="14" gridZ="22" imageBase="london_table" Action="Default" type="Table" />
+
+<Item ink="36" dir="6" gridX="15" gridZ="22" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="36" dir="4" gridX="14" gridZ="21" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="8" dir="2" gridX="10" gridZ="25" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="8" dir="0" gridX="11" gridZ="25" imageBase="london_table" Action="Default" type="Table" />
+
+<Item ink="36" dir="6" gridX="12" gridZ="25" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="8" dir="2" gridX="15" gridZ="25" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="8" dir="0" gridX="16" gridZ="25" imageBase="london_table" Action="Default" type="Table" />
+
+<Item ink="36" dir="6" gridX="17" gridZ="25" imageBase="london_chair" Action="Default" type="Chair" />
+
+<Item ink="36" dir="2" gridX="7" gridZ="15" imageBase="london_cokecase" Action="DRINK_DESPENSER" type="Default" />
+
+<Item ink="36" dir="2" gridX="7" gridZ="20" imageBase="london_cokecase" Action="DRINK_DESPENSER" type="Default" />
+
+</Furniture>
+
+<WallItems>
+
+</WallItems>
+
+<StaticItems castLib="Studio">
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="49" width="54" y="248" x="280" layer="1" col="1" row="1" member="london_stairs_mask" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="33" width="41" y="274" x="67" layer="1" col="11" row="23" member="london_small1_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="31" width="41" y="284" x="92" layer="1" col="12" row="23" member="london_small2_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="31" width="39" y="296" x="117" layer="1" col="13" row="23" member="london_small3_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="31" width="40" y="308" x="140" layer="1" col="14" row="23" member="london_small4_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="32" width="42" y="320" x="164" layer="1" col="15" row="23" member="london_small5_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="32" width="42" y="333" x="190" layer="1" col="16" row="23" member="london_small6_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="29" width="38" y="346" x="216" layer="1" col="17" row="23" member="london_small7_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="29" width="38" y="357" x="237" layer="1" col="18" row="23" member="london_small8_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="60" width="261" y="360" x="261" layer="10" col="21" row="23" member="london_big_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="120" width="69" y="198" x="691" layer="1" col="25" row="11" member="stage_corner_mask" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="141" width="38" y="-50" x="0" layer="1" col="11" row="5" member="cc.london.bgtopright1" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="165" width="240" y="-50" x="0" layer="1" col="12" row="6" member="cc.london.bgtopright2" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="60" width="46" y="90" x="233" layer="1" col="8" row="13" member="london_bardesk10_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="46" width="48" y="115" x="205" layer="1" col="8" row="14" member="london_bardesk9_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="45" width="50" y="129" x="181" layer="1" col="8" row="15" member="london_bardesk8_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="44" width="49" y="141" x="157" layer="1" col="8" row="16" member="london_bardesk7_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="44" width="50" y="153" x="133" layer="1" col="8" row="17" member="london_bardesk6_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="45" width="51" y="165" x="108" layer="1" col="8" row="18" member="london_bardesk5_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="45" width="50" y="177" x="84" layer="1" col="8" row="19" member="london_bardesk4_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="45" width="51" y="189" x="59" layer="1" col="8" row="20" member="london_bardesk3_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="44" width="46" y="202" x="39" layer="1" col="8" row="21" member="london_bardesk2_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="41" width="22" y="216" x="39" layer="1" col="8" row="22" member="london_bardesk1_masking" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="228" width="255" y="32" x="0" layer="1" col="8" row="23" member="london_barmask" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="36" width="46" y="188" x="279" layer="1" col="11" row="14" member="london_bartable_a_0_2_1_0_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="23" width="41" y="200" x="255" layer="1" col="11" row="15" member="london_bartable_a_0_2_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="38" width="46" y="212" x="231" layer="1" col="11" row="16" member="london_bartable_a_0_4_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="36" width="46" y="248" x="159" layer="1" col="11" row="19" member="london_bartable_a_0_2_1_0_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="23" width="41" y="260" x="135" layer="1" col="11" row="20" member="london_bartable_a_0_2_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="38" width="46" y="272" x="111" layer="1" col="11" row="21" member="london_bartable_a_0_4_0" />
+
+<Item Action="SpeakerAnim" skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="73" width="49" y="152" x="571" layer="1" col="18" row="9" member="london_speaker1_anim0" />
+
+<Item Action="SpeakerAnim" skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="73" width="49" y="198" x="663" layer="1" col="22" row="9" member="london_speaker2_anim0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="29" width="38" y="226" x="590" layer="1" col="19" row="9" member="london_djtable_a_0_0_0" />
+
+<Item Action="LondonPaletteAnimator" skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="33" height="193" width="145" y="150" x="594" layer="1" col="17" row="10" member="london_plight_1" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="33" height="209" width="145" y="127" x="548" layer="1" col="20" row="10" member="london_plight_2" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="33" height="217" width="145" y="113" x="530" layer="1" col="23" row="10" member="london_plight_3" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="127" width="245" y="-50" x="0" layer="1" col="29" row="29" member="londonseparatoroverlap" />
+
+</StaticItems>
+
+<Door col="12" row="5">
+
+<Exit blend="0" ink="8" member="london_exitmask" />
+
+</Door>
+
+</Studio>
+

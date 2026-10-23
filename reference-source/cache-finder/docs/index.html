@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coke Studios Lost Media Hunt</title>
+<meta name="description" content="Your old computer may still hold files from Coke Studios, Coke Music and MyCoke (2002-2007). A free tool finds them so the game can be preserved.">
+<style>
+  :root {
+    --bg: #faf7f2; --panel: #ffffff; --ink: #1d1a17; --soft: #5f574f; --line: #e6ded3;
+    --accent: #c8102e; --accent-ink: #ffffff; --tint: #fbecec; --code: #f2ece4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151210; --panel: #1f1b18; --ink: #f2ece4; --soft: #b8ada1; --line: #3a332d;
+      --accent: #ff4d5e; --accent-ink: #1a0b0d; --tint: #2c1a1b; --code: #2a2420;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #151210; --panel: #1f1b18; --ink: #f2ece4; --soft: #b8ada1; --line: #3a332d;
+    --accent: #ff4d5e; --accent-ink: #1a0b0d; --tint: #2c1a1b; --code: #2a2420;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  a { color: var(--accent); }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+  header { border-bottom: 1px solid var(--line); }
+  header .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: space-between; padding-top: 14px; padding-bottom: 14px; }
+  .brand { font-weight: 700; letter-spacing: .01em; text-decoration: none; color: var(--ink); }
+  .brand span { color: var(--accent); }
+  nav a { color: var(--soft); text-decoration: none; margin-left: 16px; font-size: 15px; }
+  nav a:first-child { margin-left: 0; }
+  nav a:hover { color: var(--ink); }
+  .hero { padding: 56px 0 36px; }
+  h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.12; margin: 0 0 18px; letter-spacing: -.01em; }
+  .lead { font-size: 19px; color: var(--soft); max-width: 680px; margin: 0 0 28px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+  .btn { display: inline-block; padding: 12px 18px; border-radius: 10px; text-decoration: none; font-weight: 600;
+         border: 1px solid var(--line); color: var(--ink); background: var(--panel); }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .btn small { display: block; font-weight: 400; font-size: 13px; opacity: .85; }
+  .fine { font-size: 14px; color: var(--soft); }
+  section { padding: 34px 0; border-top: 1px solid var(--line); }
+  h2 { font-size: 26px; margin: 0 0 14px; }
+  h3 { font-size: 18px; margin: 0 0 6px; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; counter-reset: step; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+  .steps .card::before { counter-increment: step; content: counter(step); display: inline-grid; place-items: center;
+         width: 30px; height: 30px; border-radius: 50%; background: var(--tint); color: var(--accent); font-weight: 700; margin-bottom: 10px; }
+  .card p { margin: 0; color: var(--soft); font-size: 15px; }
+  ul.wanted { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; }
+  ul.wanted li { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 8px; padding: 12px 14px; font-size: 15px; }
+  ul.wanted b { display: block; font-size: 16px; }
+  /* Period screenshots of what's missing: one per card, more as thumbnails.
+     Each is a link to the image, so it opens even without the viewer. */
+  .shot { margin: 0 0 10px; }
+  .shot a, .more a { display: block; cursor: zoom-in; }
+  .shot img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; background: #111; border-radius: 5px; }
+  .shot figcaption { font-size: 13px; line-height: 1.35; color: var(--soft); margin-top: 5px; }
+  .more { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .more img { display: block; width: 66px; height: 45px; object-fit: cover; background: #111; border-radius: 4px; border: 1px solid var(--line); }
+  .credit { font-size: 13px; color: var(--soft); margin: 14px 0 0; }
+  .viewer { padding: 0; border: 0; background: transparent; max-width: min(96vw, 900px); }
+  .viewer::backdrop { background: rgba(0, 0, 0, .82); }
+  .viewer img { display: block; max-width: 100%; max-height: 80vh; margin: 0 auto; border-radius: 6px; }
+  .viewer p { color: #fff; text-align: center; font-size: 15px; margin: 10px 0 0; }
+  code { background: var(--code); padding: 1px 6px; border-radius: 5px; font-size: .9em; word-break: break-word; }
+  .table { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--soft); font-weight: 600; white-space: nowrap; }
+  details { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; margin-bottom: 10px; }
+  summary { cursor: pointer; font-weight: 600; }
+  details p { color: var(--soft); margin: 10px 0 2px; }
+  footer { border-top: 1px solid var(--line); padding: 26px 0 40px; color: var(--soft); font-size: 14px; }
+
+  /* Saved vs missing: one block per file or item. Green and red are the
+     status colours; a missing block is also outlined,
+     so the chart still reads for red-green colourblind visitors. */
+  :root { --good: #0ca30c; --bad: #d03b3b; --bad-tint: rgba(208, 59, 59, 0.34); }
+  .tally { display: flex; flex-wrap: wrap; gap: 10px 28px; margin: 4px 0 20px; }
+  .tally div { font-size: 15px; color: var(--soft); }
+  .tally b { display: block; font-size: 30px; line-height: 1.1; color: var(--ink); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; color: var(--soft); margin-bottom: 18px; }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .chart { display: grid; gap: 16px; }
+  .crow { display: grid; grid-template-columns: 200px 1fr; gap: 4px 18px; align-items: start; }
+  .crow h3 { font-size: 15px; margin: 0; line-height: 1.3; }
+  .crow .count { display: block; font-size: 13px; color: var(--soft); font-weight: 400; margin-top: 2px; }
+  .crow .note { grid-column: 2; font-size: 13px; color: var(--soft); margin: 2px 0 0; }
+  .blocks { display: flex; flex-wrap: wrap; gap: 3px; padding-top: 2px; }
+  .blk { width: 14px; height: 14px; border-radius: 3px; flex: none; }
+  .blk.s { background: var(--good); }
+  .blk.m { background: var(--bad-tint); border: 2px solid var(--bad); }
+  .blocks .blk:hover, .blocks .blk.on { outline: 2px solid var(--ink); outline-offset: 1px; }
+  .tip { position: fixed; z-index: 10; max-width: 280px; padding: 8px 11px; border-radius: 8px; pointer-events: none;
+         background: var(--panel); border: 1px solid var(--line); box-shadow: 0 4px 16px rgba(0, 0, 0, .14); font-size: 14px; line-height: 1.4; }
+  .tip b { display: block; }
+  .tip span { color: var(--soft); }
+  .tip img { display: block; width: 256px; height: 171px; object-fit: contain; background: #111; border-radius: 5px; margin-bottom: 7px; }
+  .chart-list { margin-top: 18px; }
+  .chart-list ul { margin: 10px 0 0; padding-left: 20px; font-size: 15px; color: var(--soft); }
+  .chart-list li b { color: var(--ink); font-weight: 600; }
+  @media (max-width: 560px) { .crow { grid-template-columns: 1fr; } .crow .note { grid-column: 1; } }
+  @media (forced-colors: active) { .blk.s { background: CanvasText; } .blk.m { border-color: CanvasText; } }
+  @media (max-width: 560px) { nav { width: 100%; } nav a { margin: 0 14px 0 0; } .hero { padding-top: 36px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="#">Coke Studios <span>Lost Media Hunt</span></a>
+    <nav>
+      <a href="#help">Help</a>
+      <a href="#saved">What's missing</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#faq">FAQ</a>
+      <a class="repo-link" href="#">Source</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Your old computer might still have Coke Studios on it.</h1>
+    <p class="lead">Coke Studios (Coke Music, later MyCoke) closed in December 2007. Fans have since saved most of it, including the rooms, the furniture, the V-egos and the website games, but some pieces are still missing. Every time you played, Shockwave downloaded the game through your web browser, and browsers kept copies. The missing pieces may still be on an old PC or hard drive, and a free tool can find them for you.</p>
+    <div class="buttons">
+      <a class="btn primary dl" data-file="CokeCacheFinder.exe" href="#">Download for Windows<small>Windows 95, 98, XP, Vista, 7, 8, 10, 11</small></a>
+      <a class="btn dl" data-file="CokeCacheFinder-mac.zip" href="#">Mac<small>macOS 10.13 and later</small></a>
+      <a class="btn dl" data-file="CokeCacheFinder-linux.tar.gz" href="#">Linux<small>any 64-bit</small></a>
+    </div>
+    <p class="fine">Free, open source, about 110 KB. Nothing to install, and it never connects to the internet.</p>
+  </div>
+
+  <section id="help">
+    <h2>How to help</h2>
+    <div class="steps">
+      <div class="card"><h3>Run it</h3><p>Double-click the program and choose <b>1</b>. If the computer is too old to download it, copy it over on a USB stick. Old hard drives can be searched from any computer through a USB adapter.</p></div>
+      <div class="card"><h3>Wait</h3><p>It checks every drive and lists anything it finds as it goes. Most computers take a few minutes. Searching deleted files (option 2) can take an hour or more.</p></div>
+      <div class="card"><h3>Send the zip</h3><p>It makes one <code>.zip</code> next to the program. <a class="send-link" href="#">Open a new issue</a> and drag the zip in, even if it found only a little. Issues are public; the zip holds only game files.</p></div>
+    </div>
+    <p class="fine" style="margin-top:14px">Windows may say the program is unrecognised, because it isn't signed. Click <b>More info</b>, then <b>Run anyway</b>. On a Mac, right-click it and choose <b>Open</b>.</p>
+  </section>
+
+  <section id="saved">
+    <h2>What's saved, and what's missing</h2>
+    <p>Each block is one file or item from the game. Hover over a block (or tap it) to see what it is.</p>
+    <div class="tally" id="tally"></div>
+    <div class="legend" aria-hidden="true">
+      <span><i class="blk s"></i>Saved</span>
+      <span><i class="blk m"></i>Missing</span>
+    </div>
+    <div class="chart" id="chart"></div>
+    <details class="chart-list"><summary>Show the missing things as a list</summary><ul id="chart-list"></ul></details>
+    <div class="tip" id="tip" role="tooltip" hidden></div>
+  </section>
+
+  <section id="wanted">
+    <h2>What we're looking for</h2>
+    <p>The tool flags these as <b>WANTED</b> when it finds them. Everything is also checked against the project's archive, so the tool can tell you when <i>any</i> file is new.</p>
+    <ul class="wanted">
+      <li>
+        <figure class="shot"><a href="img/v1-alaska.webp" data-cap="Version 1 (2002&ndash;2004): the Alaska lobby"><img src="img/v1-alaska.webp" width="760" height="520" loading="lazy" alt="A Version 1 public room, Alaska, with V-egos on the snow"></a><figcaption>Version 1: the Alaska lobby</figcaption></figure>
+        <b>The 2002&ndash;2004 game</b>Version 1, the 2.0 beta and the Shark Tale edition. The oldest surviving client is from 2006.
+        <span class="more"><a href="img/beta-ingame.webp" data-cap="The Coke Studios 2.0 beta in New Orleans: a rare snapshot of the beta" title="The 2.0 beta in game"><img src="img/beta-ingame.webp" loading="lazy" alt="The 2.0 beta in game: New Orleans at night with a Coke trolley"></a><a href="img/beta-splash.webp" data-cap="The Coke Studios 2.0 beta's welcome screen" title="The 2.0 beta's welcome screen"><img src="img/beta-splash.webp" loading="lazy" alt="The Coke Studios 2.0 beta's welcome screen"></a><a href="img/sharktale-splash.webp" data-cap="The Shark Tale edition (2004)" title="The Shark Tale edition (2004)"><img src="img/sharktale-splash.webp" loading="lazy" alt="The Shark Tale at Coke Studios welcome screen"></a></span>
+      </li>
+      <li>
+        <figure class="shot"><a href="img/coming-soon-theatre.webp" data-cap="The Coming Soon Theatre's cinema lobby, with the Shark Tale cutout of Oscar (an example shot from a developer's gallery)"><img src="img/coming-soon-theatre.webp" width="434" height="297" loading="lazy" alt="A cinema lobby with a Coca-Cola Center Cinema De Lux sign, movie posters, velvet ropes and V-egos"></a><figcaption>The Coming Soon Theatre's cinema lobby</figcaption></figure>
+        <b>Lost rooms</b>The Batman Begins Coming Soon Theatre, Wal-Mart Music Downloads and Neptune II.
+        <span class="more"><a href="img/walmart.webp" data-cap="Wal-Mart Music Downloads" title="Wal-Mart Music Downloads"><img src="img/walmart.webp" loading="lazy" alt="The Wal-Mart Music Downloads room, with V-egos among the music displays"></a><a href="img/neptune2.webp" data-cap="Neptune II" title="Neptune II"><img src="img/neptune2.webp" loading="lazy" alt="Neptune II"></a><a href="img/batman-dispenser.webp" data-cap="The Batman Begins poster dispenser, from the Coming Soon Theatre" title="The Batman Begins poster dispenser"><img src="img/batman-dispenser.webp" loading="lazy" alt="The Batman Begins poster dispenser's Poster Award window"></a></span>
+      </li>
+      <li>
+        <figure class="shot"><a href="img/whale-wash.webp" data-cap="Whale Wash, the Shark Tale game that became Recycler"><img src="img/whale-wash.webp" width="760" height="521" loading="lazy" alt="Whale Wash: a V-ego dodging fish and turtles on the whale wash floor, with the time, score, lives and level shown"></a><figcaption>Whale Wash, the game that became Recycler</figcaption></figure>
+        <b>Shark Tale</b>Whale Wash Builder, the Whale Wash game, the underwater studio background, and the Promo Poster's three Shark Tale designs.
+        <span class="more"><a href="img/sharktale-studio.webp" data-cap="A Shark Tale room with the underwater background around it (possibly a development shot)" title="A Shark Tale room, with the underwater background"><img src="img/sharktale-studio.webp" loading="lazy" alt="A Shark Tale era room surrounded by an underwater background"></a><a href="img/sharktale-site.webp" data-cap="Whale Wash Builder and the Whale Wash activity, on the 2004 site" title="Whale Wash Builder and the Whale Wash activity"><img src="img/sharktale-site.webp" loading="lazy" alt="The 2004 Shark Tale at Coke Studios page advertising Whale Wash Builder"></a><a href="img/promo-countdown.webp" data-cap="Promo Poster, Shark Tale design 1: the countdown (&quot;59 days till Shark Tale&quot;)" title="Promo Poster: the Shark Tale countdown"><img src="img/promo-countdown.webp" loading="lazy" alt="A wall poster reading 59 days till Shark Tale"></a><a href="img/promo-intheatres.webp" data-cap="Promo Poster, Shark Tale design 2: &quot;In Theatres October 1st&quot; (partly hidden by a name tag and a chair)" title="Promo Poster: In Theatres October 1st"><img src="img/promo-intheatres.webp" loading="lazy" alt="A Shark Tale wall poster reading In Theatres October 1st, partly hidden"></a><a href="img/promo-nowintheatres.webp" data-cap="Promo Poster, Shark Tale design 3: &quot;Now In Theatres&quot;" title="Promo Poster: Now In Theatres"><img src="img/promo-nowintheatres.webp" loading="lazy" alt="A Shark Tale wall poster reading Now In Theatres"></a></span>
+      </li>
+      <li>
+        <figure class="shot"><a href="img/popquiz-v105.webp" data-cap="Pop Quiz as released (v1.05), mid-question"><img src="img/popquiz-v105.webp" width="759" height="519" loading="lazy" alt="Pop Quiz: a fill-in-the-blank question on the board, with V-egos on podiums"></a><figcaption>Pop Quiz as released (v1.05)</figcaption></figure>
+        <b>The original Pop Quiz</b>The 2002 trivia game, before it became Sports Challenge.
+        <span class="more"><a href="img/popquiz-lobby.webp" data-cap="Pop Quiz's lobby and its navigator (v1.04)" title="Pop Quiz's lobby"><img src="img/popquiz-lobby.webp" loading="lazy" alt="The Pop Quiz lobby with its room navigator"></a></span>
+      </li>
+      <li>
+        <figure class="shot"><a href="img/uncover-tiles.webp" data-cap="Seven of Uncover the Music's original tile faces, collected from archived screenshots"><img src="img/uncover-tiles.webp" width="259" height="382" loading="lazy" alt="Uncover the Music tiles, some turned over to show patterns"></a><figcaption>Seven original tile faces, from archived screenshots</figcaption></figure>
+        <b>Uncover the Music's tiles</b>The tile faces and the sound each one played.
+      </li>
+      <li>
+        <figure class="shot"><a href="img/coaster-ride.webp" data-cap="A frame from the only recording of Coaster's ride"><img src="img/coaster-ride.webp" width="640" height="360" loading="lazy" alt="The view from a roller coaster car, looking down the track"></a><figcaption>A frame from the only recording</figcaption></figure>
+        <b>Coaster's ride</b>The movie of the coaster going over the top. Only a video recording survives.
+      </li>
+      <li>
+        <figure class="shot"><a href="img/sports-tour.webp" data-cap="The MyCoke site's own Sports Challenge tour. The missing part is its announcer's voice."><img src="img/sports-tour.webp" width="300" height="300" loading="lazy" alt="The Sports Challenge tour: the lobby, a question, and the players' scores"></a><figcaption>The MyCoke site's Sports Challenge tour</figcaption></figure>
+        <b>Sports Challenge's announcer</b>62 of 65 voice lines.
+      </li>
+      <li>
+        <figure class="shot"><a href="img/nav-icon.webp" data-cap="A navigator banner (Central Park's). Ray's Rooftop's is the one missing."><img src="img/nav-icon.webp" width="257" height="42" loading="lazy" alt="The Central Park navigator banner"></a><figcaption>A navigator banner (Central Park's); Ray's Rooftop's looked like this</figcaption></figure>
+        <b>Room descriptions &amp; icons</b>An older public room list, and Ray's Rooftop's navigator icon.
+      </li>
+      <li>
+        <figure class="shot"><a href="img/vego-colours.webp" data-cap="The V-ego creator. Its five main palettes survive; a few styles' own palettes are what's missing"><img src="img/vego-colours.webp" width="760" height="519" loading="lazy" alt="The V-ego creator with its column of colour swatches"></a><figcaption>The V-ego creator and its colour swatches</figcaption></figure>
+        <b>V-ego colours</b>The palettes a few hairstyles, shirts, pants and shoes had of their own.
+      </li>
+      <li>
+        <figure class="shot"><a href="img/cokemusic-2002.webp" data-cap="cokemusic.com in 2002: its Downloads page offered screensavers"><img src="img/cokemusic-2002.webp" width="760" height="506" loading="lazy" alt="The cokemusic.com home page from 2002"></a><figcaption>cokemusic.com in 2002, with its Downloads link</figcaption></figure>
+        <b>Downloads &amp; screenshots</b>MyCoke screensavers, and any screenshots, especially from 2002&ndash;2004.
+      </li>
+    </ul>
+    <p class="credit">Pictures from the MyCoke Wiki's archive: collected by adamaniax, Fishmech and CokeHistory, from Studiocom's own presentation and the Wayback Machine, and from developer Maissito's portfolio (Whale Wash, and most likely the theatre). The Sports Challenge tour is the MyCoke site's own, found by the decibel.fun project. Click one to see it full size.</p>
+    <dialog class="viewer" id="viewer"><img alt=""><p></p></dialog>
+  </section>
+
+  <section id="how">
+    <h2>What it looks at</h2>
+    <p>It recognises Shockwave casts and movies (<code>.cct</code>, <code>.dcr</code>, …) and Flash movies by their contents, whatever they are called. It reads Internet Explorer's and Firefox's cache indexes to learn which address each file came from and when. It looks inside cache files, temp files and disk images for game files packed into them. And it collects the game's old web addresses from browser history, which show what existed even where the files are gone.</p>
+  </section>
+
+  <section id="privacy">
+    <h2>Your privacy</h2>
+    <ul>
+      <li><b>It only reads.</b> Nothing is changed or deleted, and nothing is sent anywhere. You decide whether to send the zip.</li>
+      <li><b>The zip holds only game files</b>, and every one is listed in the <code>report.txt</code> beside it, so you can check before sending.</li>
+      <li><b>Your Windows user name is removed</b> from the report. Web addresses lose everything after <code>?</code>, where session ids lived.</li>
+      <li><b>Cookies are never read.</b> Pictures with "coke" in the name are listed, but never copied.</li>
+    </ul>
+  </section>
+
+  <section id="manual">
+    <h2>Looking by hand</h2>
+    <p>Look for files ending in <code>.cct</code>, <code>.dcr</code> or <code>.swf</code>, and anything with <code>[1]</code> in its name. On Windows, turn on hidden files first.</p>
+    <div class="table">
+    <table>
+      <tr><th>Windows 95/98/ME</th><td><code>C:\WINDOWS\Temporary Internet Files\</code></td></tr>
+      <tr><th>Windows 2000/XP</th><td><code>C:\Documents and Settings\<i>you</i>\Local Settings\Temporary Internet Files\Content.IE5\</code></td></tr>
+      <tr><th>Windows Vista/7</th><td><code>C:\Users\<i>you</i>\AppData\Local\Microsoft\Windows\Temporary Internet Files\</code></td></tr>
+      <tr><th>Firefox</th><td><code>…\Mozilla\Firefox\Profiles\<i>name</i>\Cache\</code></td></tr>
+      <tr><th>Mac</th><td><code>~/Library/Caches/</code> and <code>~/Library/Preferences/Explorer/</code></td></tr>
+      <tr><th>Upgraded PCs</th><td><code>C:\Windows.old\</code></td></tr>
+    </table>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2>Questions</h2>
+    <details><summary>Is it safe to run?</summary><p>It only reads files and never goes online. The source code is public, and every release is built from it by GitHub.</p></details>
+    <details><summary>It found nothing. Is that useful?</summary><p>Yes, thank you. If the computer was used for Coke Studios and has been cleaned up since, try option 2: deleted files often stay on the disk for years.</p></details>
+    <details><summary>It found files "the archive already has". Should I still send them?</summary><p>Please do. Send the zip anyway. The report records where and when your copies were saved, which helps date the archive's.</p></details>
+    <details><summary>My old PC doesn't turn on any more.</summary><p>The hard drive inside probably still works. A USB-to-IDE/SATA adapter costs a few dollars and lets any computer search it.</p></details>
+    <details><summary>Can it read Mac OS 9 or very old Macs?</summary><p>Not directly, but it can search their drives when they are connected to a newer Mac, or from a disk image.</p></details>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    A fan preservation project, not affiliated with or endorsed by The Coca-Cola Company. "Coke", "Coca-Cola" and "Coke Studios" are its trademarks.
+  </div>
+</footer>
+
+<script>
+  // Set this to the GitHub repository that hosts the tool.
+  const REPO = 'Lost-Media-Hunt/Coke-Studios';
+  const base = 'https://github.com/' + REPO;
+  document.querySelectorAll('a.dl').forEach(a => { a.href = base + '/releases/latest/download/' + a.dataset.file; });
+  document.querySelectorAll('a.repo-link').forEach(a => { a.href = base; });
+  document.querySelectorAll('a.send-link').forEach(a => { a.href = base + '/issues/new?title=My%20Coke%20Studios%20finds'; });
+
+  // Screenshots open in a viewer; without <dialog> the link just opens the image.
+  const viewer = document.getElementById('viewer');
+  if (viewer && viewer.showModal) {
+    document.querySelectorAll('#wanted a[data-cap]').forEach((a) => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const img = viewer.querySelector('img');
+        img.src = a.getAttribute('href');
+        img.alt = a.querySelector('img').alt;
+        viewer.querySelector('p').textContent = a.dataset.cap;
+        viewer.showModal();
+      });
+    });
+    viewer.addEventListener('click', () => viewer.close());
+  }
+</script>
+<script>
+// Saved vs missing: one entry per file or item, 's' saved or 'm' missing.
+// From what the revival's archive holds and lacks. Things that may never
+// have existed are left out.
+(function () {
+  // the catalogue's 209 original rows [prodId, name] (the revival's own Red Separator left out)
+  const CATALOGUE = /*CATALOGUE*/[[0,"Decibles"],[1,"Wallpaper"],[2,"Floor"],[3,"Premier Chair"],[4,"Premier Stool"],[5,"Premier Sofa"],[6,"Premier Coffee Table"],[7,"Premier Table"],[8,"Premier Stereo"],[9,"Premier Minibar"],[10,"Premier Light"],[11,"5001 Chair"],[12,"5001 Stool"],[13,"5001 Sofa"],[14,"5001 Coffee Table"],[15,"5001 Table"],[16,"5001 Sound System"],[17,"5001 Minibar"],[18,"5001 Cube Light"],[19,"Equipment Rack"],[20,"Sampler Rack"],[21,"Wooden Speaker"],[22,"Microphone"],[23,"Cables"],[24,"TV"],[25,"Retro Speaker"],[26,"Blank CD"],[27,"Acoustic Pad"],[28,"Tinted Separator"],[29,"Potted Plant"],[30,"Tulip"],[31,"Psychedelic Carpet"],[32,"Straw Mat"],[33,"Furry Rug"],[34,"Corner Piece"],[35,"White Separator"],[36,"Beige Separator"],[37,"Grey Separator"],[38,"Yellow Separator"],[39,"Steel Separator"],[40,"Orange Separator"],[41,"Green Separator"],[42,"Blue Separator"],[43,"Minibar"],[44,"Chair"],[45,"Coke Cooler"],[46,"Polar Bear"],[47,"Coke CD Player"],[48,"Lava Lamp"],[49,"Coca-Cola Neon Sign"],[50,"Coke Couch"],[51,"Guitar"],[52,"Bass"],[53,"Trumpet"],[54,"Acoustic Foam"],[55,"Retro Keyboard"],[56,"Disco Poster"],[57,"Tropical Poster"],[58,"Top 40 Chart"],[59,"Aquarium"],[60,"Dance Floor"],[61,"Teleporter"],[62,"Futuristic Chair"],[63,"Leopard Couch"],[64,"Zebra Couch"],[65,"Grunge Couch"],[66,"Messy Table"],[67,"Messy Box"],[68,"Coke Machine"],[69,"Jukebox"],[70,"Diner Seating"],[71,"Diner Table"],[72,"Disco Lights"],[73,"Happy Holidays Poster"],[74,"Old Fridge"],[75,"Boom Box"],[76,"Instant Bookshelf"],[77,"Dorm Light"],[78,"Instant Table"],[79,"Funky Chair"],[80,"Stylish Couch"],[81,"Surf Board"],[82,"Gold Record"],[83,"Platinum Record"],[84,"Coca-Cola Pinball Machine"],[85,"Tatami Mat"],[86,"Rice Paper Divider"],[87,"Gong"],[88,"Mixer"],[89,"BurnedCD"],[90,"Vanilla Coke Gumball Machine"],[91,"Cow Pattern Bean Bag Chair"],[92,"WallShelf"],[93,"Vanilla Coke Machine"],[94,"Vanilla Coke Shelf"],[95,"Trash Can"],[96,"Vanilla Coke Table"],[97,"Eyeball Lamp"],[98,"Shark Portal"],[99,"Deluxe Aquarium"],[100,"Diving Suit"],[101,"Fish Porthole"],[102,"Life Preserver"],[103,"Lighthouse Buoy"],[104,"Oyster Couch"],[105,"Fishy"],[106,"Placeholder"],[107,"Lighthouse Aquarium"],[108,"Treasure Chest"],[109,"Promo Poster"],[110,"Ocean Floor Table"],[111,"Aquatic Divider"],[112,"Sea Sponge Barrier"],[113,"Molten Magma Lamp"],[114,"Coral Mood Light"],[115,"Scrap Metal Carpet"],[116,"Robot Sculpture"],[117,"Recycling Bin"],[118,"Tire Chair"],[119,"Gear Table"],[120,"Comet Curtain"],[121,"Pop Art Poster"],[122,"Diva Marquee"],[123,"Playa Marquee"],[124,"Street Styles"],[125,"Red Couch"],[126,"El Vego Placeholder"],[127,"Wardrobe Trunk"],[128,"Trophy Case"],[129,"Piano"],[130,"Congas"],[131,"Vintage Amp"],[132,"Plasma Screen"],[133,"Star Rug"],[134,"Royal Throne"],[135,"Res-O-Scanner"],[136,"Item Dispenser"],[137,"Hologram"],[138,"Batman Begins Poster"],[139,"EA Batman Poster"],[140,"Retro TV"],[141,"Lawn Chair"],[142,"Refrigerator"],[143,"Oven"],[144,"Kitchen Sink"],[145,"Kitchen Cabinet"],[146,"Bookshelf"],[147,"Fireplace"],[148,"Entertainment Center"],[149,"Black Traffic Light"],[150,"Heart Poster"],[151,"Spider Web"],[152,"Winter View"],[153,"City View"],[154,"Beach View"],[155,"Curtain"],[156,"Grey Traffic Light"],[157,"Infinite Jukebox"],[158,"Randomatic Number Podium"],[159,"Randomatic Number Display"],[160,"Randomatic Letter Podium"],[161,"Randomatic Letter Display"],[162,"DJ Stand"],[163,"DJ Console"],[164,"Robot Dog"],[165,"Cushion"],[166,"Washer"],[167,"Dryer"],[168,"Victorian Chair"],[169,"Victorian Table"],[170,"Arcade Sign"],[171,"V-Ball Machine"],[172,"Plasma Lamp"],[173,"Totem pole 1"],[174,"Totem pole 2"],[175,"Totem pole 3"],[176,"Fortune teller"],[177,"Path corner"],[178,"Path cross"],[179,"Path line"],[180,"Path tee"],[181,"Robot lamp"],[182,"Parasol table"],[183,"Turn stile"],[184,"Board"],[185,"Torch"],[186,"Darts"],[187,"Funhouse mirror"],[188,"Submarine"],[189,"Submarine"],[190,"Submarine"],[191,"Submarine"],[192,"Christmas Tree"],[193,"Christmas Lights"],[194,"Santa picture"],[195,"White board"],[196,"Car Front"],[197,"Car Back"],[198,"Elevator 1"],[199,"Elevator 2"],[200,"Elevator 3"],[201,"Elevator 4"],[202,"Gym Locker"],[203,"Stadium seating"],[204,"Final Four Poster"],[205,"Backboard and goal"],[206,"Team wall banner"],[207,"Pop a basketball"],[208,"Decompressionschamber"]];
+  // the Music Mixer's sample library, by genre
+  const SAMPLES = /*SAMPLES*/["Country: 4x4","Country: Bluegrass","Country: Bluesy","Country: Grinnin'","Country: Pickin'","Country: Shuffle 1","Country: Shuffle 2","Country: Slide Guitar","Country: Steady","Country: Country 1","Country: Country 2","Country: CountryVocal1","Country: CountryVocal2","Dance: Daft","Dance: Dance","Dance: Dance 2","Dance: Electro","Dance: Magpie","Dance: Sonar Pole","Dance: Tracky","Dance: Uhh!","Dance: Synth 1","Dance: Synth 2","Dance: Dance Tech","Dance: DanceVocal","Hip-Hop: Downtown","Hip-Hop: Hip hop","Hip-Hop: Hip hop 2","Hip-Hop: Lo","Hip-Hop: Rakim","Hip-Hop: Red Alert","Hip-Hop: Rico","Hip-Hop: Skee","Hip-Hop: Skee 2","Hip-Hop: Slinky","Hip-Hop: Slinky 2","Hip-Hop: Tight","Hip-Hop: Triangle","Hip-Hop: Hip Hop Keys","Hip-Hop: Hip Hop 1","Latin: Bells","Latin: Conga Bells","Latin: CongaBell2","Latin: CongaTambo","Latin: Drum Kit","Latin: Horns","Latin: Horns 2","Latin: Latin Horn","Latin: Maracas","Latin: Maracas 2","Latin: Piano","Latin: Piano 2","Latin: Saxaphone","Latin: Latin Guitar 1","Latin: Latin Guitar 2","Misc: Asian Strings","Misc: Bass!","Misc: C'mon!","Misc: Cow Bell","Misc: Detroit","Misc: East Beat","Misc: East Beat 2","Misc: Fast Scratch","Misc: Feel it!","Misc: FunkGuitar","Misc: FunkyBass","Misc: Getup!","Misc: Harmonica","Misc: Higher","Misc: Jazz Beatz","Misc: Jazz Guitar","Misc: Jazz Trumpet","Misc: Raggae Bass","Misc: Ratchet","Misc: Scratch","Misc: Shaker","Misc: Smooth Bass","Misc: Spanish Guitar","Misc: Steel Guitar","Misc: Tubular Bells","Pop: Breakbeat","Pop: Breakbeat 2","Pop: Bumble Bee","Pop: C'mon Again","Pop: Cop Show","Pop: Cop Show 2","Pop: Delayed","Pop: FunkChord2","Pop: Pop bass","Pop: Pop beat","Pop: Pop beat 2","Pop: YMCA","Pop: Rock Guitar 1","Pop: Rock Guitar 2","Pop: Rock Guitar 3","Pop: DrumBass 1","Rock: Big Beats","Rock: Big Beats 2","Rock: Crash","Rock: Danger","Rock: Drum Kit 2","Rock: Hanoi","Rock: High Hat","Rock: Marco","Rock: Polo","Rock: Ride","Rock: Rocks","Rock: With Synth","Rock: DrumBass 2","Rock: Rock Drums","Rock: Heavy Guitar","Rock: Pop Guitar","Rock: Rock Guitar 4","Rock: Rock Guitar 5"];
+
+  const rows = [];
+  const add = (name, items, extra) => rows.push(Object.assign({ name, items }, extra || {}));
+  // The Promo Poster (109) itself is saved; its designs have their own row below.
+  const MISSING_CATALOGUE = {
+    136: ['m', 'the Batman Begins poster dispenser'],
+  };
+  // A missing thing's picture for its tooltip: the same ones as the cards below.
+  const IMG = {
+    'Version 1': 'v1-alaska', '2.0 Beta': 'beta-ingame', 'Shark Tale edition': 'sharktale-splash',
+    'Coming Soon Theatre': 'coming-soon-theatre',
+    'Wal-Mart Music Downloads': 'walmart', 'Neptune II': 'neptune2',
+    'Shark Tale underwater studio background': 'sharktale-studio', 'Item Dispenser': 'batman-dispenser',
+    'Some styles\' own colour palettes': 'vego-colours', 'Pop Quiz (the original)': 'popquiz-v105',
+    'Whale Wash': 'whale-wash', 'Whale Wash Builder': 'sharktale-site',
+    "Coaster's winning cutscene (CoasterAnim.swf)": 'coaster-ride', 'MyCoke screensavers': 'cokemusic-2002',
+    'Shark Tale countdown': 'promo-countdown', '"In Theatres October 1st"': 'promo-intheatres',
+    '"Now In Theatres"': 'promo-nowintheatres',
+  };
+  const range = (n, f) => Array.from({ length: n }, (_, i) => f(i));
+  const pad = (i) => String(i).padStart(2, '0');
+
+  add('Game client', [
+    ['Version 1', 'm', 'June 2002 – December 2004; nothing of it survives'],
+    ['2.0 Beta', 'm', '2003 – 2004; never archived'],
+    ['Shark Tale edition', 'm', 'September – December 2004; ran on its own server'],
+    ['Version 2', 's', 'December 2004 – December 2007; the client the revival is built on']],
+    { ordered: true });
+
+  add('Public rooms', ['London', 'Miami', 'Mombasa', 'New York', 'Rio', 'Seattle', 'Sydney', 'Tokyo', 'Goa',
+    'Alaska', 'Moscow', ['Coca-Cola Red Room II', 's', 'the 2005 Orpheum version; recovered via the decibel.fun revival'],
+    'San Francisco', 'Central Park', 'New Orleans', 'Mexico', 'Neptune', 'Whale Wash', 'Casting Call (blue)',
+    'Casting Call (gold)', 'mycoke Arena',
+    'Club Cherry', ['Coming Soon Theatre', 'm', 'the Batman Begins lobby'],
+    ['Wal-Mart Music Downloads', 'm', 'only screenshots survive'], "Ray's Rooftop Party", 'Casting Call (red)',
+    ['Neptune II', 'm'],
+    'Coca-Cola Red Room']);
+
+  add('Studio layouts', ['Studio A', 'Studio B', 'Studio C', 'Studio D', 'Studio E', 'Studio F', 'Studio G',
+    'Star Suite', 'Personal Suite', 'Wayne Enterprises – Applied Science Lab', 'Wayne Enterprises – Covered Bay',
+    'Wayne Enterprises – Stores', 'Wayne Enterprises – Vehicle Bay',
+    ['Shark Tale underwater studio background', 'm', 'the backdrop that filled the black around studios in 2004']]);
+
+  add('Catalogue items', CATALOGUE.filter(([id]) => id !== 126 /* El Vego: a dropped idea */).map(([id, name]) => [name].concat(MISSING_CATALOGUE[id] || ['s'])));
+
+  // The Promo Poster's picture was a separate movie the website sent, changed over time.
+  add('Promo Poster designs', [
+    ['Shark Tale countdown', 'm', '"59 days till Shark Tale", 2004'],
+    ['"In Theatres October 1st"', 'm', 'Shark Tale, 2004'],
+    ['"Now In Theatres"', 'm', 'Shark Tale, 2004'],
+    ['"make it real"', 's', 'red, with a black Coke bottle']],
+    { ordered: true });
+
+  add('V-ego parts', ['Hair', 'Heads and faces', 'Eyes and sunglasses', 'Shirts and sleeves', 'Pants', 'Shoes',
+    'Hats and headphones', ['Colour palettes', 's', 'hair, skin, shirt, pants and shoes; a copy is baked into the website\'s avatar engine'],
+    ['Some styles\' own colour palettes', 'm', 'the AvatarConfig file; 19 hairstyles, shirts, pants and shoes had palettes of their own']]);
+
+  // The navigator icons are numbered by room location, in StudioMap's order.
+  const NAV_STUDIOS = [
+    'London', 'Miami', 'Mombasa', 'New York', 'Rio de Janeiro', 'Seattle', 'Sydney', 'Tokyo', 'Goa', 'Alaska',
+    'Moscow', 'Coca-Cola Red Room II', 'San Francisco', 'Central Park', 'New Orleans', 'Mexico', 'Neptune',
+    'Whale Wash', 'Casting Call (blue)', 'Casting Call (gold)', 'Casting Call (green)', 'mycoke Arena',
+    'Club Cherry', 'Coming Soon Theatre', 'Wal-Mart', "Ray's Rooftop Party", 'Casting Call (red)',
+    'Casting Call (orange)', 'Neptune II', 'Coca-Cola Red Room'];
+  add('Navigator icons', range(30, (i) => i === 25
+    ? ['Navigator icon 26', 'm', "Ray's Rooftop Party"]
+    : ['Navigator icon ' + pad(i + 1), 's', NAV_STUDIOS[i]]),
+    { listAs: "Ray's Rooftop Party's icon (26)" });
+
+  add('Music Mixer samples', SAMPLES.map((s) => [s, 's']));
+
+  add('Coke Studios games', ['Coaster', 'V-ego San', 'Uncover the Music', 'Sports Challenge', 'Recycler',
+    ['Pop Quiz (the original)', 'm', 'the 2002 game by GamesThatWork'],
+    ['Whale Wash', 'm', 'the Shark Tale game Recycler was made from'],
+    ['Whale Wash Builder', 'm', 'the first Shark Tale game']]);
+
+  add('Uncover the Music tiles', [['Tile 00, the Pass', 'm'], ['Tile 01, the Wild', 'm']]
+    .concat(range(27, (i) => ['Tile ' + pad(i + 2), 'm', 'its picture and its sound'])),
+    { listAs: 'all 29 tile faces and their sounds', img: 'uncover-tiles' });
+
+  add('Sports Challenge announcer', [['First player line 1', 's'], ['First player line 3', 's'],
+    ['Second player line 2', 's']].concat(range(62, () => ['Announcer line', 'm'])),
+    { listAs: '62 of its 65 lines', img: 'sports-tour' });
+
+  add('Website extras and tools', ['Messenger', 'V-ego creator', 'Moderator Tool 1.77', 'Infinite Jukebox',
+    ['Music Mixer interface', 's', "the OddCast AudioMixer Flash app (am_habbo_v2.swf); only its save-to-server backend is dead"],
+    ["Coaster's winning cutscene (CoasterAnim.swf)", 'm', 'the coaster finishing its loop when a team wins; only a screen recording survives'],
+    ['MyCoke screensavers', 'm', 'offered as downloads; none archived']]);
+
+  const ORDER = { s: 0, m: 1 };
+  const LABEL = { s: 'Saved', m: 'Missing' };
+  const chart = document.getElementById('chart');
+  const list = document.getElementById('chart-list');
+  const total = { s: 0, m: 0 };
+
+  rows.forEach((row) => {
+    const items = row.items.map((it) => (typeof it === 'string' ? [it, 's'] : it));
+    // most rows read best saved-first; an ordered row keeps its given order
+    // (the client versions, which run in release order)
+    if (!row.ordered) items.sort((a, b) => ORDER[a[1]] - ORDER[b[1]]);
+    const c = { s: 0, m: 0 };
+    items.forEach((it) => { c[it[1]]++; total[it[1]]++; });
+
+    const el = document.createElement('div');
+    el.className = 'crow';
+    const h = document.createElement('h3');
+    h.textContent = row.name;
+    const count = document.createElement('span');
+    count.className = 'count';
+    count.textContent = c.s + ' of ' + items.length + ' saved';
+    h.appendChild(count);
+    const blocks = document.createElement('div');
+    blocks.className = 'blocks';
+    blocks.setAttribute('role', 'img');
+    blocks.setAttribute('aria-label', row.name + ': ' + c.s + ' saved, ' + c.m + ' missing');
+    items.forEach(([name, st, note]) => {
+      const b = document.createElement('i');
+      b.className = 'blk ' + st;
+      b.dataset.name = name;
+      b.dataset.st = st;
+      if (note) b.dataset.note = note;
+      const img = st === 'm' && (IMG[name] || row.img);
+      if (img) b.dataset.img = img;
+      blocks.appendChild(b);
+    });
+    el.append(h, blocks);
+    if (row.note) {
+      const p = document.createElement('p');
+      p.className = 'note';
+      p.textContent = row.note;
+      el.appendChild(p);
+    }
+    chart.appendChild(el);
+
+    if (c.m) {
+      const li = document.createElement('li');
+      const b = document.createElement('b');
+      b.textContent = row.name + ': ';
+      li.append(b, row.listAs || items.filter((it) => it[1] === 'm').map((it) => it[0]).join(', '));
+      list.appendChild(li);
+    }
+  });
+
+  const tally = document.getElementById('tally');
+  [['s', 'saved'], ['m', 'missing']].forEach(([k, word]) => {
+    const d = document.createElement('div');
+    const n = document.createElement('b');
+    n.textContent = total[k];
+    d.append(n, word);
+    tally.appendChild(d);
+  });
+
+  const tip = document.getElementById('tip');
+  let on = null;
+  function show(b) {
+    if (on) on.classList.remove('on');
+    on = b;
+    b.classList.add('on');
+    const t = document.createElement('b');
+    t.textContent = b.dataset.name;
+    const s = document.createElement('span');
+    s.textContent = LABEL[b.dataset.st] + (b.dataset.note ? ': ' + b.dataset.note : '');
+    if (b.dataset.img) {
+      const im = document.createElement('img');
+      im.src = 'img/' + b.dataset.img + '.webp';
+      im.alt = '';
+      tip.replaceChildren(im, t, s);
+    } else {
+      tip.replaceChildren(t, s);
+    }
+    tip.hidden = false;
+    const r = b.getBoundingClientRect(), w = tip.offsetWidth, ht = tip.offsetHeight;
+    const x = Math.max(8, Math.min(r.left + r.width / 2 - w / 2, innerWidth - w - 8));
+    const y = r.top - ht - 8 < 8 ? r.bottom + 8 : r.top - ht - 8;
+    tip.style.left = x + 'px';
+    tip.style.top = y + 'px';
+  }
+  function hide() {
+    if (on) on.classList.remove('on');
+    on = null;
+    tip.hidden = true;
+  }
+  chart.addEventListener('mouseover', (e) => { const b = e.target.closest('.blk'); if (b) show(b); });
+  chart.addEventListener('mouseleave', hide);
+  document.addEventListener('click', (e) => { const b = e.target.closest('#chart .blk'); if (b) show(b); else hide(); });
+  addEventListener('scroll', hide, { passive: true });
+})();
+</script>
+</body>
+</html>

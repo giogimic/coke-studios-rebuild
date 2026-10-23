@@ -1,0 +1,11 @@
+'use strict';
+const fs=require('node:fs');
+const path=require('node:path');
+const vm=require('node:vm');
+const base=path.resolve(__dirname,'../sources/cokephase');
+const c={module:{exports:{}}};
+vm.runInNewContext(fs.readFileSync(path.join(base,'ClientConfig.js'),'utf8'),c);
+const files=c.module.exports.include;
+const missing=files.filter(f=>!fs.existsSync(path.join(base,f.replace(/^\/?\.\//,'').replace(/^\//,''))));
+console.log(JSON.stringify({clientScripts:files.length,missing},null,2));
+if(missing.length)process.exitCode=1;

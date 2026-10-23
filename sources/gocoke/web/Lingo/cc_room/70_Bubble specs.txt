@@ -1,0 +1,1 @@
+Five bubble lines on screenAll text: #000000User name text: Verdana, 10px, boldSpeak text: Verdana, 10px, plainShout text: Verdana, 10px, boldSing text: Verdana, 11px, bold italic, sing-text 1px down

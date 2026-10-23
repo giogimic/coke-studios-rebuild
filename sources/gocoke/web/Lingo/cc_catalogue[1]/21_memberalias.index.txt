@@ -1,0 +1,1 @@
+cc.catalogue.page.title.7=cc.catalogue.page.title.6cc.catalogue.page.title.10=cc.catalogue.page.title.6cc.catalogue.page.title.11=cc.catalogue.page.title.6cc.catalogue.page.title.12=cc.catalogue.page.title.6

@@ -1,0 +1,7 @@
+Number,Type,Name,Registration Point,Filename
+1,field,DefaultSequence,"(0, 0)",
+2,script,Sequencer,"(0, 0)",
+3,script,SoundEvent,"(0, 0)",
+4,script,SoundLibrary,"(0, 0)",
+5,script,Sound,"(0, 0)",
+6,script,Track,"(0, 0)",

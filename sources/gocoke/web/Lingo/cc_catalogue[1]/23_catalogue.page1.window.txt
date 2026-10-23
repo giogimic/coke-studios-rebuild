@@ -1,0 +1,33 @@
+<window>
+
+	<version>
+		1.0
+	</version>
+
+	<name>
+		"catalogue_page1"
+	</name>
+
+	<elements>
+		[#member: "cc.catalogue.frontpage.title", #media: #bitmap, #locH: 12, #locV: 12, #ink: 36, #blend: 100, #width: 366, #height: 54, #palette: "Cat Palette", #type: "piece", #id: "catalog_bg", #strech: #fixed]
+[#member: "catalogue_1_desc", #media: #field, #locH: 28, #locV: 93, #ink: 36, #blend: 100, #width: 218, #height: 54, #editable: 0, #autoTab: 0, #boxType: #adjust, #wordWrap: 1, #alignment: "center", #txtColor: "#663300", #font: "Verdana", #fontStyle: "bold", #fontSize: 20, #lineHeight: 24, #type: "text", #id: "", #key: "CAT_0_DESC", #streched: #fixed]
+[#member: "catalogue_1_title", #media: #field, #locH: 20, #locV: 15, #ink: 36, #blend: 100, #width: 245, #height: 48, #editable: 0, #autoTab: 0, #boxType: #adjust, #wordWrap: 1, #alignment: "left", #txtColor: "#EEDBC6", #font: "Verdana", #fontStyle: "bold", #fontSize: 20, #lineHeight: 24, #type: "text", #id: "", #key: "CAT_0_TITLE", #streched: #fixed]
+		[#member: "cc.catalogue.frontpage.picture", #media: #bitmap, #locH: 33, #locV: 154, #ink: 36, #blend: 100, #width: 195, #height: 130, #palette: "CatThumbs Palette", #type: "piece", #id: "catalog_bg", #strech: #fixed]
+		[#member: "cc.catalogue.frontpage.smallpic1", #media: #bitmap, #locH: 269, #locV: 79, #ink: 36, #blend: 100, #width: 109, #height: 77, #palette: "CatThumbs Palette", #type: "piece", #id: "catalog_fpic1", #strech: #fixed]
+		[#member: "cc.catalogue.frontpage.smallpic2", #media: #bitmap, #locH: 269, #locV: 168, #ink: 36, #blend: 100, #width: 109, #height: 77, #palette: "CatThumbs Palette", #type: "piece", #id: "catalog_fpic2", #strech: #fixed]
+		[#member: "cc.catalogue.frontpage.smallpic3", #media: #bitmap, #locH: 269, #locV: 257, #ink: 36, #blend: 100, #width: 109, #height: 77, #palette: "CatThumbs Palette", #type: "piece", #id: "catalog_fpic3", #strech: #fixed]
+		[#member: "cc.catalogue.frontpage.pic1.text", #media: #field, #locH: 274, #locV: 82, #ink: 36, #blend: 100, #width: 102, #height: 15, #editable: 0, #autoTab: 0, #boxType: #limit, #wordWrap: 0, #alignment: "left", #txtColor: "#EFDFCB", #font: "verdana", #fontStyle: "bold", #fontSize: 10, #lineHeight: 13, #type: "text", #id: "catalog_fpic1", #model: #image, #key: "CAT_0_TEXT2", #strech: #fixed]
+		[#member: "cc.catalogue.frontpage.pic2.text", #media: #field, #locH: 274, #locV: 171, #ink: 36, #blend: 100, #width: 102, #height: 12, #editable: 0, #autoTab: 0, #boxType: #limit, #wordWrap: 0, #alignment: "left", #txtColor: "#EFDFCB", #font: "verdana", #fontStyle: "bold", #fontSize: 10, #lineHeight: 13, #type: "text", #id: "catalog_fpic2", #model: #image, #key: "CAT_0_TEXT3", #strech: #fixed]
+		[#member: "cc.catalogue.frontpage.pic3.text", #media: #field, #locH: 274, #locV: 260, #ink: 36, #blend: 100, #width: 102, #height: 12, #editable: 0, #autoTab: 0, #boxType: #limit, #wordWrap: 0, #alignment: "left", #txtColor: "#EFDFCB", #font: "verdana", #fontStyle: "bold", #fontSize: 10, #lineHeight: 13, #type: "text", #id: "catalog_fpic3", #model: #image, #key: "CAT_0_TEXT4", #strech: #fixed]
+		[#member: "cc.catalogue.longdivider", #media: #bitmap, #locH: 11, #locV: 347, #ink: 36, #blend: 100, #width: 368, #height: 4, #palette: "Cat Palette", #type: "piece", #id: "catalog_bg", #strech: #fixed]
+		[#member: "cc.catalogue.text.infotext2", #media: #field, #locH: 24, #locV: 304, #ink: 36, #blend: 100, #width: 230, #height: 30, #color: "#6C472D", #editable: 0, #autoTab: 0, #boxType: #limit, #wordWrap: 1, #alignment: "left", #txtColor: "#6C472D", #font: "verdana", #fontStyle: "bold", #fontSize: 10, #lineHeight: 13, #type: "text", #id: "catalog_bg", #model: #image, #key: "CAT_0_TEXT1", #strech: #fixed]
+		[#member: "shadow.pixel", #media: #bitmap, #locH: 11, #locV: 361, #ink: 36, #blend: 100, #width: 88, #height: 17, #type: "button", #id: "catalog_previous", #model: 2, #key: "cat_prev", #alignment: #left, #maxwidth: 120, #fixedsize: 0, #icon: ""]
+		[#member: "shadow.pixel", #media: #bitmap, #locH: 289, #locV: 361, #ink: 36, #blend: 100, #width: 88, #height: 17, #type: "button", #id: "catalog_next", #model: 2, #key: "cat_next", #alignment: #right, #maxwidth: 120, #fixedsize: 0, #icon: ""]
+		[#member: "cc.catalogue.text.pagenum", #media: #field, #locH: 100, #locV: 363, #ink: 36, #blend: 100, #width: 188, #height: 12, #editable: 0, #autoTab: 0, #boxType: #limit, #wordWrap: 1, #alignment: "center", #txtColor: "#6C472D", #font: "verdana", #fontStyle: "bold", #fontSize: 10, #lineHeight: 13, #type: "text", #id: "catalog_index", #model: #image, #key: "", #strech: #fixed]
+	</elements>
+
+	<rect>
+		[188, 70, 580, 458]
+	</rect>
+
+</window>

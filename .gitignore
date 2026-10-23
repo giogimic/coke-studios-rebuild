@@ -1,0 +1,40 @@
+# Runtime data, logs, and process IDs
+.runtime/
+*.log
+*.pid
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Preservation archives (large binary dumps; see docs/SOURCE-MANIFEST.json)
+archives/
+*.rar
+*.zip
+*.tar.gz
+
+# Companion and reference repositories (documented with upstream URLs in docs/SOURCE-MANIFEST.json)
+sources/uncover-the-music/
+sources/original-client-source/
+sources/dirplayer-rs/
+sources/cokephase-upstream/
+sources/projector-rays/
+sources/avatar-assets/
+sources/avatar-engine/
+sources/cs-ui/
+sources/cs-chat/
+sources/cs-website/
+sources/catalogue-parser/
+sources/screensavers/
+sources/yeomans-client/
+sources/cokeitems/
+sources/cokemusic-extractor/
+sources/cache-finder/
+sources/shockrays/
+
+# OS and Editor artifacts
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.tmp

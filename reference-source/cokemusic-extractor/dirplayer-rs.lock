@@ -1,0 +1,8 @@
+{
+  "remote": "https://github.com/reowens/dirplayer-rs.git",
+  "branch": "cokemusic",
+  "sha": "cfd73293e610ba61cbf58c1b0dd037bf9d041a5c",
+  "captured_at": "2026-07-21",
+  "visibility": "public",
+  "notes": "Public fork of igorlira/dirplayer-rs at reowens/dirplayer-rs (real GitHub fork lineage; click 'forked from igorlira/dirplayer-rs' on the repo page). The cokemusic branch holds the CokeMusic extraction harness on top of upstream main: get_cast_member_picture / get_cast_member_picture_with_palette / load_movie / get_film_loop_frames MCP tools, native-build cfg gates, seven bitmap dumpers (dump_cct_bitmaps, dump_dcr_bitmaps, dump_engine_bitmaps, dump_studio_bitmaps, dump_studio_palette_variants, dump_furniture_bitmaps, dump_avatar_bitmaps), and dump_dcr_score for FurniFactory2 sprite-channel/behavior JSON. Dumpers read CASTS_ROOT / OUTPUT_ROOT / ROOM_JSON_DIR / DCR_PATH / UTM_PARTS_ROOT from environment. SHA bump 6652280 to cfd7329 (2026-07-21): adds indexed/direct-color palette and deterministic skip-summary handling, filtered-run scope metadata, authenticated loopback-only MCP/proxy controls with bounded resources, sandboxed context-isolated Electron with a validated preload bridge, Rust 1.95.0 and wasm-pack 0.14.0 pins, warning-baseline enforcement, local security/toolchain tests, and verified forced authenticated extraction startup. Upstream main on the fork mirrors igorlira:main verbatim, untouched, so upstream sync stays trivial."
+}

@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coke Music / Coke Studios - Digital Preservation & Rebuild Hub</title>
+  <style>
+    :root {
+      --coke-red: #e41e2b;
+      --coke-dark-red: #a50e18;
+      --coke-charcoal: #151515;
+      --coke-panel: #1e1e1e;
+      --coke-card: #262626;
+      --coke-card-hover: #2e2e2e;
+      --coke-border: #383838;
+      --coke-text: #f5f5f5;
+      --coke-muted: #aaaaaa;
+      --coke-accent: #ff4d5a;
+      --coke-green: #00e676;
+      --coke-gold: #ffc107;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--coke-charcoal);
+      color: var(--coke-text);
+      line-height: 1.6;
+      padding: 0 0 60px 0;
+    }
+    header {
+      background: linear-gradient(135deg, var(--coke-red) 0%, var(--coke-dark-red) 100%);
+      padding: 35px 20px;
+      text-align: center;
+      border-bottom: 4px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 25px rgba(0,0,0,0.5);
+    }
+    header h1 {
+      font-size: 2.6rem;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    header p {
+      color: rgba(255,255,255,0.92);
+      font-size: 1.15rem;
+      margin-top: 6px;
+      font-weight: 400;
+    }
+    .badge-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      background: rgba(0,0,0,0.35);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    .container {
+      max-width: 1140px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .section-title {
+      font-size: 1.35rem;
+      margin: 36px 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--coke-red);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section-title span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+    }
+
+    /* Live Status Pill */
+    .status-pills {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .status-pill {
+      background: var(--coke-panel);
+      border: 1px solid var(--coke-border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+    .status-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--coke-green);
+      box-shadow: 0 0 8px var(--coke-green);
+      margin-right: 6px;
+    }
+
+    /* Character Creator & Launchpad */
+    .launchpad-card {
+      background: linear-gradient(180deg, #2c1a1d 0%, var(--coke-card) 100%);
+      border: 2px solid var(--coke-red);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      margin-bottom: 30px;
+    }
+    .launchpad-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 768px) {
+      .launchpad-grid { grid-template-columns: 1fr; }
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #ddd;
+    }
+    .form-input, .form-select {
+      width: 100%;
+      background: #181818;
+      border: 1px solid var(--coke-border);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .form-input:focus, .form-select:focus {
+      border-color: var(--coke-accent);
+    }
+    .id-preview-box {
+      background: #161616;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .id-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #282828;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .id-badge {
+      background: var(--coke-red);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .id-details p {
+      font-size: 0.88rem;
+      color: #bbb;
+      margin-bottom: 6px;
+    }
+    .id-details strong {
+      color: #fff;
+    }
+    .btn-action-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      flex: 1;
+      min-width: 200px;
+      background: var(--coke-red);
+      color: #fff;
+      border: none;
+      padding: 13px 20px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.15s ease, transform 0.1s ease;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background: var(--coke-accent);
+      transform: translateY(-1px);
+    }
+    .btn-multiplayer {
+      background: #333;
+      color: #fff;
+      border: 1px solid #555;
+      padding: 13px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.15s ease;
+    }
+    .btn-multiplayer:hover {
+      background: #444;
+      border-color: #777;
+    }
+
+    /* Sound Sequencer Preview */
+    .audio-player-box {
+      background: var(--coke-panel);
+      border: 1px solid var(--coke-border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .genre-button-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+    .btn-genre {
+      background: #2a2a2a;
+      border: 1px solid #444;
+      color: #eee;
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-genre:hover, .btn-genre.active {
+      background: var(--coke-red);
+      border-color: var(--coke-accent);
+      color: #fff;
+    }
+    .sample-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+    .sample-item {
+      background: #242424;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.82rem;
+    }
+    .sample-play-btn {
+      background: var(--coke-red);
+      color: #fff;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      transition: background 0.15s ease;
+    }
+    .sample-play-btn:hover {
+      background: var(--coke-accent);
+    }
+
+    /* Grid & Cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--coke-card);
+      border: 1px solid var(--coke-border);
+      border-radius: 10px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: var(--coke-accent);
+    }
+    .card h3 {
+      font-size: 1.25rem;
+      color: #fff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card p {
+      color: var(--coke-muted);
+      font-size: 0.93rem;
+      margin-bottom: 16px;
+      flex-grow: 1;
+    }
+    .card .specs {
+      font-size: 0.85rem;
+      color: #999;
+      background: var(--coke-panel);
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    .card .btn {
+      display: inline-block;
+      text-align: center;
+      background: var(--coke-red);
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: background 0.15s ease;
+    }
+    .card .btn:hover { background: var(--coke-accent); }
+    .card .btn.secondary { background: #444; }
+    .card .btn.secondary:hover { background: #555; }
+
+    /* Admin / Terminal Box */
+    .status-panel {
+      background: var(--coke-panel);
+      border: 1px solid var(--coke-border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 30px;
+    }
+    .status-panel h4 {
+      color: var(--coke-accent);
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+    }
+    .status-panel pre {
+      background: #111;
+      padding: 14px;
+      border-radius: 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      color: #00e676;
+      line-height: 1.5;
+    }
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      color: #777;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Coke Music / Coke Studios</h1>
+    <p>Complete Community Rebuild & Digital Preservation Archive</p>
+    <div class="badge-bar">
+      <span class="badge">Debian-First Architecture</span>
+      <span class="badge">Ebitengine / WebAssembly Client</span>
+      <span class="badge">Full Original Audio & Asset Libraries</span>
+      <span class="badge">Decompiled Lingo 2006-2007</span>
+      <span class="badge">ElectroServer Clint Pack</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Live Status Dashboard -->
+    <div class="status-pills">
+      <div class="status-pill">
+        <span><span class="status-dot"></span> Master Portal & Gateway (24902)</span>
+        <small style="color:var(--coke-green);">Default Hub</small>
+      </div>
+      <div class="status-pill">
+        <span><span class="status-dot"></span> GoCoke + Game Server (8080)</span>
+        <small style="color:var(--coke-green);">Live (AMF/WS)</small>
+      </div>
+      <div class="status-pill">
+        <span><span class="status-dot"></span> CokePhase Demo (8081)</span>
+        <small style="color:var(--coke-green);">Online</small>
+      </div>
+      <div class="status-pill">
+        <span><span class="status-dot"></span> CSMusicMixer (8082)</span>
+        <small style="color:var(--coke-green);">Online</small>
+      </div>
+    </div>
+
+    <!-- Character Creator & Quick Launchpad -->
+    <div class="section-title">
+      <span>🚀 Denizen Launchpad & Realtime Room Selector</span>
+      <small style="color:var(--coke-muted);font-size:0.85rem;">Configure your Denizen identity before entering the studios</small>
+    </div>
+
+    <div class="launchpad-card">
+      <div class="launchpad-grid">
+        <!-- Form Controls -->
+        <div>
+          <div class="form-group">
+            <label for="inputScreenName">Denizen Screen Name:</label>
+            <input type="text" id="inputScreenName" class="form-input" value="Adam" placeholder="Enter screen name..." maxlength="20">
+          </div>
+
+          <div class="form-group">
+            <label for="selectGender">Gender:</label>
+            <select id="selectGender" class="form-select">
+              <option value="M">Male (M)</option>
+              <option value="F">Female (F)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="inputMotto">Motto / Mission Statement:</label>
+            <input type="text" id="inputMotto" class="form-input" value="Coke Music Reborn!" placeholder="Your denizen motto..." maxlength="40">
+          </div>
+
+          <div class="form-group">
+            <label for="selectRoom">Starting Studio / Room:</label>
+            <select id="selectRoom" class="form-select">
+              <option value="VIS$0">🌴 Central Park Studio (VIS$0)</option>
+              <option value="VIS$1">🌁 San Francisco Studio (VIS$1)</option>
+              <option value="VIS$2">🎡 London Studio (VIS$2)</option>
+              <option value="studio_1">🎧 Private Studio #1 (studio_1)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Live ID Card Preview -->
+        <div class="id-preview-box">
+          <div>
+            <div class="id-header">
+              <strong style="font-size:1.05rem;">Coke Studios Passport</strong>
+              <span class="id-badge">Verified Denizen</span>
+            </div>
+            <div class="id-details">
+              <p>Name: <strong id="previewName">Adam</strong></p>
+              <p>Base64 SW1 Token: <code id="previewSW1" style="color:var(--coke-accent);">QWRhbQ==</code></p>
+              <p>Decibel Balance: <strong style="color:var(--coke-gold);">50,000 DB</strong></p>
+              <p>Motto: <em id="previewMotto">"Coke Music Reborn!"</em></p>
+              <p>Target Studio: <strong id="previewRoom">Central Park Studio</strong></p>
+            </div>
+          </div>
+
+          <div style="margin-top:14px;background:#111;padding:8px;border-radius:4px;font-size:0.78rem;color:#888;">
+            Direct Launch Target: <span id="previewURL" style="word-break:break-all;color:#4caf50;">http://127.0.0.1:8080/?user=Adam</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="btn-action-row">
+        <a id="btnLaunchSingle" href="http://127.0.0.1:8080/?user=Adam" target="_blank" class="btn-primary">
+          Enter Coke Studios (Single Player)
+        </a>
+        <button id="btnLaunchMulti" class="btn-multiplayer" type="button">
+          👥 Launch 2-Player Test (Realtime Room Sync)
+        </button>
+      </div>
+    </div>
+
+    <!-- Authentic Sound Sequencer Loop Player -->
+    <div class="section-title">
+      <span>🎵 Sound Library & Music Mixer Audio Vault</span>
+      <small style="color:var(--coke-muted);font-size:0.85rem;">129 extracted authentic original 2002-2007 WAV loops</small>
+    </div>
+
+    <div class="audio-player-box">
+      <p style="color:var(--coke-muted);font-size:0.92rem;">
+        Click any loop below to audition the authentic sound library samples used in the iconic 4-track sequencer.
+      </p>
+
+      <div class="genre-button-row">
+        <button class="btn-genre active" data-genre="dance">Dance</button>
+        <button class="btn-genre" data-genre="hiphop">Hip-Hop</button>
+        <button class="btn-genre" data-genre="rock">Rock</button>
+        <button class="btn-genre" data-genre="pop">Pop</button>
+        <button class="btn-genre" data-genre="latino">Latin</button>
+        <button class="btn-genre" data-genre="country">Country</button>
+      </div>
+
+      <div class="sample-list" id="sampleContainer">
+        <!-- Rendered via JavaScript -->
+      </div>
+      <audio id="audioElement" preload="none"></audio>
+    </div>
+
+    <!-- Playable & Interactive Rebuilds -->
+    <div class="section-title">
+      <span>Playable & Interactive Rebuilds</span>
+      <small style="color:var(--coke-muted);font-size:0.85rem;">Run natively in modern browsers</small>
+    </div>
+
+    <div class="grid">
+      <!-- GoCoke -->
+      <div class="card" style="border: 2px solid var(--coke-red);">
+        <div>
+          <h3>⭐ GoCoke (Most Complete)</h3>
+          <p>The definitive Coke Studios client rebuild. Features full isometric room navigation, 14-part avatar engine with clothes/customization, backpack, catalogue, room furniture placement, chat bubbles, sound loops, and built-in music mixer sequencer in WebAssembly.</p>
+          <div class="specs">
+            <strong>Stack:</strong> Go + Ebitengine (53 MB WASM) / Canvas<br>
+            <strong>Assets:</strong> Thousands of original sprites, palettes, sound loops<br>
+            <strong>Backend:</strong> Standalone Go server (AMF0 + WebSocket RFC6455)
+          </div>
+        </div>
+        <a href="http://127.0.0.1:8080/" target="_blank" class="btn">Launch GoCoke (Port 8080)</a>
+      </div>
+
+      <!-- CokePhase -->
+      <div class="card">
+        <div>
+          <h3>CokePhase (Isogenic HTML5)</h3>
+          <p>Browser recreation built on the Isogenic isometric HTML5 engine. Features 7 distinct room layouts (Public Studios, Rooftop, Wayne, Pokemon), original catalogue fixtures, avatar movement, and local JSON response adapters.</p>
+          <div class="specs">
+            <strong>Stack:</strong> HTML5 Canvas / Isogenic Engine / Vanilla JS<br>
+            <strong>Rooms:</strong> 7 included room models & catalogue pages<br>
+            <strong>Mode:</strong> Local simulation (no PHP/Grunt needed)
+          </div>
+        </div>
+        <a href="http://127.0.0.1:8081/" target="_blank" class="btn">Launch CokePhase (Port 8081)</a>
+      </div>
+
+      <!-- CSMusicMixer -->
+      <div class="card">
+        <div>
+          <h3>CSMusicMixer (Mark Hughes)</h3>
+          <p>Standalone recreation of the iconic MyCoke / Coke Studios Music Mixer. Choose genres (Country, Dance, Hip-Hop, Latin, Pop, Rock), sequence audio loops across 4 channels, control timeline playback, and export track data.</p>
+          <div class="specs">
+            <strong>Stack:</strong> Modern TypeScript / Howler.js Audio Engine / Webpack<br>
+            <strong>Sounds:</strong> 56 bundled original WAV samples across 6 genres<br>
+            <strong>Mode:</strong> Standalone web application
+          </div>
+        </div>
+        <a href="http://127.0.0.1:8082/" target="_blank" class="btn">Launch Music Mixer (Port 8082)</a>
+      </div>
+    </div>
+
+    <!-- Preservation Archives & Extraction Toolchain -->
+    <div class="section-title">
+      <span>Preservation Archives & Extraction Toolchain</span>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div>
+          <h3>Decompiled Lingo Sources</h3>
+          <p>Complete Macromedia Director / Shockwave cast script dumps from surviving Sulake clients: March 14 2006, May 3 2006, and October 8 2007. Includes all room scripts, mixer, sequencer, chat, and mod tool.</p>
+          <div class="specs">
+            <strong>Location:</strong> <code>sources/original-client-source/</code><br>
+            <strong>Files:</strong> 2,994 decompiled Lingo and cast script files
+          </div>
+        </div>
+        <a href="file:///c:/Users/Matth/OneDrive/Desktop/GPT/sources/original-client-source" class="btn secondary">Open Folder</a>
+      </div>
+
+      <div class="card">
+        <div>
+          <h3>Clint Complete Pack Archive</h3>
+          <p>The legendary 80 MB Coke Studios Private Server release by Clint. Contains ElectroServer 3, AS2 Flash Client.swf/fla, Navigator.fla, Inventory.fla, complete sound libraries, and Shockwave minigames.</p>
+          <div class="specs">
+            <strong>Location:</strong> <code>archives/extracted-complete-pack/</code><br>
+            <strong>Archive:</strong> <code>archives/CokeStudios-The-Complete-Pack.rar</code> (84.3 MB)
+          </div>
+        </div>
+        <a href="file:///c:/Users/Matth/OneDrive/Desktop/GPT/archives/extracted-complete-pack" class="btn secondary">Open Folder</a>
+      </div>
+
+      <div class="card">
+        <div>
+          <h3>Extractor & Decompiler Tools</h3>
+          <p>Modern extraction and reverse engineering pipeline for Macromedia Director (.dcr) and Shockwave casts (.cct/.ccr), including ProjectorRays, Shockrays, cokemusic-extractor, and dirplayer-rs.</p>
+          <div class="specs">
+            <strong>Tools:</strong> Rust, Python, Go, and C tools in <code>sources/</code><br>
+            <strong>Purpose:</strong> Asset extraction, cast analysis & decompiler
+          </div>
+        </div>
+        <a href="file:///c:/Users/Matth/OneDrive/Desktop/GPT/sources" class="btn secondary">Open Folder</a>
+      </div>
+
+      <div class="card" style="border: 2px solid var(--coke-gold);">
+        <div>
+          <h3 style="color:var(--coke-gold);">📘 Architecture & Rebuild Bible</h3>
+          <p>Authoritative engineering documentation covering 2:1 isometric projection formulas, inverse screen-to-grid raycasting, 14-part avatar composite tables, 4-track sequencer specifications, and AMF0/WebSocket protocols.</p>
+          <div class="specs">
+            <strong>Location:</strong> <code>docs/BIBLE.md</code><br>
+            <strong>Coverage:</strong> Formulas, sprite layer tables, timings & RFC6455 specs
+          </div>
+        </div>
+        <a href="file:///c:/Users/Matth/OneDrive/Desktop/GPT/docs/BIBLE.md" class="btn secondary">Open Architecture Bible</a>
+      </div>
+    </div>
+
+    <!-- System Admin Box -->
+    <div class="status-panel">
+      <h4>System & Multiplatform Environment (Debian Linux First)</h4>
+      <p style="color:var(--coke-muted);margin-bottom:10px;">Primary deployment targets Debian 12 (Bookworm) / Ubuntu, with native Windows support.</p>
+      <pre>
+# Debian 12 / Ubuntu Quick Launch:
+./setup.sh
+./start.sh
+# To stop background services: ./stop.sh
+
+# Docker Container (Debian Bookworm):
+docker compose up -d
+
+# Windows Native Support:
+Start-Local.cmd (or Start-Local.ps1)
+Stop-Local.cmd  (or Stop-Local.ps1)
+
+Ports & Endpoints:
+- Port 24902: Master Recovery Portal & Unified Gateway (Default Entry Point)
+- Port 8080: Standalone GoCoke Backend (Direct WebSocket & AMF)
+- Port 8081: CokePhase HTML5 Engine
+- Port 8082: CSMusicMixer Standalone
+- /sf/gateway: Flash Remoting AMF0 Gateway
+- /ws/realtime: RFC6455 Realtime Multiplayer Game Server
+      </pre>
+    </div>
+  </div>
+
+  <footer>
+    Coke Music & Coke Studios are trademarks of The Coca-Cola Company. Preserved for educational, historical, and research purposes.
+  </footer>
+
+  <script>
+    // Character Creator & URL Generator
+    const nameInput = document.getElementById('inputScreenName');
+    const genderSelect = document.getElementById('selectGender');
+    const mottoInput = document.getElementById('inputMotto');
+    const roomSelect = document.getElementById('selectRoom');
+
+    const previewName = document.getElementById('previewName');
+    const previewSW1 = document.getElementById('previewSW1');
+    const previewMotto = document.getElementById('previewMotto');
+    const previewRoom = document.getElementById('previewRoom');
+    const previewURL = document.getElementById('previewURL');
+    const btnLaunchSingle = document.getElementById('btnLaunchSingle');
+    const btnLaunchMulti = document.getElementById('btnLaunchMulti');
+
+    function updateLaunchDetails() {
+      const name = nameInput.value.trim() || 'Adam';
+      const gender = genderSelect.value;
+      const motto = mottoInput.value.trim() || 'Coke Music Reborn!';
+      const room = roomSelect.value;
+      const roomLabel = roomSelect.options[roomSelect.selectedIndex].text;
+
+      let sw1 = 'QWRhbQ==';
+      try {
+        sw1 = btoa(name);
+      } catch (_) {}
+
+      const sessionToken = name + '_' + Math.random().toString(36).substring(2, 8);
+      const host = window.location.host || '127.0.0.1:24902';
+      const protocol = window.location.protocol || 'http:';
+      const url = `${protocol}//${host}/game/?user=${encodeURIComponent(name)}&sw1=${encodeURIComponent(sw1)}&sw2=${encodeURIComponent(sessionToken)}&room=${encodeURIComponent(room)}`;
+
+      previewName.textContent = name;
+      previewSW1.textContent = sw1;
+      previewMotto.textContent = `"${motto}"`;
+      previewRoom.textContent = roomLabel;
+      previewURL.textContent = url;
+      btnLaunchSingle.href = url;
+    }
+
+    nameInput.addEventListener('input', updateLaunchDetails);
+    genderSelect.addEventListener('change', updateLaunchDetails);
+    mottoInput.addEventListener('input', updateLaunchDetails);
+    roomSelect.addEventListener('change', updateLaunchDetails);
+    updateLaunchDetails();
+
+    // 2-Player Test Launcher
+    btnLaunchMulti.addEventListener('click', () => {
+      const p1Name = nameInput.value.trim() || 'Adam';
+      const p2Name = p1Name === 'Adam' ? 'DJ_Beatmaker' : 'Adam';
+      const room = roomSelect.value;
+
+      const p1SW1 = btoa(p1Name);
+      const p2SW1 = btoa(p2Name);
+
+      const host = window.location.host || '127.0.0.1:24902';
+      const protocol = window.location.protocol || 'http:';
+      const p1URL = `${protocol}//${host}/game/?user=${encodeURIComponent(p1Name)}&sw1=${encodeURIComponent(p1SW1)}&sw2=${encodeURIComponent(p1Name + '_tab1')}&room=${encodeURIComponent(room)}`;
+      const p2URL = `${protocol}//${host}/game/?user=${encodeURIComponent(p2Name)}&sw1=${encodeURIComponent(p2SW1)}&sw2=${encodeURIComponent(p2Name + '_tab2')}&room=${encodeURIComponent(room)}`;
+
+      window.open(p1URL, '_blank', 'width=960,height=700,left=50,top=50');
+      setTimeout(() => {
+        window.open(p2URL, '_blank', 'width=960,height=700,left=1030,top=50');
+      }, 600);
+    });
+
+    // Sound Library Preview Player
+    const samplePacks = {
+      dance: [
+        { name: 'Dance One - Bass 00', file: '11_danceOne_bass00.wav' },
+        { name: 'Dance One - Beatz 00', file: '12_danceOne_beatz00.wav' },
+        { name: 'Dance One - Beatz 01', file: '13_danceOne_beatz01.wav' },
+        { name: 'Dance Two - Beatz 00', file: '14_danceTwo_beatz00.wav' },
+        { name: 'Dance Two - Effect 00', file: '15_danceTwo_effect00.wav' }
+      ],
+      hiphop: [
+        { name: 'Hip-Hop One - Beatz 00', file: '100_minus_1t1.wav' },
+        { name: 'Hip-Hop One - Bass 01', file: '101_minus_1t2.wav' },
+        { name: 'Hip-Hop Two - Loop 01', file: '105_plus_1.wav' },
+        { name: 'Hip-Hop Two - Loop 03', file: '106_plus_3.wav' }
+      ],
+      rock: [
+        { name: 'Rock - Riff 01', file: '107_plus_5.wav' },
+        { name: 'Rock - Drums 10', file: '108_plus_10.wav' },
+        { name: 'Rock - Solo 16', file: '109_plus_16.wav' }
+      ],
+      pop: [
+        { name: 'Pop - Melody 01', file: '100_minus_1t1.wav' },
+        { name: 'Pop - Synth 02', file: '102_minus_1t3.wav' }
+      ],
+      latino: [
+        { name: 'Latino - Rhythm 01', file: '103_minus_10.wav' },
+        { name: 'Latino - Percussion 02', file: '104_minus_16.wav' }
+      ],
+      country: [
+        { name: 'Country Two - Beatz 01', file: '10_countryTwo_beatz01.wav' }
+      ]
+    };
+
+    const container = document.getElementById('sampleContainer');
+    const audioEl = document.getElementById('audioElement');
+    let currentlyPlaying = null;
+
+    function renderGenre(genre) {
+      const list = samplePacks[genre] || [];
+      container.innerHTML = '';
+      list.forEach(sample => {
+        const item = document.createElement('div');
+        item.className = 'sample-item';
+        item.innerHTML = `
+          <span>${sample.name}</span>
+          <button class="sample-play-btn" data-file="${sample.file}" title="Play Loop">▶</button>
+        `;
+        container.appendChild(item);
+      });
+
+      container.querySelectorAll('.sample-play-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const file = btn.getAttribute('data-file');
+          const url = `/Lingo/soundlibrary/${file}`;
+
+          if (currentlyPlaying === btn) {
+            audioEl.pause();
+            btn.textContent = '▶';
+            currentlyPlaying = null;
+            return;
+          }
+
+          if (currentlyPlaying) {
+            currentlyPlaying.textContent = '▶';
+          }
+
+          audioEl.src = url;
+          audioEl.play().then(() => {
+            btn.textContent = '■';
+            currentlyPlaying = btn;
+          }).catch(err => {
+            console.error('Audio playback error:', err);
+          });
+        });
+      });
+    }
+
+    audioEl.addEventListener('ended', () => {
+      if (currentlyPlaying) {
+        currentlyPlaying.textContent = '▶';
+        currentlyPlaying = null;
+      }
+    });
+
+    document.querySelectorAll('.btn-genre').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.btn-genre').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderGenre(btn.getAttribute('data-genre'));
+      });
+    });
+
+    renderGenre('dance');
+  </script>
+</body>
+</html>

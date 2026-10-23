@@ -1,0 +1,62 @@
+{
+	"title": "5001 Collection",
+	"description": "The 5001 product range is the closest you'll get to comfort!",
+	"items": [
+		{
+			"prodId": "11",
+			"type": "Chair",
+			"price": "500",
+			"name": "5001 Chair",
+			"image": "5001_chair_small.png"
+		},
+		{
+			"prodId": "12",
+			"type": "Stool",
+			"price": "450",
+			"name": "5001 Stool",
+			"image": "5001_stool_small.png"
+		},
+		{
+			"prodId": "13",
+			"type": "Sofa",
+			"price": "625",
+			"name": "5001 Sofa",
+			"image": "5001_sofa_small.png"
+		},
+		{
+			"prodId": "14",
+			"type": "Table",
+			"price": "450",
+			"name": "5001 Coffee Table",
+			"image": "5001_ctable_small.png"
+		},
+		{
+			"prodId": "15",
+			"type": "Table",
+			"price": "950",
+			"name": "5001 Table",
+			"image": "5001_table_small.png"
+		},
+		{
+			"prodId": "16",
+			"type": "Default",
+			"price": "500",
+			"name": "5001 Sound System",
+			"image": "5001_stereo_small.png"
+		},
+		{
+			"prodId": "17",
+			"type": "Default",
+			"price": "500",
+			"name": "5001 Minibar",
+			"image": "5001_minibar_small.png"
+		},
+		{
+			"prodId": "18",
+			"type": "Default",
+			"price": "600",
+			"name": "5001 Cube Light",
+			"image": "5001_light_small.png"
+		}
+	]
+}
