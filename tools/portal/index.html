@@ -1471,7 +1471,7 @@
             </div>
           </div>
           <div class="game-iframe-wrapper" id="gameFrameWrapper">
-            <iframe id="gameIframe" src="/game/" allow="autoplay"></iframe>
+            <iframe id="gameFrame" name="gameFrame" src="/game/" allow="autoplay"></iframe>
           </div>
         </div>
 
@@ -2455,7 +2455,7 @@
 
     // Studio In-Game Actions Bridge
     function triggerGameCokeDrink() {
-      const iframe = document.getElementById('gameIframe');
+      const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
       try {
         if (iframe && iframe.contentWindow && iframe.contentWindow.ige && iframe.contentWindow.ige.client) {
           iframe.contentWindow.ige.client.drinkCoke();
@@ -2466,7 +2466,7 @@
     }
 
     function triggerGameDJMix() {
-      const iframe = document.getElementById('gameIframe');
+      const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
       try {
         if (iframe && iframe.contentWindow && iframe.contentWindow.ige && iframe.contentWindow.ige.client) {
           iframe.contentWindow.ige.client.triggerDJPerformance();
@@ -2477,7 +2477,7 @@
     }
 
     function triggerGameVoteCheer() {
-      const iframe = document.getElementById('gameIframe');
+      const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
       try {
         if (iframe && iframe.contentWindow && iframe.contentWindow.ige && iframe.contentWindow.ige.client) {
           iframe.contentWindow.ige.client.voteCheer();
@@ -2488,7 +2488,7 @@
     }
 
     function triggerGameVoteBoo() {
-      const iframe = document.getElementById('gameIframe');
+      const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
       try {
         if (iframe && iframe.contentWindow && iframe.contentWindow.ige && iframe.contentWindow.ige.client) {
           iframe.contentWindow.ige.client.voteBoo();
@@ -2507,14 +2507,14 @@
       document.getElementById('currentRoomTitle').textContent = roomTitle;
       const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
       const avatarDef = localStorage.getItem('coke_avatarDef') || (document.getElementById('avatarDefText') ? document.getElementById('avatarDefText').textContent : '');
-      const iframe = document.getElementById('gameIframe');
+      const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
       const base = '/game/';
       try { localStorage.setItem('coke_studioType', roomId); } catch (_) {}
       iframe.src = base + '?user=' + encodeURIComponent(user) + '&sw1=' + btoa(user) + '&room=' + encodeURIComponent(roomId) + (avatarDef ? '&avatarDef=' + encodeURIComponent(avatarDef) : '') + '&_t=' + Date.now();
     }
 
     function reloadClient() {
-      const iframe = document.getElementById('gameIframe');
+      const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
       const url = new URL(iframe.src, window.location.origin);
       url.searchParams.set('_t', Date.now());
       iframe.src = url.toString();
@@ -2705,7 +2705,7 @@
     // Sync ScreenName changes to game iframe
     document.getElementById('screenNameInput').addEventListener('change', (e) => {
       const name = e.target.value.trim();
-      const iframe = document.getElementById('gameIframe');
+      const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
       const url = new URL(iframe.src, window.location.origin);
       url.searchParams.set('user', name);
       iframe.src = url.toString();
@@ -3024,7 +3024,7 @@
 
           updateTopBarHeadshot();
 
-          const iframe = document.getElementById('gameIframe');
+          const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
           if (iframe && iframe.contentWindow) {
             iframe.contentWindow.postMessage({ type: 'APPLY_FIGURE_DEF', avatarDef: defText }, '*');
           }
@@ -3114,7 +3114,7 @@
       // Sync initial game iframe with user's customized look & personal studio
       const activeDef = localStorage.getItem('coke_avatarDef') || (document.getElementById('avatarDefText') ? document.getElementById('avatarDefText').textContent : '');
       const activeRoom = localStorage.getItem('coke_studioType') || 'studio_model_b';
-      const iframe = document.getElementById('gameIframe');
+      const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
       if (iframe && !iframe.src.includes('avatarDef')) {
         iframe.src = `/game/?user=${encodeURIComponent(user)}&sw1=${btoa(user)}&room=${encodeURIComponent(activeRoom)}${activeDef ? '&avatarDef=' + encodeURIComponent(activeDef) : ''}&_t=${Date.now()}`;
       }
@@ -3578,7 +3578,7 @@
           setTimeout(() => {
             closeRegisterModal();
             switchTab('play');
-            const iframe = document.getElementById('gameIframe');
+            const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
             iframe.src = data.gameUrl || `/game/?user=${encodeURIComponent(data.screenName)}&sw1=${encodeURIComponent(data.sw1 || btoa(data.screenName))}&sw2=${encodeURIComponent(data.sw2 || '')}&room=${encodeURIComponent(chosenRoom)}&avatarDef=${encodeURIComponent(figureDef)}`;
           }, 1000);
         } else {

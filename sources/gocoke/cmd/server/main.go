@@ -346,6 +346,7 @@ func (s *Server) handleRegisterDenizen(w http.ResponseWriter, r *http.Request) {
 
 	_ = json.NewEncoder(w).Encode(map[string]any{
 		"status":     "success",
+		"success":    true,
 		"screenName": cleanName,
 		"gender":     d.Gender,
 		"avatarDef":  d.AvatarDef,
@@ -356,7 +357,9 @@ func (s *Server) handleRegisterDenizen(w http.ResponseWriter, r *http.Request) {
 		"studioType": req.StudioType,
 		"sw1":        sw1,
 		"sw2":        sw2,
+		"secret":     sw2,
 		"gameUrl":    fmt.Sprintf("/game/?user=%s&sw1=%s&sw2=%s", url.QueryEscape(cleanName), url.QueryEscape(sw1), url.QueryEscape(sw2)),
+		"launchUrl":  fmt.Sprintf("/game/?user=%s&sw1=%s&sw2=%s", url.QueryEscape(cleanName), url.QueryEscape(sw1), url.QueryEscape(sw2)),
 	})
 }
 
@@ -429,6 +432,7 @@ func (s *Server) handleLoginDenizen(w http.ResponseWriter, r *http.Request) {
 	if denizen == nil {
 		user := q.Get("user")
 		if user == "" { user = q.Get("screenName") }
+		if user == "" { user = q.Get("username") }
 		pass := q.Get("password")
 		if pass == "" { pass = q.Get("pass") }
 		if user != "" && pass != "" {
@@ -440,6 +444,7 @@ func (s *Server) handleLoginDenizen(w http.ResponseWriter, r *http.Request) {
 	if denizen == nil {
 		user := q.Get("user")
 		if user == "" { user = q.Get("screenName") }
+		if user == "" { user = q.Get("username") }
 		if enc := q.Get("sw1"); enc != "" {
 			if dec, decErr := base64.StdEncoding.DecodeString(enc); decErr == nil && len(dec) > 0 {
 				user = string(dec)
@@ -540,7 +545,48 @@ func (s *Server) handleRedeemCap(w http.ResponseWriter, r *http.Request) {
 		rewardVC, rewardItem, newVC, user)
 }
 
+func (s *Server) handleShopPurchase(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	_ = r.ParseForm()
+	user := strings.TrimSpace(r.FormValue("user"))
+	if user == "" {
+		if authD, err := s.authenticatedDenizen(r); err == nil && authD != nil {
+			user = authD.ScreenName
+		}
+	}
+	itemStr := r.FormValue("item")
+	if itemStr == "" {
+		itemStr = r.FormValue("catalog_item_id")
+	}
+	catID, _ := strconv.Atoi(itemStr)
+	if catID <= 0 {
+		catID = 45
+	}
+
+	res, err := s.Purchase(user, catID, map[string]any{}, "")
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	var posID float64
+	if len(res) > 0 {
+		if m, ok := res[0].(map[string]any); ok {
+			posID, _ = m["id"].(float64)
+		}
+	}
+	_ = json.NewEncoder(w).Encode(map[string]any{
+		"success": true,
+		"pos_id":  int64(posID),
+		"item":    catID,
+	})
+}
+
 func (s *Server) handleDenizenProfile(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost || r.Method == http.MethodPut {
+		s.handleUpdateDenizen(w, r)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
 	q := r.URL.Query()
 	user := strings.TrimSpace(q.Get("user"))
@@ -1311,12 +1357,18 @@ func (s *Server) handleWebSocketRealtime(w http.ResponseWriter, r *http.Request)
 			continue
 		}
 
-		parts := strings.SplitN(string(raw), " ", 3)
+		rawStr := strings.TrimRight(string(raw), "\x00")
 		var xmlPayload string
-		if len(parts) == 3 {
-			xmlPayload = strings.TrimRight(parts[2], "\x00")
+		trimmed := strings.TrimSpace(rawStr)
+		if strings.HasPrefix(trimmed, "<") {
+			xmlPayload = rawStr
 		} else {
-			xmlPayload = strings.TrimRight(string(raw), "\x00")
+			parts := strings.SplitN(rawStr, " ", 3)
+			if len(parts) == 3 && strings.HasPrefix(strings.TrimSpace(parts[2]), "<") {
+				xmlPayload = parts[2]
+			} else {
+				xmlPayload = rawStr
+			}
 		}
 
 		s.handlePlayerMessage(player, xmlPayload)
@@ -1324,7 +1376,7 @@ func (s *Server) handleWebSocketRealtime(w http.ResponseWriter, r *http.Request)
 }
 
 func (s *Server) handlePlayerMessage(player *Player, xml string) {
-	if strings.Contains(xml, "<System.Login") || strings.Contains(xml, "<Login") {
+	if strings.Contains(xml, "<System.Login") || strings.Contains(xml, "<Login") || strings.Contains(xml, "<Auth.SecretKey") || strings.Contains(xml, "<DENIZEN_AUTH") {
 		msgID := extractAttr(xml, "msgID")
 		if msgID == "" {
 			msgID = "1"
@@ -1335,6 +1387,9 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		}
 		if sn == "" {
 			sn = extractAttr(xml, "screenName")
+		}
+		if sn == "" {
+			sn = extractAttr(xml, "u")
 		}
 		if dec, err := hex.DecodeString(sn); err == nil && len(dec) > 0 {
 			sn = string(dec)
@@ -1347,8 +1402,18 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		if sec == "" {
 			sec = extractAttr(xml, "secret")
 		}
-		if dec, err := hex.DecodeString(sec); err == nil && len(dec) > 0 {
-			sec = string(dec)
+		if sec != "" {
+			if dec, err := hex.DecodeString(sec); err == nil && len(dec) > 0 {
+				sec = string(dec)
+			}
+		} else if p := extractAttr(xml, "p"); p != "" {
+			if dec, err := hex.DecodeString(p); err == nil && len(dec) > 0 {
+				sec = string(dec)
+			} else {
+				sec = p
+			}
+		} else if key := extractAttr(xml, "key"); key != "" {
+			sec = key
 		}
 
 		def := extractAttr(xml, "def")
@@ -2226,17 +2291,38 @@ func parsePPoints(xml string) [][2]int {
 }
 
 func extractAttr(xml, attr string) string {
-	pattern := attr + "=\""
-	i := strings.Index(xml, pattern)
-	if i < 0 {
-		return ""
+	patterns := []string{" " + attr + "=\"", "\t" + attr + "=\"", "\n" + attr + "=\""}
+	for _, p := range patterns {
+		if idx := strings.Index(xml, p); idx >= 0 {
+			start := idx + len(p)
+			end := strings.Index(xml[start:], "\"")
+			if end >= 0 {
+				return xml[start : start+end]
+			}
+		}
 	}
-	i += len(pattern)
-	j := strings.Index(xml[i:], "\"")
-	if j < 0 {
-		return ""
+	patternsSingle := []string{" " + attr + "='", "\t" + attr + "='", "\n" + attr + "='"}
+	for _, p := range patternsSingle {
+		if idx := strings.Index(xml, p); idx >= 0 {
+			start := idx + len(p)
+			end := strings.Index(xml[start:], "'")
+			if end >= 0 {
+				return xml[start : start+end]
+			}
+		}
 	}
-	return xml[i : i+j]
+	// Fallback to exact prefix attr=" if attribute immediately follows tag name
+	rawPattern := attr + "=\""
+	if idx := strings.Index(xml, rawPattern); idx >= 0 {
+		if idx == 0 || xml[idx-1] == ' ' || xml[idx-1] == '\t' || xml[idx-1] == '\n' || xml[idx-1] == '<' {
+			start := idx + len(rawPattern)
+			end := strings.Index(xml[start:], "\"")
+			if end >= 0 {
+				return xml[start : start+end]
+			}
+		}
+	}
+	return ""
 }
 
 // Minimal RFC6455 upgrader

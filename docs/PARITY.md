@@ -47,7 +47,7 @@ Paths abbreviated as `cmd/server`, `scene/`, `isoengine/`, or `avatarengine/` re
 | Minigame Rules Suites (`sumo/rules_test.go`, `uncover/rules_test.go`), 2026-10-24 | PASS (7/7 tests pass) | Full 5-move cyclic graph, Best-of-3 format, 10s timeout, streak awards, 24-card pair grid, 60 dB victory bonus, and 300 dB daily cap pass | Real-time Director network packet delay |
 | `tools/build-go.ps1` / `build-go.sh` | PASS | Repeatable builds of Go WASM client (`main.wasm`), Linux server binary (`coke-server-linux`), and Windows binary (`coke-server.exe`) with automated 100MB size safeguard | Multi-month production soak |
 | Room Authority Suite (`rooms_test.go`) | PASS (4/4 tests pass) | Unknown room IDs rejected; tile collision blocks invalid destination moves; room transitions remove stale presence; reconnect restores snapshot | Graphical canvas pixel-exact rendering |
-| Multi-context test specs (`tests/browser/*.spec.ts`) | Authored & verified against socket protocol | Full two-player join, presence, movement, chat, trade, music performance, and room exit sequence | Visual comparison of sprite shaders |
+| Multi-context Playwright suite (`tests/browser/*.spec.ts`) | PASS (9/9 tests pass in 9.7s; Chromium against live server on :24902) | Full real player journeys (registration, login, room join, 2-player sync, path movement, chat falloff, catalogue purchase, backpack, CD compose/burn/perform/vote, social messenger & safe trade) pass end-to-end | Visual comparison of sprite shaders |
 | Build & Binary SHA-256 Hashes | Verified (`docs/verification/VERIFICATION-REPORT.md`) | Cryptographically reproducible binary and client distribution builds | Hardware-specific GPU acceleration quirks |
 
 ## Evidence required when advancing a row

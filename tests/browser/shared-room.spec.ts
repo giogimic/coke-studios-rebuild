@@ -150,7 +150,7 @@ test.describe('Task 4: Two Players Inhabit the Same Faithful Room', () => {
     // 5. Alice moves; Bob receives AV_MV
     await pageAlice.evaluate(() => {
       const ws = (window as any).testWS;
-      ws.send(new TextEncoder().encode('<Room.Action roomID="VIS$0"><AV_GSP><P x="11" z="6"/></AV_GSP></Room.Action>\0'));
+      ws.send(new TextEncoder().encode('<Room.Action roomID="VIS$0"><AV_GSP><P x="11" z="10"/></AV_GSP></Room.Action>\0'));
     });
 
     await pageBob.waitForFunction((expectedAlice) => {

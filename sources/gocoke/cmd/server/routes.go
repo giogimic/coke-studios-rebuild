@@ -29,6 +29,8 @@ func (s *Server) Handler() http.Handler {
 
 	// 4. Red Cap PIN code redemption HTTP API
 	mux.HandleFunc("/sf/ssldocs/redeemCap.jsp", s.handleRedeemCap)
+	mux.HandleFunc("/api/shop/purchase", s.handleShopPurchase)
+	mux.HandleFunc("/api/catalogue/purchase", s.handleShopPurchase)
 
 	// 5. Denizen Profile & Customizer APIs
 	mux.HandleFunc("/api/denizen/profile", s.handleDenizenProfile)
@@ -37,6 +39,7 @@ func (s *Server) Handler() http.Handler {
 
 	// 6. Messenger & Social APIs
 	mux.HandleFunc("/api/messenger/friends", s.handleMessengerFriends)
+	mux.HandleFunc("/api/messenger/friend/list", s.handleMessengerFriends)
 	mux.HandleFunc("/api/messenger/send", s.handleMessengerSend)
 	mux.HandleFunc("/api/messenger/messages", s.handleMessengerMessages)
 	mux.HandleFunc("/api/messenger/friend/add", s.handleMessengerAddFriend)

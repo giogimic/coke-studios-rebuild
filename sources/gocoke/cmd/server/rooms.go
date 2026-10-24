@@ -186,7 +186,8 @@ func (r *Room) LoadPathMap(webRoot string) {
 		var pm pathMapXML
 		if xmlErr := xml.Unmarshal(data, &pm); xmlErr == nil {
 			for _, n := range pm.Nodes {
-				if n.Weight == 0 || n.Weight == 10 || n.Weight == 150 || n.Weight == 155 || n.Weight == 110 || n.Weight == 200 {
+				if n.Weight != 255 {
+					walkable[[2]int{n.Col, n.Row}] = true
 					walkable[[2]int{n.Row, n.Col}] = true
 				}
 			}

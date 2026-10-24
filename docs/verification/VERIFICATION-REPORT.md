@@ -13,8 +13,8 @@ All binaries are compiled directly from `sources/gocoke` without external closed
 
 | Artifact | Target OS / Arch | Size (bytes) | SHA-256 Checksum |
 |---|---|---|---|
-| `tools/bin/coke-server-linux` | Linux / amd64 (Debian 12) | 11,739,298 | `305611FB44A57C12DAD399A4D99AEF6A2A3B7AE9BB70EE057D286783E187D99F` |
-| `tools/bin/coke-server.exe` | Windows / amd64 | 11,833,856 | `D6D090A78EEF5F4B50E264B231A48E6C41E74779928A0EF6FD868FDBBA4F0808` |
+| `tools/bin/coke-server-linux` | Linux / amd64 (Debian 12) | 11,747,490 | `5CF203C8C8DDE5096FCBAD2F0595A64A1A99C695DB5CFE5689E42DD1B29DF720` |
+| `tools/bin/coke-server.exe` | Windows / amd64 | 11,840,512 | `0AC7974883432EB8A287AEF0FA7BE8C8B0977967584FD6E0F319FCCC86F8CC1D` |
 | `sources/gocoke/web/main.wasm` | WebAssembly / JS | 53,003,187 | `565C93B6C0690C1A5378B3762E747A94B5608461CBF541EF9EB8ECAA2C3825D1` |
 
 > [!NOTE]
@@ -73,6 +73,25 @@ Executed with `go test -v ./cmd/server`: **51/51 PASS (2.573s)**
 ### 2.2 Client Rules Suites
 - `internal/client/minigames/sumo/rules_test.go`: **PASS** (`TestSumoRuleMatrixComplete`, `TestSumoBestOfThreeProgression`, `TestSumoTurnTimerFallback`, `TestSumoStreakRewards`).
 - `internal/client/minigames/uncover/rules_test.go`: **PASS** (`TestUncoverGamePlayerBounds`, `TestUncoverGamePairMatchingAndBonus`, `TestUncoverWildCardMatching`).
+
+### 2.3 End-to-End Browser Journey Tests (`tests/browser/`)
+Executed with Playwright against live running authoritative Go server on port 24902: **9/9 PASS (9.7s)**
+
+- `go-entry.spec.ts`:
+  - `portal loads and delegates sole gameplay to Go WebAssembly` (PASS - 234ms)
+  - `/game/ serves WebAssembly shell with canvas and honest retry on missing WASM` (PASS - 133ms)
+- `account-session.spec.ts`:
+  - `register new denizen issues authoritative session and launches Go world` (PASS - 388ms)
+  - `login rejects invalid credentials and accepts valid credentials` (PASS - 126ms)
+  - `two distinct accounts maintain completely isolated state and sessions` (PASS - 195ms)
+- `shared-room.spec.ts`:
+  - `two players join same room, see each other, walk, chat, and handle leaves/reconnect` (PASS - 254ms)
+- `studio-economy.spec.ts`:
+  - `catalogue pricing, atomic purchase, idempotency, backpack transfer, and studio placement` (PASS - 1.8s)
+- `music-performance.spec.ts`:
+  - `compose, burn CD, perform in room, spectator vote, single settlement, and Top 40 chart qualification` (PASS - 1.8s)
+- `social-trade.spec.ts`:
+  - `friend request, reject, accept, instant messaging, host controls, and atomic trade` (PASS - 4.0s)
 
 ---
 
