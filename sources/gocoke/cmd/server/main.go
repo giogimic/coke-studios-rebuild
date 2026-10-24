@@ -871,12 +871,13 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 
 	case strings.Contains(target, "burnCD"):
 		d := s.resolveAMFDenizen(r, bodyVal)
-		screenName := "Adam"
-		if d != nil {
-			screenName = d.ScreenName
+		if d == nil {
+			responseValue = map[string]any{"__amf_error_type": "SecurityException", "__amf_error_message": "Unauthorized"}
+			break
 		}
-		title := "Coke Beats Vol. 1"
-		edl := "^50,rockOne_guitar00{2,0{4,4{^50,danceOne_beatz00{4,0{^"
+		screenName := d.ScreenName
+		title := "My Track"
+		edl := ""
 		if arr, ok := bodyVal.([]any); ok {
 			for _, item := range arr {
 				if s, ok := item.(string); ok && strings.HasPrefix(s, "^") {
@@ -886,11 +887,21 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		}
-		// Deduct 10 dB and mint a new playable CD (catalogItem 89) into backpack
-		_, _ = s.store.AdjustBalance(screenName, -10, 0)
+		if edl == "" {
+			responseValue = map[string]any{"__amf_error_type": "MusicException", "__amf_error_message": "Empty EDL sequence"}
+			break
+		}
+		songID, err := s.store.SaveSong(screenName, title, edl)
+		if err != nil {
+			responseValue = map[string]any{"__amf_error_type": "DatabaseException", "__amf_error_message": err.Error()}
+			break
+		}
+		newDB, _ := s.store.AdjustBalance(screenName, -10, 0)
 		cdProps := map[string]any{
+			"songId":    float64(songID),
 			"songName":  title,
 			"ownerName": screenName,
+			"artist":    screenName,
 			"edl":       edl,
 		}
 		newID, _ := s.store.AddBackpackItem(screenName, 89, cdProps)
@@ -899,6 +910,7 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 			"possession":  float64(newID),
 			"catalogItem": float64(89),
 			"properties":  cdProps,
+			"balance":     float64(newDB),
 		}
 
 	case strings.Contains(target, "getAllPrivateStudios") || strings.Contains(target, "getMyStudios") || strings.Contains(target, "getFeaturedStudios"):
@@ -1391,16 +1403,14 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		sEDL := extractAttr(xml, "s")
 		title := extractAttr(xml, "title")
 		if title == "" {
-			title = "Coke Beats Vol. 1"
+			title = "My Mix"
 		}
-		if sEDL == "" {
-			sEDL = "^50,rockOne_guitar00{2,0{4,4{^50,danceOne_beatz00{4,0{^"
-		}
-
-		roomID := player.RoomID
-		if roomID != "" {
-			room := s.GetOrCreateRoom(roomID)
-			s.startPerformance(room, player.ScreenName, title, sEDL)
+		if sEDL != "" {
+			roomID := player.RoomID
+			if roomID != "" {
+				room := s.GetOrCreateRoom(roomID)
+				s.startPerformance(room, player.ScreenName, title, sEDL)
+			}
 		}
 		return
 	}
@@ -1600,21 +1610,23 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 			title = "My Burned Beat"
 		}
 		edl := extractAttr(xml, "edl")
-		if edl == "" {
-			edl = "^50,rockOne_guitar00{2,0{4,4{^"
-		}
-		newDB, err := s.store.AdjustBalance(player.ScreenName, -10, 0)
-		if err == nil {
-			cdProps := map[string]any{
-				"songName":  title,
-				"ownerName": player.ScreenName,
-				"edl":       edl,
+		if edl != "" {
+			songID, _ := s.store.SaveSong(player.ScreenName, title, edl)
+			newDB, err := s.store.AdjustBalance(player.ScreenName, -10, 0)
+			if err == nil {
+				cdProps := map[string]any{
+					"songId":    float64(songID),
+					"songName":  title,
+					"ownerName": player.ScreenName,
+					"artist":    player.ScreenName,
+					"edl":       edl,
+				}
+				newID, _ := s.store.AddBackpackItem(player.ScreenName, 89, cdProps)
+				mintXML := fmt.Sprintf("<POS_MINT id=\"%d\" cid=\"89\" title=\"%s\" edl=\"%s\" db=\"%d\"/>",
+					newID, title, edl, newDB)
+				_ = player.Send(mintXML)
+				log.Printf("[MIXER] Player %s burned CD #%d (%q)", player.ScreenName, newID, title)
 			}
-			newID, _ := s.store.AddBackpackItem(player.ScreenName, 89, cdProps)
-			mintXML := fmt.Sprintf("<POS_MINT id=\"%d\" cid=\"89\" title=\"%s\" edl=\"%s\" db=\"%d\"/>",
-				newID, title, edl, newDB)
-			_ = player.Send(mintXML)
-			log.Printf("[MIXER] Player %s burned CD #%d (%q)", player.ScreenName, newID, title)
 		}
 		return
 	}
@@ -1690,7 +1702,14 @@ func (s *Server) handleMixerBurn(w http.ResponseWriter, r *http.Request) {
 		user = r.URL.Query().Get("user")
 	}
 	if user == "" {
-		user = "Adam"
+		if d, _ := s.authenticatedDenizen(r); d != nil {
+			user = d.ScreenName
+		}
+	}
+	if user == "" {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "user identity required"})
+		return
 	}
 	title := r.FormValue("title")
 	if title == "" {
@@ -1704,7 +1723,16 @@ func (s *Server) handleMixerBurn(w http.ResponseWriter, r *http.Request) {
 		edl = r.URL.Query().Get("edl")
 	}
 	if edl == "" {
-		edl = "^50,rockOne_guitar00{2,0{4,4{^"
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "EDL sequence required"})
+		return
+	}
+
+	songID, err := s.store.SaveSong(user, title, edl)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
 	}
 
 	newDB, err := s.store.AdjustBalance(user, -10, 0)
@@ -1715,8 +1743,10 @@ func (s *Server) handleMixerBurn(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cdProps := map[string]any{
+		"songId":    float64(songID),
 		"songName":  title,
 		"ownerName": user,
+		"artist":    user,
 		"edl":       edl,
 	}
 	newID, err := s.store.AddBackpackItem(user, 89, cdProps)
@@ -1741,8 +1771,10 @@ func (s *Server) handleMixerBurn(w http.ResponseWriter, r *http.Request) {
 		"success":       true,
 		"possession_id": newID,
 		"catalog_item":  89,
+		"song_id":       songID,
 		"song_name":     title,
 		"owner":         user,
+		"artist":        user,
 		"edl":           edl,
 		"new_decibels":  newDB,
 	})
@@ -1998,132 +2030,42 @@ func (s *Server) handleStudioDecor(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// startPerformance manages the 60-second DJ voting battle loop
+// startPerformance initiates an authoritative DJ performance using calculated sequence duration
 func (s *Server) startPerformance(room *Room, dj, title, edl string) {
-	room.mu.Lock()
-	if room.Performance != nil && !room.Performance.Done {
-		close(room.Performance.cancelCh)
-	}
-
-	session := &PerformanceSession{
-		DJ:        dj,
-		SongTitle: title,
-		EDL:       edl,
-		StartedAt: time.Now(),
-		Duration:  60 * time.Second,
-		Cheers:    0,
-		Boos:      0,
-		Voters:    make(map[string]bool),
-		cancelCh:  make(chan struct{}),
-	}
-	room.Performance = session
-	room.mu.Unlock()
-
-	// Broadcast song start and DJ animation to all room occupants (with 1:1 client attributes: av, a, sn, s)
-	cdpXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_P av=\"%s\" a=\"%s\" sn=\"%s\" title=\"%s\" s=\"%s\" catId=\"89\"/></Room.Action>",
-		room.ID, dj, dj, title, title, edl)
-	room.Broadcast(cdpXML, "")
-	log.Printf("[MUSIC] DJ %s started track %q in %s", dj, title, room.ID)
-
-	// Background ticker for 60-second song duration
-	go func() {
-		select {
-		case <-time.After(session.Duration):
-		case <-session.cancelCh:
-			return
-		}
-
-		room.mu.Lock()
-		if session.Done {
-			room.mu.Unlock()
-			return
-		}
-		session.Done = true
-		cheers := session.Cheers
-		boos := session.Boos
-		room.mu.Unlock()
-
-		// Calculate 1:1 reward formula: max(0, (Cheers * 2) - Boos) + 10 audience bonus
-		rewardDB := (cheers * 2) - boos
-		if rewardDB < 0 {
-			rewardDB = 0
-		}
-		rewardDB += 10 // Participation bonus
-
-		// Credit Decibels to DJ in persistent database
-		newBalance, _ := s.store.AdjustBalance(dj, rewardDB, 0)
-		log.Printf("[MUSIC] Performance ended for %s in %s. Cheers: %d, Boos: %d, Awarded: +%d dB (New Balance: %d)",
-			dj, room.ID, cheers, boos, rewardDB, newBalance)
-
-		// 1. Broadcast CD_VR with tur, tdr, pa for official performance results dialog
-		vrXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_VR tur=\"%d\" tdr=\"%d\" pa=\"%d\"/></Room.Action>",
-			room.ID, cheers, boos, rewardDB)
-		room.Broadcast(vrXML, "")
-
-		// 2. Broadcast CD_PRS with reaction summary for crowd cheers/boos audio
-		prsXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_PRS av=\"%s\" tur=\"%d\" tdr=\"%d\" tu=\"%d\" td=\"%d\" db=\"%d\"/></Room.Action>",
-			room.ID, dj, cheers, boos, cheers, boos, rewardDB)
-		room.Broadcast(prsXML, "")
-	}()
+	_, _ = s.StartPerformance(room, dj, dj, title, edl)
 }
 
 func (s *Server) stopPerformance(room *Room) {
-	room.mu.Lock()
-	defer room.mu.Unlock()
-	if room.Performance != nil && !room.Performance.Done {
-		room.Performance.Done = true
-		select {
-		case <-room.Performance.cancelCh:
-		default:
-			close(room.Performance.cancelCh)
-		}
-	}
+	_, _ = s.SettlePerformance(room)
 }
 
 func (s *Server) recordVote(room *Room, voter string, delta int) {
-	room.mu.Lock()
-	if room.Performance == nil || room.Performance.Done {
-		room.mu.Unlock()
+	if err := s.RecordPerformanceVote(room, voter, delta); err != nil {
+		log.Printf("[VOTE] Vote by %s in %s rejected: %v", voter, room.ID, err)
 		return
 	}
-	if room.Performance.Voters[voter] {
-		// Already voted in this performance round
-		room.mu.Unlock()
-		return
-	}
-	room.Performance.Voters[voter] = true
 
-	var tuXML, tdXML string
+	room.mu.RLock()
+	session := room.Performance
+	if session == nil {
+		room.mu.RUnlock()
+		return
+	}
+	cheers := session.Cheers
+	boos := session.Boos
+	room.mu.RUnlock()
+
+	var voteXML string
 	if delta > 0 {
-		room.Performance.Cheers++
-		tuXML = fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_TU av=\"%s\"/></Room.Action>", room.ID, voter)
-		awardDB := 5
-		if room.IsRedRoom {
-			awardDB = 10
-		}
-		_, _ = s.store.AdjustBalance(room.Performance.DJ, awardDB, 0)
-		_ = s.store.RecordChartVote(room.Performance.DJ, room.Performance.SongTitle, voter)
+		voteXML = fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_TU av=\"%s\"/></Room.Action>", room.ID, voter)
 	} else {
-		room.Performance.Boos++
-		tdXML = fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_TD av=\"%s\"/></Room.Action>", room.ID, voter)
+		voteXML = fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_TD av=\"%s\"/></Room.Action>", room.ID, voter)
 	}
+	room.Broadcast(voteXML, "")
 
-	cheers := room.Performance.Cheers
-	boos := room.Performance.Boos
 	vrXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_VR tu=\"%d\" td=\"%d\"/></Room.Action>",
 		room.ID, cheers, boos)
-	room.mu.Unlock()
-
-	// Broadcast events after releasing lock
-	if tuXML != "" {
-		room.Broadcast(tuXML, "")
-	} else if tdXML != "" {
-		room.Broadcast(tdXML, "")
-	}
 	room.Broadcast(vrXML, "")
-
-	log.Printf("[VOTE] [%s] %s voted (delta: %d, Cheers: %d, Boos: %d)",
-		room.ID, voter, delta, cheers, boos)
 }
 
 func parsePPoints(xml string) [][2]int {

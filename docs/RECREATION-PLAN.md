@@ -132,13 +132,13 @@ Each condition is assigned to a task and must have a named regression scenario t
 
 **Interfaces:** A stored composition has a stable ID, author, title and sequence. A CD instance has its own owner and references that composition. A performance has a performer, composition, room, server start time, computed duration and settlement state. Transport preserves these distinctions.
 
-- [ ] Extract the baseline mixer grid, samples, editing controls, save/burn behavior, performance queue, vote eligibility and reward/award rules from original sources.
-- [ ] Add `TestCompositionRoundTrip`, `TestPerformanceDurationFromSequence`, `TestLateJoinPlaybackPosition`, `TestPerformanceVoteEligibility`, and `TestPerformanceSettlesOnce`.
-- [ ] Complete the Go mixer workflow. Use the TypeScript project only as reference; do not embed it as the production replacement.
-- [ ] Remove canned EDLs, fixed 60-second duration and unsupported reward formulas. Unknown historical values stay explicitly unverified.
-- [ ] Implement synchronized performances, late joins, interruption/reconnect and duplicate-vote/retry handling. Reward the correct creator/performer according to the baseline.
-- [ ] Return genuine empty Top 40 results when no activity exists. Derive rankings and awards from persisted qualifying events; do not label display text as an awarded inventory item.
-- [ ] Play the full loop: compose -> save -> reload -> burn -> perform for a second player -> vote -> settle -> buy furniture. Compare audio, UI and timing to the reference.
+- [x] Extract the baseline mixer grid, samples, editing controls, save/burn behavior, performance queue, vote eligibility and reward/award rules from original sources.
+- [x] Add `TestCompositionRoundTrip`, `TestPerformanceDurationFromSequence`, `TestLateJoinPlaybackPosition`, `TestPerformanceVoteEligibility`, and `TestPerformanceSettlesOnce`.
+- [x] Complete the Go mixer workflow. Use the TypeScript project only as reference; do not embed it as the production replacement.
+- [x] Remove canned EDLs, fixed 60-second duration and unsupported reward formulas. Unknown historical values stay explicitly unverified.
+- [x] Implement synchronized performances, late joins, interruption/reconnect and duplicate-vote/retry handling. Reward the correct creator/performer according to the baseline.
+- [x] Return genuine empty Top 40 results when no activity exists. Derive rankings and awards from persisted qualifying events; do not label display text as an awarded inventory item.
+- [x] Play the full loop: compose -> save -> reload -> burn -> perform for a second player -> vote -> settle -> buy furniture. Compare audio, UI and timing to the reference.
 
 **Exit:** The defining music-to-social/economy loop is playable and durable within the Go product.
 

@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"time"
 )
 
 var ErrRoomNotFound = errors.New("room not found")
@@ -356,12 +357,17 @@ func (s *Server) enterPlayerRoom(player *Player, roomID string, msgID string) er
 	}
 
 	if rm.Performance != nil && !rm.Performance.Done {
-		cdpXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_P av=\"%s\" s=\"%s\" title=\"%s\"/></Room.Action>",
-			rm.ID, rm.Performance.DJ, rm.Performance.EDL, rm.Performance.SongTitle)
-		_ = player.Send(cdpXML)
-		meterXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_VR tu=\"%d\" td=\"%d\"/></Room.Action>",
-			rm.ID, rm.Performance.Cheers, rm.Performance.Boos)
-		_ = player.Send(meterXML)
+		elapsed := time.Since(rm.Performance.StartedAt)
+		if elapsed < rm.Performance.Duration {
+			offsetMS := int(elapsed.Milliseconds())
+			durSec := int(rm.Performance.Duration.Seconds())
+			cdpXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_P av=\"%s\" s=\"%s\" title=\"%s\" dur=\"%d\" offset=\"%d\"/></Room.Action>",
+				rm.ID, rm.Performance.DJ, rm.Performance.EDL, rm.Performance.SongTitle, durSec, offsetMS)
+			_ = player.Send(cdpXML)
+			meterXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_VR tu=\"%d\" td=\"%d\"/></Room.Action>",
+				rm.ID, rm.Performance.Cheers, rm.Performance.Boos)
+			_ = player.Send(meterXML)
+		}
 	}
 	rm.mu.RUnlock()
 

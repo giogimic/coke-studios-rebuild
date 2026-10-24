@@ -1490,16 +1490,68 @@ func (s *Store) GetTop40(period string) ([]Top40Entry, error) {
 		}
 	}
 
-	// If empty, return sample authentic charts
-	if len(list) == 0 {
-		list = []Top40Entry{
-			{Rank: 1, SongTitle: "Cherry Coke Grooves", CreatorName: "DJ-Cherry", Votes: 42, Award: "Gold Record"},
-			{Rank: 2, SongTitle: "Neon Nights (Saints Remix)", CreatorName: "Adam", Votes: 38},
-			{Rank: 3, SongTitle: "Red Room Anthem", CreatorName: "CokeMaster", Votes: 29},
-			{Rank: 4, SongTitle: "Rooftop Sunset Beat", CreatorName: "SummerVibe", Votes: 21},
-		}
+	return list, nil
+}
+
+type SongRecord struct {
+	ID        int
+	DenizenID string
+	Title     string
+	Artist    string
+	EDLString string
+	CreatedAt string
+}
+
+func (s *Store) SaveSong(screenName, title, edl string) (int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var denizenID string
+	err := s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&denizenID)
+	if err != nil {
+		denizenID = "usr_guest"
 	}
 
+	res, err := s.db.Exec("INSERT INTO songs (denizen_id, title, artist, edl_string) VALUES (?, ?, ?, ?)",
+		denizenID, strings.TrimSpace(title), strings.TrimSpace(screenName), strings.TrimSpace(edl))
+	if err != nil {
+		return 0, err
+	}
+	lid, _ := res.LastInsertId()
+	return int(lid), nil
+}
+
+func (s *Store) GetSong(id int) (*SongRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var r SongRecord
+	err := s.db.QueryRow("SELECT id, denizen_id, title, artist, edl_string, created_at FROM songs WHERE id = ?", id).
+		Scan(&r.ID, &r.DenizenID, &r.Title, &r.Artist, &r.EDLString, &r.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *Store) GetSongsByArtist(screenName string) ([]SongRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	rows, err := s.db.Query("SELECT id, denizen_id, title, artist, edl_string, created_at FROM songs WHERE LOWER(artist) = LOWER(?) ORDER BY id DESC",
+		strings.TrimSpace(screenName))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var list []SongRecord
+	for rows.Next() {
+		var r SongRecord
+		if err := rows.Scan(&r.ID, &r.DenizenID, &r.Title, &r.Artist, &r.EDLString, &r.CreatedAt); err == nil {
+			list = append(list, r)
+		}
+	}
 	return list, nil
 }
 
