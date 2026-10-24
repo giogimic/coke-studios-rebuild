@@ -1,0 +1,164 @@
+[
+  {
+    "url": "http://www.mycoke.com/images/2007/regRight.gif",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 8,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/regStep1L.jpg",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 14,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/regStep2L.jpg",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 20,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/regStep3L.jpg",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 26,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/inputBackground.gif",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 44,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/captchaBackground.jpg",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 54,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/topLeft.gif",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 59,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/topRigth.gif",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 65,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/bottomLeft.gif",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 71,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/bottomRigth.gif",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 78,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/decibel_tracker2L.jpg",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 171,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/decibel_trackerRight.gif",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 172,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/decibel_trackerRight.gif",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 173,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/decibel_tracker2L_no_bottom.jpg",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 174,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/decibel_trackerRight_no_bottom.gif",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 175,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "http://www.mycoke.com/images/2007/email_inputBackground.gif",
+    "path": "sources/uncover-the-music/_resources/_other/html/css/styles07.css",
+    "line": 186,
+    "kind": "community-minigame-preservation"
+  },
+  {
+    "url": "https://web.archive.org/web/20021209162605/http://www.cokemusic.com/home/privacypolicy.html",
+    "path": "sources/cs-website/templates/postcard.html",
+    "line": 70,
+    "kind": "community-website-reconstruction"
+  },
+  {
+    "url": "https://web.archive.org/web/20021209162605/http://cariocas.cokemusic.com/cdc/rules.jsp",
+    "path": "sources/cs-website/templates/postcard.html",
+    "line": 76,
+    "kind": "community-website-reconstruction"
+  },
+  {
+    "url": "http://www.cokemusic.com/postcard/media/postcard_menu.swf",
+    "path": "sources/cs-website/templates/postcard.html",
+    "line": 585,
+    "kind": "community-website-reconstruction"
+  },
+  {
+    "url": "http://dev4.cokemusic.com/home/privacypolicy.html",
+    "path": "sources/cs-website/www/js/library.js",
+    "line": 108,
+    "kind": "community-website-reconstruction"
+  },
+  {
+    "url": "http://dev2.cariocas.cokemusic.com/cdc/rules.jsp",
+    "path": "sources/cs-website/www/js/library.js",
+    "line": 114,
+    "kind": "community-website-reconstruction"
+  },
+  {
+    "url": "http://www.cokemusic.com/cstudios/cslanding1.jsp",
+    "path": "sources/cs-website/www/js/library.js",
+    "line": 153,
+    "kind": "community-website-reconstruction"
+  },
+  {
+    "url": "http://www.cokemusic.com/games/coaster.swf",
+    "path": "sources/cs-website/www/js/library.js",
+    "line": 154,
+    "kind": "community-website-reconstruction"
+  },
+  {
+    "url": "http://mycoke.studiocom.com/recycler.do",
+    "path": "sources/original-client-source/Recycler/FurniFactory/Cast gamecode BehaviorScript 60.ls",
+    "line": 11,
+    "kind": "decompiled-original-client"
+  },
+  {
+    "url": "http://www.cokemusic.com",
+    "path": "sources/original-client-source/Recycler/FurniFactory/Cast isoengine ParentScript 95 - ACTION_TOP_40_CHART.ls",
+    "line": 16,
+    "kind": "decompiled-original-client"
+  },
+  {
+    "url": "https://decibel.fun",
+    "path": "sources/cokeitems/api/proxy.js",
+    "line": 21,
+    "kind": "community-item-reference"
+  },
+  {
+    "url": "https://decibel.fun",
+    "path": "sources/cokeitems/vite.config.js",
+    "line": 10,
+    "kind": "community-item-reference"
+  }
+]

@@ -1,0 +1,2678 @@
+[
+  {
+    "sha1": "0091c3aad3d1fe1f6aaafc147c3925388b4246ae",
+    "bytes": 12423,
+    "filename": "latinoTwo_piano00_[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "02318add0db3c2f65b98fd87bf1de36ab0ca8cd3",
+    "bytes": 690557,
+    "filename": "SF_Gateway.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "038d48d00e132ac423bf61de5ffe9da1abea2b34",
+    "bytes": 169218,
+    "filename": "moscow.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "03c61dae43ed689e3e9b27bfe6ab10c7170bfdd0",
+    "bytes": 648972,
+    "filename": "ncaa.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "049cb3eaac2c128b2c7b4fce02ed5d26865ef0a3",
+    "bytes": 1676416,
+    "filename": "cc_furniture[1][1].cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "04ccf57be128acdaec3aa5757fbcecbe0ae225e3",
+    "bytes": 170985,
+    "filename": "fca_new_furni_night.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "04fddbc630182bef00fd39f1926588dad640ecac",
+    "bytes": 393141,
+    "filename": "sydney.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "06a1ce7ccc8e7afe60e995b1fe83e02d044db6c8",
+    "bytes": 6417,
+    "filename": "hipHopOne_bass00_[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "07dc5510f8c01b81bd0f12d337620ff721fa7138",
+    "bytes": 104530,
+    "filename": "Tester.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "07e164fe428a859689b85c21669a129a1fd27cef",
+    "bytes": 3170,
+    "filename": "GenderEnum.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "08d71c2ebbfbe3acb85e3a54f4c611400deedfc1",
+    "bytes": 198862,
+    "filename": "cc_furniture_small.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "08da711128af54485f607a1ff3b29b3857c7ca1a",
+    "bytes": 261083,
+    "filename": "cc_furniture_small.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "0affc67312baf109916702e48513939af01c71ac",
+    "bytes": 12423,
+    "filename": "danceOne_bass00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "0b0c39d3e87856aa91961b7c9a5bbe7bfa1e0d48",
+    "bytes": 45308,
+    "filename": "chatenginecct.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "0b1b518f5834027469acbf79e363dd9fbb1a52c2",
+    "bytes": 343388,
+    "filename": "SF_Gateway.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "0b796788d128a05fd099f8d9cb494c15dbc65981",
+    "bytes": 2474,
+    "filename": "PluginXML.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "0c232556d48995490303df8cf98070d8a29638c7",
+    "bytes": 39361,
+    "filename": "login.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "0c620e160991f6d17653b7ffb712bb30a2ffecef",
+    "bytes": 292293,
+    "filename": "miami.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "0c7cdbc167def34b0d91560979476726f0eab089",
+    "bytes": 1097198,
+    "filename": "FurniFactory.dcr",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "0d732b398fcc826b95d525f226aea87bde0e7497",
+    "bytes": 749609,
+    "filename": "am_habbo_v2.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "0dbc196c7dd3012799266942e4a737c5f10ee423",
+    "bytes": 739207,
+    "filename": "auditionred.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "0df7b645b5ff6156bde65c1c1645661a5d17235d",
+    "bytes": 12423,
+    "filename": "shared_latinoBells00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "0f1088c1685c8fb6514df392c440286d665f96a0",
+    "bytes": 15231,
+    "filename": "sequencer.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "0f40e07d1ad5ddf28016aa20409a9b5726064613",
+    "bytes": 3692339,
+    "filename": "soundlibrary.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "0fe843f14eeb9e8575ac9df0d9000f56888d963a",
+    "bytes": 31469,
+    "filename": "ChatInput.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "11046f1c23277d5f41866f995569bfb0fc49c06d",
+    "bytes": 308223,
+    "filename": "tokyo.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "1163fdda4019d1095381f1ab6ab632b99e5997c6",
+    "bytes": 474066,
+    "filename": "centralpark.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "12e4db47089dbe7abd9b226ac8a870b1363354f4",
+    "bytes": 206044,
+    "filename": "avatar_engine.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "13599df78bbcc33c93daff247f870009dda62aad",
+    "bytes": 6417,
+    "filename": "countryTwo_bass00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "136607102622f4bebde3f6f1a7a7002ad75b775b",
+    "bytes": 14801,
+    "filename": "news.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "13eba6aae348668721b1bbaf5a731f3558003b6a",
+    "bytes": 35120,
+    "filename": "fca_vego_board.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "1453877fa059fea403c234c23a4ed882e9228f0f",
+    "bytes": 1544,
+    "filename": "harmonica[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "14ffb5d34b92037c3790b0ecc91818bb75a1fea7",
+    "bytes": 1223,
+    "filename": "README.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "15e73584273129984a70283032c5a652ee1bc34c",
+    "bytes": 69679,
+    "filename": "Player.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "161662c29106942076471bb29141657e784ce32a",
+    "bytes": 324355,
+    "filename": "cc_furniture_small.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "165ccd1a07fe210c79653d2ed9cd21f6fe821948",
+    "bytes": 602053,
+    "filename": "mexico.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "1726c98e6cbe1dd7e1a76ad0e9a830fcb62839fb",
+    "bytes": 12423,
+    "filename": "shared_triangle00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "176a343cb2e180d2c0c63467711613a354d12c12",
+    "bytes": 426661,
+    "filename": "atlantis.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "177c363bfc02edb24eddad988cd79ec084b64b38",
+    "bytes": 1542,
+    "filename": "guitar[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "184a8bda3e5c4928d5f7315d5cab1c77941286b9",
+    "bytes": 826696,
+    "filename": "secretroom.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "188b2fca7936101564395920ffed7830ca7ba011",
+    "bytes": 12419,
+    "filename": "hipHopOne_bass00__[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "18a45e4bea667276ce6b9aca294226e50c90effd",
+    "bytes": 69492,
+    "filename": "Player.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "1a1f9568f3eedaf858622ee3f45d186df806d9a1",
+    "bytes": 704313,
+    "filename": "atlantis.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "1a6badb31b50f033be085835a94a78bea8d75958",
+    "bytes": 6417,
+    "filename": "countryOne_beatz00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "1c61c7bf9a61864be9d7ab8a66f79e4af777f331",
+    "bytes": 7733,
+    "filename": "PosessionManager.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "1d8197253864c4bbba98d8d6f66266a39c8ba974",
+    "bytes": 130548,
+    "filename": "redroom.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "1d8be1102b16a987c622529951b75007a8841d37",
+    "bytes": 802,
+    "filename": "config.xml",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "1eb2f3296dcaf4b3c4299017a43158354e0cdaf7",
+    "bytes": 742192,
+    "filename": "atlantis.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "1f26c4d40b6539c5404883f2c2d47674ba1ed9e7",
+    "bytes": 40437,
+    "filename": "avatarengine.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "206fa5c7c8f8fde47c1a07b8ca2b64adba7157c2",
+    "bytes": 368684,
+    "filename": "mexico.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "20e33d1780ec789a26326da974864fa8d4375714",
+    "bytes": 1314980,
+    "filename": "auditiongold.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "21b07461e89c5ea879ed3d6ac914ba38e927aed8",
+    "bytes": 414430,
+    "filename": "cc_furniture.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "224bdd87b14eea0cc800b526afba618b66da4e53",
+    "bytes": 53628,
+    "filename": "cc_messenger.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "22a7d1773d5f9a1f6a183c017fdcf17e381441a1",
+    "bytes": 8989,
+    "filename": "vego05.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "2338dc498ab82ce34ddbc8e3038a5d740007b0ba",
+    "bytes": 1254443,
+    "filename": "clubcherry.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "23f416fdf68d96c1d7543beebb572de6680acee7",
+    "bytes": 435702,
+    "filename": "raysrooftopparty.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "24043d4066dc2a26eae7026b500779f8c0f2013f",
+    "bytes": 19202,
+    "filename": "shell_config.xml",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "2413d46ba55e6e4b99ed194f04c0b887a8b34555",
+    "bytes": 430815,
+    "filename": "!ORIGINAL.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "24a735b81ba362a07f236abd02636d04082ff750",
+    "bytes": 108683,
+    "filename": "shell112.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "2502485ea2d0977885057d995d7f274be882a9ec",
+    "bytes": 603882,
+    "filename": "mexico.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "25fd81357242d133e8d30d6a56401070bc00f31d",
+    "bytes": 38416,
+    "filename": "studios_games_fca.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "260a1aca8f2811de1919527c70bffb46e629a050",
+    "bytes": 12423,
+    "filename": "misc_jazzTrumpet00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "265c055a74ffa86f55c182ec5decc60cb074d5cc",
+    "bytes": 283,
+    "filename": "README.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "265eb8ca1c177755c538ea01b4ec7122b34d975f",
+    "bytes": 6417,
+    "filename": "hipHopTwo_beatz00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "26b9c49f31a37b4cdafceb1af95596ae5f0aed64",
+    "bytes": 175161,
+    "filename": "avatar_engineV.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "26d3c0ebdbbb9394b718fe50c96bf956cd039735",
+    "bytes": 92,
+    "filename": "New Text Document.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "27421b0724ee7a5968c8886c48b27bf8ceb544bb",
+    "bytes": 549042,
+    "filename": "shell113.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "27603975befe042cd750074cbf01fb48c9fbd384",
+    "bytes": 27377,
+    "filename": "game111.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "276d6d5cee5f38ba57b465ebf436a45ef44ce9df",
+    "bytes": 205976,
+    "filename": "studios_animation.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "27a1983f43fbf814dac7d263df52d64109d4a8d2",
+    "bytes": 2272,
+    "filename": "Jukebox.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "285f4e024b5407f6f040384167fe248673a17ed2",
+    "bytes": 598405,
+    "filename": "cc_catalogue[1].cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "28dc61668fcc7d87b76c98ca3597d55b5a33ab72",
+    "bytes": 69562,
+    "filename": "cc_navigator[1].cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "29b90f4fd7299f30de5a8edabbbc59f6ada964f9",
+    "bytes": 231020,
+    "filename": "mixer.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "29c580df15475ffc8739f16239ca484a6c881e7c",
+    "bytes": 2119048,
+    "filename": "newyork.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "29f90c75c7b08555335cb6852cf7e5b8c8620dcf",
+    "bytes": 1256735,
+    "filename": "cc_furniture.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "2a5953d7d99b1bad69a584223e32873179b6d840",
+    "bytes": 1905077,
+    "filename": "entry.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "2b1229ac21634fad6c075d4dcacec376fa5313a0",
+    "bytes": 3682,
+    "filename": "Posession.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "2b5519d3a3c590b3f5ef8d7f12ba976ebf046f18",
+    "bytes": 1690581,
+    "filename": "castingcallroom.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "2c63ed4f5a8822eac5172f950044538ed8009b7c",
+    "bytes": 12419,
+    "filename": "latinOne_sax00__[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "2d740ca5d02535d38eb8e4038b23d1485ed07a0c",
+    "bytes": 4818,
+    "filename": "CatalogItem.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "2deedd73ec2fdb58985a79768960c0fdc349fb51",
+    "bytes": 12423,
+    "filename": "popTwo_beatz00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "2f898f9b0b15d91815e84a35695435d68b68430c",
+    "bytes": 49606,
+    "filename": "DatabasePluginExample.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "2fdc7b8752d41b1dbede1485d18c45020b566e27",
+    "bytes": 50120,
+    "filename": "EmailPluginExample.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3086464a936c251078365529e9391050c44d1d51",
+    "bytes": 35976,
+    "filename": "Controls.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "31013d01b2b951042076b7b59cdd61027fcb1021",
+    "bytes": 58375,
+    "filename": "atrium.xml",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "318eece1b0250bb63ce7758a60539307b93a9d77",
+    "bytes": 133,
+    "filename": "RIPPED.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "31a5e9c62cd1b1f177f4c33ba39b5a8cfb36ada0",
+    "bytes": 1562848,
+    "filename": "goa.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3241b04c7dd07ee30005ba137e71515232337e9a",
+    "bytes": 155264,
+    "filename": "isoengine.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "334dd973c247f05720916c14e79e5155aae9fed5",
+    "bytes": 126206,
+    "filename": "SF_Gateway[1].cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3368f3b810857d9bc66f5162f6331b7e02748cc3",
+    "bytes": 7406,
+    "filename": "PublicStudios_English.xml",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3479e0212718d12be78e832a96e258010b2b698e",
+    "bytes": 76,
+    "filename": "ServerSettings.xml",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "349385b98a6b252444cef77a09866584c5eda22d",
+    "bytes": 17211,
+    "filename": "game112.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "34af1782e31fb4128c6c18a47fe62790238dcaf1",
+    "bytes": 2144,
+    "filename": "LoginServlet.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3514b59c41e181d003c5e853a93bb8540e975ac8",
+    "bytes": 35235,
+    "filename": "SF_Client.dcr",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "356ba8ddbb7aebd63e37b952dd0832e6eac85174",
+    "bytes": 24357,
+    "filename": "misc_vocal04[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "35b33dcbd02e1acf34ba243d030cc411744eaf2b",
+    "bytes": 6417,
+    "filename": "shared_crash00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3631acf9fbfa7cad0ce1c75a29f5f81ad1d523fd",
+    "bytes": 440597,
+    "filename": "cc_interface.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "37daae431fa1b59edbbcfcade9210338bf65e01b",
+    "bytes": 860405,
+    "filename": "sanfrancisco.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "38fdb186b6c623c0fe83ed5db5d88243323e97bd",
+    "bytes": 43591,
+    "filename": "vego_config.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3a20fbaa7e9fea3ebfa866ac185b8f92a5430b43",
+    "bytes": 117929,
+    "filename": "Screen.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3aad03017579db00c33223c93a1f954ddee5224a",
+    "bytes": 62934,
+    "filename": "Screen.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3c5949695189725ab20f6b1411091e22d3fe75e4",
+    "bytes": 1211979,
+    "filename": "soundlibrary.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3c59ed22bbca413a434cc17e62d23a148e4990a3",
+    "bytes": 36581,
+    "filename": "Stage.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3dd22103e7ee3f119e67f4a486077b5cdfa3418e",
+    "bytes": 48843,
+    "filename": "SimplePluginExample.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3e04a6b4fd084ef0253ce04514b38aa92a2dfea0",
+    "bytes": 1009146,
+    "filename": "cc_interface.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3f5acf9a4a9668ebcff0186c0779a2a692deba46",
+    "bytes": 1453,
+    "filename": "vocal[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3faaba87e488f722d61f51c08bef897421845827",
+    "bytes": 1553,
+    "filename": "drums[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3fc79223690745af93aa2e847acaad1285ae5d79",
+    "bytes": 156,
+    "filename": "README.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3fe437fec70d3596c44e568dc837428ba5902bb9",
+    "bytes": 1899,
+    "filename": "fx[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "3fe919b01e45b8d1b1d9616a41011c5575820cb7",
+    "bytes": 6417,
+    "filename": "misc_harmonica00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "400fd522d8f87272e8e995263d9bd70b9001bfb9",
+    "bytes": 79226,
+    "filename": "chat.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4032f82e94b5b97842f90f98455950afd004e25e",
+    "bytes": 30944,
+    "filename": "cc_room.cct_191.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "40450d0f2aacb27cabcd00152b23c5e77ebc7aee",
+    "bytes": 1341028,
+    "filename": "seattle.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "411672ae93923d887d8dbde3e3b80ff00fd08738",
+    "bytes": 56159,
+    "filename": "ClientStubsOfServerCode.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "41e4bc61d2580c1dc2a3a71d4aa65998ac961f1e",
+    "bytes": 86437,
+    "filename": "fuse_client.dcr",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "42108c233878096a9a159f63482c6eaec9780b18",
+    "bytes": 187805,
+    "filename": "fca_vego_survey.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "42583a03d3d1c2f48248981486f02faddc7c9b17",
+    "bytes": 247798,
+    "filename": "cc_room.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "428bb2e09fa793bee5fd29ce32eae0566b5234f0",
+    "bytes": 430228,
+    "filename": "secretroom.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "43b3e201c3270a7ed82670cab8b089cc8bba9cbe",
+    "bytes": 103714,
+    "filename": "UserVariablesTest.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "43f29ab844ec219cbf72e3b4b07a037ab8e92be4",
+    "bytes": 77192,
+    "filename": "lobby112.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "44bede4088a478c7be0cf008282ebeda1c353695",
+    "bytes": 123833,
+    "filename": "moscow.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "45a181ef5f8e9502e87aa9113fa0c29ee0f905c6",
+    "bytes": 382634,
+    "filename": "cc_items.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "472e419fb2b551b1c1e8eb47709307c1d0b17ca8",
+    "bytes": 691592,
+    "filename": "cc_room.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "47ab718c5eb72d04aceab53cb5896bf986af9d60",
+    "bytes": 6417,
+    "filename": "misc_tubularBells00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4867aa87f5f467f3dfe33b9e31d8c9e8cfe006ce",
+    "bytes": 1283900,
+    "filename": "auditiongold.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "489325348d77256de8a04dfad26f2306146e4be6",
+    "bytes": 23217,
+    "filename": "chatengine.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4a3685b2fd14cfa66ca98b852a185b0dd8586431",
+    "bytes": 3120,
+    "filename": "XMLManager.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4a6fb6916f6187caa6064eb5071f7dc5a19b9676",
+    "bytes": 58431,
+    "filename": "dance.xml",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4b031302aced6ce24e4a18590d2dcdc1e287772f",
+    "bytes": 291795,
+    "filename": "centralpark.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4b58e861a26ffd87b2aa70fb4a5d17d5c0119dfa",
+    "bytes": 7391,
+    "filename": "ChatOutput.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4b74e6a3a001aeb841c0a32b0f93c2cb136be75f",
+    "bytes": 35992,
+    "filename": "Player.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4c821dc6b0bd335285a478dee7210b388ac3fd51",
+    "bytes": 1343748,
+    "filename": "alaska.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4c8bd3c8de0cdf2efaec223e19b9a245ca13360c",
+    "bytes": 342,
+    "filename": "README.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4d05e8805a9f62ef9eb50022c2e955059edb5bdb",
+    "bytes": 402481,
+    "filename": "people.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4d47b31c1ba6d837bedcb6a8abdf7894ffa441af",
+    "bytes": 1815,
+    "filename": "horns[2].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4d74f971ae2b52191b0072fb19330831df1d5b59",
+    "bytes": 58433,
+    "filename": "lounge.xml",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4db79100875df58fb70b947193127bce88948880",
+    "bytes": 23582,
+    "filename": "Messages.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4e0d58cbed255f8219dc14faf39efa7a357af9a6",
+    "bytes": 138135,
+    "filename": "MusicSfx.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4eb1d345a1d02ac69b15cc41b5f8cadd3db2e889",
+    "bytes": 66104,
+    "filename": "avatarengine.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4edf8c8ae23bae12d63f180648c9de6cedaba93d",
+    "bytes": 6417,
+    "filename": "danceOne_beatz00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4efbc0b1a8a182755f53c911b9ba23ef880540c4",
+    "bytes": 518741,
+    "filename": "isoengine.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4f18e64c0b53d8b542b960583265185bec984873",
+    "bytes": 1474,
+    "filename": "banjo[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "4fd054c1940a8ba6ccfffc7f75f3db745e2135cd",
+    "bytes": 1687067,
+    "filename": "auditionred.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "500fc8356e7027591f7f2d5dde58d96d90638d8e",
+    "bytes": 1262452,
+    "filename": "mombasa.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "51d8266a5866710b2f09832a354034faee9b5964",
+    "bytes": 89,
+    "filename": "ServerSettings.xml",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "51ebaf8f3c693a3d841633e33921e582bd594188",
+    "bytes": 265294,
+    "filename": "sydney.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5220489d5b6bbc83494e93afbadf0b6c18d355a3",
+    "bytes": 1745,
+    "filename": "README!!.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "527f3e36c949a491180ac0212c5c36fcc2786e80",
+    "bytes": 1674612,
+    "filename": "castingcallroom.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5319362a6efd961b24fc8252e7615f0508e1bd14",
+    "bytes": 559,
+    "filename": "LingoPropertyMap.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "542cfe293f1b710b0330f22146aa22860d5e52ed",
+    "bytes": 956608,
+    "filename": "bg.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "547560ea74d2557cf8d23380b98919743ab51a09",
+    "bytes": 239240,
+    "filename": "cc_room.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "54d4b691f7f87821a2ac60bdefbe3cfffce033f0",
+    "bytes": 10426,
+    "filename": "StudioManager.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "54f68388b48d427b0fb75b402b3aecae5ea882d1",
+    "bytes": 51945,
+    "filename": "LoadVarsExample.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "55cc17b04b9aa79dbd69d7efb69f0036689b2276",
+    "bytes": 207358,
+    "filename": "tokyo.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "57c554e205c0a7e831aaf9f8e91b699d618c79d0",
+    "bytes": 146849,
+    "filename": "cc_catalogue.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "57fac9757b335b01cd1b322ca61c0fdf9b5a0a87",
+    "bytes": 41968,
+    "filename": "cc_items[1].cct_117.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "589bc39770373b6382a8cba924f2b6e4e1073d06",
+    "bytes": 25830,
+    "filename": "SF_Client.dir",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "58d81b1cd8c417c6f316bf5d21f7d58cb3728bf7",
+    "bytes": 131497,
+    "filename": "isoengine.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "59606f670f1a343610bb7957d508ff4001c8978d",
+    "bytes": 1809,
+    "filename": "maracas[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5a356efd9b12e92521a9639909a0e4e945bf46de",
+    "bytes": 2393,
+    "filename": "SongData.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5a850f6d6fb9f0364395621cad08d02adcef0c7c",
+    "bytes": 25446,
+    "filename": "popup-vegoconfig.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5ae5a281c62a1f6ba6eff95bd7fa547c8dca780e",
+    "bytes": 140769,
+    "filename": "cokestudios.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5b010e6719acb9945e55a9cd01c6d070bfafdf4e",
+    "bytes": 1262038,
+    "filename": "moscow.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5b91c0a7ed841345f0100eeeb334011bfbc103a6",
+    "bytes": 161655,
+    "filename": "shell111.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5bb23bb0e2b4be352e149bf1dd13091c693a831c",
+    "bytes": 34263,
+    "filename": "CaptainInterface.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5bc3559a8592fc7a00010ce33dfdebdc77587b83",
+    "bytes": 4234043,
+    "filename": "cc_items[1].cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5bdea1dbe61d6a4d8396bf71c835b48d8ba2a6b7",
+    "bytes": 1116,
+    "filename": "RemoteMixer.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5c822c8ec5f07201a5c1a5b9fbadea5203091c1a",
+    "bytes": 28,
+    "filename": "README.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5c99c39807f8fa57e53f2ead56dc0c5a240eb391",
+    "bytes": 6417,
+    "filename": "misc_fastScratch00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5cf8f7528165c7ac7f54d050bc086d1c19c536cc",
+    "bytes": 25079,
+    "filename": "ChatOutput.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5cfd6bd2921b4b5dcb79ae29526de5a76666d469",
+    "bytes": 538156,
+    "filename": "cc_interface[1].cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5d65a8e753754d42699f05ed900644ad72fe10f8",
+    "bytes": 6417,
+    "filename": "misc_spanishGuit00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5df68a2fc3d16e2641c5f165456c7b3a8742cc79",
+    "bytes": 6417,
+    "filename": "danceTwo_strings00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5e4a60ba5c6b5c27bda9d48a524c2be0595c3d3e",
+    "bytes": 214819,
+    "filename": "cc_catalogue[1].cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5e9c5472a4aeb7730c0945a5fc6d569ba418e99a",
+    "bytes": 172464,
+    "filename": "mombasa.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5fb9e6f22af997fc05abd42a7a0969b9c5612073",
+    "bytes": 53047,
+    "filename": "Screen.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "5fe2775b91a0e2cb7334c6546d7b964146280053",
+    "bytes": 226290,
+    "filename": "mixer.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "60020ca593f9537de653b26e3f5ada3099d1fadf",
+    "bytes": 50820,
+    "filename": "chatengine.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "61321a94baf99f5de84bb24b151b5c1e95a3af02",
+    "bytes": 1381608,
+    "filename": "miami.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "62b42443577ebe97e941620d45f689ef0f6d6ec9",
+    "bytes": 9318,
+    "filename": "ESAdmin.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "62f0757b4166d2cf9da6803246920593d69816dd",
+    "bytes": 101029,
+    "filename": "SharedBall.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "639ffa322a438ae34668dfe20aee259ae5c55b79",
+    "bytes": 287382,
+    "filename": "rio.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "63b08f535407019dcbe944d02ae8b7ab2f8498c9",
+    "bytes": 1571,
+    "filename": "Trade.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "64055e5e329e95970510774a08bb9c7941d3d9fa",
+    "bytes": 88449,
+    "filename": "cs_bigpic_landing.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "65a981da93b58d82dc3ae3e130890dac9341c4a7",
+    "bytes": 471305,
+    "filename": "cc_interface.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "66212eef30732a5bc3aad6393b9eb4a0a23326be",
+    "bytes": 273081,
+    "filename": "seattle.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6751d7abdefc9e2320f22de1dc8b39bfce33a9f8",
+    "bytes": 151736,
+    "filename": "shell.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "67a8cc6a65b0a375e6710d517330d842d2345289",
+    "bytes": 12423,
+    "filename": "hipHopOne_beatz01[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "67dfafd81e61c28963d437153e2d113b144c7afd",
+    "bytes": 333443,
+    "filename": "people.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "686c388777778457c00223b4dce3dced87b0c770",
+    "bytes": 22325,
+    "filename": "STREAMfirstplayer_01.SWF",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6907ef6157a8aefc9e1350d7ca20bbdba4d3beda",
+    "bytes": 947984,
+    "filename": "isoengine.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6ac87aa8312eb5f91676d370381b9261b93e8c42",
+    "bytes": 68516,
+    "filename": "modTool.dir",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6af54ae96974173ef9e0d06aeeac07870b63d705",
+    "bytes": 1797,
+    "filename": "Mix.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6b233b0bf2af05c52ef68986de9f00609660fd8d",
+    "bytes": 222816,
+    "filename": "miami.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6b293e3b3f74c5587504bd3189f8fdd65fe238c4",
+    "bytes": 31257,
+    "filename": "ChatInput.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6c4696b2abe2541bc19d0d0191ab609570d3ca00",
+    "bytes": 6417,
+    "filename": "countryTwo_beatz01[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6cef67bf92837fa21f83de4126c269e13264050a",
+    "bytes": 292683,
+    "filename": "neworleans.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6cf57c4165f480ea99f7d3e06b7be8a4e5fc063b",
+    "bytes": 2853,
+    "filename": "survey_check.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6d3233754fabc52fdcb21268a64e92289081fbc1",
+    "bytes": 383,
+    "filename": "FeatureSet.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6d3a593bcdf5aa9fe33a58e79f932e2524284f89",
+    "bytes": 176,
+    "filename": "README.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6df248311cb3594a8253a02f33a3051431144ecc",
+    "bytes": 61,
+    "filename": "Missing.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6ec8757ddcce6c76cc7ca9b4bfadeca4230bafa0",
+    "bytes": 276,
+    "filename": "README.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6f3789f10be407fd10a80893d6b24ded021d5acd",
+    "bytes": 526690,
+    "filename": "cc_interface[1][1].cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "6fa49d85b4bac283e314199c19d1052ea8005f3d",
+    "bytes": 566967,
+    "filename": "bg.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "71500b387ec13264503ef3b5ea594c467976cba0",
+    "bytes": 497569,
+    "filename": "SF_Gateway.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "71b83030b43f6e9cecd44e374b32433a2a4082ff",
+    "bytes": 7934,
+    "filename": "Backpack.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "71bd0f9bee7bb9e9025270813c75552a99cb55d7",
+    "bytes": 2556897,
+    "filename": "cc_studio.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "722de26c09dc70be98002ab8fcfb7484e7b6d75b",
+    "bytes": 12137,
+    "filename": "fg.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "72ea316e91b1ac78719ff47e3244b400798ca582",
+    "bytes": 23186,
+    "filename": "chatengine[1].cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "731c013f7a6421f5b8c915220527dbbc0c5d05ae",
+    "bytes": 268490,
+    "filename": "newyork.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "73504bfee2f4f757af8724a9c02bd5bb7f526f80",
+    "bytes": 1979,
+    "filename": "cc_items[1].cct_88.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "73506ac2f813bf214291a1b465f973c2081121d6",
+    "bytes": 336,
+    "filename": "crossdomain.xml",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "7352b1a30b5f7f304d6958a8bfa8895dc9d29e1a",
+    "bytes": 206701,
+    "filename": "Coaster.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "73fda8212a7cb20be742b0623842c193472dba1d",
+    "bytes": 1752,
+    "filename": "StatusServlet.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "744e1e7c52024865f65ac560148b55ebff81ffa0",
+    "bytes": 100,
+    "filename": "cc_catalogue[1].cct_60.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "7478e80493312b16a8c7ac7a3dfba31217a6f328",
+    "bytes": 497609,
+    "filename": "SF_Gateway.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "749018f336efe9dff6e94475b87c3a2c44309ab1",
+    "bytes": 12423,
+    "filename": "latinoTwo_piano00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "74a2178485af14983e5625db2d2fb06906d401ee",
+    "bytes": 3656,
+    "filename": "FlashReturnStatusEnum.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "74bc090cddd569156d541a463e47763591eed524",
+    "bytes": 95382,
+    "filename": "lobby111.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "75030cff6dcebedd9e15aaf27c46a4dcc8dcf6e8",
+    "bytes": 548214,
+    "filename": "cc_items.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "75d58d0c0cb564e82d5d843c6960d35b20406d1e",
+    "bytes": 67459,
+    "filename": "Catalogue_English.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "765f1e290309d4690522a123fe51e41eece3d64a",
+    "bytes": 124039,
+    "filename": "SF_Gateway.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "76643b77674a0d82f7ae2df785cc94d84de6f18e",
+    "bytes": 12423,
+    "filename": "popTwo_bass00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "772d9b63a53c45aceb9d6323e6f3faadb0382e5d",
+    "bytes": 1600,
+    "filename": "strings[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "77492df648b2065a22b530a6da86ac6d9f1afc14",
+    "bytes": 490366,
+    "filename": "neworleans.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "775c591e6fdfbc18d6ac8a767054a5e9da72ba65",
+    "bytes": 681,
+    "filename": "PluginXML.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "777cf3113dc5359fdecda0db746cfc74a20671bf",
+    "bytes": 38814,
+    "filename": "SF_Client.dcr",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "77b3047a70b30cc29af3a8ac38bc09603c6e5768",
+    "bytes": 3695120,
+    "filename": "soundlibrary.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "77dd4cc76f1ae3653c1a4cf59c85b6b978613964",
+    "bytes": 206336,
+    "filename": "rio.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "77fd1da5394b681d1cc0cc6ae05c15ae26a2a9f7",
+    "bytes": 579750,
+    "filename": "cc_catalogue.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "783693cc3cdd2a06ae776cfeb7578d811929b03b",
+    "bytes": 585313,
+    "filename": "clubcherry.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "79681d0a99bfcce85a0e77160d4674421713b6ae",
+    "bytes": 12423,
+    "filename": "misc_vocal02[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "79911d660c7584611c3fffb733c70573b15c59a7",
+    "bytes": 12423,
+    "filename": "danceOne_beatz01[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "79c5dc06014e6bc769a7e99eef0dc4ff3c451537",
+    "bytes": 104,
+    "filename": "status.xml",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "7a1e5ca175c1653e3ef715acb1737ff6580bd1fd",
+    "bytes": 392044,
+    "filename": "entry.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "7a9898259dab22d7757fb4659486566b6e59672a",
+    "bytes": 2298910,
+    "filename": "cc_furniture.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "7ae6ba50e983e80495e4de56cd988c13fc3d53a2",
+    "bytes": 12423,
+    "filename": "danceTwo_effect00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "7b4cbe0c29a5ea1cd3097cef68efd1a88c43b03e",
+    "bytes": 1185396,
+    "filename": "alaska.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "7bf0c7776b5bc600657c61f3e20fab1f38eed1d9",
+    "bytes": 1245,
+    "filename": "PrePurchase.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "7c1986d1b35b90a602fc486da84240af202247b5",
+    "bytes": 90915,
+    "filename": "fx.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "7c2cbab34f0167004d40d3a514e56be7146c438b",
+    "bytes": 390975,
+    "filename": "entry.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "7f03f5e0f6f5f46af5510ad40f92379a6bbc2cf9",
+    "bytes": 6417,
+    "filename": "latinoTwo_percCombo00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "7f7f5e4779a20bfc453c41fc1ef33da40b6fd8ec",
+    "bytes": 12423,
+    "filename": "countryTwo_banjo00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "7fba0f38d36a14162a2178510890b762c3c1d1d8",
+    "bytes": 43156,
+    "filename": "avatarengine[1].cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "7fdf53fd09831b4b8561fde9bc6eb48eef80b76e",
+    "bytes": 31826,
+    "filename": "Avatar.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "803e9ba1fefd2f2beea11d3315c8e6e31c7a1195",
+    "bytes": 6417,
+    "filename": "rockOne_bass00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "80bc7c3a7791d5af7364f33c7a2a180c0eae23cc",
+    "bytes": 80340,
+    "filename": "editor.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "80dafb6b1940f50b35eb52410e92c29ae1de5dc6",
+    "bytes": 3539,
+    "filename": "CatalogCategoryEnum.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "81e9dc0fbe3a9316ad232801cda95613f5b5e230",
+    "bytes": 5605,
+    "filename": "leftwall%20poster%20makeitreal.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "823d8cd7f2e8a0758f5fd8036970a7b717c3d806",
+    "bytes": 12423,
+    "filename": "misc_shaker00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "82fc3ad82e693d90f47476a9c153181f63b9d76f",
+    "bytes": 6417,
+    "filename": "misc_vocal03[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "84349b7b07aa6ba0bab8f58774df7ea45a95a65e",
+    "bytes": 21522,
+    "filename": "sports_games_fca.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "84c6f22f6f857ec2ae4882f82d719fb4a8e66425",
+    "bytes": 2655564,
+    "filename": "sydney.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "85b19763a0459322556f50cd25189ade64a31072",
+    "bytes": 1813,
+    "filename": "BurnedCD.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "87247a29b0f2b11de2eb9fdee292cf45fd4519b5",
+    "bytes": 6417,
+    "filename": "latinoTwo_percCombo00_[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "875c2ca75973089be7abc9299759ebc8022c1a3c",
+    "bytes": 6413,
+    "filename": "latinoTwo_marracas00_[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "87cac38f3a8a3fc4f798fd6a162bcb854ce995ca",
+    "bytes": 95086,
+    "filename": "top_nav_bar.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "88d4f90d4ed427ddc19709f1f97f3fdb38c1ae8d",
+    "bytes": 907025,
+    "filename": "cc_items[1].cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "894e9a45316a75118506747bbd101a892998ad7b",
+    "bytes": 6417,
+    "filename": "misc_cowbell00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "8967b40d51ef09f82781957fa6e6725bbc481fd6",
+    "bytes": 168141,
+    "filename": "Networking.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "89cbdc89073b86a476a8692ea8b909e2c6be227a",
+    "bytes": 26424,
+    "filename": "game113.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "8a16f6ec73030b4160a58dff1c03fd36d354b086",
+    "bytes": 144556,
+    "filename": "cc_furniture_small.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "8aee5d9f05e7d06ff60e7d4e9394c4b478dc275d",
+    "bytes": 12423,
+    "filename": "hipHopOne_kbd00_[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "8aff9fa59e7cd8a3f238d64ff6cdd9f3553efc96",
+    "bytes": 6417,
+    "filename": "rockOne_beatz00_[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "8cd6d42b8029bc0b4ecdafbd63d196df0560ac99",
+    "bytes": 6868,
+    "filename": "sequencer.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "8cdf4b15af1ac016941b4bd9cd331e064ddb877d",
+    "bytes": 9378,
+    "filename": "Host.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "8d18f0f973107fd0bbec159209d0684b6003affa",
+    "bytes": 17264,
+    "filename": "Text_English.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "8d7944cf4f49744203b71887620c6f2692b5d6e7",
+    "bytes": 12423,
+    "filename": "misc_easternPerc00_[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "8e1f6e452217a2695a18a7b1d78f223b21eb0a55",
+    "bytes": 100410,
+    "filename": "Chat.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "8f33b0d7b041e375f9342cfb24f5be380cf46ea4",
+    "bytes": 3486,
+    "filename": "ItemActionEnum.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "8fc79fab138a5ff3ca2b2c75fd53f596d38c44c7",
+    "bytes": 2701,
+    "filename": "Base64.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "906c28787d371bec4223229cbddb47fa67f7cc35",
+    "bytes": 7714,
+    "filename": "PublicStudios_English.xml",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "90e0af8408665d22ef16fd00b371e07c0f89841b",
+    "bytes": 475087,
+    "filename": "centralpark.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "90e25d625ff77894edef661939432ba1829d8455",
+    "bytes": 6036,
+    "filename": "Timer.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "916647372ca0a1fa3d98c7ce0206a93f1beb5419",
+    "bytes": 561254,
+    "filename": "people.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "917e8cb9021fec4f21a9e701042b084e92db5686",
+    "bytes": 32471,
+    "filename": "cs_bigpic_musicmixer.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "91b6893180f78c0fd44bc77258b8282b757b988a",
+    "bytes": 1295690,
+    "filename": "bg.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "91ede653196302af8ce2eab7d58ad2fbe121f6da",
+    "bytes": 47939,
+    "filename": "avatarengine.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "925afa774cf7ebf5dc837db16ef15d8156472f1b",
+    "bytes": 12423,
+    "filename": "hipHopOne_kbd00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "92d6797e61ecb05cca9134b04ce98d8dd3651ea8",
+    "bytes": 6417,
+    "filename": "rockOne_cymbal00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "93d9d881ee02445d3d412375a94e3a714fc98340",
+    "bytes": 14412,
+    "filename": "Session.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "942f0374dadbf455ed87097dbe84f55c25bfa006",
+    "bytes": 1560,
+    "filename": "crash[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "94f4cc1ab749e30bf0290bfb6657d5deba9ad39e",
+    "bytes": 12423,
+    "filename": "popOne_kbd00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "95538e703504b224e2d895e782e49252b743b4ef",
+    "bytes": 491931,
+    "filename": "neworleans.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "96bf748002e61c56a8a679485252011a9655588b",
+    "bytes": 7322,
+    "filename": "Constructors.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "96f55347a9350c860f84814e1c8711ac185e81d4",
+    "bytes": 1493,
+    "filename": "README.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "984f6d614ecc91ed63de84936d50547cb54e25a4",
+    "bytes": 96671,
+    "filename": "lobby112.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "987c10dfc938c6dc394411e93ef2badb25bc395f",
+    "bytes": 24759,
+    "filename": "shell.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "98eb6bb8c6b4f1991d902c7295e71ec4144d0172",
+    "bytes": 295580,
+    "filename": "london.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "99843512b84bf9ae07d6fe022d602553e4805be7",
+    "bytes": 1565996,
+    "filename": "rio.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "99b3e71022bed50b9ac3fc8cffe8b2b215f984cf",
+    "bytes": 2804730,
+    "filename": "cc_furniture[1].cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "9a3c4d7634286ef1cccaf2c4d71a4028927e16fb",
+    "bytes": 34316,
+    "filename": "cc_items[1].cct_115.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "9a4ffc727f970982ed550f356d6e83a7d86b87cb",
+    "bytes": 766,
+    "filename": "Empty.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "9a790d9d4a37332fb8ff5d19f58ea2fbc1c6be44",
+    "bytes": 985,
+    "filename": "Empty.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "9a951d43783654d2570103c6b221a8510a53ac1f",
+    "bytes": 12423,
+    "filename": "misc_jazzGuit00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "9ac030cb06c449715176a5efda4b7aebe8c90ecd",
+    "bytes": 41737,
+    "filename": "cc_items[1].cct_116.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "9c35722aab48762cafad2d2a7e72e15c6d0a91f5",
+    "bytes": 1207548,
+    "filename": "london.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "9cb5a28f4e365c7c6288b6202d2e5bd0d6b6195f",
+    "bytes": 514302,
+    "filename": "dojo.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "9dff54f8b5d6c1a3fb95102e666dd023759b1c0c",
+    "bytes": 24053,
+    "filename": "DenizenManager.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "9e930ca398fc86d5b0f0d8d206eb56484cabf296",
+    "bytes": 58267,
+    "filename": "fca_truck_night.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "9e99ccd2e45b519d57ee58acdb3b08ccbaaa5afb",
+    "bytes": 1205861,
+    "filename": "entry.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "9f251e4aee0930b1f2732dd4a4fffafcf7385cca",
+    "bytes": 134451,
+    "filename": "isoengine.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "9f2f7bf83e15831b830278cb51610249a293a012",
+    "bytes": 298974,
+    "filename": "bg.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a065cec1a1f87d056e84d06b5bf31ff93f8e2119",
+    "bytes": 12423,
+    "filename": "countryOne_bass00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a1710b4e7eaa0f7bbe5d36ee8e235882323fb1bf",
+    "bytes": 1593,
+    "filename": "RemoteCorrespondence.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a1922d6f37483eb9007a7ae7327ec71edcf0575c",
+    "bytes": 4515,
+    "filename": "Room.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a2098a0a0c31959c12be24b4f89bb67ca89aa157",
+    "bytes": 12423,
+    "filename": "popTwo_beatz00_[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a21a6ae42e88db2e9e58953864b53b3570b01384",
+    "bytes": 12423,
+    "filename": "misc_bass00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a21b9bab19a3ca3f13cedd4ef6eb34c5bcb0fe44",
+    "bytes": 7369,
+    "filename": "configuration.xml",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a4adff1d68d37c33694eeb7b3c5148f2dbd87657",
+    "bytes": 127126,
+    "filename": "Chess.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a53a198c1b807784a7c2e6ac85d03e9676e50437",
+    "bytes": 551153,
+    "filename": "cc_navigator.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a5642dfb4b0137af7ce932bda70d798d687e7197",
+    "bytes": 524869,
+    "filename": "sanfrancisco.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a58c4c71c6df0f4d7b8a58d84766cc007ca95958",
+    "bytes": 1055,
+    "filename": "READ ME.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a84c146233d4a8f332fec1be6f09ebf3f3a5535b",
+    "bytes": 12423,
+    "filename": "danceOne_bass00___[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a8b56bbb2859a5ff9eef9c6b1f69d5f630bde613",
+    "bytes": 323520,
+    "filename": "avatar_engine.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a8fffcb917d4c50a9578bae3d6ca312c101f855e",
+    "bytes": 180519,
+    "filename": "goa.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a94e9e7be1c022888605ced06f520766b914300d",
+    "bytes": 30941,
+    "filename": "sequencer.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a996353e7102bf9ea4f8bedcd37ef33936882b31",
+    "bytes": 253096,
+    "filename": "Empty.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "a9d6cdb4c71c3d1687af6f58d65276db0e1154fc",
+    "bytes": 283968,
+    "filename": "avatarengine.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ab0d913176b545fcd39c893aa923339715f260be",
+    "bytes": 8251,
+    "filename": "Host.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ac07d04bc782b1646c7019b2121f45308f2f1f31",
+    "bytes": 6417,
+    "filename": "latinoOne_percCombo00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ac16875f85c6579653074ad49748791742231668",
+    "bytes": 1978,
+    "filename": "cc_items[1].cct_87.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ac7a9f609f537393cfd5ab651d8fde344a9c13b7",
+    "bytes": 2557062,
+    "filename": "cc_studio.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ac99b2ec8b64e157524ffd0135e91ac23743120e",
+    "bytes": 562089,
+    "filename": "raysrooftopparty.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ad1daa2d76e254fcc6cbd9e19a943183c733de29",
+    "bytes": 551874,
+    "filename": "cc_navigator[1].cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ad7dad6435966dd3eb2890770a56dbe12eb695b6",
+    "bytes": 58536,
+    "filename": "garden.xml",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ad943f5b3d75a71662cd7302550b2a788a507bbf",
+    "bytes": 11458,
+    "filename": "STREAMsecondplayer_02.SWF",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ae8f0dc26112aa0521fbdfe2bb140227a13f1c23",
+    "bytes": 8648,
+    "filename": "SF_Client.dcr_1_23.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "aebe1112acdb45d7b45f50a8a8a105f363a6f6c9",
+    "bytes": 1431880,
+    "filename": "Empty.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "aedd4d368d653711a99de1a6e30118ecaaf000ba",
+    "bytes": 6315,
+    "filename": "Constants.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "b03cc9741822cb7d03d6a1195a2fa0702c20b11d",
+    "bytes": 83231,
+    "filename": "messenger.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "b231be7fb279c45106ea9335dae07f13de4ae9dc",
+    "bytes": 1036,
+    "filename": "cast.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "b23ab0836b28dffc4e581e8e3c20ca8dcbdc5b9e",
+    "bytes": 56572,
+    "filename": "Studio.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "b2949d445983b6333e883bbcd033967bbd09f615",
+    "bytes": 12423,
+    "filename": "countryOne_guitar00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "b2d650c69a40a5f9f47823a295a6e8680cd0701e",
+    "bytes": 6417,
+    "filename": "rockOne_guitar00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "b3038df4e56a1f1b6d841cf57c62576be56a4165",
+    "bytes": 123049,
+    "filename": "SF_Gateway.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "b35834dbfcb81953ea076bb770a5bc89249aece7",
+    "bytes": 343593,
+    "filename": "SF_Gateway.cct_2.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "b3830bbddac7196826f53b14cf156e3e4b330ab1",
+    "bytes": 1320222,
+    "filename": "cc_furniture.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "b5ae697124c0b232d790384238a09dfa3327fa29",
+    "bytes": 277816,
+    "filename": "cc_messenger[1].cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "b602a028575e03b1400c0e3d34f738ac4f7e30e3",
+    "bytes": 1328,
+    "filename": "triangle[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "b6749129f2fde6b05994264193353f912efbcbe9",
+    "bytes": 496729,
+    "filename": "SF_Gateway.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "b6ad5c3284263868747608ccd46dd8a6447f18d4",
+    "bytes": 12423,
+    "filename": "popOne_kbd00_[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "b954494d6e0cd2771b927487c68e5b19003f485f",
+    "bytes": 163172,
+    "filename": "isoengine[1].cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ba651bb9af6c93efab6e90840b2132ae22b7e70a",
+    "bytes": 6417,
+    "filename": "rockOne_beatz00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ba9f6dd6b7b31b4b83709542376e41c59aaffa4c",
+    "bytes": 1056927,
+    "filename": "cc_interface[1].cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "bad3fc02eb034e11783fad2f25888d66f791ea2e",
+    "bytes": 150001,
+    "filename": "cc_furniture_small.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "bb2d0ae40f74d6686fec771d0589f887917ec9a1",
+    "bytes": 27761,
+    "filename": "callout_landing.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "bb88ee265b6c6a241981ae80880e1cbb0ef924c2",
+    "bytes": 12419,
+    "filename": "popTwo_bass00__[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "bc0c646938fb3ca5e72013218c2b4eccda2dff37",
+    "bytes": 1465220,
+    "filename": "tokyo.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "bc68983aeb78d2a24aace602f74a9a9b1a06e5d2",
+    "bytes": 175381,
+    "filename": "newyork.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "bc8dc3d0b1b252543862cacd2323824c5e216954",
+    "bytes": 973006,
+    "filename": "sanfrancisco.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "bc95846c6670ec375d830f06ecab16212d5404bd",
+    "bytes": 6417,
+    "filename": "misc_funkGuit00_[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "bcec4cf6f19212bb212ea0b0115e83159727443d",
+    "bytes": 12419,
+    "filename": "hipHopone_kbd00__[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "bcfd16fa31b0694330922ea7a4f18719fed577de",
+    "bytes": 12423,
+    "filename": "misc_vocal00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "bdbba523b96237df283129fab771b80c30491a3c",
+    "bytes": 1164541,
+    "filename": "redroom.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "bdd2751ea5ec700bc47ad0ff34e4e21cac8f6231",
+    "bytes": 977323,
+    "filename": "entry.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "be1a146abbe068ae1ae1c5c121fc64f4d5f42dc7",
+    "bytes": 8020,
+    "filename": "ribbon_home.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "bef21a4251f21255ae6f51baa3e173cb92bd67aa",
+    "bytes": 12423,
+    "filename": "rockOne_guitar01[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c05e0e13c364814756762445180cb2a48096172d",
+    "bytes": 387109,
+    "filename": "cc_items.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c0e60c08fc3e83d5583ca26d578df0c27720a6c8",
+    "bytes": 30419,
+    "filename": "CaptainInterface.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c18a2fd08cd3a5792537f13e5abf4ce1cb04fe59",
+    "bytes": 42741,
+    "filename": "vego03.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c1b4e67a328051fc9d44d4b4c1059aa697ed8e3f",
+    "bytes": 23658,
+    "filename": "player2.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c1e65dcc746186e49f671b417fd794de8743e17a",
+    "bytes": 1489193,
+    "filename": "Client.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c235dc912c23e28e10c3e9abab8bd666c29e039c",
+    "bytes": 27951,
+    "filename": "displayPoints.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c2465005316cf081d81a44d086b286715f076f81",
+    "bytes": 103,
+    "filename": "README.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c2ccaff5baea4930c2b9c3a5d98c3b1d62544153",
+    "bytes": 27953,
+    "filename": "vego04.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c391f2f2f899a96e3c806ddae13e42c60d112629",
+    "bytes": 31852,
+    "filename": "ChatInput.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c402951747b579d1c994dee93a04ab30babfb63d",
+    "bytes": 1464127,
+    "filename": "people.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c4466c7f3234ebc4ef01645290e065bac900f2da",
+    "bytes": 6417,
+    "filename": "popOne_vocal00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c4b7ff558fc971ed123256dc972fd86969e758d6",
+    "bytes": 586465,
+    "filename": "ESA_interface_v1c.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c516a39a9b8ae6f0483e95f70ffbe720102b4a70",
+    "bytes": 12423,
+    "filename": "countryTwo_beatz00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c5424bd731d47ce039ac0815912220edd0b71998",
+    "bytes": 2559566,
+    "filename": "alaska.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c5680bbde8c4cbfdf66d6469af549f2fcb6f6bfa",
+    "bytes": 1880719,
+    "filename": "people.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c5ec4b81550f718792530433ace04e372271efcc",
+    "bytes": 17100,
+    "filename": "Text_English.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c68234b2224d21530bdbdfb36367a79a3e79acbd",
+    "bytes": 1257,
+    "filename": "keyboard[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c865a978e6f39972910b7a79887d9da2727d4bd8",
+    "bytes": 6417,
+    "filename": "misc_rachet00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "c9906d491a1ae8ed36b7d735f234f8ae1a408419",
+    "bytes": 2231,
+    "filename": "Messenger.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ca6e75b38a363268d7fb66dfcede87608686e45d",
+    "bytes": 928,
+    "filename": "SFGameServer.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "cb957508babc2c7071dcd92f64487f87ad3e52af",
+    "bytes": 1136,
+    "filename": "Empty.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "cd5cd75eea7b79cfb0b7cf87af445bb056307be2",
+    "bytes": 94582,
+    "filename": "lobby113.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ce2f69ed1ff8e3bae81231b5cc731cdc1542a1c2",
+    "bytes": 6417,
+    "filename": "rockTwo_beatz00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ce7973d73a7291990b192022f90ce933e8e2debf",
+    "bytes": 21153,
+    "filename": "game112.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "cf616bf15211a14fdbb235d906d207fd6d6c0aea",
+    "bytes": 212113,
+    "filename": "shell112.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "d0378150846724358a657e1d45ef4e1cef32d90a",
+    "bytes": 52436,
+    "filename": "cc_messenger.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "d078d7f77e28f97542e639acdb3e3ef392bf492e",
+    "bytes": 55830,
+    "filename": "Catalogue_English.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "d07ff19daba0adae3e0c93b455482c3c3d3f0e84",
+    "bytes": 296849,
+    "filename": "grid.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "d094a165a120b293be136576568c57fc7d2b86c5",
+    "bytes": 999,
+    "filename": "NO JRE !!.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "d18f3958006158ac2ad86433067c6cb3da2e85ff",
+    "bytes": 131478,
+    "filename": "Alien Avatar Chat.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "d2840c674af01a4d4b33bcc65dc39583ea21eabc",
+    "bytes": 1570,
+    "filename": "bells[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "d3d8d1bff32d68464df14b50761ea773d834e6fd",
+    "bytes": 6417,
+    "filename": "popTwo_kbd00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "d6c4e70c66753a6828c5d66e84aede892b43f23b",
+    "bytes": 1440,
+    "filename": "bass[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "d7a457a91cb9eb7cdb71157e3209d0a068d38f46",
+    "bytes": 241,
+    "filename": "README.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "d8cd8c5dc5825cffad251684b4374648a164cef4",
+    "bytes": 166235,
+    "filename": "seattle.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "d9781bd784169424831665600be6a139013a466a",
+    "bytes": 3489,
+    "filename": "CatalogManager.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "d9fe3b29b3500f3a6436eb559539e0a1b38d6b0a",
+    "bytes": 459,
+    "filename": "Empty.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "da27ab1195e07c129581d9d30c8b1b3964c708d6",
+    "bytes": 739710,
+    "filename": "castingcallroom.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "da51dc3f4ac0f717c575749e582df051c8935b2b",
+    "bytes": 22325,
+    "filename": "STREAMfirstplayer_03.SWF",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "dbee8abc702cc6b3edcf235565749fd3aa2c041a",
+    "bytes": 501178,
+    "filename": "auditiongold.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "de220e5e62e8cc69b5811494aee709ce74fe54a9",
+    "bytes": 170780,
+    "filename": "SF_Client.dir",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "e2379bcc523d2804a98f855a27ed0e7ed7226f7c",
+    "bytes": 8349,
+    "filename": "Map.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "e3417609bb46bd8a51c532526cd5181cb5ff52ba",
+    "bytes": 945489,
+    "filename": "entry[1].cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "e351d72b4924fc3089c5092337192ab4615bdb10",
+    "bytes": 4135,
+    "filename": "Denizen.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "e41cab3840cb9a7d8638468db9261e9863205257",
+    "bytes": 4746,
+    "filename": "ItemTypeEnum.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "e447ef347a9aadd22a83478c20e3f71a0b046b39",
+    "bytes": 22942,
+    "filename": "moveselection.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "e47aefbfb3054358a9e3333d0e9f97c9e97e9dac",
+    "bytes": 2648575,
+    "filename": "soundlibrary.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "e50983a0ab9029a8547ce5d3de577c4b2bb366e5",
+    "bytes": 76879,
+    "filename": "whiteboard.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "e57efda772cd41959442b6e6e1bb290fe18344c7",
+    "bytes": 37879,
+    "filename": "SF_Client.dir",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "e76b735f8969c5f430f126192fb3947112812e96",
+    "bytes": 28171,
+    "filename": "Stage.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "e87f30cdd0f391b219b500df34faf50770fd9d8c",
+    "bytes": 132237,
+    "filename": "mombasa.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "e8eaca42121400d1bdfe91c4b470d169ad83ea0d",
+    "bytes": 282145,
+    "filename": "cc_people.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "e933f35b46c3e9349c218fc650a2578349371cfc",
+    "bytes": 383239,
+    "filename": "goa.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "e9aa39360e4e01eed0c46ff7b39a8bfce6bc0341",
+    "bytes": 1623,
+    "filename": "Admin.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ead11e0bbde3a755eeb4b3890a9bc7ab4ad415ac",
+    "bytes": 94568,
+    "filename": "Tic_Tac_Toe.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ec6bf6889be0b8da9b80706c1a709cbcacbcafcb",
+    "bytes": 1086168,
+    "filename": "atlantis2.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ec787aef0c6cc3374219ae6d8276f1a992bf669b",
+    "bytes": 3580,
+    "filename": "debug.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ed8cf6af3127747295932241f1a79912d2c81928",
+    "bytes": 4198451,
+    "filename": "cc_studio.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ee18349bbeb32c8de6639a57c5d55050cf55b168",
+    "bytes": 126189,
+    "filename": "mixer.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ee58c4b645fdaf935539a2ec06fdeffbbfdde378",
+    "bytes": 1435,
+    "filename": "turntable[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "eec1cf240bb9c38fa81aeeeba63046b25da353db",
+    "bytes": 45308,
+    "filename": "chatengine.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "eec3b479086f83767ea4f0055bd2db10f2bc4d01",
+    "bytes": 154292,
+    "filename": "SF_Gateway.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ef0cc6cf0f478fe03d06e704bd52721fa0155754",
+    "bytes": 1676247,
+    "filename": "cc_furniture[1].cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "efa1095abb7a8dc65c35c5509054d2bd1ad72ff7",
+    "bytes": 2600,
+    "filename": "Math_SHA.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "efd5eb74c81665a41bea3313580a365c17bc0516",
+    "bytes": 2515,
+    "filename": "SFFriend.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "f1d41d2c012f83f0a0556fd3ce35fabe648b733a",
+    "bytes": 5621,
+    "filename": "rightwall%20poster%20makeitreal.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "f2ef795aca68a75cd4ebf8644c60a884ad9633f2",
+    "bytes": 47442,
+    "filename": "Screen.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "f38b105d102940dd0b1175d2312c2e9df310b4a4",
+    "bytes": 217663,
+    "filename": "cc_messenger.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "f675c3a12ee0dc9f250e1dfbe9cd5a84684199f4",
+    "bytes": 24314,
+    "filename": "ChatInput.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "f725f3311d23a83db569aa08e93f65dcab7fcc1e",
+    "bytes": 1117,
+    "filename": "ReadMe.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "f7458cc6a952bc37c3ac8f15a979f1b1c2491329",
+    "bytes": 4495372,
+    "filename": "cc_studio.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "f755a8dd1672cfd1304d8f3191fda6e3cc34d03f",
+    "bytes": 4123,
+    "filename": "CdPlayer.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "f7616865b3b3b3f71c2d65281d97582dad39a37d",
+    "bytes": 280103,
+    "filename": "redroom.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "f9703329d04cd365706878a5556bab11e98d3789",
+    "bytes": 6417,
+    "filename": "misc_effect00[1].swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "fa290827ab01a126167b5d56526cdd2aeaca1c69",
+    "bytes": 23671,
+    "filename": "chatengine.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "fa3db249f3613e890f3403a847697fb62ae3dc2a",
+    "bytes": 34293,
+    "filename": "cc_items[1].cct_114.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "fab40e081089e14ec33e64a0bcec17ca8eeefa67",
+    "bytes": 2377407,
+    "filename": "cc_studio.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "fbbd596a04df0e38d2eeb6fd8c01d35be491db38",
+    "bytes": 406225,
+    "filename": "ncaa.cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "fbf0576eb7f044ffc042fc6462844dccafd25f7d",
+    "bytes": 206827,
+    "filename": "redroom.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "fc3b50de292075a38391df6bfa91b2ac182f471a",
+    "bytes": 567233,
+    "filename": "people[1].cct",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "fc4b40caec6f4d34f9ea21698d9005854cfa2ff6",
+    "bytes": 46,
+    "filename": "READme.txt",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "fc87d4db8c5c7d94a03d5397b0e5d78d0f742f1c",
+    "bytes": 12458,
+    "filename": "Timer.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "fcee797d1f4ad659605292d35802c7990a9f4bca",
+    "bytes": 666335,
+    "filename": "cc_room.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "fd6249c49fe964ad24aa2953de23b2ed9885e577",
+    "bytes": 7256,
+    "filename": "debug.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "fddd01ec76cd6992ec9c797d9ca2f3780e401188",
+    "bytes": 3148,
+    "filename": "LogoSmall.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "fe5589aca7969e8e6ab0391963a2de07c7a0b54f",
+    "bytes": 75678,
+    "filename": "Player.swf",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "feab767e593885e5206d7ff2cfd6fec225196529",
+    "bytes": 548877,
+    "filename": "raysrooftopparty.cst",
+    "source": "sources/cache-finder/src/known.c"
+  },
+  {
+    "sha1": "ff32442d9d3811fa9dcc0796a4b6232ed00d7aa9",
+    "bytes": 165843,
+    "filename": "london.cct",
+    "source": "sources/cache-finder/src/known.c"
+  }
+]

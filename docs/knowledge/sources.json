@@ -1,0 +1,164 @@
+{
+  "researchDate": "2026-10-24",
+  "sources": [
+    {
+      "id": "DEV-BLOTTNER",
+      "type": "original-developer-retrospective",
+      "url": "https://markblottner.com/cokestudios.html",
+      "status": "text-read; image URLs resolved; image bytes not saved",
+      "date": null,
+      "note": "Primary testimony and 18 linked visual references. Screenshots span features/promotions; no exact client build is stated."
+    },
+    {
+      "id": "DEV-SKOP",
+      "type": "original-product-manager-retrospective",
+      "url": "https://jeffskop.com/project/coke-studios/",
+      "status": "text-read",
+      "date": null,
+      "note": "First-person platform history and product scope. Not a pixel/layout specification."
+    },
+    {
+      "id": "LOCAL-CSWEBSITE",
+      "type": "community-reconstruction",
+      "url": "https://github.com/markhughes/CSWebsite",
+      "status": "already-preserved-locally",
+      "localPath": "sources/cs-website",
+      "date": "2015 copyright in source",
+      "note": "Pre-MyCoke reconstruction. Original-asset attribution does not authenticate routes or CSS as an original crawl."
+    },
+    {
+      "id": "LOCAL-CLIENT",
+      "type": "community-preserved-decompilation",
+      "url": "https://github.com/jtieri/Coke-Studios-Source",
+      "status": "already-preserved-locally",
+      "localPath": "sources/original-client-source",
+      "date": "Directory labels: 2006-03-14, 2006-05-03, 2007-10-08",
+      "note": "Version folders are distinct. Decompiled source is not the original server."
+    },
+    {
+      "id": "LOCAL-GOCOKE",
+      "type": "remake-with-recovered-assets",
+      "url": "https://github.com/bolognesandwiches/GoCoke",
+      "status": "already-preserved-locally",
+      "localPath": "sources/gocoke/web",
+      "date": null,
+      "note": "Recovered Lingo, cast metadata, images, strings, catalogue and feature flags; local modifications require hash tracking."
+    },
+    {
+      "id": "LOCAL-CACHE",
+      "type": "community-preservation-research",
+      "url": "https://github.com/Lost-Media-Hunt/Coke-Studios",
+      "status": "already-preserved-locally; current repository tree inspected",
+      "localPath": "sources/cache-finder",
+      "date": null,
+      "note": "22 preserved WebP references, wanted-file notes and 446 known SHA-1 fingerprints. Screenshot capture dates are not authenticated."
+    },
+    {
+      "id": "LOCAL-PACK",
+      "type": "mixed-community-preservation-pack",
+      "url": "https://h4bbo.net/archive/HabboStuff/CokeStudios%20The%20Complete%20Pack.rar",
+      "status": "already-preserved-locally",
+      "localPath": "archives/extracted-complete-pack/Cokestudios Private Server",
+      "date": null,
+      "note": "Private server and original-asset material coexist. Generic ElectroServer documentation is not game-specific evidence."
+    },
+    {
+      "id": "FORK-CSWEBSITE",
+      "type": "community-reconstruction-fork",
+      "url": "https://github.com/deafro5/CSWebsite",
+      "status": "tree metadata saved; alternate files not acquired",
+      "localPath": "docs/knowledge/sources/cswebsite-fork-tree.json",
+      "date": null,
+      "note": "Tree d06cf58e3ea4293d6829787dfa051f3cedb4c8d2 has 135 files; no missing paths relative to local CSWebsite. Byte differences need normalization before assuming unique material."
+    },
+    {
+      "id": "WIKI-HISTORY",
+      "type": "secondary-community-research",
+      "url": "https://mycoke.fandom.com/wiki/CokeHistory",
+      "status": "search-index excerpt; direct access failed/blocked",
+      "date": null,
+      "note": "Useful screenshot leads, but collection also includes edits, third-party tools and fan worlds. Authenticate every image individually."
+    },
+    {
+      "id": "WIKI-VERSIONS",
+      "type": "secondary-community-research",
+      "url": "https://mycoke.fandom.com/wiki/Versions",
+      "status": "search-index excerpt",
+      "date": null,
+      "note": "Source of dated Wayback leads; chronology is not used as a technical specification."
+    },
+    {
+      "id": "WIKI-ROOMS",
+      "type": "secondary-community-research",
+      "url": "https://mycoke.fandom.com/wiki/Public_rooms",
+      "status": "cached page read through research tool",
+      "date": null,
+      "note": "Public-areas and music FAQ archive links extracted from search results; archive payloads not retrieved."
+    },
+    {
+      "id": "WIKI-GAMES",
+      "type": "secondary-community-research",
+      "url": "https://cokestudios.miraheze.org/wiki/Games",
+      "status": "HTTP 403 through research tool; no retry",
+      "date": null,
+      "note": "Discovery only; contents not acquired."
+    },
+    {
+      "id": "WIKI-ADAMANIAX",
+      "type": "secondary-community-research",
+      "url": "https://cokestudios.miraheze.org/wiki/Adamaniax",
+      "status": "not accessible through research tool",
+      "date": null,
+      "note": "Discovery only."
+    },
+    {
+      "id": "REVIVAL-DECIBEL",
+      "type": "current-revival",
+      "url": "https://decibel.fun/play.php",
+      "status": "text-read",
+      "date": null,
+      "note": "Current revival navigation is evidence of this revival only. No accounts created or player data queried."
+    },
+    {
+      "id": "ARCHIVE-DEK",
+      "type": "community-archive",
+      "url": "https://habbo.dek.cx/",
+      "status": "landing page read; archive payload unavailable",
+      "date": null,
+      "note": "Search advertises Coke Studios/Decibel pages. Original versus revival provenance unresolved."
+    },
+    {
+      "id": "DEV-POPQUIZ",
+      "type": "original-game-developer-lead",
+      "url": "http://gamesthatwork.com/home/portfolio/pop-quiz/",
+      "status": "direct HTTPS page inaccessible; archive lead discovered",
+      "date": null,
+      "note": "Potential primary rules/visual evidence; not retrieved."
+    },
+    {
+      "id": "WIKI-PERFORMING",
+      "type": "secondary-community-research",
+      "url": "https://mycoke.fandom.com/wiki/Performing",
+      "status": "search-index excerpt",
+      "date": null,
+      "note": "Lead to dated daily/weekly chart URLs; no payout formula accepted."
+    },
+    {
+      "id": "WIKI-POPQUIZ",
+      "type": "secondary-community-research",
+      "url": "https://mycoke.fandom.com/wiki/Pop_Quiz",
+      "status": "search-index excerpt",
+      "date": null,
+      "note": "Leads to original coming-soon page, developer portfolio and preserved rules; no exact scoring adopted."
+    },
+    {
+      "id": "LOCAL-UNCOVER",
+      "type": "community-preserved-game-and-rules",
+      "url": "https://github.com/markhughes/uncover-the-music",
+      "status": "already-preserved-locally; rules read",
+      "localPath": "sources/uncover-the-music",
+      "date": null,
+      "note": "Rules page and late website CSS fragments. Original capture URL/date unverified; current remake code is not proof of original behavior."
+    }
+  ]
+}

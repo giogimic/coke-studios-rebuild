@@ -38,7 +38,7 @@ services:
       - PORT=${PORT:-24902}
       - BACKEND_PORT=${BACKEND_PORT:-8080}
       - DB_DRIVER=mysql
-      - DATABASE_URL=coke:coke_secret@tcp(mariadb:3306)/coke_studios?parseTime=true
+      - DATABASE_URL=${DATABASE_URL:-coke:coke_secret@tcp(mariadb:3306)/coke_studios?parseTime=true}
 
 volumes:
   coke_mariadb_data:

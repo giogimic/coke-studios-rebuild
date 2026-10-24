@@ -1,0 +1,125 @@
+{
+  "reviewDate": "2026-10-24",
+  "observations": [
+    {
+      "id": "KB-001-WEBSITE-ORIGIN",
+      "sourcePath": "sources/cs-website/README.md",
+      "sha256": "c4817245cd2f93398e0976fba19e1f53068883426290c257539116dd76b80d00",
+      "locator": "Opening description",
+      "observation": "Repository identifies itself as a pre-MyCoke website recreation.",
+      "confidence": "High for repository description; historical page provenance unverified.",
+      "originalCaptureDate": null,
+      "historicalParity": "not verified by this research"
+    },
+    {
+      "id": "KB-002-EARLY-NAV",
+      "sourcePath": "sources/cache-finder/docs/img/cokemusic-2002.webp",
+      "sha256": "15dfcc0045736a6937979dd9e6cf3a1c0627bc6f22308ca03e77ebe3e723c6c4",
+      "locator": "Top navigation; visual inspection",
+      "observation": "Home, Launching Pad, Coke Studios, Create Your Demo, Coke FM, Downloads, Help.",
+      "confidence": "High for visible labels; filename year not authenticated capture date.",
+      "originalCaptureDate": null,
+      "historicalParity": "not verified by this research"
+    },
+    {
+      "id": "KB-003-REMAKE-NAV",
+      "sourcePath": "sources/cs-website/templates/page.html",
+      "sha256": "1cee55c3ae58efc61a0be6aa32eb3696691d73eac176d810a3715b754c3b9a2e",
+      "locator": "Navigation links",
+      "observation": "Different navigation includes Games, Music-Mixer, Music and Decible Central.",
+      "confidence": "High for preserved markup; not original routing proof.",
+      "originalCaptureDate": null,
+      "historicalParity": "not verified by this research"
+    },
+    {
+      "id": "KB-004-STAGE",
+      "sourcePath": "sources/gocoke/web/Lingo/Movies.csv",
+      "sha256": "2882838d4aea806070d772b6f3469f964340e8e11f8a4f8a97b66edc42b53a86",
+      "locator": "SF_Client.dir row",
+      "observation": "Director 10.0; rectangle (89,50) to (849,570), hence 760 x 520.",
+      "confidence": "High for export metadata; exact build/date unresolved.",
+      "originalCaptureDate": null,
+      "historicalParity": "not verified by this research"
+    },
+    {
+      "id": "KB-005-TOOLBAR",
+      "sourcePath": "sources/gocoke/web/Lingo/cc_room/62_room_bar.window.txt",
+      "sha256": "0893992e1707d3aba2b3183a8711fbb7355aaac032ab7ea1fae30247310a8adf",
+      "locator": "elements and rect",
+      "observation": "Toolbar template preserves speech controls, chat field and eight tool icons.",
+      "confidence": "High for definition; runtime placement unresolved.",
+      "originalCaptureDate": null,
+      "historicalParity": "not verified by this research"
+    },
+    {
+      "id": "KB-006-FIVE-SLOTS",
+      "sourcePath": "sources/gocoke/web/Lingo/mixer/37__MIXER_.ls",
+      "sha256": "fd2a618bc188a26a5dea1dfa89a61ff78ceb82e648d470265ce7df8d43243771",
+      "locator": "updatecontent",
+      "observation": "Initializes five saved-mix slots.",
+      "confidence": "High for recovered code; version association unresolved.",
+      "originalCaptureDate": null,
+      "historicalParity": "not verified by this research"
+    },
+    {
+      "id": "KB-007-EXTERNAL-EDITOR",
+      "sourcePath": "sources/gocoke/web/Lingo/mixer/37__MIXER_.ls",
+      "sha256": "fd2a618bc188a26a5dea1dfa89a61ff78ceb82e648d470265ce7df8d43243771",
+      "locator": "editMix",
+      "observation": "Stops playback, opens paused dialog and launches external mixer URL.",
+      "confidence": "High for recovered code; full editor/save replay pending.",
+      "originalCaptureDate": null,
+      "historicalParity": "not verified by this research"
+    },
+    {
+      "id": "KB-008-BLANK-CD",
+      "sourcePath": "sources/gocoke/web/Lingo/mixer/37__MIXER_.ls",
+      "sha256": "fd2a618bc188a26a5dea1dfa89a61ff78ceb82e648d470265ce7df8d43243771",
+      "locator": "burnMix",
+      "observation": "Requires saved mix and at least one blank CD; prompts using current count.",
+      "confidence": "High for client code; additional fee and server transaction not established.",
+      "originalCaptureDate": null,
+      "historicalParity": "not verified by this research"
+    },
+    {
+      "id": "KB-009-MIXER-ACCESS",
+      "sourcePath": "sources/gocoke/web/Lingo/isoengine/124_ACTION_MIXER.ls",
+      "sha256": "3099e744a2e335992d5d4c123539852690d51c45a4502e4b7612337b5d54f570",
+      "locator": "use / openmixer",
+      "observation": "Checks feature flags, position and owner/moderator access.",
+      "confidence": "High for client code; server enforcement unverified by this source.",
+      "originalCaptureDate": null,
+      "historicalParity": "not verified by this research"
+    },
+    {
+      "id": "KB-010-UNCOVER-RULES",
+      "sourcePath": "sources/uncover-the-music/_resources/_other/html/RevealChallengeRules.htm",
+      "sha256": "30359d8d7b2e0bc25a1891fe58c7db7f91813ee3be58adbe27b780c07c18f86a",
+      "locator": "How to participate section",
+      "observation": "3–5 players; 24 cells; 15-second turn; 60-Decibel winner bonus; 300 daily limit.",
+      "confidence": "High for preserved text; original capture date and release applicability unresolved.",
+      "originalCaptureDate": null,
+      "historicalParity": "not verified by this research"
+    },
+    {
+      "id": "KB-011-PROMO-SITE",
+      "sourcePath": "sources/cache-finder/docs/img/sharktale-site.webp",
+      "sha256": "f3e9d36257b12c92f963a1943a61d3a1576ddab5d39320a2f76689248ab45a8a",
+      "locator": "Visible promotion panels/footer",
+      "observation": "Separate Whale Wash Builder and Activity links; 2004 footer; missing image resources.",
+      "confidence": "High for visible elements; capture date/build unknown.",
+      "originalCaptureDate": null,
+      "historicalParity": "not verified by this research"
+    },
+    {
+      "id": "KB-012-TRADE",
+      "sourcePath": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+      "sha256": "5d60d4edd8f71d7e7f1dd7c51e20e2fa07c403d3db8c64af6e8642fada14ebc2",
+      "locator": "elements",
+      "observation": "Two-sided six-slot trade display with agreement/cancel controls.",
+      "confidence": "High for definition; atomic transfer and acceptance rules require handler trace.",
+      "originalCaptureDate": null,
+      "historicalParity": "not verified by this research"
+    }
+  ]
+}

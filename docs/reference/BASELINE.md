@@ -1,5 +1,7 @@
 # Coke Studios Historical Baseline Specification
 
+> Research qualification, 2026-10-24: this is a working reference candidate. March 14 and May 3 are separate archive labels; their file-level association to the GoCoke exports is not authenticated by Movies.csv. The 760x520 stage observation is supported. The Retina interpretation, FPS ranges and combined release identity below remain unverified. See [evidence and versions](../knowledge/EVIDENCE-AND-VERSIONS.md), [music](../knowledge/MUSIC.md), and [hashed observations](../knowledge/observations.json).
+
 **Document Date:** 2026-10-24  
 **Reference Release Target:** Macromedia Director MX 2004 (Director 10.0) Client Archive (March 14, 2006 / May 3, 2006 StudioCom Build)  
 **Primary Evidence Corpus:**

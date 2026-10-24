@@ -32,23 +32,32 @@ find_next_free_port() {
     echo "${p}"
 }
 
+# Helper: Sanitize string values (strip quotes, carriage returns, leading/trailing whitespace)
+clean_val() {
+    local val="$1"
+    val="$(echo "${val}" | tr -d '\r\n\t'\''"')"
+    echo "${val}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'
+}
+
 # Load existing configuration if .env exists
 if [ -f .env ]; then
+    # Normalize line endings and strip Windows carriage returns
+    sed -i -e 's/\r$//' .env 2>/dev/null || true
     set -a
     # shellcheck disable=SC1091
     source .env 2>/dev/null || true
     set +a
 fi
 
-PORT="${PORT:-24902}"
-BACKEND_PORT="${BACKEND_PORT:-8080}"
-COKEPHASE_PORT="${COKEPHASE_PORT:-8081}"
-MUSICMIXER_PORT="${MUSICMIXER_PORT:-8082}"
-DB_PORT="${DB_PORT:-3306}"
-DB_NAME="${DB_NAME:-coke_studios}"
-DB_USER="${DB_USER:-coke}"
-DB_PASS="${DB_PASS:-coke_secret}"
-DB_ROOT_PASSWORD="${DB_ROOT_PASSWORD:-coke_root_secret}"
+PORT="$(clean_val "${PORT:-24902}")"
+BACKEND_PORT="$(clean_val "${BACKEND_PORT:-8080}")"
+COKEPHASE_PORT="$(clean_val "${COKEPHASE_PORT:-8081}")"
+MUSICMIXER_PORT="$(clean_val "${MUSICMIXER_PORT:-8082}")"
+DB_PORT="$(clean_val "${DB_PORT:-3306}")"
+DB_NAME="$(clean_val "${DB_NAME:-coke_studios}")"
+DB_USER="$(clean_val "${DB_USER:-coke}")"
+DB_PASS="$(clean_val "${DB_PASS:-coke_secret}")"
+DB_ROOT_PASSWORD="$(clean_val "${DB_ROOT_PASSWORD:-coke_root_secret}")"
 
 echo "===================================================================="
 echo "    COKE STUDIOS & COKE MUSIC 1:1 REBUILD - DEBIAN DOCKER SETUP"
@@ -57,6 +66,12 @@ echo " Mode: $( [ "${1:-}" = "--update" ] || [ "${1:-}" = "update" ] && echo "UP
 echo " Database:     MariaDB 11 (Scalable Docker Cluster)"
 echo " Workspace:    ${SCRIPT_DIR}"
 echo "===================================================================="
+
+# Automatically clean up any orphaned Coke containers or background processes
+if [ -f "./stop.sh" ]; then
+    echo "[*] Ensuring previous Coke Studios containers and processes are stopped..."
+    bash ./stop.sh >/dev/null 2>&1 || true
+fi
 
 # Helper: check for docker command
 check_docker() {
@@ -114,7 +129,7 @@ if [ ${IS_UPDATE} -eq 0 ]; then
             echo "  [!] Port ${PORT} is IN USE. Suggested free port: ${SUGG_PORT}"
         fi
         read -r -p "  [1/5] Primary Portal Port [default: ${SUGG_PORT}]: " INPUT_PORT
-        PORT="${INPUT_PORT:-$SUGG_PORT}"
+        PORT=$(clean_val "${INPUT_PORT:-$SUGG_PORT}")
 
         # 2. Standalone Go Backend Port (commonly 8080)
         SUGG_BACKEND="${BACKEND_PORT}"
@@ -123,7 +138,7 @@ if [ ${IS_UPDATE} -eq 0 ]; then
             echo "  [!] Port ${BACKEND_PORT} is ALREADY IN USE! Suggested free port: ${SUGG_BACKEND}"
         fi
         read -r -p "  [2/5] Standalone Go Backend Port [default: ${SUGG_BACKEND}]: " INPUT_BACKEND
-        BACKEND_PORT="${INPUT_BACKEND:-$SUGG_BACKEND}"
+        BACKEND_PORT=$(clean_val "${INPUT_BACKEND:-$SUGG_BACKEND}")
 
         # 3. MariaDB Host Port (commonly 3306)
         SUGG_DB="${DB_PORT}"
@@ -132,7 +147,7 @@ if [ ${IS_UPDATE} -eq 0 ]; then
             echo "  [!] Port ${DB_PORT} (MySQL) is ALREADY IN USE! Suggested free port: ${SUGG_DB}"
         fi
         read -r -p "  [3/5] MariaDB Host Port [default: ${SUGG_DB}]: " INPUT_DB
-        DB_PORT="${INPUT_DB:-$SUGG_DB}"
+        DB_PORT=$(clean_val "${INPUT_DB:-$SUGG_DB}")
 
         # 4. CokePhase Port
         SUGG_CP="${COKEPHASE_PORT}"
@@ -141,7 +156,7 @@ if [ ${IS_UPDATE} -eq 0 ]; then
             echo "  [!] Port ${COKEPHASE_PORT} is IN USE. Suggested free port: ${SUGG_CP}"
         fi
         read -r -p "  [4/5] CokePhase HTML5 Port [default: ${SUGG_CP}]: " INPUT_CP
-        COKEPHASE_PORT="${INPUT_CP:-$SUGG_CP}"
+        COKEPHASE_PORT=$(clean_val "${INPUT_CP:-$SUGG_CP}")
 
         # 5. CSMusicMixer Port
         SUGG_MIXER="${MUSICMIXER_PORT}"
@@ -150,7 +165,7 @@ if [ ${IS_UPDATE} -eq 0 ]; then
             echo "  [!] Port ${MUSICMIXER_PORT} is IN USE. Suggested free port: ${SUGG_MIXER}"
         fi
         read -r -p "  [5/5] CSMusicMixer Standalone Port [default: ${SUGG_MIXER}]: " INPUT_MIXER
-        MUSICMIXER_PORT="${INPUT_MIXER:-$SUGG_MIXER}"
+        MUSICMIXER_PORT=$(clean_val "${INPUT_MIXER:-$SUGG_MIXER}")
 
         echo "--------------------------------------------------------------------"
     else
@@ -166,7 +181,7 @@ if [ ${IS_UPDATE} -eq 0 ]; then
     fi
 fi
 
-# Write updated configuration to .env
+# Write updated configuration to .env with clean Unix line endings
 echo "[*] Writing .env configuration..."
 cat > .env <<EOF
 PORT=${PORT}
@@ -181,6 +196,7 @@ DB_PASS=${DB_PASS}
 DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
 DATABASE_URL=${DB_USER}:${DB_PASS}@tcp(mariadb:3306)/${DB_NAME}?parseTime=true
 EOF
+sed -i -e 's/\r$//' .env 2>/dev/null || true
 
 # Ensure Linux binaries have executable permissions
 chmod +x start.sh stop.sh tools/bin/* 2>/dev/null || true

@@ -1,0 +1,37 @@
+[
+  {
+    "path": "sources/gocoke/web/data/Catalogue_English.txt",
+    "sha256": "0bf3961f8b697c6831e6bee9ab99d91009a0f8d52428774750f337d5c3d34d72",
+    "lineCount": 231
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "sha256": "30701b681271941ccefe491f645b237c6a7833df641da4c8ce067b23d3abb35a",
+    "lineCount": 26
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "sha256": "367ed605d045f25997347fa909a53e006d82917236b354b5f109354a7c4283a6",
+    "lineCount": 532
+  },
+  {
+    "path": "sources/catalogue-parser/Catalogue_English.txt",
+    "sha256": "9137227ce21d3dedf62ddee91176a847ed7d3700ffb0a5dd40861780247491ad",
+    "lineCount": 197
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Catalogue_English(5-23-6).txt",
+    "sha256": "9137227ce21d3dedf62ddee91176a847ed7d3700ffb0a5dd40861780247491ad",
+    "lineCount": 197
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "sha256": "30701b681271941ccefe491f645b237c6a7833df641da4c8ce067b23d3abb35a",
+    "lineCount": 26
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "sha256": "f30d4f3c19bc2f9cb2e81d86a2e9fcb54e1db38b27cac154c76a8fd2a0771fe4",
+    "lineCount": 532
+  }
+]

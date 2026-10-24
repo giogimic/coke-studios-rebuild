@@ -1,6 +1,8 @@
 # Recreation parity register
 
-Updated 2026-10-24. Baseline: **Pinned to Macromedia Director MX 2004 (Director 10.0) Client Archive (March 14, 2006 / May 3, 2006 StudioCom Build)**. This register records evidence, not estimated completion percentages.
+Updated 2026-10-24. Baseline: **Working Director 10.0 / 760x520 reference; March 14 and May 3, 2006 archive associations require file-level verification**. This register records evidence, not estimated completion percentages.
+
+Research addition: [knowledge/README.md](knowledge/README.md) indexes the preserved corpus and [observations.json](knowledge/observations.json) records source-level findings. Website versions, mixer structure and Uncover rules now have explicit evidence/limits. This adds **source present / source analyzed** evidence only; no gameplay or whole-feature parity was re-tested in this research pass.
 
 Status meanings:
 - **Source present:** relevant code/assets exist; functionality is not established.
@@ -13,8 +15,8 @@ No feature below is currently promoted to whole-feature historical-parity verifi
 
 | Feature | Current assessment | Implementation/evidence location | Next acceptance gate | Plan |
 |---|---|---|---|---|
-| Historical release baseline | Pinned baseline (March 14, 2006 / Director 10.0) | `docs/reference/BASELINE.md`, `evidence.json` [EVID-001-VIEWPORT, EVID-002-CASTS, EVID-003-BOOT-PARAMS, EVID-006, EVID-007, EVID-008] | Continuous verification against 760x520 viewport and Director scripts | 1 |
-| Website and entry flow | Behavior verified; 1:1 historical 2-column layout with 180px V-Ego status badge on glowing podium, 584px sliced button navigation matching Director MX 2004 760px baseline, authentic tab-home welcome landing page, unified auth modal (direct sign-in + 5-step registration), and 760x520 popout game launcher | `tools/portal/index.html`, `sources/gocoke/cmd/server/routes.go`, `routes_test.go` | Reference visual verification against Director Shockwave and 2004 site archives | 2 |
+| Historical release baseline | Working baseline candidate; viewport evidenced, exact release association unresolved | `docs/reference/BASELINE.md`, `evidence.json` [EVID-001-VIEWPORT, EVID-002-CASTS, EVID-003-BOOT-PARAMS, EVID-006, EVID-007, EVID-008] | Match individual client/cast/text hashes to one release; compare at 760x520 | 1 |
+| Website and entry flow | Behavior verification previously reported; two-column website, status badge, sliced navigation, auth flow and popout are implemented; historical correspondence remains unverified | `tools/portal/index.html`, `sources/gocoke/cmd/server/routes.go`, `routes_test.go` | Reference visual verification against Director Shockwave and 2004 site archives | 2 |
 | Go client build/boot | Behavior verified; automated build scripts | `tools/build-go.ps1`, `tools/build-go.sh`, `sources/gocoke/web/main.wasm`, `tests/browser/go-entry.spec.ts` | Clean browser boot directly into Go Ebitengine without external JS engines | 2 |
 | Registration/login/session | Behavior verified; PBKDF2 hashing, expiring tokens, isolated identity | `cmd/server/auth.go`, `auth_test.go`, `db.go`, `tests/browser/account-session.spec.ts` | Complete browser journey from register -> login -> WASM boot | 3 |
 | V-ego creation/profile | Behavior verified; custom avatar def persists per player | `cmd/server/main.go`, `auth.go`, `db.go`, `avatarengine/` | Same evidenced appearance persists across login and other players' screens | 3-4 |

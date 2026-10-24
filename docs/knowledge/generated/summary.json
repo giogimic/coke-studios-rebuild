@@ -1,0 +1,170 @@
+{
+  "generatedAt": "2026-10-24T21:03:13.157Z",
+  "workspace": "C:\\Users\\Matth\\OneDrive\\Desktop\\GPT",
+  "scope": [
+    {
+      "root": "sources/cache-finder",
+      "kind": "community-preservation-research",
+      "releaseNote": "screenshots and known-file hashes; capture dates require authentication"
+    },
+    {
+      "root": "sources/music-mixer/assets",
+      "kind": "community-mixer-preserved-assets",
+      "releaseNote": "OddCast and remake assets; classify each file before use"
+    },
+    {
+      "root": "sources/avatar-engine",
+      "kind": "community-avatar-reference",
+      "releaseNote": "not original server behavior"
+    },
+    {
+      "root": "sources/uncover-the-music",
+      "kind": "community-minigame-preservation",
+      "releaseNote": "preserved Flash and reconstruction code; mixed provenance"
+    },
+    {
+      "root": "sources/cs-website",
+      "kind": "community-website-reconstruction",
+      "releaseNote": "pre-MyCoke recreation; not a dated original capture"
+    },
+    {
+      "root": "sources/gocoke/web/Lingo",
+      "kind": "recovered-client-assets",
+      "releaseNote": "release association needs file-level verification"
+    },
+    {
+      "root": "sources/gocoke/web/data",
+      "kind": "client-data",
+      "releaseNote": "release association needs verification"
+    },
+    {
+      "root": "sources/original-client-source",
+      "kind": "decompiled-original-client",
+      "releaseNote": "dated directory is an archive label, not independently authenticated build"
+    },
+    {
+      "root": "sources/avatar-assets",
+      "kind": "community-preserved-avatar-assets",
+      "releaseNote": "version unresolved"
+    },
+    {
+      "root": "sources/catalogue-parser",
+      "kind": "community-parser-and-data",
+      "releaseNote": "version unresolved"
+    },
+    {
+      "root": "sources/cokeitems",
+      "kind": "community-item-reference",
+      "releaseNote": "version unresolved"
+    },
+    {
+      "root": "sources/cs-ui",
+      "kind": "community-ui-reference",
+      "releaseNote": "version unresolved"
+    },
+    {
+      "root": "sources/cs-chat",
+      "kind": "community-chat-reference",
+      "releaseNote": "version unresolved"
+    },
+    {
+      "root": "sources/screensavers",
+      "kind": "preserved-downloads",
+      "releaseNote": "version unresolved"
+    },
+    {
+      "root": "archives/extracted-complete-pack/Cokestudios Private Server",
+      "kind": "private-server-release-and-assets",
+      "releaseNote": "mixed preservation pack; not original backend"
+    }
+  ],
+  "files": 18793,
+  "bytes": 395637358,
+  "uniqueContentHashes": 13627,
+  "duplicateGroups": 2731,
+  "windows": 117,
+  "elements": 2856,
+  "websitePages": 14,
+  "websiteLinks": 50,
+  "lingoScripts": 1881,
+  "lingoHandlers": 14797,
+  "historicalURLReferences": 27,
+  "uniqueHistoricalURLs": 25,
+  "byKind": {
+    "private-server-release-and-assets": {
+      "files": 1137,
+      "bytes": 58205020
+    },
+    "community-preserved-avatar-assets": {
+      "files": 1316,
+      "bytes": 724328
+    },
+    "community-avatar-reference": {
+      "files": 4,
+      "bytes": 12206
+    },
+    "community-preservation-research": {
+      "files": 54,
+      "bytes": 1724478
+    },
+    "community-parser-and-data": {
+      "files": 5,
+      "bytes": 60733
+    },
+    "community-item-reference": {
+      "files": 238,
+      "bytes": 543698
+    },
+    "community-chat-reference": {
+      "files": 8,
+      "bytes": 57251
+    },
+    "community-ui-reference": {
+      "files": 3,
+      "bytes": 36165
+    },
+    "community-website-reconstruction": {
+      "files": 154,
+      "bytes": 3463807
+    },
+    "client-data": {
+      "files": 4,
+      "bytes": 92305
+    },
+    "recovered-client-assets": {
+      "files": 5441,
+      "bytes": 32017496
+    },
+    "community-mixer-preserved-assets": {
+      "files": 201,
+      "bytes": 35199737
+    },
+    "decompiled-original-client": {
+      "files": 2994,
+      "bytes": 110419647
+    },
+    "preserved-downloads": {
+      "files": 9,
+      "bytes": 536928
+    },
+    "community-minigame-preservation": {
+      "files": 7225,
+      "bytes": 152543559
+    }
+  },
+  "limits": [
+    "No original release date inferred from extractor filenames or embedded window dates.",
+    "Text extraction limited to 2 MiB per file; binaries and LASM are inventoried, not parsed.",
+    "Window property extraction preserves raw lines; it is not a complete Lingo interpreter.",
+    "Website HTML is a community reconstruction; extracted navigation does not prove historical routing.",
+    "No original screenshot pixels recovered through web search are claimed as downloaded.",
+    "HTML extraction is static and heuristic; unclosed tags or runtime JavaScript need manual review.",
+    "Community known-file fingerprints describe that project archive, not all surviving files globally."
+  ],
+  "textKeys": 731,
+  "catalogueRecords": 601,
+  "windowTextReferences": 508,
+  "knownFileFingerprints": 446,
+  "galleryImages": 446,
+  "interfaceDispatchCases": 174
+}

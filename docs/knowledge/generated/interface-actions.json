@@ -1,0 +1,4424 @@
+[
+  {
+    "controlId": "entry_info",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 3,
+    "statements": [
+      {
+        "line": 4,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"safety tips\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/17_cc_entry.window_OLD.txt",
+        "line": 14,
+        "member": "cc.entry.notice1"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/5_BETA_cc_entry.window.txt",
+        "line": 18,
+        "member": "cc.entry.notice1"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/6_cc_entry.window.txt",
+        "line": 18,
+        "member": "cc.entry.notice1"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.entry.help",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 5,
+    "statements": [
+      {
+        "line": 6,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"button display status\"), whatsprite))"
+      },
+      {
+        "line": 7,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"call for help btn\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/5_BETA_cc_entry.window.txt",
+        "line": 19,
+        "member": "cc.entry.help.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/6_cc_entry.window.txt",
+        "line": 19,
+        "member": "cc.entry.help.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.entry.mms",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 8,
+    "statements": [
+      {
+        "line": 9,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"button display status\"), whatsprite))"
+      },
+      {
+        "line": 10,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"messenger\")))"
+      },
+      {
+        "line": 11,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"messenger btn\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/5_BETA_cc_entry.window.txt",
+        "line": 20,
+        "member": "cc.entry.mms.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/6_cc_entry.window.txt",
+        "line": 20,
+        "member": "cc.entry.mms.active"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_search_tab",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 12,
+    "statements": [
+      {
+        "line": 13,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"generictab\"), callerID, \"nav_search_start.window\"))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/59_nav_public_start.window.txt",
+        "line": 78,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/60_nav_public_info.window.txt",
+        "line": 88,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/61_nav_public_people.window.txt",
+        "line": 87,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/62_nav_public_special_info.window.txt",
+        "line": 80,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/63_nav_private_start.window.txt",
+        "line": 65,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/64_nav_private_info.window.txt",
+        "line": 75,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/65_nav_private_people.window.txt",
+        "line": 71,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/66_nav_private_start_search.window.txt",
+        "line": 69,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/76_nav_private_mystudio_info.window.txt",
+        "line": 75,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/86_nav_private_start_search.window-old.txt",
+        "line": 69,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_private_tab",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 14,
+    "statements": [
+      {
+        "line": 15,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"generictab\"), callerID, \"nav_private_start.window\"))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/12_nav_public_loading.window.txt",
+        "line": 61,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/59_nav_public_start.window.txt",
+        "line": 77,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/60_nav_public_info.window.txt",
+        "line": 87,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/61_nav_public_people.window.txt",
+        "line": 86,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/62_nav_public_special_info.window.txt",
+        "line": 79,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/67_nav_search_start.window.txt",
+        "line": 63,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/68_nav_search_results.window.txt",
+        "line": 72,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/81_nav_search_results-old.window.txt",
+        "line": 74,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_public_tab",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 16,
+    "statements": [
+      {
+        "line": 17,
+        "text": "if member(\"roomdisplay\").memberNum < 1 then"
+      },
+      {
+        "line": 18,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"generictab\"), callerID, \"nav_public_start.window\"))"
+      },
+      {
+        "line": 19,
+        "text": "else"
+      },
+      {
+        "line": 20,
+        "text": "if (member(\"roomdisplay\").comments.line[3] = EMPTY) or (member(\"roomdisplay\").comments.line[3] = \"0\") then"
+      },
+      {
+        "line": 21,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"generictab\"), callerID, \"nav_public_start.window\"))"
+      },
+      {
+        "line": 22,
+        "text": "else"
+      },
+      {
+        "line": 23,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"generictab\"), callerID, \"nav_public_info.window\"))"
+      },
+      {
+        "line": 24,
+        "text": "end if"
+      },
+      {
+        "line": 25,
+        "text": "end if"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/13_nav_private_loading.window.txt",
+        "line": 61,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/14_nav_private_removefavorite.window.txt",
+        "line": 59,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/63_nav_private_start.window.txt",
+        "line": 64,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/64_nav_private_info.window.txt",
+        "line": 74,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/65_nav_private_people.window.txt",
+        "line": 70,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/66_nav_private_start_search.window.txt",
+        "line": 68,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/67_nav_search_start.window.txt",
+        "line": 62,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/68_nav_search_results.window.txt",
+        "line": 71,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/76_nav_private_mystudio_info.window.txt",
+        "line": 74,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/81_nav_search_results-old.window.txt",
+        "line": 73,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/86_nav_private_start_search.window-old.txt",
+        "line": 68,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_public_people_tab",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 26,
+    "statements": [
+      {
+        "line": 27,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"generictab\"), callerID, \"nav_public_people.window\"))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/12_nav_public_loading.window.txt",
+        "line": 60,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/60_nav_public_info.window.txt",
+        "line": 86,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_people_tab",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 28,
+    "statements": [
+      {
+        "line": 29,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"generictab\"), callerID, \"nav_private_people.window\"))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/64_nav_private_info.window.txt",
+        "line": 73,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/76_nav_private_mystudio_info.window.txt",
+        "line": 73,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_public_info_tab",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 30,
+    "statements": [
+      {
+        "line": 31,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"generictab\"), callerID, \"nav_public_info.window\"))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/61_nav_public_people.window.txt",
+        "line": 85,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_private_info_tab",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 32,
+    "statements": [
+      {
+        "line": 33,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"generictab\"), callerID, \"nav_private_info.window\"))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/65_nav_private_people.window.txt",
+        "line": 69,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_priv_popular",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 34,
+    "statements": [
+      {
+        "line": 35,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"activestudios\"), callerID))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/63_nav_private_start.window.txt",
+        "line": 58,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/64_nav_private_info.window.txt",
+        "line": 67,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/65_nav_private_people.window.txt",
+        "line": 63,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/76_nav_private_mystudio_info.window.txt",
+        "line": 67,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_priv_own",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 36,
+    "statements": [
+      {
+        "line": 37,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"mystudios\"), callerID))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/63_nav_private_start.window.txt",
+        "line": 59,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/64_nav_private_info.window.txt",
+        "line": 68,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/65_nav_private_people.window.txt",
+        "line": 64,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/76_nav_private_mystudio_info.window.txt",
+        "line": 68,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_priv_create_own",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 38,
+    "statements": [
+      {
+        "line": 39,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"createroom\"), callerID))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/63_nav_private_start.window.txt",
+        "line": 60,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/66_nav_private_start_search.window.txt",
+        "line": 62,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/86_nav_private_start_search.window-old.txt",
+        "line": 62,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_go_search_button",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 40,
+    "statements": [
+      {
+        "line": 41,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"startsearchroom\"), callerID))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/63_nav_private_start.window.txt",
+        "line": 62,
+        "member": "cc.navi.search_btn.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/64_nav_private_info.window.txt",
+        "line": 62,
+        "member": "cc.navi.search_btn.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/76_nav_private_mystudio_info.window.txt",
+        "line": 62,
+        "member": "cc.navi.search_btn.active"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_search_button",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 42,
+    "statements": [
+      {
+        "line": 43,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"searchroom\"), callerID))"
+      },
+      {
+        "line": 44,
+        "text": "\"nav_createstudio_cancel\", \"nav_delete_room_cancel_1\", \"nav_delete_room_cancel_2\":"
+      },
+      {
+        "line": 45,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"cancelcreateroom\"), callerID))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/66_nav_private_start_search.window.txt",
+        "line": 64,
+        "member": "cc.navi.search_btn.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/86_nav_private_start_search.window-old.txt",
+        "line": 64,
+        "member": "cc.navi.search_btn.active"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_delete_room_ok_3",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 46,
+    "statements": [
+      {
+        "line": 47,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"okdeleteroom\"), callerID))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/75_nav_private_modify_delete3.window.txt",
+        "line": 22,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_private_search_field",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 48,
+    "statements": [
+      {
+        "line": 49,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"searchroom field\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/13_nav_private_loading.window.txt",
+        "line": 56,
+        "member": "nav_search_field"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/14_nav_private_removefavorite.window.txt",
+        "line": 55,
+        "member": "nav_search_field"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/66_nav_private_start_search.window.txt",
+        "line": 67,
+        "member": "nav_prv_search_field"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/86_nav_private_start_search.window-old.txt",
+        "line": 67,
+        "member": "nav_prv_search_field"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_createstudio_ok",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 50,
+    "statements": [
+      {
+        "line": 51,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"OKCREATEROOM\"), callerID))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/69_nav_createroom.window.txt",
+        "line": 58,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "v-ego_result_figure",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 52,
+    "statements": [
+      {
+        "line": 53,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"vegoResultFigure\"), whatsprite))"
+      },
+      {
+        "line": 54,
+        "text": "\"close\", \"MODERATOR_HELP_CANCEL\", \"sanfo_decision_cancel\":"
+      },
+      {
+        "line": 55,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"closewindow\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/68_nav_search_results.window.txt",
+        "line": 73,
+        "member": "nav_v-ego_result_dummyfigure"
+      }
+    ]
+  },
+  {
+    "controlId": "help_called_cancel",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 56,
+    "statements": [
+      {
+        "line": 57,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"closewindow\"), callerID)]"
+      },
+      {
+        "line": 58,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"fake moderator message\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/30_cc_callsent.window.txt",
+        "line": 23,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_create_roomnamefield",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 59,
+    "statements": [
+      {
+        "line": 60,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"roomname field\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/69_nav_createroom.window.txt",
+        "line": 33,
+        "member": "nav_modify_studio_name"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_create_roomdescfield",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 61,
+    "statements": [
+      {
+        "line": 62,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"roomdesc field\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/69_nav_createroom.window.txt",
+        "line": 34,
+        "member": "nav_modify_studio_desc"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_modify_roomnamefield",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 63,
+    "statements": [
+      {
+        "line": 64,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"roomname field\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/72_nav_private_modify.window.txt",
+        "line": 30,
+        "member": "nav_modify_studio_name"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_modify_roomdescription_field",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 65,
+    "statements": [
+      {
+        "line": 66,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"roomdesc field\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/72_nav_private_modify.window.txt",
+        "line": 31,
+        "member": "nav_modify_studio_desc"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_modifystudio_cancel",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 67,
+    "statements": [
+      {
+        "line": 68,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"cancelcreateroom\"), callerID))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/72_nav_private_modify.window.txt",
+        "line": 33,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_modify_deleteroom",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 69,
+    "statements": [
+      {
+        "line": 70,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"deleteroom1\"), callerID))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/72_nav_private_modify.window.txt",
+        "line": 34,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_delete_room_ok_1",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 71,
+    "statements": [
+      {
+        "line": 72,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"deleteroom2\"), callerID))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/73_nav_private_modify_delete1.window.txt",
+        "line": 22,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_delete_room_ok_2",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 73,
+    "statements": [
+      {
+        "line": 74,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"deleteroom3\"), callerID))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/74_nav_private_modify_delete2.window.txt",
+        "line": 22,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "v-ego_search_field",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 75,
+    "statements": [
+      {
+        "line": 76,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"searchuser field\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/67_nav_search_start.window.txt",
+        "line": 61,
+        "member": "nav_vego_search_field"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/68_nav_search_results.window.txt",
+        "line": 69,
+        "member": "nav_vego_search_field"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/81_nav_search_results-old.window.txt",
+        "line": 69,
+        "member": "nav_vego_search_field"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_v-ego_search_button",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 77,
+    "statements": [
+      {
+        "line": 78,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"searchuser\"), callerID))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/67_nav_search_start.window.txt",
+        "line": 59,
+        "member": "cc.navi.search_btn.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/68_nav_search_results.window.txt",
+        "line": 67,
+        "member": "cc.navi.search_btn.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/81_nav_search_results-old.window.txt",
+        "line": 67,
+        "member": "cc.navi.search_btn.active"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_modifystudio_ok",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 79,
+    "statements": [
+      {
+        "line": 80,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"okmodifyroom\"), callerID))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/72_nav_private_modify.window.txt",
+        "line": 32,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.speechswitch.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 81,
+    "statements": [
+      {
+        "line": 82,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"speechswitch btn\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/82_cc.controlbar.window.txt",
+        "line": 27,
+        "member": "cc.speechswitch.speak"
+      }
+    ]
+  },
+  {
+    "controlId": "cb.jukebox.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 83,
+    "statements": [
+      {
+        "line": 84,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"button display status\"), whatsprite))"
+      },
+      {
+        "line": 85,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"controlbar btn rollover text\"), spriteID))"
+      },
+      {
+        "line": 86,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"jukeboxbtn\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/82_cc.controlbar.window.txt",
+        "line": 18,
+        "member": "cc.bottombtn.jukebox.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cb.nav.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 87,
+    "statements": [
+      {
+        "line": 88,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"button display status\"), whatsprite))"
+      },
+      {
+        "line": 89,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"controlbar btn rollover text\"), spriteID))"
+      },
+      {
+        "line": 90,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"navbtn\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/82_cc.controlbar.window.txt",
+        "line": 17,
+        "member": "cc.bottombtn.navi.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cb.mms.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 91,
+    "statements": [
+      {
+        "line": 92,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"button display status\"), whatsprite))"
+      },
+      {
+        "line": 93,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"controlbar btn rollover text\"), spriteID))"
+      },
+      {
+        "line": 94,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"messenger btn\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/82_cc.controlbar.window.txt",
+        "line": 19,
+        "member": "cc.bottombtn.mms.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cb.dbs.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 95,
+    "statements": [
+      {
+        "line": 96,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"button display status\"), whatsprite))"
+      },
+      {
+        "line": 97,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"controlbar btn rollover text\"), spriteID))"
+      },
+      {
+        "line": 98,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"balance btn\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/82_cc.controlbar.window.txt",
+        "line": 20,
+        "member": "cc.bottombtn.dbs.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cb.bag.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 99,
+    "statements": [
+      {
+        "line": 100,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"button display status\"), whatsprite))"
+      },
+      {
+        "line": 101,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"controlbar btn rollover text\"), spriteID))"
+      },
+      {
+        "line": 102,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"backpack btn\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/82_cc.controlbar.window.txt",
+        "line": 21,
+        "member": "cc.bottombtn.bag.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cb.cat.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 103,
+    "statements": [
+      {
+        "line": 104,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"button display status\"), whatsprite))"
+      },
+      {
+        "line": 105,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"controlbar btn rollover text\"), spriteID))"
+      },
+      {
+        "line": 106,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"catalogue btn\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/82_cc.controlbar.window.txt",
+        "line": 22,
+        "member": "cc.bottombtn.catalogue.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cb.snd.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 107,
+    "statements": [
+      {
+        "line": 108,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"button display status\"), whatsprite))"
+      },
+      {
+        "line": 109,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"controlbar btn rollover text\"), spriteID))"
+      },
+      {
+        "line": 110,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"sound toggle\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/82_cc.controlbar.window.txt",
+        "line": 23,
+        "member": "cc.bottombtn.sound.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cb.hlp.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 111,
+    "statements": [
+      {
+        "line": 112,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"button display status\"), whatsprite))"
+      },
+      {
+        "line": 113,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"controlbar btn rollover text\"), spriteID))"
+      },
+      {
+        "line": 114,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"call for help btn\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/82_cc.controlbar.window.txt",
+        "line": 24,
+        "member": "cc.bottombtn.help.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.chatinput.fld",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 115,
+    "statements": [
+      {
+        "line": 116,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"chatinput script\")))"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/82_cc.controlbar.window.txt",
+        "line": 28,
+        "member": "inputchat"
+      }
+    ]
+  },
+  {
+    "controlId": "nav_go_public_button",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 117,
+    "statements": [
+      {
+        "line": 118,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"button display status\"), whatsprite))"
+      },
+      {
+        "line": 119,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"GoToPublicStudioScript\")))"
+      },
+      {
+        "line": 120,
+        "text": "\"nav_go_private_button\", \"nav_gotoyourstudio\":"
+      },
+      {
+        "line": 121,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"button display status\"), whatsprite))"
+      },
+      {
+        "line": 122,
+        "text": "sprite(whatsprite).scriptInstanceList.add(new(script(\"GoToPrivateStudioScript\")))"
+      },
+      {
+        "line": 123,
+        "text": "\"balance_ok_button\", \"Call_for_help_ok_button\":"
+      },
+      {
+        "line": 124,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"closewindow\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/12_nav_public_loading.window.txt",
+        "line": 55,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/60_nav_public_info.window.txt",
+        "line": 85,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.backpack.bg",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 125,
+    "statements": [
+      {
+        "line": 126,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"backpack Window\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 17,
+        "member": "cc.backpack.bg"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.backpack.closebox",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 127,
+    "statements": [
+      {
+        "line": 128,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"close backpack\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 18,
+        "member": "cc.backpack.closebox.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.pack.leftarrow",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 129,
+    "statements": [
+      {
+        "line": 130,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"backpack leftarrow\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 47,
+        "member": "cc.pack.leftarrow"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.pack.rightarrow",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 131,
+    "statements": [
+      {
+        "line": 132,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"backpack rightarrow\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 48,
+        "member": "cc.pack.rightarrow"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.backpack.item",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 133,
+    "statements": [
+      {
+        "line": 134,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"backpack item script\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 19,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 20,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 21,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 22,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 23,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 24,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 25,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 26,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 27,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 28,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 29,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 30,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 31,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 32,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 33,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 34,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 35,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 36,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 37,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 38,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 39,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 40,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 41,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 42,
+        "member": "room_object_placeholder_sd"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/92_cc.backpack.window.txt",
+        "line": 43,
+        "member": "room_object_placeholder_sd"
+      }
+    ]
+  },
+  {
+    "controlId": "CFH_hyperlink",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 135,
+    "statements": [
+      {
+        "line": 136,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"CFH hyperlink\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/entry/100_cc.call_for_help.window.txt",
+        "line": 17,
+        "member": "help_topic_1_title"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/100_cc.call_for_help.window.txt",
+        "line": 19,
+        "member": "help_topic_2_title"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/100_cc.call_for_help.window.txt",
+        "line": 21,
+        "member": "help_topic_3_title"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/entry/100_cc.call_for_help.window.txt",
+        "line": 23,
+        "member": "help_topic_4_title"
+      }
+    ]
+  },
+  {
+    "controlId": "MODERATOR_HELP_SEND",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 137,
+    "statements": [
+      {
+        "line": 138,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"help send btn\"), callerID), new(script(\"button display status\"), whatsprite)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/29_MODERATOR_HELP.window.txt",
+        "line": 33,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "catalog_next",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 139,
+    "statements": [
+      {
+        "line": 140,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"catalogue next\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/142_catalogue.pagedynamic.window.txt",
+        "line": 49,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/143_catalogue.page1.window.txt",
+        "line": 34,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 67,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 39,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/23_catalogue.page1.window.txt",
+        "line": 25,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 58,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/25_catalogue.page2.window.txt",
+        "line": 50,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "catalog_previous",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 141,
+    "statements": [
+      {
+        "line": 142,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"catalogue prev\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/142_catalogue.pagedynamic.window.txt",
+        "line": 48,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/143_catalogue.page1.window.txt",
+        "line": 33,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 66,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 38,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/23_catalogue.page1.window.txt",
+        "line": 24,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 57,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/25_catalogue.page2.window.txt",
+        "line": 49,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "catalog_wall_bg",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 143,
+    "statements": [
+      {
+        "line": 144,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"WallBackground\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 49,
+        "member": "cat.roomprev.wall"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 38,
+        "member": "cat.roomprev.wall"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_floor_texture",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 145,
+    "statements": [
+      {
+        "line": 146,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"GetFloorTextureSprite\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 48,
+        "member": "studiofloor_1_preview"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 40,
+        "member": "studiofloor_1_preview"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_left_wall_dirt",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 147,
+    "statements": [
+      {
+        "line": 148,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"GetLeftWallSprite\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 50,
+        "member": "cat_left_wall_1_b_0_0_0"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 41,
+        "member": "cat_left_wall_1_b_0_0_0"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_right_wall_dirt",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 149,
+    "statements": [
+      {
+        "line": 150,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"GetrightWallSprite\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 51,
+        "member": "cat_right_wall_1_b_0_0_0"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 42,
+        "member": "cat_right_wall_1_b_0_0_0"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_left_wall_texture",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 151,
+    "statements": [
+      {
+        "line": 152,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"GetLeftWallTextureSprite\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 52,
+        "member": "cat_left_wall_1_a_0_0_0"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 43,
+        "member": "cat_left_wall_1_a_0_0_0"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_right_wall_texture",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 153,
+    "statements": [
+      {
+        "line": 154,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"GetrightWallTextureSprite\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 53,
+        "member": "cat_right_wall_1_a_0_0_0"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 44,
+        "member": "cat_right_wall_1_a_0_0_0"
+      }
+    ]
+  },
+  {
+    "controlId": "catalog_wall_bg_replace",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 155,
+    "statements": [
+      {
+        "line": 156,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"WallBackgroundReplace\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/27_confirm_texture.windowOLD.txt",
+        "line": 24,
+        "member": "cat.roomprev.wall"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/28_confirm_texture.windowOLDOLD.txt",
+        "line": 27,
+        "member": "cat.roomprev.wall"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_floor_texture_replace",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 157,
+    "statements": [
+      {
+        "line": 158,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"GetFloorTextureSpriteReplace\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/27_confirm_texture.windowOLD.txt",
+        "line": 26,
+        "member": "studiofloor_1_preview"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/28_confirm_texture.windowOLDOLD.txt",
+        "line": 26,
+        "member": "studiofloor_1_preview"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_left_wall_dirt_replace",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 159,
+    "statements": [
+      {
+        "line": 160,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"GetLeftWallSpriteReplace\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/27_confirm_texture.windowOLD.txt",
+        "line": 27,
+        "member": "cat_left_wall_1_b_0_0_0"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/28_confirm_texture.windowOLDOLD.txt",
+        "line": 29,
+        "member": "cat_left_wall_1_b_0_0_0"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_right_wall_dirt_replace",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 161,
+    "statements": [
+      {
+        "line": 162,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"GetrightWallSpriteReplace\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/27_confirm_texture.windowOLD.txt",
+        "line": 28,
+        "member": "cat_right_wall_1_b_0_0_0"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/28_confirm_texture.windowOLDOLD.txt",
+        "line": 30,
+        "member": "cat_right_wall_1_b_0_0_0"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_left_wall_texture_replace",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 163,
+    "statements": [
+      {
+        "line": 164,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"GetLeftWallTextureSpriteReplace\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/27_confirm_texture.windowOLD.txt",
+        "line": 29,
+        "member": "cat_left_wall_1_a_0_0_0"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/28_confirm_texture.windowOLDOLD.txt",
+        "line": 31,
+        "member": "cat_left_wall_1_a_0_0_0"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_right_wall_texture_replace",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 165,
+    "statements": [
+      {
+        "line": 166,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"GetrightWallTextureSpriteReplace\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/27_confirm_texture.windowOLD.txt",
+        "line": 30,
+        "member": "cat_right_wall_1_a_0_0_0"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/28_confirm_texture.windowOLDOLD.txt",
+        "line": 32,
+        "member": "cat_right_wall_1_a_0_0_0"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_floor_shape_replace",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 167,
+    "statements": [
+      {
+        "line": 168,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"GetFloorShapeSpriteReplace\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/27_confirm_texture.windowOLD.txt",
+        "line": 25,
+        "member": "floor_shape_preview"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/28_confirm_texture.windowOLDOLD.txt",
+        "line": 28,
+        "member": "floor_shape_preview"
+      }
+    ]
+  },
+  {
+    "controlId": "confirm_texture_ok",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 169,
+    "statements": [
+      {
+        "line": 170,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"replaceOK\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/26_confirm_texture.window.txt",
+        "line": 25,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/27_confirm_texture.windowOLD.txt",
+        "line": 33,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/28_confirm_texture.windowOLDOLD.txt",
+        "line": 34,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "DELETE_ITEM_OK",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 171,
+    "statements": [
+      {
+        "line": 172,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"deleteok\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/202_delete_item.window.txt",
+        "line": 24,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_wall_prev",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 173,
+    "statements": [
+      {
+        "line": 174,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"ScrollWallPatternsLeft\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 54,
+        "member": "cc.catalogue.button.left.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 45,
+        "member": "cc.catalogue.button.left.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/25_catalogue.page2.window.txt",
+        "line": 37,
+        "member": "cc.catalogue.button.left.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_wall_next",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 175,
+    "statements": [
+      {
+        "line": 176,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"ScrollWallPatternsRight\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 55,
+        "member": "cc.catalogue.button.right.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 46,
+        "member": "cc.catalogue.button.right.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/25_catalogue.page2.window.txt",
+        "line": 38,
+        "member": "cc.catalogue.button.right.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_walltexture_prev",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 177,
+    "statements": [
+      {
+        "line": 178,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"ScrollWallColorsLeft\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 56,
+        "member": "cc.catalogue.button.left.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 47,
+        "member": "cc.catalogue.button.left.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/25_catalogue.page2.window.txt",
+        "line": 39,
+        "member": "cc.catalogue.button.left.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_walltexture_next",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 179,
+    "statements": [
+      {
+        "line": 180,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"ScrollWallColorsRight\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 57,
+        "member": "cc.catalogue.button.right.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 48,
+        "member": "cc.catalogue.button.right.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/25_catalogue.page2.window.txt",
+        "line": 40,
+        "member": "cc.catalogue.button.right.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_floor_prev",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 181,
+    "statements": [
+      {
+        "line": 182,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"ScrollFloorPatternsLeft\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 60,
+        "member": "cc.catalogue.button.left.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 51,
+        "member": "cc.catalogue.button.left.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/25_catalogue.page2.window.txt",
+        "line": 43,
+        "member": "cc.catalogue.button.left.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_floor_next",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 183,
+    "statements": [
+      {
+        "line": 184,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"ScrollFloorPatternsRight\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 61,
+        "member": "cc.catalogue.button.right.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 52,
+        "member": "cc.catalogue.button.right.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/25_catalogue.page2.window.txt",
+        "line": 44,
+        "member": "cc.catalogue.button.right.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_floortexture_prev",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 185,
+    "statements": [
+      {
+        "line": 186,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"ScrollFloorColorsLeft\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 62,
+        "member": "cc.catalogue.button.left.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 53,
+        "member": "cc.catalogue.button.left.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/25_catalogue.page2.window.txt",
+        "line": 45,
+        "member": "cc.catalogue.button.left.active"
+      }
+    ]
+  },
+  {
+    "controlId": "catfloortexture_next",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 187,
+    "statements": [
+      {
+        "line": 188,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"ScrollFloorColorsRight\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 63,
+        "member": "cc.catalogue.button.right.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 54,
+        "member": "cc.catalogue.button.right.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/25_catalogue.page2.window.txt",
+        "line": 46,
+        "member": "cc.catalogue.button.right.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_floor_shape",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 189,
+    "statements": [
+      {
+        "line": 190,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"GetFloorShapeSprite\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 47,
+        "member": "floor_shape_bitmap"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 39,
+        "member": "floor_shape_preview"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_previewbox",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 191,
+    "statements": [
+      {
+        "line": 192,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"catalogue thumbnail\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/142_catalogue.pagedynamic.window.txt",
+        "line": 45,
+        "member": "cc.catalogue.previewbox"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 35,
+        "member": "cc.catalogue.previewbox"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_overlay_1",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 193,
+    "statements": [
+      {
+        "line": 194,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"catalog overlay click\"), 1, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 19,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_overlay_2",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 195,
+    "statements": [
+      {
+        "line": 196,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"catalog overlay click\"), 2, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 20,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_overlay_3",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 197,
+    "statements": [
+      {
+        "line": 198,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"catalog overlay click\"), 3, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 21,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_overlay_4",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 199,
+    "statements": [
+      {
+        "line": 200,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"catalog overlay click\"), 4, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 22,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_overlay_5",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 201,
+    "statements": [
+      {
+        "line": 202,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"catalog overlay click\"), 5, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 23,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_overlay_6",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 203,
+    "statements": [
+      {
+        "line": 204,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"catalog overlay click\"), 6, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 24,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_overlay_7",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 205,
+    "statements": [
+      {
+        "line": 206,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"catalog overlay click\"), 7, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 25,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_overlay_8",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 207,
+    "statements": [
+      {
+        "line": 208,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"catalog overlay click\"), 8, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 26,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_buy_1",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 209,
+    "statements": [
+      {
+        "line": 210,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"catalogue buy btn script\"), 1, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 27,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_buy_2",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 211,
+    "statements": [
+      {
+        "line": 212,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"catalogue buy btn script\"), 2, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 28,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_buy_3",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 213,
+    "statements": [
+      {
+        "line": 214,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"catalogue buy btn script\"), 3, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 29,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_buy_4",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 215,
+    "statements": [
+      {
+        "line": 216,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"catalogue buy btn script\"), 4, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 30,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_buy_5",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 217,
+    "statements": [
+      {
+        "line": 218,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"catalogue buy btn script\"), 5, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 31,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_buy_6",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 219,
+    "statements": [
+      {
+        "line": 220,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"catalogue buy btn script\"), 6, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 32,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_buy_7",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 221,
+    "statements": [
+      {
+        "line": 222,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"catalogue buy btn script\"), 7, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 33,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cat_buy_8",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 223,
+    "statements": [
+      {
+        "line": 224,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"catalogue buy btn script\"), 8, callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/22_catalogue.pagedynamic.window.txt",
+        "line": 34,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "purchase_decision_ok",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 225,
+    "statements": [
+      {
+        "line": 226,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"ok_purchase script\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/173_purchase_info.window.txt",
+        "line": 24,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "console_myhead_image",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 227,
+    "statements": [
+      {
+        "line": 228,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"msg avatar script\"))]"
+      },
+      {
+        "line": 229,
+        "text": "\"whale_wash_cancel\", \"whale_wash_ok\":"
+      },
+      {
+        "line": 230,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"whale_wash_dialog script\"), callerID, spriteID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/10_console_myinfo.window.txt",
+        "line": 40,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "console_compose_message_field",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 231,
+    "statements": [
+      {
+        "line": 232,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"messengerTextBox\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/14_console_compose.window.txt",
+        "line": 34,
+        "member": "message"
+      }
+    ]
+  },
+  {
+    "controlId": "drag",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 233,
+    "statements": [
+      {
+        "line": 234,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"generic drag window\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/176_sanfo_basic2.window.txt",
+        "line": 19,
+        "member": "cc.window.lefttop"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/176_sanfo_basic2.window.txt",
+        "line": 20,
+        "member": "cc.window.top"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/176_sanfo_basic2.window.txt",
+        "line": 21,
+        "member": "cc.window.righttop"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/176_sanfo_basic2.window.txt",
+        "line": 22,
+        "member": "cc.window.left"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/176_sanfo_basic2.window.txt",
+        "line": 23,
+        "member": "cc.window.center"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/176_sanfo_basic2.window.txt",
+        "line": 24,
+        "member": "cc.window.right"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/176_sanfo_basic2.window.txt",
+        "line": 25,
+        "member": "cc.window.leftbottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/176_sanfo_basic2.window.txt",
+        "line": 26,
+        "member": "cc.window.bottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/176_sanfo_basic2.window.txt",
+        "line": 27,
+        "member": "cc.window.rightbottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/176_sanfo_basic2.window.txt",
+        "line": 28,
+        "member": "window_title"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/2_sanfo_basic.window_OLD.txt",
+        "line": 24,
+        "member": "grid.top.left"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/2_sanfo_basic.window_OLD.txt",
+        "line": 25,
+        "member": "grid.top.middle"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/2_sanfo_basic.window_OLD.txt",
+        "line": 26,
+        "member": "grid.top.right"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/2_sanfo_basic.window_OLD.txt",
+        "line": 27,
+        "member": "window_title"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/23_sanfo_basic.window.txt",
+        "line": 19,
+        "member": "cc.window.lefttop"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/23_sanfo_basic.window.txt",
+        "line": 20,
+        "member": "cc.window.top"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/23_sanfo_basic.window.txt",
+        "line": 21,
+        "member": "cc.window.righttop"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/23_sanfo_basic.window.txt",
+        "line": 22,
+        "member": "cc.window.left"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/23_sanfo_basic.window.txt",
+        "line": 23,
+        "member": "cc.window.center"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/23_sanfo_basic.window.txt",
+        "line": 24,
+        "member": "cc.window.right"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/23_sanfo_basic.window.txt",
+        "line": 25,
+        "member": "cc.window.leftbottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/23_sanfo_basic.window.txt",
+        "line": 26,
+        "member": "cc.window.bottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/23_sanfo_basic.window.txt",
+        "line": 27,
+        "member": "cc.window.rightbottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/23_sanfo_basic.window.txt",
+        "line": 28,
+        "member": "window_title"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/24_sanfo_simple.window.txt",
+        "line": 19,
+        "member": "cc.window.lefttop"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/24_sanfo_simple.window.txt",
+        "line": 20,
+        "member": "cc.window.top"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/24_sanfo_simple.window.txt",
+        "line": 21,
+        "member": "cc.window.righttop"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/24_sanfo_simple.window.txt",
+        "line": 22,
+        "member": "cc.window.left"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/24_sanfo_simple.window.txt",
+        "line": 23,
+        "member": "cc.window.center"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/24_sanfo_simple.window.txt",
+        "line": 24,
+        "member": "cc.window.right"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/24_sanfo_simple.window.txt",
+        "line": 25,
+        "member": "cc.window.leftbottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/24_sanfo_simple.window.txt",
+        "line": 26,
+        "member": "cc.window.bottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/24_sanfo_simple.window.txt",
+        "line": 27,
+        "member": "cc.window.rightbottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/25_sanfo_full.window.txt",
+        "line": 19,
+        "member": "cc.window.lefttop"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/25_sanfo_full.window.txt",
+        "line": 20,
+        "member": "cc.window.top"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/25_sanfo_full.window.txt",
+        "line": 21,
+        "member": "cc.window.righttop"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/25_sanfo_full.window.txt",
+        "line": 22,
+        "member": "cc.window.left"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/25_sanfo_full.window.txt",
+        "line": 23,
+        "member": "cc.window.center"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/25_sanfo_full.window.txt",
+        "line": 24,
+        "member": "cc.window.right"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/25_sanfo_full.window.txt",
+        "line": 25,
+        "member": "cc.window.leftbottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/25_sanfo_full.window.txt",
+        "line": 26,
+        "member": "cc.window.bottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/25_sanfo_full.window.txt",
+        "line": 27,
+        "member": "cc.window.rightbottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/25_sanfo_full.window.txt",
+        "line": 37,
+        "member": "window_title"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/26_cc_simple2.window.txt",
+        "line": 19,
+        "member": "cc.window.lefttop"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/26_cc_simple2.window.txt",
+        "line": 20,
+        "member": "cc.window.top"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/26_cc_simple2.window.txt",
+        "line": 21,
+        "member": "cc.window.righttop"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/26_cc_simple2.window.txt",
+        "line": 22,
+        "member": "cc.window.left"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/26_cc_simple2.window.txt",
+        "line": 23,
+        "member": "cc.window.center"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/26_cc_simple2.window.txt",
+        "line": 24,
+        "member": "cc.window.right"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/26_cc_simple2.window.txt",
+        "line": 25,
+        "member": "cc.window.leftbottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/26_cc_simple2.window.txt",
+        "line": 26,
+        "member": "cc.window.bottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/26_cc_simple2.window.txt",
+        "line": 27,
+        "member": "cc.window.rightbottom"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/26_cc_simple2.window.txt",
+        "line": 28,
+        "member": "window_title"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/3_sanfo_full.window_OLD.txt",
+        "line": 33,
+        "member": "grid.top.left"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/3_sanfo_full.window_OLD.txt",
+        "line": 34,
+        "member": "grid.top.middle"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/3_sanfo_full.window_OLD.txt",
+        "line": 35,
+        "member": "grid.top.right"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/3_sanfo_full.window_OLD.txt",
+        "line": 36,
+        "member": "window_title"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/10_console_myinfo.window.txt",
+        "line": 16,
+        "member": "mmsSHELL1"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/11_console_getmessage.window.txt",
+        "line": 16,
+        "member": "mmsSHELL1"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/12_console_getrequest.window.txt",
+        "line": 16,
+        "member": "mmsSHELL1"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/13_console_friends.window.txt",
+        "line": 16,
+        "member": "mmsSHELL1"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/14_console_compose.window.txt",
+        "line": 16,
+        "member": "mmsSHELL1"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/15_console_removefriend.window.txt",
+        "line": 16,
+        "member": "mmsSHELL1"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/158_cc.infinite_jukebox.catalog.window.txt",
+        "line": 18,
+        "member": "cc.jukebox.bg"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/208_cc.infinite_jukebox.playback.window.txt",
+        "line": 16,
+        "member": "cc.jukebox.bg"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/222_cc.infinite_jukebox.playlist.window.txt",
+        "line": 16,
+        "member": "cc.jukebox.bg"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/223_cc.infinite_jukebox.playlist.window.OLD.txt",
+        "line": 16,
+        "member": "cc.jukebox.bg"
+      }
+    ]
+  },
+  {
+    "controlId": "console_myinfo_messages_link",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 235,
+    "statements": [
+      {
+        "line": 236,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"myinfo msg script\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/10_console_myinfo.window.txt",
+        "line": 42,
+        "member": "Messages"
+      }
+    ]
+  },
+  {
+    "controlId": "console_myinfo_requests_link",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 237,
+    "statements": [
+      {
+        "line": 238,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"myinfo reqs script\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/10_console_myinfo.window.txt",
+        "line": 43,
+        "member": "requests"
+      }
+    ]
+  },
+  {
+    "controlId": "nextmessage",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 239,
+    "statements": [
+      {
+        "line": 240,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"delete message\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/11_console_getmessage.window.txt",
+        "line": 34,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "console.myinfo.button",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 241,
+    "statements": [
+      {
+        "line": 242,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"messenger start\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/11_console_getmessage.window.txt",
+        "line": 35,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/13_console_friends.window.txt",
+        "line": 39,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/14_console_compose.window.txt",
+        "line": 31,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/15_console_removefriend.window.txt",
+        "line": 32,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "console.myfriends.button",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 243,
+    "statements": [
+      {
+        "line": 244,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"messenger friends\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/10_console_myinfo.window.txt",
+        "line": 44,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/12_console_getrequest.window.txt",
+        "line": 39,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "console_friendrequest_accept",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 245,
+    "statements": [
+      {
+        "line": 246,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"accept invite\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/12_console_getrequest.window.txt",
+        "line": 44,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "console_getfriendrequest_reject",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 247,
+    "statements": [
+      {
+        "line": 248,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"reject invite\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/12_console_getrequest.window.txt",
+        "line": 43,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "console_getmessage_reply",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 249,
+    "statements": [
+      {
+        "line": 250,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"reply\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/11_console_getmessage.window.txt",
+        "line": 33,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "console_compose_cancel",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 251,
+    "statements": [
+      {
+        "line": 252,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"cancel reply\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/14_console_compose.window.txt",
+        "line": 35,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "console_compose_send",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 253,
+    "statements": [
+      {
+        "line": 254,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"send msg\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/14_console_compose.window.txt",
+        "line": 36,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "messenger_friends_compose_button",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 255,
+    "statements": [
+      {
+        "line": 256,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"compose\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/13_console_friends.window.txt",
+        "line": 46,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "messenger_friends_remove_button",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 257,
+    "statements": [
+      {
+        "line": 258,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"remove\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/13_console_friends.window.txt",
+        "line": 45,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "console_getfriendrequest_cancel",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 259,
+    "statements": [
+      {
+        "line": 260,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"cancelremove\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/15_console_removefriend.window.txt",
+        "line": 34,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "console_friendrequest_remove",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 261,
+    "statements": [
+      {
+        "line": 262,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"okremove\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_messenger[1]/15_console_removefriend.window.txt",
+        "line": 35,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "v-ego_ask_button",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 263,
+    "statements": [
+      {
+        "line": 264,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"invite friend\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/68_nav_search_results.window.txt",
+        "line": 70,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_navigator[1]/81_nav_search_results-old.window.txt",
+        "line": 72,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_sdpixel",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 265,
+    "statements": [
+      {
+        "line": 266,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"blocker\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 12,
+        "member": "cc.mixer.shadow_pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_play_1",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 267,
+    "statements": [
+      {
+        "line": 268,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"PLAY\"), new(script(\"playbtn\"), 1)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 18,
+        "member": "cc.mixer.playbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_play_2",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 269,
+    "statements": [
+      {
+        "line": 270,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"PLAY\"), new(script(\"playbtn\"), 2)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 21,
+        "member": "cc.mixer.playbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_play_3",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 271,
+    "statements": [
+      {
+        "line": 272,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"PLAY\"), new(script(\"playbtn\"), 3)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 24,
+        "member": "cc.mixer.playbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_play_4",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 273,
+    "statements": [
+      {
+        "line": 274,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"PLAY\"), new(script(\"playbtn\"), 4)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 27,
+        "member": "cc.mixer.playbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_play_5",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 275,
+    "statements": [
+      {
+        "line": 276,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"PLAY\"), new(script(\"playbtn\"), 5)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 30,
+        "member": "cc.mixer.playbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_edit_1",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 277,
+    "statements": [
+      {
+        "line": 278,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"EDIT\"), new(script(\"editbtn\"), 1)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 19,
+        "member": "cc.mixer.editbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_edit_2",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 279,
+    "statements": [
+      {
+        "line": 280,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"EDIT\"), new(script(\"editbtn\"), 2)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 22,
+        "member": "cc.mixer.editbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_edit_3",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 281,
+    "statements": [
+      {
+        "line": 282,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"EDIT\"), new(script(\"editbtn\"), 3)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 25,
+        "member": "cc.mixer.editbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_edit_4",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 283,
+    "statements": [
+      {
+        "line": 284,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"EDIT\"), new(script(\"editbtn\"), 4)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 28,
+        "member": "cc.mixer.editbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_edit_5",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 285,
+    "statements": [
+      {
+        "line": 286,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"EDIT\"), new(script(\"editbtn\"), 5)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 31,
+        "member": "cc.mixer.editbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_burn_1",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 287,
+    "statements": [
+      {
+        "line": 288,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"BURN\"), new(script(\"burnbtn\"), 1)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 20,
+        "member": "cc.mixer.burnbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_burn_2",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 289,
+    "statements": [
+      {
+        "line": 290,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"BURN\"), new(script(\"burnbtn\"), 2)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 23,
+        "member": "cc.mixer.burnbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_burn_3",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 291,
+    "statements": [
+      {
+        "line": 292,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"BURN\"), new(script(\"burnbtn\"), 3)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 26,
+        "member": "cc.mixer.burnbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_burn_4",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 293,
+    "statements": [
+      {
+        "line": 294,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"BURN\"), new(script(\"burnbtn\"), 4)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 29,
+        "member": "cc.mixer.burnbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_burn_5",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 295,
+    "statements": [
+      {
+        "line": 296,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"mixerbtn\"), \"BURN\"), new(script(\"burnbtn\"), 5)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 32,
+        "member": "cc.mixer.burnbutton.active"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_cdburner",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 297,
+    "statements": [
+      {
+        "line": 298,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"cdburner\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 38,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "closemixer",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 299,
+    "statements": [
+      {
+        "line": 300,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"closemixer\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/6_cc_mixer.window.txt",
+        "line": 17,
+        "member": "cc.mixer.closebox.active"
+      }
+    ]
+  },
+  {
+    "controlId": "BURN_CANCEL",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 301,
+    "statements": [
+      {
+        "line": 302,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"cancelburn\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/41_burn_decision.window.txt",
+        "line": 23,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "BURN_OK",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 303,
+    "statements": [
+      {
+        "line": 304,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"OKburn\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/41_burn_decision.window.txt",
+        "line": 24,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "mixer_unpause",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 305,
+    "statements": [
+      {
+        "line": 306,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"closewindow\"), callerID), new(script(\"mixer_unpause\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/mixer/43_paused.window.txt",
+        "line": 22,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cdtimer",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 307,
+    "statements": [
+      {
+        "line": 308,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"cdtimer\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/113_cc_cdplayer.window.txt",
+        "line": 38,
+        "member": "cdplayer_time"
+      }
+    ]
+  },
+  {
+    "controlId": "playsong",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 309,
+    "statements": [
+      {
+        "line": 310,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"songblend\")), new(script(\"playsong\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/113_cc_cdplayer.window.txt",
+        "line": 36,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cdicon",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 311,
+    "statements": [
+      {
+        "line": 312,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"songblend\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/113_cc_cdplayer.window.txt",
+        "line": 33,
+        "member": "choose.cd.icon"
+      }
+    ]
+  },
+  {
+    "controlId": "closecd",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 313,
+    "statements": [
+      {
+        "line": 314,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"closecd\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/113_cc_cdplayer.window.txt",
+        "line": 37,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/113_cc_cdplayer.window.txt",
+        "line": 39,
+        "member": "closebox.active"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_herstuff_1",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 315,
+    "statements": [
+      {
+        "line": 316,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"leftslot1\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 49,
+        "member": "tradingbox"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 45,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_herstuff_2",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 317,
+    "statements": [
+      {
+        "line": 318,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"leftslot2\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 50,
+        "member": "tradingbox"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 46,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_herstuff_3",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 319,
+    "statements": [
+      {
+        "line": 320,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"leftslot3\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 51,
+        "member": "tradingbox"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 47,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_herstuff_4",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 321,
+    "statements": [
+      {
+        "line": 322,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"leftslot4\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 52,
+        "member": "tradingbox"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 48,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_herstuff_5",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 323,
+    "statements": [
+      {
+        "line": 324,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"leftslot5\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 53,
+        "member": "tradingbox"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 49,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_herstuff_6",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 325,
+    "statements": [
+      {
+        "line": 326,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"leftslot6\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 54,
+        "member": "tradingbox"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 50,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_mystuff_1",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 327,
+    "statements": [
+      {
+        "line": 328,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"rightSlot1\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 43,
+        "member": "tradingbox"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 39,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_mystuff_2",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 329,
+    "statements": [
+      {
+        "line": 330,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"rightSlot2\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 44,
+        "member": "tradingbox"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 40,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_mystuff_3",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 331,
+    "statements": [
+      {
+        "line": 332,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"rightSlot3\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 45,
+        "member": "tradingbox"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 41,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_mystuff_4",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 333,
+    "statements": [
+      {
+        "line": 334,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"rightSlot4\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 46,
+        "member": "tradingbox"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 42,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_mystuff_5",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 335,
+    "statements": [
+      {
+        "line": 336,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"rightSlot5\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 47,
+        "member": "tradingbox"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 43,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_mystuff_6",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 337,
+    "statements": [
+      {
+        "line": 338,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"rightSlot6\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 48,
+        "member": "tradingbox"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 44,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_cancel",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 339,
+    "statements": [
+      {
+        "line": 340,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"closetrader\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 63,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 64,
+        "member": "closebox.active"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 58,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_confirm_check",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 341,
+    "statements": [
+      {
+        "line": 342,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"rightcheckbox\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 55,
+        "member": "cc.interface.checkbox.active.off"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 51,
+        "member": "cc.interface.checkbox.active.on"
+      }
+    ]
+  },
+  {
+    "controlId": "trading_buddycheck_image",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 343,
+    "statements": [
+      {
+        "line": 344,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"leftcheckbox\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/43_sanfo_trading.window.txt",
+        "line": 56,
+        "member": "cc.interface.checkbox.active.off"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/53_sanfo_trading.window_OLD.txt",
+        "line": 52,
+        "member": "cc.interface.checkbox.active.off"
+      }
+    ]
+  },
+  {
+    "controlId": "wall_ok",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 345,
+    "statements": [
+      {
+        "line": 346,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"buy wall\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 59,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 50,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/25_catalogue.page2.window.txt",
+        "line": 42,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "floor_ok",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 347,
+    "statements": [
+      {
+        "line": 348,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"buy floor\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/144_catalogue.page2.window.txt",
+        "line": 65,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/24_catalogue.page2.window.old.txt",
+        "line": 56,
+        "member": "shadow.pixel"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/25_catalogue.page2.window.txt",
+        "line": 48,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "WFprev",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 349,
+    "statements": [
+      {
+        "line": 350,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"WFpreview script\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/25_catalogue.page2.window.txt",
+        "line": 51,
+        "member": "WFprev"
+      }
+    ]
+  },
+  {
+    "controlId": "WFreplace",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 351,
+    "statements": [
+      {
+        "line": 352,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"WFreplace script\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/26_confirm_texture.window.txt",
+        "line": 24,
+        "member": "WFreplace"
+      }
+    ]
+  },
+  {
+    "controlId": "dispense_item_close",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 353,
+    "statements": [
+      {
+        "line": 354,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"closewindow\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/304_cc_dispenseitem_success.window.txt",
+        "line": 15,
+        "member": "cc.dispenseitem.button"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/305_cc_dispenseitem_fail.window.txt",
+        "line": 15,
+        "member": "cc.dispenseitem.button"
+      }
+    ]
+  },
+  {
+    "controlId": "launch_web_close",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 355,
+    "statements": [
+      {
+        "line": 356,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"closewindow\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/325_cc_launchweb.window.txt",
+        "line": 17,
+        "member": "cc.launchwebclose.button"
+      }
+    ]
+  },
+  {
+    "controlId": "launch_web_launch",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 357,
+    "statements": [
+      {
+        "line": 358,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"launchURL\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/325_cc_launchweb.window.txt",
+        "line": 18,
+        "member": "cc.launchweblaunch.button"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.jukebox.catalog.playlist.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 359,
+    "statements": [
+      {
+        "line": 360,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"jukebox.playlist.btn script\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/158_cc.infinite_jukebox.catalog.window.txt",
+        "line": 20,
+        "member": "cc.jukebox.catalog.playlist.btn"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.jukebox.playlist.catalog.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 361,
+    "statements": [
+      {
+        "line": 362,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"jukebox.catalog.btn script\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/222_cc.infinite_jukebox.playlist.window.txt",
+        "line": 18,
+        "member": "cc.jukebox.playlist.catalog.btn"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/223_cc.infinite_jukebox.playlist.window.OLD.txt",
+        "line": 18,
+        "member": "cc.jukebox.playlist.catalog.btn"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.jukebox.add.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 363,
+    "statements": [
+      {
+        "line": 364,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"add song script\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/158_cc.infinite_jukebox.catalog.window.txt",
+        "line": 26,
+        "member": "cc.jukebox.catalog.add.btn.dim"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.jukebox.download.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 365,
+    "statements": [
+      {
+        "line": 366,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"download song script\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/158_cc.infinite_jukebox.catalog.window.txt",
+        "line": 27,
+        "member": "cc.jukebox.catalog.download.btn.dim"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.jukebox.remove.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 367,
+    "statements": [
+      {
+        "line": 368,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"remove song script\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/222_cc.infinite_jukebox.playlist.window.txt",
+        "line": 20,
+        "member": "cc.jukebox.player.remove.btn.dim"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/223_cc.infinite_jukebox.playlist.window.OLD.txt",
+        "line": 20,
+        "member": "cc.jukebox.player.remove.btn.dim"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.jukebox.player.play.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 369,
+    "statements": [
+      {
+        "line": 370,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"play song script\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/158_cc.infinite_jukebox.catalog.window.txt",
+        "line": 28,
+        "member": "cc.jukebox.catalog.play.btn.dim"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/208_cc.infinite_jukebox.playback.window.txt",
+        "line": 24,
+        "member": "cc.jukebox.player.play.btn.dim"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.jukebox.catalog.drawer",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 371,
+    "statements": [
+      {
+        "line": 372,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"catalogue drawer script\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/158_cc.infinite_jukebox.catalog.window.txt",
+        "line": 16,
+        "member": "cc.jukebox.catalog.drawer"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.jukebox.catalog.drawer.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 373,
+    "statements": [
+      {
+        "line": 374,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"catalogue drawer button script\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/158_cc.infinite_jukebox.catalog.window.txt",
+        "line": 17,
+        "member": "cc.jukebox.catalog.drawer.btn"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.jukebox.playback.close",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 375,
+    "statements": [
+      {
+        "line": 376,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"close playback\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/208_cc.infinite_jukebox.playback.window.txt",
+        "line": 19,
+        "member": "cc.jukebox.closebox.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.jukebox.catalog.close",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 377,
+    "statements": [
+      {
+        "line": 378,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"close catalog\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/158_cc.infinite_jukebox.catalog.window.txt",
+        "line": 30,
+        "member": "cc.jukebox.closebox.active"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.jukebox.player.scrollbar",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 379,
+    "statements": [
+      {
+        "line": 380,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"jukebox scrollbar script\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/158_cc.infinite_jukebox.catalog.window.txt",
+        "line": 22,
+        "member": "cc.jukebox.player.scrollbar"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/208_cc.infinite_jukebox.playback.window.txt",
+        "line": 20,
+        "member": "cc.jukebox.player.scrollbar"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/222_cc.infinite_jukebox.playlist.window.txt",
+        "line": 25,
+        "member": "cc.jukebox.player.scrollbar"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.jukebox.scrollhead",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 381,
+    "statements": [
+      {
+        "line": 382,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"jukebox scrollhead script\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/158_cc.infinite_jukebox.catalog.window.txt",
+        "line": 25,
+        "member": "cc.jukebox.scrollhead"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/208_cc.infinite_jukebox.playback.window.txt",
+        "line": 21,
+        "member": "cc.jukebox.scrollhead"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/222_cc.infinite_jukebox.playlist.window.txt",
+        "line": 27,
+        "member": "cc.jukebox.scrollhead"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/223_cc.infinite_jukebox.playlist.window.OLD.txt",
+        "line": 23,
+        "member": "cc.jukebox.scrollhead"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.jukebox.backbutton",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 383,
+    "statements": [
+      {
+        "line": 384,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"jukebox back button\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/158_cc.infinite_jukebox.catalog.window.txt",
+        "line": 31,
+        "member": "cc.jukebox.backbutton"
+      }
+    ]
+  },
+  {
+    "controlId": "sanfo_decision_ok",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 385,
+    "statements": [
+      {
+        "line": 386,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"dialog ok button script\")), new(script(\"closewindow\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_interface[1]/9_sanfo_decision_dialog.window.txt",
+        "line": 24,
+        "member": "shadow.pixel"
+      }
+    ]
+  },
+  {
+    "controlId": "cc.jukebox.player.help.btn",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 387,
+    "statements": [
+      {
+        "line": 388,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"jukebox help btn\"))]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/158_cc.infinite_jukebox.catalog.window.txt",
+        "line": 29,
+        "member": "cc.jukebox.catalog.help.btn"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/208_cc.infinite_jukebox.playback.window.txt",
+        "line": 22,
+        "member": "cc.jukebox.player.help.btn"
+      },
+      {
+        "path": "sources/gocoke/web/Lingo/cc_room/222_cc.infinite_jukebox.playlist.window.txt",
+        "line": 22,
+        "member": "cc.jukebox.player.help.btn"
+      }
+    ]
+  },
+  {
+    "controlId": "EDIT_URL_OK",
+    "path": "sources/gocoke/web/Lingo/entry/67_WindowInteractivity.ls",
+    "line": 389,
+    "statements": [
+      {
+        "line": 390,
+        "text": "sprite(whatsprite).scriptInstanceList = [new(script(\"button display status\"), whatsprite), new(script(\"edit url ok btn\"), callerID)]"
+      }
+    ],
+    "windowReferences": [
+      {
+        "path": "sources/gocoke/web/Lingo/isoengine/188_cc.editURL.window.txt",
+        "line": 17,
+        "member": "shadow.pixel"
+      }
+    ]
+  }
+]

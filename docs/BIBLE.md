@@ -29,6 +29,10 @@ The previous Bible mixed historical research, proposed architecture, invented im
 - Test/sample state is excluded from normal play.
 - Future completion reports must distinguish implementation, behavioral verification, and historical parity.
 
+## Research knowledge base
+
+The expanded [knowledge base](knowledge/README.md) records website pages, menus, popups, interface definitions, screenshot observations, music flows and minigame rules with file hashes and source locators. Read its [evidence qualifications](knowledge/EVIDENCE-AND-VERSIONS.md) before relying on historical assertions below. The 2015 website reconstruction and the early website screenshot show different menus; they are not one authenticated edition. Source presence does not promote a feature to historical parity.
+
 ## Reference baseline and evidence
 
 The user has specified the game and the Go requirement, but has not selected an exact dated edition in this review. Do not silently interpret "Coke Music / Coke Studios" as a single hybrid of all years.
@@ -58,11 +62,13 @@ The main player experience must contain:
 - Friends, messenger, host controls, reporting/moderation, errors, and reconnect states.
 - Version-appropriate public rooms, minigames, promotional areas, prizes, and website content.
 
-### Website and entry layout specifications
+### Current website implementation reference (historical verification pending)
+
+The details in this section describe implementation choices and reconstruction assets. Exact historical correspondence of the badge, registration steps and website geometry remains unverified; use [WEBSITE-STRUCTURE.md](knowledge/WEBSITE-STRUCTURE.md) to select a dated reference. The Director stage dimensions do not authenticate a website version.
 
 - **Two-Column Geometry:**
-  - **Left V-Ego Status Badge (176px - 180px):** Features an authentic `badge-header-strip`, live isometric avatar canvas on a glowing gold podium base, online status indicator, DJ handle, mission statement, Decibels & V-Coins meters, and quick action controls (Wardrobe editor, Pop-out 760×520 launcher, Auth trigger).
-  - **Top Sliced Navigation (584px width, 26px height):** Built from historical raster slices (`home` 50px, `cokestudios` 92px, `games` 65px, `music-mixer` 87px, `music` 53px, `dc` 107px, `downloads` 83px, `help` 47px). The combined width ($176\text{px} + 584\text{px} = 760\text{px}$) matches the exact logical baseline of Director MX 2004 Coke Music.
+  - **Left V-Ego Status Badge (176px - 180px):** Features a `badge-header-strip`, live isometric avatar canvas on a glowing gold podium base, online status indicator, DJ handle, mission statement, Decibels & V-Coins meters, and quick action controls (Wardrobe editor, Pop-out 760×520 launcher, Auth trigger).
+  - **Top Sliced Navigation (584px width, 26px height):** Built from preserved reconstruction raster slices (`home` 50px, `cokestudios` 92px, `games` 65px, `music-mixer` 87px, `music` 53px, `dc` 107px, `downloads` 83px, `help` 47px). The combined width ($176\text{px} + 584\text{px} = 760\text{px}$) equals the exported Director stage width; this numerical match does not establish shared historical provenance.
   - **Game Viewport (760×520):** Director MX 2004 baseline resolution powered by Go/Ebitengine compiled to WebAssembly at `/game/`, playable either embedded or via an authentic 760×520 popout window (`window.open(..., 'CokeStudios', 'width=760,height=520')`).
 - **Unified Authentication:**
   - **Sign In:** Direct login verifying against `/sf/ssldocs/loginDenizen.jsp` with PBKDF2 hashed credentials, issuing secure `coke_session` cookies, and updating the status badge and balances in real time.

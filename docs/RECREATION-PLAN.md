@@ -10,6 +10,10 @@
 
 **Spec:** [BIBLE.md](BIBLE.md). Evidence and starting defects: [PROGRESS-REVIEW.md](PROGRESS-REVIEW.md). Completion register: [PARITY.md](PARITY.md).
 
+## Research update: 2026-10-24
+
+Use [the expanded knowledge base](knowledge/README.md) for fidelity work. [Evidence qualifications](knowledge/EVIDENCE-AND-VERSIONS.md) apply before treating the current client/website combination as an authenticated historical release. [The research backlog](knowledge/GAPS.md) identifies what to acquire and compare next. In particular, trace the five-slot mixer/external-editor journey and the preserved Uncover rules before declaring those interfaces and mechanics historically verified. This research pass does not re-run or change implementation milestones.
+
 ## Global constraints
 
 - The gameplay client is Go/Ebitengine compiled to WebAssembly.

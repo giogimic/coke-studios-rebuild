@@ -6,6 +6,10 @@ Build a faithful, playable 1:1 recreation of the historical Coke Music / Coke St
 
 Read `docs/BIBLE.md`, `docs/RECREATION-PLAN.md`, `docs/PARITY.md`, and `docs/PROGRESS-REVIEW.md` before product work. These supersede the earlier architecture and completion claims preserved in `docs/history/`. The user's instructions take precedence.
 
+## Research knowledge base
+
+Read docs/knowledge/README.md and the relevant website/interface/music/minigame reference before fidelity work. docs/knowledge/EVIDENCE-AND-VERSIONS.md qualifies older historical claims: the 2015 CSWebsite reconstruction is not a dated original crawl, and matching widths do not authenticate a release. Use observations.json, the hashed inventories and source locators; keep queued URLs distinct from downloaded captures. Research tools and the asset gallery remain outside the player flow.
+
 ## Implementation direction
 
 - Continue GoCoke in `sources/gocoke`: Go/Ebitengine compiled to WebAssembly for gameplay, Go for the authoritative server. Repair that path when it breaks.

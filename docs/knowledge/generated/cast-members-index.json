@@ -1,0 +1,102 @@
+[
+  {
+    "path": "sources/gocoke/web/Lingo/SF_Client/Members.csv",
+    "sha256": "6bb68e0199581edb2096e795ec10173f87023165f737e7c0e42940805d362b16",
+    "rows": 41
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/SF_Gateway/Members.csv",
+    "sha256": "e7d4acec3da29dd4203a322f7d737d0eab1699f72280279934b37dd5135142a6",
+    "rows": 26
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/avatarengine/Members.csv",
+    "sha256": "0bfd1daf1c096959d0953403c2a92a4e52d5d3a868ab4bf33b9f5171ef90ba81",
+    "rows": 10
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/cc_catalogue[1]/Members.csv",
+    "sha256": "55bfebc35e2c659e21e7df5d4a4a346161a0afb0b3af8fa5827a5e00975c9094",
+    "rows": 158
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/cc_furniture[1]/Members.csv",
+    "sha256": "c602e93457ac32421ce5809c6035dfe7f50a1dac88c084dd391c3cbf96e13bf7",
+    "rows": 1309
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/cc_furniture_small/Members.csv",
+    "sha256": "e9bbe8186e60ddd4efa9831e2502d4d388596cdce200f8a5cbfee05b2b1c1540",
+    "rows": 285
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/cc_interface[1]/Members.csv",
+    "sha256": "3e6c2659376ea1326055f7f7a7e55d2f3c039626e0d668fcf101179de6826f50",
+    "rows": 296
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/cc_items[1]/Members.csv",
+    "sha256": "614d5072a31066a2f07299d56bedddb88e8aaaeb80a4bba1fe59efa44ddb5835",
+    "rows": 162
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/cc_messenger[1]/Members.csv",
+    "sha256": "b2274756b94eb0987b2ac2a2ff505d5707878636a87840d5a4a6fa98cd72b5a1",
+    "rows": 68
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/cc_navigator[1]/Members.csv",
+    "sha256": "e4f268c135d4c51f4b037b5d18bafb75ae386aa2ab985038c39bdb5ab927c9b5",
+    "rows": 60
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/cc_room/Members.csv",
+    "sha256": "c0c436a8ec8013bb747441bea993151c57f3606d966ad8463e2c4c39ed13fd57",
+    "rows": 139
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/cc_studio/Members.csv",
+    "sha256": "1c587ae6713046437602b90c2eb8b0cc35f6a7198ff2c152e67e5acd16944c35",
+    "rows": 197
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/chatengine/Members.csv",
+    "sha256": "e622c400f26d15b8ca3f2f8b68b9c65391b98320b2591f973cfbd619e9410497",
+    "rows": 6
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/entry/Members.csv",
+    "sha256": "1bd9a10e0fdfeedefb40818b910741dc47add979e7133f08096f26d1ec5b36ef",
+    "rows": 102
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/isoengine/Members.csv",
+    "sha256": "329d868f739f626fe59403f8fe9d07f11de9cf16944b7dc517cd96ec00c8a23f",
+    "rows": 197
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/london/Members.csv",
+    "sha256": "d0e11fe32e719f7169aef0f4a943d9cd8d205c3f8d77d72d4aa346cdc400f893",
+    "rows": 67
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/mixer/Members.csv",
+    "sha256": "9654490d7089805bc7692d7ef8cf9bef887378e543ff957306ec9ed82b31acc9",
+    "rows": 39
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/people/Members.csv",
+    "sha256": "0d7d709e3e11ba205f4bf7d87b2d402044b4593297b7fbe0c2912c8f81528c57",
+    "rows": 2514
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/sequencer/Members.csv",
+    "sha256": "703f70cd4214d0214f45e47ec6658c1d966de4f400dabb2ff66517e95d1aa7cf",
+    "rows": 6
+  },
+  {
+    "path": "sources/gocoke/web/Lingo/soundlibrary/Members.csv",
+    "sha256": "f1203ae9431dc2ef8ccf99c467c506ef10cfa244c1d6b2e7391eea817cba820d",
+    "rows": 130
+  }
+]

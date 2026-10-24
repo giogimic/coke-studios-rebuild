@@ -6,6 +6,7 @@ The goal is a **playable 1:1 recreation of the historical game**, including its 
 
 ## Start here
 
+- [Historical knowledge base](docs/knowledge/README.md): versioned website/menu/interface research, local asset gallery, traced music and minigame rules, source hashes and capture queue.
 - [Project specification](docs/BIBLE.md): what 1:1 means, Go architecture, evidence rules and acceptance.
 - [Implementation plan](docs/RECREATION-PLAN.md): ordered, file-specific changes and player milestones.
 - [Progress review](docs/PROGRESS-REVIEW.md): verified findings, useful work to keep, and testing limits.

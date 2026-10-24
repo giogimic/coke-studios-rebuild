@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-24T22:03:11.630Z",
+  "result": "DNS resolution remains unavailable",
+  "dnsChecks": [
+    {
+      "host": "markblottner.com",
+      "error": "ENOTFOUND"
+    },
+    {
+      "host": "web.archive.org",
+      "error": "ENOTFOUND"
+    },
+    {
+      "host": "decibel.fun",
+      "error": "ENOTFOUND"
+    },
+    {
+      "host": "github.com",
+      "error": "ENOTFOUND"
+    }
+  ],
+  "retriedCaptureIDs": [
+    "blottner-01",
+    "early-studios",
+    "popquiz-rules-revival"
+  ],
+  "downloadedCaptures": 0,
+  "queuePreserved": true
+}

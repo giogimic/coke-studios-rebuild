@@ -1,0 +1,5119 @@
+[
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 1,
+    "section": "",
+    "key": "PRIVATE_STUDIOS",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 2,
+    "section": "",
+    "key": "MESSENGER",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 3,
+    "section": "",
+    "key": "CHECK_DECIBELS",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 4,
+    "section": "",
+    "key": "BACKPACK",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 5,
+    "section": "",
+    "key": "CATALOG",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 6,
+    "section": "",
+    "key": "PURCHASING",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 7,
+    "section": "",
+    "key": "TRADING",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 8,
+    "section": "",
+    "key": "PERFORMANCE",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 9,
+    "section": "",
+    "key": "VOTING",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 10,
+    "section": "",
+    "key": "FURNITURE_USE",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 11,
+    "section": "",
+    "key": "FURNITURE_MOVE",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 12,
+    "section": "",
+    "key": "FURNITURE_PICKUP",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 13,
+    "section": "",
+    "key": "FURNITURE_PUTDOWN",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 14,
+    "section": "",
+    "key": "FURNITURE_DELETE",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 15,
+    "section": "",
+    "key": "FURNITURE_ROTATE",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 16,
+    "section": "",
+    "key": "CALL_FOR_HELP",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 17,
+    "section": "",
+    "key": "DANCING",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 18,
+    "section": "",
+    "key": "TELEPORTING",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 19,
+    "section": "",
+    "key": "MIXER",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 20,
+    "section": "",
+    "key": "CDPLAYER",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 21,
+    "section": "",
+    "key": "DRINK_DISPENSER",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 22,
+    "section": "",
+    "key": "CHARTS",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 23,
+    "section": "",
+    "key": "BETA",
+    "value": "0"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 24,
+    "section": "",
+    "key": "NOTHING",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 25,
+    "section": "",
+    "key": "ENCRYPTION",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/FeatureSet.txt",
+    "line": 26,
+    "section": "",
+    "key": "ITEM_DISPENSER",
+    "value": "1"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 1,
+    "section": "",
+    "key": "FEATURE_DISABLED",
+    "value": "This feature will be available soon!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 2,
+    "section": "",
+    "key": "LOCAL_SCREEN_NAME",
+    "value": "Aslan"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 3,
+    "section": "",
+    "key": "LOCAL_GAME_SERVER",
+    "value": "sf1dev.cokemusic.com"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 6,
+    "section": "Loading",
+    "key": "LOADER_TITLE",
+    "value": "Loading Coke Studios..."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 7,
+    "section": "Loading",
+    "key": "LOADING",
+    "value": "Loading..."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 10,
+    "section": "Control bar button text",
+    "key": "JUKEBOX",
+    "value": "Jukebox"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 11,
+    "section": "Control bar button text",
+    "key": "NAVIGATOR",
+    "value": "Navigator"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 12,
+    "section": "Control bar button text",
+    "key": "MESSENGER",
+    "value": "Messenger"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 13,
+    "section": "Control bar button text",
+    "key": "BALANCE",
+    "value": "Decibels"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 14,
+    "section": "Control bar button text",
+    "key": "YOUR_ITEMS",
+    "value": "Backpack"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 15,
+    "section": "Control bar button text",
+    "key": "CATALOGUE",
+    "value": "Catalogue"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 16,
+    "section": "Control bar button text",
+    "key": "SOUND",
+    "value": "Sound"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 17,
+    "section": "Control bar button text",
+    "key": "CALL_FOR_ASSISTANCE",
+    "value": "Call for Assistance"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 20,
+    "section": "Chat Input text",
+    "key": "SPEAK",
+    "value": "Speak"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 21,
+    "section": "Chat Input text",
+    "key": "SHOUT",
+    "value": "Shout"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 24,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "Welcome to Coke Studios. Take a minute to review our safety tips."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 25,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "If you encounter any problems, please use the Call for Assistance button to gain the assistance of an online monitor."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 26,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "DO have fun! :)"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 27,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "Do NOT engage in sexual discussions."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 28,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "Do NOT talk to people who make you feel uncomfortable."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 29,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "DO call for assistance if you need to."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 30,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "Do NOT make arrangements to meet in real life."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 31,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "Do NOT give out your personal details such as your name, address, or email address."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 32,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "DO tell your parents or guardians what you are doing."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 33,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "Do NOT give out passwords or credit card information."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 36,
+    "section": "Navigator main title",
+    "key": "NAV_TITLE",
+    "value": "Coke Studios Navigation"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 39,
+    "section": "Navigator main content tab titles",
+    "key": "NAV_WORLD_VIEW_TITLE",
+    "value": "Public View"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 40,
+    "section": "Navigator main content tab titles",
+    "key": "NAV_USER_VIEW_TITLE",
+    "value": "User Studios"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 41,
+    "section": "Navigator main content tab titles",
+    "key": "NAV_VEGOS_VIEW_TITLE",
+    "value": "V-egos"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 44,
+    "section": "Navigator detail content help tab ( default )",
+    "key": "NAV_DTL_DEF_TITLE",
+    "value": "Help"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 45,
+    "section": "Navigator detail content help tab ( default )",
+    "key": "NAV_DTL_DEF_HDLN",
+    "value": "Welcome to Coke Studios!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 46,
+    "section": "Navigator detail content help tab ( default )",
+    "key": "NAV_DTL_DEF_DESC",
+    "value": "Select one of the destinations or navigate into User Studios section by clicking the tab above."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 49,
+    "section": "Navigator detail content destination info tab",
+    "key": "NAV_DTL_DEST_TITLE",
+    "value": "Destination Info"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 52,
+    "section": "Navigator detail content people tab",
+    "key": "NAV_DTL_PEOPLE_TITLE",
+    "value": "People"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 55,
+    "section": "Navigator Room display go button",
+    "key": "GO",
+    "value": "Go!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 58,
+    "section": "Navigator User view",
+    "key": "NAV_USER_ST_ACTIVE_ST_BUTTON",
+    "value": "Show Active Studios"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 59,
+    "section": "Navigator User view",
+    "key": "NAV_USER_ST_MY_ST_BUTTON",
+    "value": "Show My Studios"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 60,
+    "section": "Navigator User view",
+    "key": "NAV_USER_ST_NO_ROOMS_FOUND",
+    "value": "No Rooms Found"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 63,
+    "section": "Navigator User View help tab",
+    "key": "NAV_DTL_HELP_USER_ST_HDLN",
+    "value": "Need a studio of your own?"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 64,
+    "section": "Navigator User View help tab",
+    "key": "NAV_DTL_HELP_USER_ST_DESC",
+    "value": "Click the button below to set up your own studio and get ready to make some music!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 65,
+    "section": "Navigator User View help tab",
+    "key": "NAV_DTL_HELP_CREATE_BUTTON",
+    "value": "Setup your own studio"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 68,
+    "section": "Navigator User view destination info tab",
+    "key": "NAV_DTL_DEST_OWNER",
+    "value": "owner"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 71,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_SEARCH",
+    "value": "Search"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 72,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_LAST_ACCESS",
+    "value": "Last Access:"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 73,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_LAST_SEEN",
+    "value": "Last seen:"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 74,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_LOCATION",
+    "value": "V-ego Location"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 75,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_NOT_FOUND",
+    "value": "V-ego not found"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 76,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_CURRENTLY",
+    "value": "Currently"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 77,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_OFFLINE",
+    "value": "Offline"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 78,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_LOBBY",
+    "value": "Front Page"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 79,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_ASK_FRIEND",
+    "value": "Ask to become a friend"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 80,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_TITLE",
+    "value": "Welcome to V-ego Search!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 81,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_DESC",
+    "value": "Type a name in the search field to start searching for your friends!!!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 85,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_TITLE",
+    "value": "Set up your own studio"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 86,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_NAME",
+    "value": "Studio name"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 87,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_DESC",
+    "value": "Studio description"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 88,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_LAYOUT",
+    "value": "Studio layout"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 89,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_LOCATION",
+    "value": "Location"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 91,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_OK",
+    "value": "Ok"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 92,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 94,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_SUCCESS",
+    "value": "Congratulations, you have set up your own studio:"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 95,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_GO",
+    "value": "Go to your studio"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 98,
+    "section": "Navigator Modify Studio",
+    "key": "NAV_MODIFY_ST_BUTTON",
+    "value": "Modify"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 99,
+    "section": "Navigator Modify Studio",
+    "key": "NAV_MODIFY_ST_TITLE",
+    "value": "Change your studio information"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 100,
+    "section": "Navigator Modify Studio",
+    "key": "NAV_MODIFY_ST_DELETE_1",
+    "value": "Delete this studio"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 101,
+    "section": "Navigator Modify Studio",
+    "key": "NAV_MODIFY_ST_DELETE_2",
+    "value": "Delete room"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 103,
+    "section": "Navigator Modify Studio",
+    "key": "NAV_MODIFY_ST_DELETE_WARN_2",
+    "value": "Are you sure you want to delete this room? Please note:  all of the items in the room will be placed in your backpack."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 104,
+    "section": "Navigator Modify Studio",
+    "key": "NAV_MODIFY_ST_DELETE_WARN_1",
+    "value": "Last chance! Are you absolutely sure you want to delete this room?"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 105,
+    "section": "Navigator Modify Studio",
+    "key": "NAV_MODIFY_ST_DELETED",
+    "value": "Your room has been deleted."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 109,
+    "section": "ALERTS",
+    "key": "ALERT_TITLE",
+    "value": "Attention"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 110,
+    "section": "ALERTS",
+    "key": "ALERT_OK",
+    "value": "Ok"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 112,
+    "section": "ALERTS",
+    "key": "ALERT_GENERIC",
+    "value": "Sorry, there's been a problem with the server. Please try again."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 113,
+    "section": "ALERTS",
+    "key": "ALERT_FULL",
+    "value": "Each venue holds 25 V-egos and this one is full. Please try another."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 114,
+    "section": "ALERTS",
+    "key": "ALERT_ST_NAME",
+    "value": "You have to give a name to your studio."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 115,
+    "section": "ALERTS",
+    "key": "ALERT_OVER_LIMIT",
+    "value": "You can only have ten personal studios."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 116,
+    "section": "ALERTS",
+    "key": "ALERT_ST_NAME_LANG",
+    "value": "Sorry, your studio name was a little too creative. Enter another."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 117,
+    "section": "ALERTS",
+    "key": "ALERT_ST_DESC_LANG",
+    "value": "Sorry, your studio description was a little too creative. Enter another."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 118,
+    "section": "ALERTS",
+    "key": "ALERT_MESSENGER_LANG",
+    "value": "Sorry, your message was a little too creative. Enter another."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 120,
+    "section": "ALERTS",
+    "key": "ALERT_BANNED",
+    "value": "Sorry, you have been temporarily banned from using Coke Studios."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 122,
+    "section": "ALERTS",
+    "key": "ALERT_STATE_CLOSED",
+    "value": "Coke Studios is now closed. Coke Studios is open everyday from 10:00AM to 2:00AM EST."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 123,
+    "section": "ALERTS",
+    "key": "ALERT_STATE_FULL",
+    "value": "Sorry Coke Studios is currently full. Please try again later."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 125,
+    "section": "ALERTS",
+    "key": "ALERT_NO_CONNECTION",
+    "value": "A connection with the server could not be established."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 126,
+    "section": "ALERTS",
+    "key": "ALERT_DROPPED_CONNECTION",
+    "value": "Sorry, the connection with the server was dropped. Close this window and try again."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 127,
+    "section": "ALERTS",
+    "key": "ALERT_USER_NOT_FOUND",
+    "value": "You could not be authenticated with the server."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 128,
+    "section": "ALERTS",
+    "key": "ALERT_DUPLICATE_LOGIN",
+    "value": "There is already a connection established with your username."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 129,
+    "section": "ALERTS",
+    "key": "ALERT_ROOM_NOT_EXIST",
+    "value": "The room does not exist."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 132,
+    "section": "ALERTS",
+    "key": "ALERT_MOD_MESSAGE",
+    "value": "Online moderator message:"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 134,
+    "section": "ALERTS",
+    "key": "ALERT_THANK_YOU",
+    "value": "Thank you."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 135,
+    "section": "ALERTS",
+    "key": "ALERT_MESSAGE_SENT",
+    "value": "Your call for assistance has been sent."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 137,
+    "section": "ALERTS",
+    "key": "ALERT_INSUFFICIENT_BALANCE",
+    "value": "Sorry, you don't have enough decibels."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 139,
+    "section": "ALERTS",
+    "key": "ALERT_MAX_ITEMS_EXCEEDED",
+    "value": "You have too many items in your studio."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 141,
+    "section": "ALERTS",
+    "key": "ALERT_NO_BLANK_CDS",
+    "value": "Sorry, you don't have any blank CDs. You can buy new ones from the online catalogue."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 143,
+    "section": "ALERTS",
+    "key": "ALERT_STUDIO_NOT_EMPTY",
+    "value": "The studio must be empty before deleting."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 145,
+    "section": "ALERTS",
+    "key": "ALERT_PENDING_PURCHASE",
+    "value": "You currently have a purchase pending. Please wait."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 147,
+    "section": "ALERTS",
+    "key": "ALERT_COKE_LIMIT",
+    "value": "You have reached your daily free Coke limit. Maybe you need a REAL Coke now?"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 149,
+    "section": "ALERTS",
+    "key": "ALERT_NO_SERVER_AVAILABLE",
+    "value": "Sorry, there was a problem locating this studio. Please try another."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 152,
+    "section": "LOCATIONS",
+    "key": "LOCATION_1",
+    "value": "London"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 153,
+    "section": "LOCATIONS",
+    "key": "LOCATION_2",
+    "value": "Miami"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 154,
+    "section": "LOCATIONS",
+    "key": "LOCATION_3",
+    "value": "Mombasa"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 155,
+    "section": "LOCATIONS",
+    "key": "LOCATION_4",
+    "value": "New York"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 156,
+    "section": "LOCATIONS",
+    "key": "LOCATION_5",
+    "value": "Rio de Janeiro"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 157,
+    "section": "LOCATIONS",
+    "key": "LOCATION_6",
+    "value": "Seattle"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 158,
+    "section": "LOCATIONS",
+    "key": "LOCATION_7",
+    "value": "Sydney"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 159,
+    "section": "LOCATIONS",
+    "key": "LOCATION_8",
+    "value": "Tokyo"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 160,
+    "section": "LOCATIONS",
+    "key": "LOCATION_9",
+    "value": "Goa"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 161,
+    "section": "LOCATIONS",
+    "key": "LOCATION_10",
+    "value": "Alaska"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 162,
+    "section": "LOCATIONS",
+    "key": "LOCATION_11",
+    "value": "Moscow"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 163,
+    "section": "LOCATIONS",
+    "key": "LOCATION_12",
+    "value": "Red Room"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 166,
+    "section": "DATE FORMAT",
+    "key": "DATE_FORMAT",
+    "value": "mm/dd/yyyy"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 169,
+    "section": "TIME FORMAT",
+    "key": "TIME_FORMAT",
+    "value": "12"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 172,
+    "section": "BALANCE DISPLAY WINDOW",
+    "key": "BALANCE_TITLE",
+    "value": "Your Decibels"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 173,
+    "section": "BALANCE DISPLAY WINDOW",
+    "key": "BALANCE_DISPLAY",
+    "value": "You have {balance} decibels."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 174,
+    "section": "BALANCE DISPLAY WINDOW",
+    "key": "BALANCE_DISPLAY_FAILED",
+    "value": "Could not get your decibel balance.\\nThe server returned an error.\\nPlease try again later."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 175,
+    "section": "BALANCE DISPLAY WINDOW",
+    "key": "BALANCE_DESC_TITLE",
+    "value": "You can get decibels..."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 176,
+    "section": "BALANCE DISPLAY WINDOW",
+    "key": "BALANCE_DESC",
+    "value": "-by making your own songs, performing and getting positive feedback on your songs.\\n-from every Coke bottle cap."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 179,
+    "section": "USER ITEMS",
+    "key": "USER_ITEMS_TITLE",
+    "value": "Your items"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 180,
+    "section": "USER ITEMS",
+    "key": "USER_ITEMS_CDS",
+    "value": "{cds} Blank CDs"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 181,
+    "section": "USER ITEMS",
+    "key": "USER_ITEMS_PAGE",
+    "value": "Page {num1} of {num2}"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 182,
+    "section": "USER ITEMS",
+    "key": "USER_ITEMS_NEXT",
+    "value": "next"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 183,
+    "section": "USER ITEMS",
+    "key": "USER_ITEMS_PREV",
+    "value": "prev"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 186,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TITLE",
+    "value": "Coke Studios Help"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 187,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPICS",
+    "value": "Help Topics"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 189,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_1_TITLE",
+    "value": "Coke Studios Instructions"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 190,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_1_DESC",
+    "value": "Confused? Don't know how to do stuff? Click here for all the answers!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 191,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_1_LINK",
+    "value": "external:openHelpInstructions();"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 193,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_2_TITLE",
+    "value": "Report a Technical Problem"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 194,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_2_DESC",
+    "value": "If something isn't working right, click here to find out what to do next."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 195,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_2_LINK",
+    "value": "external:openHelpTechnicalProblems();"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 197,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_3_TITLE",
+    "value": "How to Avoid Scams"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 198,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_3_DESC",
+    "value": "Is someone stealing your decibels or furniture? Click here to learn how to avoid scam attempts!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 199,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_3_LINK",
+    "value": "external:openHelpWatchForScams();"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 201,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_4_TITLE",
+    "value": "Report Harassment"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 202,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_4_DESC",
+    "value": "Is someone bothering you? Click here and let us know!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 203,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_4_LINK",
+    "value": "internal:MODERATOR_HELP"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 206,
+    "section": "MODERATOR HELP",
+    "key": "MODERATOR_HELP_TITLE",
+    "value": "Coke Studios Help"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 207,
+    "section": "MODERATOR HELP",
+    "key": "MODERATOR_HELP_DESC1",
+    "value": "Have you been harassed by other V-egos?"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 208,
+    "section": "MODERATOR HELP",
+    "key": "MODERATOR_HELP_DESC2",
+    "value": "Send a message to online moderators to ask for assistance. Please describe your problem as clearly as possible."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 209,
+    "section": "MODERATOR HELP",
+    "key": "MODERATOR_HELP_SEND",
+    "value": "Send"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 210,
+    "section": "MODERATOR HELP",
+    "key": "MODERATOR_HELP_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 214,
+    "section": "Purchase Window",
+    "key": "PURCHASE_TITLE",
+    "value": "Purchase Info"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 215,
+    "section": "Purchase Window",
+    "key": "PURCHASE_PRICE",
+    "value": "{item} costs {price} decibels"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 216,
+    "section": "Purchase Window",
+    "key": "PURCHASE_BALANCE",
+    "value": "You have {balance} decibels in your account."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 217,
+    "section": "Purchase Window",
+    "key": "PURCHASE_OK",
+    "value": "Ok"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 218,
+    "section": "Purchase Window",
+    "key": "PURCHASE_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 221,
+    "section": "WHALE_WASH",
+    "key": "WHALE_WASH",
+    "value": "You are now being redirected to the Whale Wash Activity."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 222,
+    "section": "WHALE_WASH",
+    "key": "WHALE_WASH_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 223,
+    "section": "WHALE_WASH",
+    "key": "WHALE_WASH_OK",
+    "value": "Ok"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 230,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_TITLE",
+    "value": "Online Catalogue"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 232,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_PAGE",
+    "value": "Page"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 233,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_NEXT",
+    "value": "Next"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 234,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_PREV",
+    "value": "Previous"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 236,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_PRICE",
+    "value": "Price"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 237,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_CURRENCY",
+    "value": "db"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 239,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_BUY",
+    "value": "Buy"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 241,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_PREVIEW",
+    "value": "Preview"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 242,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_PREVIEW_INFO",
+    "value": "Click an icon on the left."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 246,
+    "section": "Cover page, Category 00",
+    "key": "CAT_0_TITLE",
+    "value": "Coke Studios\\nOnline Catalogue"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 247,
+    "section": "Cover page, Category 00",
+    "key": "CAT_0_DESC",
+    "value": "Turn your decibels into items."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 249,
+    "section": "Cover page, Category 00",
+    "key": "CAT_0_TEXT1",
+    "value": "Pages and pages of furniture and other goods to make your studio stand out."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 250,
+    "section": "Cover page, Category 00",
+    "key": "CAT_0_TEXT2",
+    "value": "Walls and Floors"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 251,
+    "section": "Cover page, Category 00",
+    "key": "CAT_0_TEXT3",
+    "value": "Premier"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 252,
+    "section": "Cover page, Category 00",
+    "key": "CAT_0_TEXT4",
+    "value": "Studio gear"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 256,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_TITLE",
+    "value": "Walls and Floors"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 257,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_Desc",
+    "value": "You can customize the way your Studio looks with these wall and floor variations. Be sure to pick matching colors!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 259,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_TEXTURE",
+    "value": "Texture"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 260,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_COLOR",
+    "value": "Color"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 262,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_WALLS_SELECTOR",
+    "value": "Walls Selector"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 263,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_WALLS_INSTRUCTION",
+    "value": "Use the arrows to select your wall design"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 265,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_FLOOR_SELECTOR",
+    "value": "Floor Selector"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 266,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_FLLOR_INSTRUCTION",
+    "value": "Use the arrows to select your floor design"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 272,
+    "section": "Premiere, Category 02",
+    "key": "CAT_2_TITLE",
+    "value": "Premier"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 273,
+    "section": "Premiere, Category 02",
+    "key": "CAT_2_Desc",
+    "value": "Our exclusive furniture provides you with moments of slick heavyweight comfort. Enjoy it while the prices are low!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 277,
+    "section": "5001 Collection, Category 03",
+    "key": "CAT_3_TITLE",
+    "value": "5001 Collection"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 278,
+    "section": "5001 Collection, Category 03",
+    "key": "CAT_3_Desc",
+    "value": "The 5001 product range is the closest you'll get to comfort!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 282,
+    "section": "Studio Essentials, Category 04",
+    "key": "CAT_4_TITLE",
+    "value": "Studio Essentials"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 283,
+    "section": "Studio Essentials, Category 04",
+    "key": "CAT_4_Desc",
+    "value": "Authentic-looking fake vintage studio equipment helps you look more professional and gets your creative juices flowing."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 287,
+    "section": "Necessities1, Category 05",
+    "key": "CAT_5_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 288,
+    "section": "Necessities1, Category 05",
+    "key": "CAT_5_Desc",
+    "value": "With this stuff you can really make your Studio breathe and create groovy spaces."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 292,
+    "section": "Necessities2, Category 06",
+    "key": "CAT_6_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 293,
+    "section": "Necessities2, Category 06",
+    "key": "CAT_6_Desc",
+    "value": "With these ultra-cool separators that double as bar desks you can arrange your Studio the way you want to!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 297,
+    "section": "Coke Collection, Category 07",
+    "key": "CAT_7_TITLE",
+    "value": "Coke Collection"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 298,
+    "section": "Coke Collection, Category 07",
+    "key": "CAT_7_Desc",
+    "value": "Oodles of authentic Coke items. Come and get a polar bear statue of your own!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 302,
+    "section": "For Walls, Category 08",
+    "key": "CAT_8_TITLE",
+    "value": "For Walls"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 303,
+    "section": "For Walls, Category 08",
+    "key": "CAT_8_Desc",
+    "value": "Add a final touch to your studio decoration with these instruments and posters."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 307,
+    "section": "Necessities3, Category 09",
+    "key": "CAT_9_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 308,
+    "section": "Necessities3, Category 09",
+    "key": "CAT_9_Desc",
+    "value": "More cool stuff for your studio!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 312,
+    "section": "Necessities4, Category 10",
+    "key": "CAT_10_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 313,
+    "section": "Necessities4, Category 10",
+    "key": "CAT_10_Desc",
+    "value": "Even more cool stuff for your studio!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 317,
+    "section": "Necessities5, Category 11",
+    "key": "CAT_11_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 318,
+    "section": "Necessities5, Category 11",
+    "key": "CAT_11_Desc",
+    "value": "Dorm room style beats. Makeshift furni for better lounging!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 323,
+    "section": "Necessities6, Category 13",
+    "key": "CAT_13_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 324,
+    "section": "Necessities6, Category 13",
+    "key": "CAT_13_Desc",
+    "value": "More cool stuff."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 328,
+    "section": "Necessities7, Category 14",
+    "key": "CAT_14_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 329,
+    "section": "Necessities7, Category 14",
+    "key": "CAT_14_Desc",
+    "value": "Household needs."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 333,
+    "section": "Necessities8, Category 15",
+    "key": "CAT_15_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 334,
+    "section": "Necessities8, Category 15",
+    "key": "CAT_15_Desc",
+    "value": "Create your own game."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 338,
+    "section": "WALL PATTERNS",
+    "key": "wall_tile",
+    "value": "Classic Bricks"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 339,
+    "section": "WALL PATTERNS",
+    "key": "wall_graythreedo",
+    "value": "Homework"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 340,
+    "section": "WALL PATTERNS",
+    "key": "wall_threegrid",
+    "value": "Sonar"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 341,
+    "section": "WALL PATTERNS",
+    "key": "wall_zalmiag",
+    "value": "Classic Lineup"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 342,
+    "section": "WALL PATTERNS",
+    "key": "wall_plottr",
+    "value": "Silent"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 343,
+    "section": "WALL PATTERNS",
+    "key": "wall_disnej",
+    "value": "Fat Controller"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 344,
+    "section": "WALL PATTERNS",
+    "key": "wall_lilacgrandma",
+    "value": "Low Rent"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 345,
+    "section": "WALL PATTERNS",
+    "key": "wall_plates",
+    "value": "Plate Reverb"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 346,
+    "section": "WALL PATTERNS",
+    "key": "wall_bighstripe",
+    "value": "Shack"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 347,
+    "section": "WALL PATTERNS",
+    "key": "wall_dithastriperh",
+    "value": "Softer Shell"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 350,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_orgun",
+    "value": "Old World Organs"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 351,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_karpyt",
+    "value": "Hard Carpets"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 352,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_indjun",
+    "value": "Grand Mother"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 353,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_ditlines",
+    "value": "Liner"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 354,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_ditgrid",
+    "value": "Mothership"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 355,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_basic",
+    "value": "Basic Floor"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 356,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_twirlee",
+    "value": "Twirly Psychedelic"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 357,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_phunk",
+    "value": "Phono"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 358,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_wooddither",
+    "value": "Time Stretch"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 359,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_oceanliner",
+    "value": "Ocean Liner"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 360,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_cahya",
+    "value": "Mouse Pad"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 361,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_purplecarpetswirl",
+    "value": "Carpet Tunnel"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 362,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_bluecarpet",
+    "value": "Hotel Style"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 363,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_drija",
+    "value": "Octave"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 364,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_woodswirl",
+    "value": "Wooden Swirl"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 372,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_TITLE",
+    "value": "Choose Your Song"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 373,
+    "section": "Choose Song",
+    "key": "cd_choosetitle",
+    "value": "You have the following songs on your CDs:"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 374,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_LOADING",
+    "value": "loading..."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 375,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_NAME",
+    "value": "Name"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 376,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_AUTHOR",
+    "value": "Author"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 377,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_PLAY",
+    "value": "Play!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 378,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 379,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_SECS",
+    "value": "secs"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 380,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_WAIT_TURN",
+    "value": "There's a song already playing. Wait for your turn."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 384,
+    "section": "Loading of external cast files",
+    "key": "Gateway",
+    "value": "Gateway"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 385,
+    "section": "Loading of external cast files",
+    "key": "Entry",
+    "value": "Entry"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 386,
+    "section": "Loading of external cast files",
+    "key": "Interface",
+    "value": "Interface"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 387,
+    "section": "Loading of external cast files",
+    "key": "Navigator",
+    "value": "Navigator"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 388,
+    "section": "Loading of external cast files",
+    "key": "People",
+    "value": "People"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 389,
+    "section": "Loading of external cast files",
+    "key": "Messenger",
+    "value": "Messenger"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 390,
+    "section": "Loading of external cast files",
+    "key": "Studio",
+    "value": "Studio"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 391,
+    "section": "Loading of external cast files",
+    "key": "ChatEngine",
+    "value": "Chat"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 392,
+    "section": "Loading of external cast files",
+    "key": "Room",
+    "value": "Room"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 393,
+    "section": "Loading of external cast files",
+    "key": "Furniture",
+    "value": "Furniture"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 394,
+    "section": "Loading of external cast files",
+    "key": "FurnitureSmall",
+    "value": "Furniture"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 395,
+    "section": "Loading of external cast files",
+    "key": "Catalogue",
+    "value": "Catalogue"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 396,
+    "section": "Loading of external cast files",
+    "key": "Items",
+    "value": "Wall Items"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 397,
+    "section": "Loading of external cast files",
+    "key": "IsoEngine",
+    "value": "IsoMetric Engine"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 398,
+    "section": "Loading of external cast files",
+    "key": "AvatarEngine",
+    "value": "AvatarEngine"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 399,
+    "section": "Loading of external cast files",
+    "key": "AudioLib",
+    "value": "Audio Library"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 403,
+    "section": "Loading of external text files",
+    "key": "StudioData",
+    "value": "Studio Data"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 404,
+    "section": "Loading of external text files",
+    "key": "TextManagerText",
+    "value": "Text Data"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 405,
+    "section": "Loading of external text files",
+    "key": "Catalog",
+    "value": "Catalogue Data"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 409,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_START",
+    "value": "Front Page"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 410,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_NEW_MESSAGES",
+    "value": "new message(s)"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 411,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_FRIEND_REQUESTS",
+    "value": "Friend Request(s)"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 413,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_FRIENDS",
+    "value": "Friends"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 414,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_MSGS",
+    "value": "msgs"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 415,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_CURRENTLY",
+    "value": "Currently"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 416,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_LAST_ACCESS",
+    "value": "Last Access"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 417,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_COMPOSE",
+    "value": "Compose"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 418,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_REMOVE",
+    "value": "Remove"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 420,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_COMPOSE_TITLE",
+    "value": "Compose a Message"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 421,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_RECIPIENT",
+    "value": "Recipient:"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 422,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_RECIPIENTS",
+    "value": "Multiple Recipients"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 423,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 424,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_SEND",
+    "value": "Send"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 426,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_READ_MESSAGE",
+    "value": "Read a Message"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 427,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_READ_FROM",
+    "value": "From:"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 428,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_REPLY",
+    "value": "Reply"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 429,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_DELETE_MESSAGE",
+    "value": "DeleteMessage"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 431,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_FRIEND_REQUEST",
+    "value": "Friend Request"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 433,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_INVITE_DISPLAY",
+    "value": "asks you to become his/her friend"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 434,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_INVITE_ACCEPT_DISPLAY",
+    "value": "(S)he will be added to your Friend List if your invitation is accepted."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 435,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_REJECT",
+    "value": "Reject"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 436,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_ACCEPT",
+    "value": "Accept"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 439,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSSENGER_REMOVE_FRIEND",
+    "value": "Remove a friend"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 440,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_REMOVE_CONFIRM1",
+    "value": "Are you sure you want to remove"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 441,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_REMOVE_CONFIRM2",
+    "value": "from your friends?"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 443,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_NO_FRIENDS",
+    "value": "You currently have no V-egos on your list. You can ask others to become your friend either by using the V-ego search in the Navigator or by selecting them in venues and clicking the \"Ask to become a Friend\" button."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 445,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_REQUEST_SENT",
+    "value": "(S)he will be added into your Friends list if (s)he accepts it."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 447,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_ALREADY_FRIEND",
+    "value": "This person is already your friend."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 448,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_ALREADY_INVITED",
+    "value": "You have already invited this person to be your friend."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 449,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_CANT_INVITE_SELF",
+    "value": "You can't invite yourself to be a friend ;)"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 453,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_TITLE",
+    "value": "CC-3001 DELUXE - Five Slot Mixer CD Burner Device"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 454,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_DESC",
+    "value": "Welcome to the CC-3001 Deluxe. To make your own music, click one of the \"Edit\" buttons."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 455,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_PLAY",
+    "value": "PLAY"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 456,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_EDIT",
+    "value": "EDIT"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 457,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_BURN",
+    "value": "BURN"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 458,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_EMPTY",
+    "value": "< Slot {mixNumber} empty >"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 459,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_LOADING",
+    "value": "Loading..."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 460,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_PLAY_ROLLOVER",
+    "value": "Play the song"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 461,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_EDIT_ROLLOVER",
+    "value": "Edit the song in this slot - ( Opens up a new window )"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 462,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_BURN_ROLLOVER",
+    "value": "Burn the song on CD"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 463,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_NOW_PLAYING",
+    "value": "Now playing..."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 464,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_NOW_EDITING",
+    "value": "Editing..."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 466,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_NOT_OWNER",
+    "value": "Sorry, only the owner of the studio can use this mixer."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 469,
+    "section": "BURN WINDOW",
+    "key": "BURN_TITLE",
+    "value": "Ready to burn?"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 470,
+    "section": "BURN WINDOW",
+    "key": "BURN_DESC",
+    "value": "You have {blankCds} blank CDs in your backpack. Would you like to use one of them?"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 471,
+    "section": "BURN WINDOW",
+    "key": "BURN_OK",
+    "value": "Ok"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 472,
+    "section": "BURN WINDOW",
+    "key": "BURN_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 473,
+    "section": "BURN WINDOW",
+    "key": "BURN_CD_BURNT",
+    "value": "CD burnt."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 477,
+    "section": "PAUSED WINDOW",
+    "key": "PAUSED_TITLE",
+    "value": "Coke Studios Paused"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 478,
+    "section": "PAUSED WINDOW",
+    "key": "PAUSED_DESC",
+    "value": "Click OK to return to Coke Studios."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 479,
+    "section": "PAUSED WINDOW",
+    "key": "PAUSED_OK",
+    "value": "OK"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 483,
+    "section": "TRADE WINDOW",
+    "key": "TRADE_TITLE",
+    "value": "Safe Trade"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 484,
+    "section": "TRADE WINDOW",
+    "key": "TRADER_BOX_DESC",
+    "value": "{Tradername} offers:"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 485,
+    "section": "TRADE WINDOW",
+    "key": "TRADEE_BOX_DESC",
+    "value": "You offer:"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 486,
+    "section": "TRADE WINDOW",
+    "key": "TRADER_AGREES",
+    "value": "{Tradername} agrees"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 487,
+    "section": "TRADE WINDOW",
+    "key": "TRADEE_AGREES",
+    "value": "You agree."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 488,
+    "section": "TRADE WINDOW",
+    "key": "TRADE_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 489,
+    "section": "TRADE WINDOW",
+    "key": "TRADE_DESC",
+    "value": "To trade or give items, drag them from your backpack into the \"You offer:\" area."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 490,
+    "section": "TRADE WINDOW",
+    "key": "BOX_ROLL",
+    "value": "Add items to box"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 491,
+    "section": "TRADE WINDOW",
+    "key": "CANCEL_ROLL",
+    "value": "Cancel trading"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 492,
+    "section": "TRADE WINDOW",
+    "key": "SCAM_WARNING",
+    "value": "There are no cheat codes. Beware of scammers. Click here to find out how to avoid scams."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 495,
+    "section": "VOTE RESULTS",
+    "key": "RESULTS_TITLE",
+    "value": "Your performance results:"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 496,
+    "section": "VOTE RESULTS",
+    "key": "THUMBS_UP_VOTES",
+    "value": "Thumbs up votes: {voteupnum}"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 497,
+    "section": "VOTE RESULTS",
+    "key": "THUMBS_DOWN_VOTES",
+    "value": "Thumbs down votes: {votedownnum}"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 498,
+    "section": "VOTE RESULTS",
+    "key": "DECIBEL_RESULT",
+    "value": "You receive {numdecibel} decibels."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 501,
+    "section": "DRINK COKE",
+    "key": "DRINK_COKE",
+    "value": "You got {points} decibels."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 504,
+    "section": "DISPENSE ITEM",
+    "key": "DISPENSE_ITEM_SUCCESS",
+    "value": "A Batman Begins countdown poster will be in your backpack the next time you sign into Coke Studios. Enjoy this new poster until the Batman Begins promotion ends!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 505,
+    "section": "DISPENSE ITEM",
+    "key": "DISPENSE_ITEM_FAIL",
+    "value": "Ooops!  You can only take two posters per day!� Come back tomorrow!"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 508,
+    "section": "CD PLAYER",
+    "key": "NOCD_TITLE",
+    "value": "You need a CD to perform"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 509,
+    "section": "CD PLAYER",
+    "key": "NOCD_DESC",
+    "value": "You need to create a CD in your personal studio before you can perform here."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 512,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "REPLACE_TITLE",
+    "value": "Confirm"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 513,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "REPLACE_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 514,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "REPLACE_OK",
+    "value": "OK"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 515,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "REPLACE_WALL",
+    "value": "Replace your current wall texture with this model? (Note that the new walls replace the old.)"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 516,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "REPLACE_FLOOR",
+    "value": "Replace your current floor texture with this model? (Note that the new floor replaces the old.)"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 517,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "DELETE_ITEM_TITLE",
+    "value": "Delete item?"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 518,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "DELETE_ITEM_HEADLINE",
+    "value": "Confirm delete"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 519,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "DELETE_ITEM_DESC",
+    "value": "Are you absolutely sure you want to delete this item?"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 520,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "DELETE_ITEM_OK",
+    "value": "OK"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 521,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "DELETE_ITEM_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 524,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_0",
+    "value": "The song was added to your playlist."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 525,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_1",
+    "value": "This song is already on your playlist."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 526,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_2",
+    "value": "You have reached the maximum number of songs allowed in your playlist."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 527,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_3",
+    "value": "Invalid song ID."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 528,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_4",
+    "value": "Song not on playlist."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 529,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_5",
+    "value": "You must be a member in order to add this song."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 530,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_PLAYLIST",
+    "value": "You need to add songs to your playlist to stream music."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 531,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_TOKENS",
+    "value": "You've used all your tokens, please try again later."
+  },
+  {
+    "path": "sources/gocoke/web/data/Text_English.txt",
+    "line": 532,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_LEAVE_SF",
+    "value": "You are being redirected to FreshTracksMusic.com.  Do you want to continue?"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 1,
+    "section": "",
+    "key": "PRIVATE_STUDIOS",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 2,
+    "section": "",
+    "key": "MESSENGER",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 3,
+    "section": "",
+    "key": "CHECK_DECIBELS",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 4,
+    "section": "",
+    "key": "BACKPACK",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 5,
+    "section": "",
+    "key": "CATALOG",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 6,
+    "section": "",
+    "key": "PURCHASING",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 7,
+    "section": "",
+    "key": "TRADING",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 8,
+    "section": "",
+    "key": "PERFORMANCE",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 9,
+    "section": "",
+    "key": "VOTING",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 10,
+    "section": "",
+    "key": "FURNITURE_USE",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 11,
+    "section": "",
+    "key": "FURNITURE_MOVE",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 12,
+    "section": "",
+    "key": "FURNITURE_PICKUP",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 13,
+    "section": "",
+    "key": "FURNITURE_PUTDOWN",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 14,
+    "section": "",
+    "key": "FURNITURE_DELETE",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 15,
+    "section": "",
+    "key": "FURNITURE_ROTATE",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 16,
+    "section": "",
+    "key": "CALL_FOR_HELP",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 17,
+    "section": "",
+    "key": "DANCING",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 18,
+    "section": "",
+    "key": "TELEPORTING",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 19,
+    "section": "",
+    "key": "MIXER",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 20,
+    "section": "",
+    "key": "CDPLAYER",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 21,
+    "section": "",
+    "key": "DRINK_DISPENSER",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 22,
+    "section": "",
+    "key": "CHARTS",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 23,
+    "section": "",
+    "key": "BETA",
+    "value": "0"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 24,
+    "section": "",
+    "key": "NOTHING",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 25,
+    "section": "",
+    "key": "ENCRYPTION",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/FeatureSet(5-23-6).txt",
+    "line": 26,
+    "section": "",
+    "key": "ITEM_DISPENSER",
+    "value": "1"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 1,
+    "section": "",
+    "key": "FEATURE_DISABLED",
+    "value": "This feature will be available soon!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 2,
+    "section": "",
+    "key": "LOCAL_SCREEN_NAME",
+    "value": "Aslan"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 3,
+    "section": "",
+    "key": "LOCAL_GAME_SERVER",
+    "value": "sf1dev.cokemusic.com"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 6,
+    "section": "Loading",
+    "key": "LOADER_TITLE",
+    "value": "Loading Coke Studios..."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 7,
+    "section": "Loading",
+    "key": "LOADING",
+    "value": "Loading..."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 10,
+    "section": "Control bar button text",
+    "key": "JUKEBOX",
+    "value": "Jukebox"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 11,
+    "section": "Control bar button text",
+    "key": "NAVIGATOR",
+    "value": "Navigator"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 12,
+    "section": "Control bar button text",
+    "key": "MESSENGER",
+    "value": "Messenger"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 13,
+    "section": "Control bar button text",
+    "key": "BALANCE",
+    "value": "Decibels"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 14,
+    "section": "Control bar button text",
+    "key": "YOUR_ITEMS",
+    "value": "Backpack"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 15,
+    "section": "Control bar button text",
+    "key": "CATALOGUE",
+    "value": "Catalogue"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 16,
+    "section": "Control bar button text",
+    "key": "SOUND",
+    "value": "Sound"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 17,
+    "section": "Control bar button text",
+    "key": "CALL_FOR_ASSISTANCE",
+    "value": "Call for Assistance"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 20,
+    "section": "Chat Input text",
+    "key": "SPEAK",
+    "value": "Speak"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 21,
+    "section": "Chat Input text",
+    "key": "SHOUT",
+    "value": "Shout"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 24,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "Welcome to Coke Studios. Take a minute to review our safety tips."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 25,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "If you encounter any problems, please use the Call for Assistance button to gain the assistance of an online monitor."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 26,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "DO have fun! :)"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 27,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "Do NOT engage in sexual discussions."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 28,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "Do NOT talk to people who make you feel uncomfortable."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 29,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "DO call for assistance if you need to."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 30,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "Do NOT make arrangements to meet in real life."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 31,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "Do NOT give out your personal details such as your name, address, or email address."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 32,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "DO tell your parents or guardians what you are doing."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 33,
+    "section": "SAFETY TIPS",
+    "key": "SAFETY_TIP",
+    "value": "Do NOT give out passwords or credit card information."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 36,
+    "section": "Navigator main title",
+    "key": "NAV_TITLE",
+    "value": "Coke Studios Navigation"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 39,
+    "section": "Navigator main content tab titles",
+    "key": "NAV_WORLD_VIEW_TITLE",
+    "value": "Public View"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 40,
+    "section": "Navigator main content tab titles",
+    "key": "NAV_USER_VIEW_TITLE",
+    "value": "User Studios"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 41,
+    "section": "Navigator main content tab titles",
+    "key": "NAV_VEGOS_VIEW_TITLE",
+    "value": "V-egos"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 44,
+    "section": "Navigator detail content help tab ( default )",
+    "key": "NAV_DTL_DEF_TITLE",
+    "value": "Help"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 45,
+    "section": "Navigator detail content help tab ( default )",
+    "key": "NAV_DTL_DEF_HDLN",
+    "value": "Welcome to Coke Studios!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 46,
+    "section": "Navigator detail content help tab ( default )",
+    "key": "NAV_DTL_DEF_DESC",
+    "value": "Select one of the destinations or navigate into User Studios section by clicking the tab above."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 49,
+    "section": "Navigator detail content destination info tab",
+    "key": "NAV_DTL_DEST_TITLE",
+    "value": "Destination Info"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 52,
+    "section": "Navigator detail content people tab",
+    "key": "NAV_DTL_PEOPLE_TITLE",
+    "value": "People"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 55,
+    "section": "Navigator Room display go button",
+    "key": "GO",
+    "value": "Go!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 58,
+    "section": "Navigator User view",
+    "key": "NAV_USER_ST_ACTIVE_ST_BUTTON",
+    "value": "Show Active Studios"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 59,
+    "section": "Navigator User view",
+    "key": "NAV_USER_ST_MY_ST_BUTTON",
+    "value": "Show My Studios"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 60,
+    "section": "Navigator User view",
+    "key": "NAV_USER_ST_NO_ROOMS_FOUND",
+    "value": "No Rooms Found"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 63,
+    "section": "Navigator User View help tab",
+    "key": "NAV_DTL_HELP_USER_ST_HDLN",
+    "value": "Need a studio of your own?"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 64,
+    "section": "Navigator User View help tab",
+    "key": "NAV_DTL_HELP_USER_ST_DESC",
+    "value": "Click the button below to set up your own studio and get ready to make some music!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 65,
+    "section": "Navigator User View help tab",
+    "key": "NAV_DTL_HELP_CREATE_BUTTON",
+    "value": "Setup your own studio"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 68,
+    "section": "Navigator User view destination info tab",
+    "key": "NAV_DTL_DEST_OWNER",
+    "value": "owner"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 71,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_SEARCH",
+    "value": "Search"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 72,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_LAST_ACCESS",
+    "value": "Last Access:"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 73,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_LAST_SEEN",
+    "value": "Last seen:"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 74,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_LOCATION",
+    "value": "V-ego Location"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 75,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_NOT_FOUND",
+    "value": "V-ego not found"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 76,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_CURRENTLY",
+    "value": "Currently"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 77,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_OFFLINE",
+    "value": "Offline"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 78,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_LOBBY",
+    "value": "Front Page"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 79,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_ASK_FRIEND",
+    "value": "Ask to become a friend"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 80,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_TITLE",
+    "value": "Welcome to V-ego Search!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 81,
+    "section": "Navigator V-Ego Tab",
+    "key": "NAV_VEGOS_DESC",
+    "value": "Type a name in the search field to start searching for your friends!!!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 85,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_TITLE",
+    "value": "Set up your own studio"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 86,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_NAME",
+    "value": "Studio name"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 87,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_DESC",
+    "value": "Studio description"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 88,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_LAYOUT",
+    "value": "Studio layout"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 89,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_LOCATION",
+    "value": "Location"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 91,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_OK",
+    "value": "Ok"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 92,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 94,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_SUCCESS",
+    "value": "Congratulations, you have set up your own studio:"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 95,
+    "section": "Navigator Create Studio",
+    "key": "NAV_CREATE_ST_GO",
+    "value": "Go to your studio"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 98,
+    "section": "Navigator Modify Studio",
+    "key": "NAV_MODIFY_ST_BUTTON",
+    "value": "Modify"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 99,
+    "section": "Navigator Modify Studio",
+    "key": "NAV_MODIFY_ST_TITLE",
+    "value": "Change your studio information"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 100,
+    "section": "Navigator Modify Studio",
+    "key": "NAV_MODIFY_ST_DELETE_1",
+    "value": "Delete this studio"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 101,
+    "section": "Navigator Modify Studio",
+    "key": "NAV_MODIFY_ST_DELETE_2",
+    "value": "Delete room"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 103,
+    "section": "Navigator Modify Studio",
+    "key": "NAV_MODIFY_ST_DELETE_WARN_2",
+    "value": "Are you sure you want to delete this room? Please note:  all of the items in the room will be placed in your backpack."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 104,
+    "section": "Navigator Modify Studio",
+    "key": "NAV_MODIFY_ST_DELETE_WARN_1",
+    "value": "Last chance! Are you absolutely sure you want to delete this room?"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 105,
+    "section": "Navigator Modify Studio",
+    "key": "NAV_MODIFY_ST_DELETED",
+    "value": "Your room has been deleted."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 109,
+    "section": "ALERTS",
+    "key": "ALERT_TITLE",
+    "value": "Attention"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 110,
+    "section": "ALERTS",
+    "key": "ALERT_OK",
+    "value": "Ok"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 112,
+    "section": "ALERTS",
+    "key": "ALERT_GENERIC",
+    "value": "Sorry, there's been a problem with the server. Please try again."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 113,
+    "section": "ALERTS",
+    "key": "ALERT_FULL",
+    "value": "Each venue holds 25 V-egos and this one is full. Please try another."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 114,
+    "section": "ALERTS",
+    "key": "ALERT_ST_NAME",
+    "value": "You have to give a name to your studio."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 115,
+    "section": "ALERTS",
+    "key": "ALERT_OVER_LIMIT",
+    "value": "You can only have ten personal studios."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 116,
+    "section": "ALERTS",
+    "key": "ALERT_ST_NAME_LANG",
+    "value": "Sorry, your studio name was a little too creative. Enter another."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 117,
+    "section": "ALERTS",
+    "key": "ALERT_ST_DESC_LANG",
+    "value": "Sorry, your studio description was a little too creative. Enter another."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 118,
+    "section": "ALERTS",
+    "key": "ALERT_MESSENGER_LANG",
+    "value": "Sorry, your message was a little too creative. Enter another."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 120,
+    "section": "ALERTS",
+    "key": "ALERT_BANNED",
+    "value": "Sorry, you have been temporarily banned from using Coke Studios."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 122,
+    "section": "ALERTS",
+    "key": "ALERT_STATE_CLOSED",
+    "value": "Coke Studios is now closed. Coke Studios is open everyday from 10:00AM to 2:00AM EST."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 123,
+    "section": "ALERTS",
+    "key": "ALERT_STATE_FULL",
+    "value": "Sorry Coke Studios is currently full. Please try again later."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 125,
+    "section": "ALERTS",
+    "key": "ALERT_NO_CONNECTION",
+    "value": "A connection with the server could not be established."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 126,
+    "section": "ALERTS",
+    "key": "ALERT_DROPPED_CONNECTION",
+    "value": "Sorry, the connection with the server was dropped. Close this window and try again."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 127,
+    "section": "ALERTS",
+    "key": "ALERT_USER_NOT_FOUND",
+    "value": "You could not be authenticated with the server."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 128,
+    "section": "ALERTS",
+    "key": "ALERT_DUPLICATE_LOGIN",
+    "value": "Whoops! Your connection to Coke Studios has been lost. Please close this window and log back in."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 129,
+    "section": "ALERTS",
+    "key": "ALERT_ROOM_NOT_EXIST",
+    "value": "The room does not exist."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 132,
+    "section": "ALERTS",
+    "key": "ALERT_MOD_MESSAGE",
+    "value": "Online moderator message:"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 134,
+    "section": "ALERTS",
+    "key": "ALERT_THANK_YOU",
+    "value": "Thank you."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 135,
+    "section": "ALERTS",
+    "key": "ALERT_MESSAGE_SENT",
+    "value": "Your call for assistance has been sent."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 137,
+    "section": "ALERTS",
+    "key": "ALERT_INSUFFICIENT_BALANCE",
+    "value": "Sorry, you don't have enough decibels."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 139,
+    "section": "ALERTS",
+    "key": "ALERT_MAX_ITEMS_EXCEEDED",
+    "value": "You have too many items in your studio."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 141,
+    "section": "ALERTS",
+    "key": "ALERT_NO_BLANK_CDS",
+    "value": "Sorry, you don't have any blank CDs. You can buy new ones from the online catalogue."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 143,
+    "section": "ALERTS",
+    "key": "ALERT_STUDIO_NOT_EMPTY",
+    "value": "The studio must be empty before deleting."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 145,
+    "section": "ALERTS",
+    "key": "ALERT_PENDING_PURCHASE",
+    "value": "You currently have a purchase pending. Please wait."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 147,
+    "section": "ALERTS",
+    "key": "ALERT_COKE_LIMIT",
+    "value": "You have reached your daily free Coke limit. Maybe you need a REAL Coke now?"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 149,
+    "section": "ALERTS",
+    "key": "ALERT_NO_SERVER_AVAILABLE",
+    "value": "Sorry, there was a problem locating this studio. Please try another."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 151,
+    "section": "ALERTS",
+    "key": "ALERT_INVALID_SCREEN_NAME",
+    "value": "Your screen name contains invalid characters. Please create a new account."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 154,
+    "section": "LOCATIONS",
+    "key": "LOCATION_1",
+    "value": "London"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 155,
+    "section": "LOCATIONS",
+    "key": "LOCATION_2",
+    "value": "Miami"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 156,
+    "section": "LOCATIONS",
+    "key": "LOCATION_3",
+    "value": "Mombasa"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 157,
+    "section": "LOCATIONS",
+    "key": "LOCATION_4",
+    "value": "New York"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 158,
+    "section": "LOCATIONS",
+    "key": "LOCATION_5",
+    "value": "Rio de Janeiro"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 159,
+    "section": "LOCATIONS",
+    "key": "LOCATION_6",
+    "value": "Seattle"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 160,
+    "section": "LOCATIONS",
+    "key": "LOCATION_7",
+    "value": "Sydney"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 161,
+    "section": "LOCATIONS",
+    "key": "LOCATION_8",
+    "value": "Tokyo"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 162,
+    "section": "LOCATIONS",
+    "key": "LOCATION_9",
+    "value": "Goa"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 163,
+    "section": "LOCATIONS",
+    "key": "LOCATION_10",
+    "value": "Alaska"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 164,
+    "section": "LOCATIONS",
+    "key": "LOCATION_11",
+    "value": "Moscow"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 165,
+    "section": "LOCATIONS",
+    "key": "LOCATION_12",
+    "value": "Red Room"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 168,
+    "section": "DATE FORMAT",
+    "key": "DATE_FORMAT",
+    "value": "mm/dd/yyyy"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 171,
+    "section": "TIME FORMAT",
+    "key": "TIME_FORMAT",
+    "value": "12"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 174,
+    "section": "BALANCE DISPLAY WINDOW",
+    "key": "BALANCE_TITLE",
+    "value": "Your Decibels"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 175,
+    "section": "BALANCE DISPLAY WINDOW",
+    "key": "BALANCE_DISPLAY",
+    "value": "You have {balance} decibels."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 176,
+    "section": "BALANCE DISPLAY WINDOW",
+    "key": "BALANCE_DISPLAY_FAILED",
+    "value": "Could not get your decibel balance.\\nThe server returned an error.\\nPlease try again later."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 177,
+    "section": "BALANCE DISPLAY WINDOW",
+    "key": "BALANCE_DESC_TITLE",
+    "value": "You can get decibels..."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 178,
+    "section": "BALANCE DISPLAY WINDOW",
+    "key": "BALANCE_DESC",
+    "value": "-by making your own songs, performing and getting positive feedback on your songs.\\n-from every Coke bottle cap."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 181,
+    "section": "USER ITEMS",
+    "key": "USER_ITEMS_TITLE",
+    "value": "Your items"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 182,
+    "section": "USER ITEMS",
+    "key": "USER_ITEMS_CDS",
+    "value": "{cds} Blank CDs"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 183,
+    "section": "USER ITEMS",
+    "key": "USER_ITEMS_PAGE",
+    "value": "Page {num1} of {num2}"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 184,
+    "section": "USER ITEMS",
+    "key": "USER_ITEMS_NEXT",
+    "value": "next"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 185,
+    "section": "USER ITEMS",
+    "key": "USER_ITEMS_PREV",
+    "value": "prev"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 188,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TITLE",
+    "value": "Coke Studios Help"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 189,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPICS",
+    "value": "Help Topics"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 191,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_1_TITLE",
+    "value": "Coke Studios Instructions"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 192,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_1_DESC",
+    "value": "Confused? Don't know how to do stuff? Click here for all the answers!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 193,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_1_LINK",
+    "value": "external:openHelpInstructions();"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 195,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_2_TITLE",
+    "value": "Report a Technical Problem"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 196,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_2_DESC",
+    "value": "If something isn't working right, click here to find out what to do next."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 197,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_2_LINK",
+    "value": "external:openHelpTechnicalProblems();"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 199,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_3_TITLE",
+    "value": "How to Avoid Scams"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 200,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_3_DESC",
+    "value": "Is someone stealing your decibels or furniture? Click here to learn how to avoid scam attempts!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 201,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_3_LINK",
+    "value": "external:openHelpWatchForScams();"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 203,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_4_TITLE",
+    "value": "Report Harassment"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 204,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_4_DESC",
+    "value": "Is someone bothering you? Click here and let us know!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 205,
+    "section": "CALL FOR HELP",
+    "key": "HELP_TOPIC_4_LINK",
+    "value": "internal:MODERATOR_HELP"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 208,
+    "section": "MODERATOR HELP",
+    "key": "MODERATOR_HELP_TITLE",
+    "value": "Coke Studios Help"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 209,
+    "section": "MODERATOR HELP",
+    "key": "MODERATOR_HELP_DESC1",
+    "value": "Have you been harassed by other V-egos?"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 210,
+    "section": "MODERATOR HELP",
+    "key": "MODERATOR_HELP_DESC2",
+    "value": "Send a message to online moderators to ask for assistance. Please describe your problem as clearly as possible."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 211,
+    "section": "MODERATOR HELP",
+    "key": "MODERATOR_HELP_SEND",
+    "value": "Send"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 212,
+    "section": "MODERATOR HELP",
+    "key": "MODERATOR_HELP_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 216,
+    "section": "Purchase Window",
+    "key": "PURCHASE_TITLE",
+    "value": "Purchase Info"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 217,
+    "section": "Purchase Window",
+    "key": "PURCHASE_PRICE",
+    "value": "{item} costs {price} decibels"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 218,
+    "section": "Purchase Window",
+    "key": "PURCHASE_BALANCE",
+    "value": "You have {balance} decibels in your account."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 219,
+    "section": "Purchase Window",
+    "key": "PURCHASE_OK",
+    "value": "Ok"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 220,
+    "section": "Purchase Window",
+    "key": "PURCHASE_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 223,
+    "section": "WHALE_WASH",
+    "key": "WHALE_WASH",
+    "value": "You are now being redirected to the Whale Wash Activity."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 224,
+    "section": "WHALE_WASH",
+    "key": "WHALE_WASH_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 225,
+    "section": "WHALE_WASH",
+    "key": "WHALE_WASH_OK",
+    "value": "Ok"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 232,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_TITLE",
+    "value": "Online Catalogue"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 234,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_PAGE",
+    "value": "Page"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 235,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_NEXT",
+    "value": "Next"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 236,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_PREV",
+    "value": "Previous"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 238,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_PRICE",
+    "value": "Price"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 239,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_CURRENCY",
+    "value": "db"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 241,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_BUY",
+    "value": "Buy"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 243,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_PREVIEW",
+    "value": "Preview"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 244,
+    "section": "GENERIC CATALOGUE TEXTS",
+    "key": "CAT_PREVIEW_INFO",
+    "value": "Click an icon on the left."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 248,
+    "section": "Cover page, Category 00",
+    "key": "CAT_0_TITLE",
+    "value": "Coke Studios\\nOnline Catalogue"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 249,
+    "section": "Cover page, Category 00",
+    "key": "CAT_0_DESC",
+    "value": "Turn your decibels into items."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 251,
+    "section": "Cover page, Category 00",
+    "key": "CAT_0_TEXT1",
+    "value": "Pages and pages of furniture and other goods to make your studio stand out."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 252,
+    "section": "Cover page, Category 00",
+    "key": "CAT_0_TEXT2",
+    "value": "Walls and Floors"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 253,
+    "section": "Cover page, Category 00",
+    "key": "CAT_0_TEXT3",
+    "value": "Premier"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 254,
+    "section": "Cover page, Category 00",
+    "key": "CAT_0_TEXT4",
+    "value": "Studio gear"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 258,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_TITLE",
+    "value": "Walls and Floors"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 259,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_Desc",
+    "value": "You can customize the way your Studio looks with these wall and floor variations. Be sure to pick matching colors!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 261,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_TEXTURE",
+    "value": "Texture"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 262,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_COLOR",
+    "value": "Color"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 264,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_WALLS_SELECTOR",
+    "value": "Walls Selector"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 265,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_WALLS_INSTRUCTION",
+    "value": "Use the arrows to select your wall design"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 267,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_FLOOR_SELECTOR",
+    "value": "Floor Selector"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 268,
+    "section": "Walls And Floors, Category 01",
+    "key": "CAT_1_FLLOR_INSTRUCTION",
+    "value": "Use the arrows to select your floor design"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 274,
+    "section": "Premiere, Category 02",
+    "key": "CAT_2_TITLE",
+    "value": "Premier"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 275,
+    "section": "Premiere, Category 02",
+    "key": "CAT_2_Desc",
+    "value": "Our exclusive furniture provides you with moments of slick heavyweight comfort. Enjoy it while the prices are low!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 279,
+    "section": "5001 Collection, Category 03",
+    "key": "CAT_3_TITLE",
+    "value": "5001 Collection"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 280,
+    "section": "5001 Collection, Category 03",
+    "key": "CAT_3_Desc",
+    "value": "The 5001 product range is the closest you'll get to comfort!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 284,
+    "section": "Studio Essentials, Category 04",
+    "key": "CAT_4_TITLE",
+    "value": "Studio Essentials"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 285,
+    "section": "Studio Essentials, Category 04",
+    "key": "CAT_4_Desc",
+    "value": "Authentic-looking fake vintage studio equipment helps you look more professional and gets your creative juices flowing."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 289,
+    "section": "Necessities1, Category 05",
+    "key": "CAT_5_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 290,
+    "section": "Necessities1, Category 05",
+    "key": "CAT_5_Desc",
+    "value": "With this stuff you can really make your Studio breathe and create groovy spaces."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 294,
+    "section": "Necessities2, Category 06",
+    "key": "CAT_6_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 295,
+    "section": "Necessities2, Category 06",
+    "key": "CAT_6_Desc",
+    "value": "With these ultra-cool separators that double as bar desks you can arrange your Studio the way you want to!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 299,
+    "section": "Coke Collection, Category 07",
+    "key": "CAT_7_TITLE",
+    "value": "Coke Collection"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 300,
+    "section": "Coke Collection, Category 07",
+    "key": "CAT_7_Desc",
+    "value": "Oodles of authentic Coke items. Come and get a polar bear statue of your own!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 304,
+    "section": "For Walls, Category 08",
+    "key": "CAT_8_TITLE",
+    "value": "For Walls"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 305,
+    "section": "For Walls, Category 08",
+    "key": "CAT_8_Desc",
+    "value": "Add a final touch to your studio decoration with these instruments and posters."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 309,
+    "section": "Necessities3, Category 09",
+    "key": "CAT_9_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 310,
+    "section": "Necessities3, Category 09",
+    "key": "CAT_9_Desc",
+    "value": "More cool stuff for your studio!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 314,
+    "section": "Necessities4, Category 10",
+    "key": "CAT_10_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 315,
+    "section": "Necessities4, Category 10",
+    "key": "CAT_10_Desc",
+    "value": "Even more cool stuff for your studio!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 319,
+    "section": "Necessities5, Category 11",
+    "key": "CAT_11_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 320,
+    "section": "Necessities5, Category 11",
+    "key": "CAT_11_Desc",
+    "value": "Dorm room style beats. Makeshift furni for better lounging!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 324,
+    "section": "Necessities6, Category 13",
+    "key": "CAT_13_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 325,
+    "section": "Necessities6, Category 13",
+    "key": "CAT_13_Desc",
+    "value": "More cool stuff."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 329,
+    "section": "Necessities7, Category 14",
+    "key": "CAT_14_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 330,
+    "section": "Necessities7, Category 14",
+    "key": "CAT_14_Desc",
+    "value": "Household needs."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 334,
+    "section": "Necessities8, Category 15",
+    "key": "CAT_15_TITLE",
+    "value": "Necessities"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 335,
+    "section": "Necessities8, Category 15",
+    "key": "CAT_15_Desc",
+    "value": "Create your own game."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 338,
+    "section": "WALL PATTERNS",
+    "key": "wall_tile",
+    "value": "Classic Bricks"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 339,
+    "section": "WALL PATTERNS",
+    "key": "wall_graythreedo",
+    "value": "Homework"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 340,
+    "section": "WALL PATTERNS",
+    "key": "wall_threegrid",
+    "value": "Sonar"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 341,
+    "section": "WALL PATTERNS",
+    "key": "wall_zalmiag",
+    "value": "Classic Lineup"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 342,
+    "section": "WALL PATTERNS",
+    "key": "wall_plottr",
+    "value": "Silent"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 343,
+    "section": "WALL PATTERNS",
+    "key": "wall_disnej",
+    "value": "Fat Controller"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 344,
+    "section": "WALL PATTERNS",
+    "key": "wall_lilacgrandma",
+    "value": "Low Rent"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 345,
+    "section": "WALL PATTERNS",
+    "key": "wall_plates",
+    "value": "Plate Reverb"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 346,
+    "section": "WALL PATTERNS",
+    "key": "wall_bighstripe",
+    "value": "Shack"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 347,
+    "section": "WALL PATTERNS",
+    "key": "wall_dithastriperh",
+    "value": "Softer Shell"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 350,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_orgun",
+    "value": "Old World Organs"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 351,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_karpyt",
+    "value": "Hard Carpets"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 352,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_indjun",
+    "value": "Grand Mother"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 353,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_ditlines",
+    "value": "Liner"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 354,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_ditgrid",
+    "value": "Mothership"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 355,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_basic",
+    "value": "Basic Floor"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 356,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_twirlee",
+    "value": "Twirly Psychedelic"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 357,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_phunk",
+    "value": "Phono"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 358,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_wooddither",
+    "value": "Time Stretch"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 359,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_oceanliner",
+    "value": "Ocean Liner"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 360,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_cahya",
+    "value": "Mouse Pad"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 361,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_purplecarpetswirl",
+    "value": "Carpet Tunnel"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 362,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_bluecarpet",
+    "value": "Hotel Style"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 363,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_drija",
+    "value": "Octave"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 364,
+    "section": "FLOOR PATTERNS",
+    "key": "floor_woodswirl",
+    "value": "Wooden Swirl"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 372,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_TITLE",
+    "value": "Choose Your Song"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 373,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_DESC",
+    "value": "You have the following songs on your CDs:"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 374,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_LOADING",
+    "value": "loading..."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 375,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_NAME",
+    "value": "Name"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 376,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_AUTHOR",
+    "value": "Author"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 377,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_PLAY",
+    "value": "Play!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 378,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 379,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_SECS",
+    "value": "secs"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 380,
+    "section": "Choose Song",
+    "key": "CHOOSE_SONG_WAIT_TURN",
+    "value": "There's a song already playing. Wait for your turn."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 384,
+    "section": "Loading of external cast files",
+    "key": "Gateway",
+    "value": "Gateway"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 385,
+    "section": "Loading of external cast files",
+    "key": "Entry",
+    "value": "Entry"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 386,
+    "section": "Loading of external cast files",
+    "key": "Interface",
+    "value": "Interface"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 387,
+    "section": "Loading of external cast files",
+    "key": "Navigator",
+    "value": "Navigator"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 388,
+    "section": "Loading of external cast files",
+    "key": "People",
+    "value": "People"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 389,
+    "section": "Loading of external cast files",
+    "key": "Messenger",
+    "value": "Messenger"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 390,
+    "section": "Loading of external cast files",
+    "key": "Studio",
+    "value": "Studio"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 391,
+    "section": "Loading of external cast files",
+    "key": "ChatEngine",
+    "value": "Chat"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 392,
+    "section": "Loading of external cast files",
+    "key": "Room",
+    "value": "Room"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 393,
+    "section": "Loading of external cast files",
+    "key": "Furniture",
+    "value": "Furniture"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 394,
+    "section": "Loading of external cast files",
+    "key": "FurnitureSmall",
+    "value": "Furniture"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 395,
+    "section": "Loading of external cast files",
+    "key": "Catalogue",
+    "value": "Catalogue"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 396,
+    "section": "Loading of external cast files",
+    "key": "Items",
+    "value": "Wall Items"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 397,
+    "section": "Loading of external cast files",
+    "key": "IsoEngine",
+    "value": "IsoMetric Engine"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 398,
+    "section": "Loading of external cast files",
+    "key": "AvatarEngine",
+    "value": "AvatarEngine"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 399,
+    "section": "Loading of external cast files",
+    "key": "AudioLib",
+    "value": "Audio Library"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 403,
+    "section": "Loading of external text files",
+    "key": "StudioData",
+    "value": "Studio Data"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 404,
+    "section": "Loading of external text files",
+    "key": "TextManagerText",
+    "value": "Text Data"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 405,
+    "section": "Loading of external text files",
+    "key": "Catalog",
+    "value": "Catalogue Data"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 409,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_START",
+    "value": "Front Page"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 410,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_NEW_MESSAGES",
+    "value": "new message(s)"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 411,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_FRIEND_REQUESTS",
+    "value": "Friend Request(s)"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 413,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_FRIENDS",
+    "value": "Friends"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 414,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_MSGS",
+    "value": "msgs"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 415,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_CURRENTLY",
+    "value": "Currently"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 416,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_LAST_ACCESS",
+    "value": "Last Access"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 417,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_COMPOSE",
+    "value": "Compose"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 418,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_REMOVE",
+    "value": "Remove"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 420,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_COMPOSE_TITLE",
+    "value": "Compose a Message"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 421,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_RECIPIENT",
+    "value": "Recipient:"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 422,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_RECIPIENTS",
+    "value": "Multiple Recipients"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 423,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 424,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_SEND",
+    "value": "Send"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 426,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_READ_MESSAGE",
+    "value": "Read a Message"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 427,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_READ_FROM",
+    "value": "From:"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 428,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_REPLY",
+    "value": "Reply"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 429,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_DELETE_MESSAGE",
+    "value": "DeleteMessage"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 431,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_FRIEND_REQUEST",
+    "value": "Friend Request"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 433,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_INVITE_DISPLAY",
+    "value": "asks you to become his/her friend"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 434,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_INVITE_ACCEPT_DISPLAY",
+    "value": "(S)he will be added to your Friend List if your invitation is accepted."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 435,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_REJECT",
+    "value": "Reject"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 436,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_ACCEPT",
+    "value": "Accept"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 439,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSSENGER_REMOVE_FRIEND",
+    "value": "Remove a friend"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 440,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_REMOVE_CONFIRM1",
+    "value": "Are you sure you want to remove"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 441,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_REMOVE_CONFIRM2",
+    "value": "from your friends?"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 443,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_NO_FRIENDS",
+    "value": "You currently have no V-egos on your list. You can ask others to become your friend either by using the V-ego search in the Navigator or by selecting them in venues and clicking the \"Ask to become a Friend\" button."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 445,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_REQUEST_SENT",
+    "value": "(S)he will be added into your Friends list if (s)he accepts it."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 447,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_ALREADY_FRIEND",
+    "value": "This person is already your friend."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 448,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_ALREADY_INVITED",
+    "value": "You have already invited this person to be your friend."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 449,
+    "section": "MESSENGER TEXT IDS",
+    "key": "MESSENGER_CANT_INVITE_SELF",
+    "value": "You can't invite yourself to be a friend ;)"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 453,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_TITLE",
+    "value": "CC-3001 DELUXE - Five Slot Mixer CD Burner Device"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 454,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_DESC",
+    "value": "Welcome to the CC-3001 Deluxe. To make your own music, click one of the \"Edit\" buttons."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 455,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_PLAY",
+    "value": "PLAY"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 456,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_EDIT",
+    "value": "EDIT"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 457,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_BURN",
+    "value": "BURN"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 458,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_EMPTY",
+    "value": "< Slot {mixNumber} empty >"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 459,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_LOADING",
+    "value": "Loading..."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 460,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_PLAY_ROLLOVER",
+    "value": "Play the song"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 461,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_EDIT_ROLLOVER",
+    "value": "Edit the song in this slot - ( Opens up a new window )"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 462,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_BURN_ROLLOVER",
+    "value": "Burn the song on CD"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 463,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_NOW_PLAYING",
+    "value": "Now playing..."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 464,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_NOW_EDITING",
+    "value": "Editing..."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 466,
+    "section": "MUSIC MIXER",
+    "key": "MIXER_NOT_OWNER",
+    "value": "Sorry, only the owner of the studio can use this mixer."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 469,
+    "section": "BURN WINDOW",
+    "key": "BURN_TITLE",
+    "value": "Ready to burn?"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 470,
+    "section": "BURN WINDOW",
+    "key": "BURN_DESC",
+    "value": "You have {blankCds} blank CDs in your backpack. Would you like to use one of them?"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 471,
+    "section": "BURN WINDOW",
+    "key": "BURN_OK",
+    "value": "Ok"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 472,
+    "section": "BURN WINDOW",
+    "key": "BURN_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 473,
+    "section": "BURN WINDOW",
+    "key": "BURN_CD_BURNT",
+    "value": "CD burnt."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 477,
+    "section": "PAUSED WINDOW",
+    "key": "PAUSED_TITLE",
+    "value": "Coke Studios Paused"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 478,
+    "section": "PAUSED WINDOW",
+    "key": "PAUSED_DESC",
+    "value": "Click OK to return to Coke Studios."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 479,
+    "section": "PAUSED WINDOW",
+    "key": "PAUSED_OK",
+    "value": "OK"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 483,
+    "section": "TRADE WINDOW",
+    "key": "TRADE_TITLE",
+    "value": "Safe Trade"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 484,
+    "section": "TRADE WINDOW",
+    "key": "TRADER_BOX_DESC",
+    "value": "{Tradername} offers:"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 485,
+    "section": "TRADE WINDOW",
+    "key": "TRADEE_BOX_DESC",
+    "value": "You offer:"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 486,
+    "section": "TRADE WINDOW",
+    "key": "TRADER_AGREES",
+    "value": "{Tradername} agrees"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 487,
+    "section": "TRADE WINDOW",
+    "key": "TRADEE_AGREES",
+    "value": "You agree."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 488,
+    "section": "TRADE WINDOW",
+    "key": "TRADE_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 489,
+    "section": "TRADE WINDOW",
+    "key": "TRADE_DESC",
+    "value": "To trade or give items, drag them from your backpack into the \"You offer:\" area."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 490,
+    "section": "TRADE WINDOW",
+    "key": "BOX_ROLL",
+    "value": "Add items to box"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 491,
+    "section": "TRADE WINDOW",
+    "key": "CANCEL_ROLL",
+    "value": "Cancel trading"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 492,
+    "section": "TRADE WINDOW",
+    "key": "SCAM_WARNING",
+    "value": "There are no cheat codes. Beware of scammers. Click here to find out how to avoid scams."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 495,
+    "section": "VOTE RESULTS",
+    "key": "RESULTS_TITLE",
+    "value": "Your performance results:"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 496,
+    "section": "VOTE RESULTS",
+    "key": "THUMBS_UP_VOTES",
+    "value": "Thumbs up votes: {voteupnum}"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 497,
+    "section": "VOTE RESULTS",
+    "key": "THUMBS_DOWN_VOTES",
+    "value": "Thumbs down votes: {votedownnum}"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 498,
+    "section": "VOTE RESULTS",
+    "key": "DECIBEL_RESULT",
+    "value": "You receive {numdecibel} decibels."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 501,
+    "section": "DRINK COKE",
+    "key": "DRINK_COKE",
+    "value": "You got {points} decibels."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 504,
+    "section": "DISPENSE ITEM",
+    "key": "DISPENSE_ITEM_SUCCESS",
+    "value": "A Batman Begins countdown poster will be in your backpack the next time you sign into Coke Studios. Enjoy this new poster until the Batman Begins promotion ends!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 505,
+    "section": "DISPENSE ITEM",
+    "key": "DISPENSE_ITEM_FAIL",
+    "value": "Ooops!  You can only take two posters per day!� Come back tomorrow!"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 508,
+    "section": "CD PLAYER",
+    "key": "NOCD_TITLE",
+    "value": "You need a CD to perform"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 509,
+    "section": "CD PLAYER",
+    "key": "NOCD_DESC",
+    "value": "You need to create a CD in your personal studio before you can perform here."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 512,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "REPLACE_TITLE",
+    "value": "Confirm"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 513,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "REPLACE_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 514,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "REPLACE_OK",
+    "value": "OK"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 515,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "REPLACE_WALL",
+    "value": "Replace your current wall texture with this model? (Note that the new walls replace the old.)"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 516,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "REPLACE_FLOOR",
+    "value": "Replace your current floor texture with this model? (Note that the new floor replaces the old.)"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 517,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "DELETE_ITEM_TITLE",
+    "value": "Delete item?"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 518,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "DELETE_ITEM_HEADLINE",
+    "value": "Confirm delete"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 519,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "DELETE_ITEM_DESC",
+    "value": "Are you absolutely sure you want to delete this item?"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 520,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "DELETE_ITEM_OK",
+    "value": "OK"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 521,
+    "section": "REPLACE WALL/FLOOR",
+    "key": "DELETE_ITEM_CANCEL",
+    "value": "Cancel"
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 524,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_0",
+    "value": "The song was added to your playlist."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 525,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_1",
+    "value": "This song is already on your playlist."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 526,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_2",
+    "value": "You have reached the maximum number of songs allowed in your playlist."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 527,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_3",
+    "value": "Invalid song ID."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 528,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_4",
+    "value": "Song not on playlist."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 529,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_5",
+    "value": "You must be a member of FreshTracksMusic.com to listen/download this song."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 530,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_PLAYLIST",
+    "value": "You need to add songs to your playlist to stream music."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 531,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_IJ_TOKENS",
+    "value": "You've used all your tokens, please try again later."
+  },
+  {
+    "path": "archives/extracted-complete-pack/Cokestudios Private Server/Cokemusic/src/CokeStudios Main Director Dump/CokeStudios March 13, 2006/Text Files/Text_English(5-23-6).txt",
+    "line": 532,
+    "section": "INFINITE JUKEBOX ERRORS",
+    "key": "ALERT_LEAVE_SF",
+    "value": "You are being redirected to FreshTracksMusic.com.  Do you want to continue?"
+  }
+]
