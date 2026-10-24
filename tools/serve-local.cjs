@@ -3,8 +3,29 @@
 const http = require('node:http');
 const net = require('node:net');
 const fs = require('node:fs/promises');
+const fsSync = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
+const soundLibraryDir = path.resolve(root, 'sources', 'gocoke', 'web', 'Lingo', 'soundlibrary');
+let soundFileMap = null;
+function getSoundFile(name) {
+  if (!soundFileMap) {
+    soundFileMap = new Map();
+    try {
+      const list = fsSync.readdirSync(soundLibraryDir);
+      for (const f of list) {
+        soundFileMap.set(f.toLowerCase(), f);
+        const idx = f.indexOf('_');
+        if (idx !== -1) {
+          soundFileMap.set(f.slice(idx + 1).toLowerCase(), f);
+        }
+      }
+    } catch (_) {}
+  }
+  const clean = name.toLowerCase();
+  const actual = soundFileMap.get(clean) || name;
+  return path.join(soundLibraryDir, actual);
+}
 const mime = {
   '.html': 'text/html; charset=utf-8',
   '.htm': 'text/html; charset=utf-8',
@@ -88,8 +109,14 @@ function makeServer(project) {
   return http.createServer(async (req, res) => {
     try {
       const url = new URL(req.url, 'http://127.0.0.1');
+      let pathname = '/';
+      try {
+        pathname = decodeURIComponent(url.pathname);
+      } catch (_) {
+        pathname = url.pathname;
+      }
 
-      if (url.pathname === '/health') {
+      if (pathname === '/health') {
         return send(res, 200, JSON.stringify({
           project,
           status: 'ok',
@@ -98,7 +125,7 @@ function makeServer(project) {
         }), 'application/json');
       }
 
-      if (project === 'portal' && (url.pathname.startsWith('/sf/') || url.pathname.startsWith('/api/'))) {
+      if (project === 'portal' && (pathname.startsWith('/sf/') || pathname.startsWith('/api/'))) {
         const proxyReq = http.request({
           hostname: '127.0.0.1',
           port: BACKEND_PORT,
@@ -116,12 +143,12 @@ function makeServer(project) {
         return;
       }
 
-      if (url.pathname.startsWith('/sf/') || url.pathname.startsWith('/ws/')) {
+      if (pathname.startsWith('/sf/') || pathname.startsWith('/ws/')) {
         return send(res, 503, 'No game backend is included in this local preview.');
       }
 
-      if (project === 'portal' && url.pathname.startsWith('/game/')) {
-        const sub = url.pathname.slice(6);
+      if (project === 'portal' && pathname.startsWith('/game/')) {
+        const sub = pathname.slice(6);
         const rel = (!sub || sub === '/') ? 'index.html' : sub;
         const file = path.resolve(root, 'sources', 'gocoke', 'web', rel);
         if (file.startsWith(path.join(root, 'sources', 'gocoke', 'web'))) {
@@ -134,13 +161,31 @@ function makeServer(project) {
         }
       }
 
+      // Assets Cascade: Portal images -> CokePhase game textures -> GoCoke web assets
+      if (project === 'portal' && pathname.startsWith('/assets/')) {
+        const sub = pathname.slice(8);
+        const candidates = [
+          path.resolve(root, 'tools', 'portal', 'assets', sub),
+          path.resolve(root, 'sources', 'cokephase', 'assets', sub),
+          path.resolve(root, 'sources', 'gocoke', 'web', 'assets', sub)
+        ];
+        for (const cand of candidates) {
+          try {
+            const ext = path.extname(cand).toLowerCase();
+            const contentType = mime[ext] || 'application/octet-stream';
+            const body = await fs.readFile(cand);
+            return send(res, 200, body, contentType);
+          } catch (_) {}
+        }
+      }
+
+      // GoCoke Core Assets: Lingo scripts, data, and fonts
       if (project === 'portal' && (
-        url.pathname.startsWith('/Lingo/') ||
-        url.pathname.startsWith('/data/') ||
-        url.pathname.startsWith('/fonts/') ||
-        url.pathname.startsWith('/assets/')
+        pathname.startsWith('/Lingo/') ||
+        pathname.startsWith('/data/') ||
+        pathname.startsWith('/fonts/')
       )) {
-        const file = path.resolve(root, 'sources', 'gocoke', 'web', url.pathname.slice(1));
+        const file = path.resolve(root, 'sources', 'gocoke', 'web', pathname.slice(1));
         if (file.startsWith(path.join(root, 'sources', 'gocoke', 'web'))) {
           try {
             const ext = path.extname(file).toLowerCase();
@@ -151,8 +196,29 @@ function makeServer(project) {
         }
       }
 
-      if (project === 'portal' && url.pathname.startsWith('/avatar-assets/')) {
-        const file = path.resolve(root, 'sources', 'avatar-assets', 'assets', url.pathname.slice(15));
+      // CokePhase Engine, Classes, CSS, and JS Assets
+      if (project === 'portal' && (
+        pathname.startsWith('/engine/') ||
+        pathname.startsWith('/gameClasses/') ||
+        pathname.startsWith('/css/') ||
+        pathname.startsWith('/js/') ||
+        pathname === '/ClientConfig.js' ||
+        pathname === '/client.js' ||
+        pathname === '/index.js'
+      )) {
+        const file = path.resolve(root, 'sources', 'cokephase', pathname.slice(1));
+        if (file.startsWith(path.join(root, 'sources', 'cokephase'))) {
+          try {
+            const ext = path.extname(file).toLowerCase();
+            const contentType = mime[ext] || 'application/octet-stream';
+            const body = await fs.readFile(file);
+            return send(res, 200, body, contentType);
+          } catch (_) {}
+        }
+      }
+
+      if (project === 'portal' && pathname.startsWith('/avatar-assets/')) {
+        const file = path.resolve(root, 'sources', 'avatar-assets', 'assets', pathname.slice(15));
         if (file.startsWith(path.join(root, 'sources', 'avatar-assets', 'assets'))) {
           try {
             const ext = path.extname(file).toLowerCase();
@@ -163,8 +229,8 @@ function makeServer(project) {
         }
       }
 
-      if (project === 'portal' && url.pathname.startsWith('/phase/')) {
-        const sub = url.pathname.slice(7);
+      if (project === 'portal' && pathname.startsWith('/phase/')) {
+        const sub = pathname.slice(7);
         const rel = (!sub || sub === '/') ? 'index.html' : sub;
         const file = path.resolve(root, 'sources', 'cokephase', rel);
         if (file.startsWith(path.join(root, 'sources', 'cokephase'))) {
@@ -182,8 +248,8 @@ function makeServer(project) {
         }
       }
 
-      if (project === 'portal' && url.pathname.startsWith('/mixer/')) {
-        const sub = url.pathname.slice(7);
+      if (project === 'portal' && pathname.startsWith('/mixer/')) {
+        const sub = pathname.slice(7);
         const rel = (!sub || sub === '/') ? 'index.html' : sub;
         const file = path.resolve(root, 'sources', 'music-mixer', 'dist', rel);
         if (file.startsWith(path.join(root, 'sources', 'music-mixer', 'dist'))) {
@@ -196,8 +262,8 @@ function makeServer(project) {
         }
       }
 
-      if (project === 'portal' && url.pathname.startsWith('/sounds/')) {
-        const audioFile = path.resolve(root, 'sources', 'gocoke', 'web', 'Lingo', 'soundlibrary', url.pathname.slice(8));
+      if (project === 'portal' && pathname.startsWith('/sounds/')) {
+        const audioFile = getSoundFile(pathname.slice(8));
         try {
           const ext = path.extname(audioFile).toLowerCase();
           const contentType = mime[ext] || 'audio/wav';
@@ -206,7 +272,7 @@ function makeServer(project) {
         } catch (_) {}
       }
 
-      if ((project === 'cokephase' || project === 'portal') && url.pathname === '/jsonreply/room.php') {
+      if ((project === 'cokephase' || project === 'portal') && pathname === '/jsonreply/room.php') {
         const params = await fields(req, url);
         const id = Number(params.get('id'));
         const data = Number.isInteger(id) && id >= 1 && id <= 7
@@ -215,7 +281,7 @@ function makeServer(project) {
         return send(res, 200, JSON.stringify(data), 'application/json');
       }
 
-      if ((project === 'cokephase' || project === 'portal') && url.pathname === '/jsonreply/catalog.php') {
+      if ((project === 'cokephase' || project === 'portal') && pathname === '/jsonreply/catalog.php') {
         const params = await fields(req, url);
         if (!params.has('page') && params.has('page-number')) {
           return send(res, 200, '{"pages":15}', 'application/json');
@@ -228,11 +294,23 @@ function makeServer(project) {
         return send(res, 200, JSON.stringify(JSON.parse(cleaned)), 'application/json');
       }
 
+      if ((project === 'cokephase' || project === 'portal') && pathname.startsWith('/jsonreply/')) {
+        const file = path.resolve(root, 'sources', 'cokephase', pathname.slice(1));
+        if (file.startsWith(path.join(root, 'sources', 'cokephase', 'jsonreply'))) {
+          try {
+            const ext = path.extname(file).toLowerCase();
+            const contentType = mime[ext] || 'application/json';
+            const body = await fs.readFile(file);
+            return send(res, 200, body, contentType);
+          } catch (_) {}
+        }
+      }
+
       if (req.method !== 'GET' && req.method !== 'HEAD') {
         return send(res, 405, 'Method not allowed');
       }
 
-      const decoded = decodeURIComponent(url.pathname);
+      const decoded = pathname;
       if (decoded.includes('\\') || decoded.includes('\0') || decoded.split('/').some(p => p.startsWith('.') || p.includes(':'))) {
         return send(res, 403, 'Forbidden');
       }
@@ -273,7 +351,6 @@ function makeServer(project) {
 }
 
 const { spawn } = require('node:child_process');
-const fsSync = require('node:fs');
 
 if (require.main === module) {
   const isWin = process.platform === 'win32';
