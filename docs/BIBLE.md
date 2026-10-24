@@ -455,10 +455,107 @@ Figure strings are serialized in authentic Sulake / Coke Studios format:
 ```
 hr={style}/{skin}&hd={skin}/1&ch={top}/1&lg={legs}/1&sh={shoes}/1&fa={face}/1&ey={eyes}/1&g={gender}
 ```
-Persisted to MariaDB `denizens.avatar_def` and broadcast dynamically to room occupants via `<AV av="DJ" ... def="..."/>` when customized in real time.
+### E. Multi-Port System & Host Conflict Avoidance Architecture
+Debian production environments and developer workstations frequently have web servers (e.g. Apache, Tomcat, Nginx) on port 8080 or existing database servers (MySQL, MariaDB) on port 3306. To guarantee failure-free deployments, both `setup.sh` and `docker-compose.yml` provide dynamic port selection:
+
+1. **Ingress Port Hierarchy:**
+   - **Primary Web Portal / Ingress:** Port `24902` (configurable via `PORT`).
+   - **Standalone Go Backend:** Default `8080` (configurable via `BACKEND_PORT`; auto-suggests `8085+` if busy).
+   - **MariaDB 11 Database Host Port:** Default `3306` (configurable via `DB_PORT`; auto-suggests `3307+` if busy).
+   - **CokePhase HTML5 Client Port:** Default `8081` (configurable via `COKEPHASE_PORT`).
+   - **CSMusicMixer Standalone Port:** Default `8082` (configurable via `MUSICMIXER_PORT`).
+
+2. **Conflict Probing Implementation (`setup.sh`):**
+   - Probes via `ss -tuln`, `netstat -tuln`, `lsof -i`, and direct non-blocking `/dev/tcp/127.0.0.1/{port}` socket checks.
+   - Automatically writes selected ports to `.env` so Docker Compose binds only unoccupied host ports:
+     ```yaml
+     ports:
+       - "${PORT:-24902}:${PORT:-24902}"
+       - "${BACKEND_PORT:-8080}:${BACKEND_PORT:-8080}"
+       - "${DB_PORT:-3306}:3306"
+       - "${COKEPHASE_PORT:-8081}:${COKEPHASE_PORT:-8081}"
+       - "${MUSICMIXER_PORT:-8082}:${MUSICMIXER_PORT:-8082}"
+     ```
+
+### F. V-Ego Messenger Protocol Specification
+The social engine replicates Sulake's classic V-Ego Console and StudioCom's `_MESSENGER_.ls` Flash Remoting targets.
+
+1. **AMF0 Remote Target Handlers:**
+   - `oDenizenManager.getFriends` / `FlashDenizenManager.getFriends`: Returns array of buddy objects (`screenName`, `gender`, `mission`, `avatarDef`, `online`, `lastSeen`, `status`).
+   - `oDenizenManager.getOnlineFriends`: Returns buddies with active WebSocket sessions and current room IDs.
+   - `oDenizenManager.sendMessage(sFrom, aToList, sMessage)`: Persists message into MariaDB `messenger_messages` and dispatches live notification to recipient if online.
+   - `oDenizenManager.getMessages`: Retrieves unread or all messages.
+   - `oDenizenManager.removeMessage`: Marks message as read / deleted.
+   - `oDenizenManager.acceptInvitation(sInvitee, sInviter)`: Establishes bidirectional `messenger_friends` record with status `accepted`.
+   - `oDenizenManager.rejectInvitation(sInvitee, sInviter)`: Deletes friendship link.
+
+2. **Real-Time WebSocket Social Frames:**
+   - `<MMS_SND to="Target" m="HexEncodedMessage" msg="Plaintext"/>`: Real-time instant message transmission.
+   - `<MMS_MSG from="Sender" m="HexEncodedMessage" msg="Plaintext"/>`: Server push delivery to online recipient.
+   - `<MMS_REQ to="Target"/>`: In-venue friend request prompt.
+   - `<MMS_ACC from="Sender" status="accepted"/>`: Instant notification upon mutual friendship approval.
+
+3. **Relational Database Schema:**
+   ```sql
+   CREATE TABLE IF NOT EXISTS messenger_friends (
+       denizen_id VARCHAR(64) NOT NULL,
+       friend_id VARCHAR(64) NOT NULL,
+       status VARCHAR(16) NOT NULL DEFAULT 'accepted',
+       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+       PRIMARY KEY (denizen_id, friend_id)
+   );
+
+   CREATE TABLE IF NOT EXISTS messenger_messages (
+       id INT AUTO_INCREMENT PRIMARY KEY,
+       sender_name VARCHAR(64) NOT NULL,
+       recipient_name VARCHAR(64) NOT NULL,
+       message TEXT NOT NULL,
+       sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+       is_read TINYINT(1) DEFAULT 0
+   );
+   ```
+
+### G. Studio Decorator Architecture & Live Synchronisation
+Studio owners can customize walls, flooring, and doorbell audio in real time:
+
+1. **Decor Attributes:**
+   - `wp` (Wallpaper ID `1..10`): Renders corresponding dimetric wall tile textures.
+   - `fl` (Floor ID `1..10`): Renders diamond-grid floor tile sets (e.g. Parquet, Checkerboard, Neon).
+   - `db` (Doorbell ID `1..4`): Sets audio chime played when visitors knock.
+
+2. **Wire Protocol & Sync:**
+   - **AMF0:** `FlashStudioManager.updateStudio(studioID, wp, fl, db)`
+   - **WebSocket:** `<ST_DECOR wp="5" fl="3" db="2"/>`
+   - **Room Entrance Broadcast:**
+     `<ST_EN layout="3" roomID="studio_1" name="Private Studio" owner="Adam" wp="5" fl="3" db="2"/>`
+   - When modified by the owner, `<Room.Action roomID="..."><ST_DECOR wp="..." fl="..." db="..."/></Room.Action>` is immediately broadcast to all players in the studio without reloading the scene.
+
+### H. In-Game CD Burning & Inventory Minting (Item 89)
+1. **EDL (Event Decision List) Format:**
+   ```
+   ^svol,loopName{repeatCount,startBeat{loopBars,totalDuration{^...
+   ```
+   Example: `^50,rockOne_guitar00{2,0{4,4{^50,danceOne_beatz00{4,0{^`
+2. **Burning Transaction:**
+   - Client sends `<CD_BURN title="..." edl="..."/>` or AMF `FlashPossessionManager.burnCD`.
+   - Server verifies player balance (cost: 10 Decibels).
+   - Server deducts 10 dB from `denizens.decibels`.
+   - Server mints an inventory record with `catalog_item_id = 89` and properties `{"songName": title, "ownerName": screenName, "edl": edl}`.
+   - Server returns newly minted item ID and sends `<POS_MINT id="..." cid="89" title="..." edl="..."/>`.
+   - The CD can be placed into any studio jukebox or traded via `<TR_OFR>`.
+
+### I. Studio Moderation, Doorbell Knocking, and Access Control
+1. **Doorbell Knocking:**
+   - When entering a studio with `doorbell=1`, guests are held at the door:
+     Client sends `<ST_KNOCK roomID="..."/>`.
+   - Studio owner receives `<Room.Action><ST_KNOCK av="VisitorName"/></Room.Action>` with options "Let In" or "Deny".
+   - Owner responds with `<ST_KNOCK_RES target="VisitorName" allow="1"/>`.
+   - Guest is admitted into the room via `<Accepted/>` and receives `<ST_EN>`.
+2. **Room Kick:**
+   - Studio owner sends `<ST_KICK target="DisruptiveUser"/>`.
+   - Server broadcasts `<KICKED roomID="..." by="Owner"/>` to the target.
+   - Target is ejected back to the public Navigator / `$LOBBY$`.
 
 ---
 
 *Authored and verified for the Coke Music / Coke Studios Preservation Archive.*
-
-

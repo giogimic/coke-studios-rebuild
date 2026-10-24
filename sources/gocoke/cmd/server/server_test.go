@@ -259,3 +259,79 @@ func TestMessengerAndDecor(t *testing.T) {
 	rm.mu.RUnlock()
 }
 
+func TestCDBurnAndModeration(t *testing.T) {
+	srv := NewServer("./web", "127.0.0.1", "8080", nil)
+
+	// Ensure test user exists with initial balance
+	d, err := srv.store.GetOrCreateDenizen("DJMaster", "M", "def", "Beats")
+	if err != nil {
+		t.Fatalf("failed to create denizen: %v", err)
+	}
+	initialDB := d.Decibels
+
+	// 1. Test In-Game CD Burning HTTP API
+	reqBurn := httptest.NewRequest("POST", "/api/mixer/burn?user=DJMaster&title=Neon+Drive&edl=^50,danceOne_bass00{4,0{^", nil)
+	wBurn := httptest.NewRecorder()
+	srv.handleMixerBurn(wBurn, reqBurn)
+	if wBurn.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", wBurn.Code)
+	}
+	body := wBurn.Body.String()
+	if !strings.Contains(body, "Neon Drive") || !strings.Contains(body, `"catalog_item":89`) {
+		t.Errorf("unexpected burn response: %s", body)
+	}
+
+	// Verify balance deduction (-10 dB)
+	newDB, _, _ := srv.store.GetBalance("DJMaster")
+	if newDB != initialDB-10 {
+		t.Errorf("expected balance %d, got %d", initialDB-10, newDB)
+	}
+
+	// Verify backpack item was persisted
+	items, err := srv.store.GetBackpack("DJMaster")
+	if err != nil || len(items) == 0 {
+		t.Fatalf("expected burned CD in backpack, got %v (err: %v)", items, err)
+	}
+	foundCD := false
+	for _, it := range items {
+		if it.CatalogItemID == 89 && it.Properties["songName"] == "Neon Drive" {
+			foundCD = true
+			break
+		}
+	}
+	if !foundCD {
+		t.Errorf("expected catalog item 89 with songName Neon Drive in backpack")
+	}
+
+	// 2. Test Studio Moderation Kick
+	p1 := &Player{ID: "p_owner", ScreenName: "OwnerUser", RoomID: "studio_test"}
+	p2 := &Player{ID: "p_guest", ScreenName: "TrollUser", RoomID: "studio_test"}
+	room := srv.GetOrCreateRoom("studio_test")
+	room.mu.Lock()
+	room.Players[p1.ID] = p1
+	room.Players[p2.ID] = p2
+	room.mu.Unlock()
+
+	srv.mu.Lock()
+	srv.Players[p1.ID] = p1
+	srv.Players[p2.ID] = p2
+	srv.mu.Unlock()
+
+	kickXML := `<Room.Action roomID="studio_test"><ST_KICK target="TrollUser"/></Room.Action>`
+	srv.handlePlayerMessage(p1, kickXML)
+
+	room.mu.RLock()
+	if _, ok := room.Players[p2.ID]; ok {
+		t.Errorf("expected TrollUser to be removed from room.Players")
+	}
+	room.mu.RUnlock()
+
+	if p2.RoomID != "$LOBBY$" {
+		t.Errorf("expected kicked player RoomID to be $LOBBY$, got: %s", p2.RoomID)
+	}
+
+	// 3. Test Doorbell Knock
+	knockXML := `<Room.Action roomID="studio_test"><ST_KNOCK roomID="studio_test"/></Room.Action>`
+	srv.handlePlayerMessage(p2, knockXML)
+}
+

@@ -1798,14 +1798,32 @@
       const songTitle = prompt('Enter your track title:', 'Coke Anthem Vol. 1');
       if (!songTitle) return;
 
+      // Build authentic EDL from active tracks
+      const sound0 = (document.getElementById('sound-0') ? document.getElementById('sound-0').value : 'rockOne_beatz00.wav').replace('.wav', '');
+      const sound1 = (document.getElementById('sound-1') ? document.getElementById('sound-1').value : 'danceOne_bass00.wav').replace('.wav', '');
+      const sound2 = (document.getElementById('sound-2') ? document.getElementById('sound-2').value : 'rockOne_guitar00.wav').replace('.wav', '');
+      const sound3 = (document.getElementById('sound-3') ? document.getElementById('sound-3').value : 'misc_funkGuit00.wav').replace('.wav', '');
+      
+      const edl = `^50,${sound0}{2,0{4,4{^50,${sound1}{4,0{^50,${sound2}{2,0{4,4{^50,${sound3}{1,0{4,4{^`;
+
       try {
-        const resp = await fetch('/sf/gateway', {
+        const formData = new URLSearchParams();
+        formData.append('user', user);
+        formData.append('title', songTitle);
+        formData.append('edl', edl);
+
+        const resp = await fetch('/api/mixer/burn', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-amf' },
-          body: 'burnCD'
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: formData.toString()
         });
-        alert(`Success! "${songTitle}" was burned to CD and placed into ${user}'s in-game backpack! (10 Decibels deducted)`);
-        fetchBalance();
+        const data = await resp.json();
+        if (data.success) {
+          alert(`Success! "${songTitle}" (Item #${data.possession_id}) was burned to CD and placed into ${user}'s in-game backpack! (New balance: ${data.new_decibels} dB)`);
+          fetchBalance();
+        } else {
+          alert('Burn CD error: ' + (data.error || 'Unknown error'));
+        }
       } catch (e) {
         alert('Burned CD saved to character inventory!');
       }

@@ -223,7 +223,10 @@ func main() {
 	// 7. Studio Decor API
 	mux.HandleFunc("/api/studio/decor", srv.handleStudioDecor)
 
-	// 8. Health endpoint
+	// 8. In-Game CD Burning API
+	mux.HandleFunc("/api/mixer/burn", srv.handleMixerBurn)
+
+	// 9. Health endpoint
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintf(w, `{"status":"ok","mode":"standalone-server","project":"gocoke","storage":"%s"}`, srv.store.driver)
@@ -574,14 +577,34 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 		}
 
 	case strings.Contains(target, "burnCD"):
-		// Deduct 10 dB and mint a new playable CD (catalogItem 89) into backpack
-		_, _ = s.store.AdjustBalance("Adam", -10, 0)
-		cdProps := map[string]any{
-			"songName":  "Coke Anthem Reborn",
-			"ownerName": "DJ Adam",
-			"edl":       "^50,rockOne_guitar00{2,0{4,4{^50,danceOne_beatz00{4,0{^",
+		screenName := "Adam"
+		title := "Coke Beats Vol. 1"
+		edl := "^50,rockOne_guitar00{2,0{4,4{^50,danceOne_beatz00{4,0{^"
+		if arr, ok := bodyVal.([]any); ok {
+			if len(arr) > 0 {
+				if s, ok := arr[0].(string); ok && s != "" {
+					screenName = s
+				}
+			}
+			if len(arr) > 1 {
+				if s, ok := arr[1].(string); ok && s != "" {
+					title = s
+				}
+			}
+			if len(arr) > 2 {
+				if s, ok := arr[2].(string); ok && s != "" {
+					edl = s
+				}
+			}
 		}
-		newID, _ := s.store.AddBackpackItem("Adam", 89, cdProps)
+		// Deduct 10 dB and mint a new playable CD (catalogItem 89) into backpack
+		_, _ = s.store.AdjustBalance(screenName, -10, 0)
+		cdProps := map[string]any{
+			"songName":  title,
+			"ownerName": screenName,
+			"edl":       edl,
+		}
+		newID, _ := s.store.AddBackpackItem(screenName, 89, cdProps)
 		responseValue = map[string]any{
 			"success":     true,
 			"possession":  float64(newID),
@@ -1233,6 +1256,160 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		}
 		return
 	}
+
+	// --- In-Game CD Burning ---
+	if strings.Contains(xml, "<CD_BURN") {
+		title := extractAttr(xml, "title")
+		if title == "" {
+			title = "My Burned Beat"
+		}
+		edl := extractAttr(xml, "edl")
+		if edl == "" {
+			edl = "^50,rockOne_guitar00{2,0{4,4{^"
+		}
+		newDB, err := s.store.AdjustBalance(player.ScreenName, -10, 0)
+		if err == nil {
+			cdProps := map[string]any{
+				"songName":  title,
+				"ownerName": player.ScreenName,
+				"edl":       edl,
+			}
+			newID, _ := s.store.AddBackpackItem(player.ScreenName, 89, cdProps)
+			mintXML := fmt.Sprintf("<POS_MINT id=\"%d\" cid=\"89\" title=\"%s\" edl=\"%s\" db=\"%d\"/>",
+				newID, title, edl, newDB)
+			_ = player.Send(mintXML)
+			log.Printf("[MIXER] Player %s burned CD #%d (%q)", player.ScreenName, newID, title)
+		}
+		return
+	}
+
+	// --- Studio Doorbell Knock ---
+	if strings.Contains(xml, "<ST_KNOCK") {
+		roomID := extractAttr(xml, "roomID")
+		if roomID != "" {
+			room := s.GetOrCreateRoom(roomID)
+			knockXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><ST_KNOCK av=\"%s\"/></Room.Action>",
+				room.ID, player.ScreenName)
+			room.Broadcast(knockXML, player.ID)
+			log.Printf("[DOORBELL] %s knocked on room %s", player.ScreenName, roomID)
+		}
+		return
+	}
+
+	// --- Studio Doorbell Response (Admit / Deny) ---
+	if strings.Contains(xml, "<ST_KNOCK_RES") {
+		target := extractAttr(xml, "target")
+		allow := extractAttr(xml, "allow")
+		roomID := player.RoomID
+		if target != "" && roomID != "" {
+			s.mu.RLock()
+			for _, p := range s.Players {
+				if strings.EqualFold(p.ScreenName, target) {
+					if allow == "1" || allow == "true" {
+						_ = p.Send(fmt.Sprintf("<Accepted roomID=\"%s\"/>", roomID))
+					} else {
+						_ = p.Send("<Alert msg=\"The studio owner declined your knock.\"/>")
+					}
+					break
+				}
+			}
+			s.mu.RUnlock()
+		}
+		return
+	}
+
+	// --- Studio Moderation Kick ---
+	if strings.Contains(xml, "<ST_KICK") {
+		target := extractAttr(xml, "target")
+		roomID := player.RoomID
+		if target != "" && roomID != "" && roomID != "$LOBBY$" {
+			room := s.GetOrCreateRoom(roomID)
+			var kickedPlayer *Player
+			room.mu.Lock()
+			for pid, p := range room.Players {
+				if strings.EqualFold(p.ScreenName, target) {
+					kickedPlayer = p
+					delete(room.Players, pid)
+					break
+				}
+			}
+			room.mu.Unlock()
+
+			if kickedPlayer != nil {
+				kickedPlayer.RoomID = "$LOBBY$"
+				_ = kickedPlayer.Send(fmt.Sprintf("<KICKED roomID=\"%s\" by=\"%s\"/>", roomID, player.ScreenName))
+				rmXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV_RM av=\"%s\"/></Room.Action>", roomID, target)
+				room.Broadcast(rmXML, "")
+				log.Printf("[MODERATION] %s kicked %s from %s", player.ScreenName, target, roomID)
+			}
+		}
+		return
+	}
+}
+
+func (s *Server) handleMixerBurn(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	user := r.FormValue("user")
+	if user == "" {
+		user = r.URL.Query().Get("user")
+	}
+	if user == "" {
+		user = "Adam"
+	}
+	title := r.FormValue("title")
+	if title == "" {
+		title = r.URL.Query().Get("title")
+	}
+	if title == "" {
+		title = "My Coke Mix"
+	}
+	edl := r.FormValue("edl")
+	if edl == "" {
+		edl = r.URL.Query().Get("edl")
+	}
+	if edl == "" {
+		edl = "^50,rockOne_guitar00{2,0{4,4{^"
+	}
+
+	newDB, err := s.store.AdjustBalance(user, -10, 0)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+
+	cdProps := map[string]any{
+		"songName":  title,
+		"ownerName": user,
+		"edl":       edl,
+	}
+	newID, err := s.store.AddBackpackItem(user, 89, cdProps)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+
+	// Notify active user session in-game
+	s.mu.RLock()
+	for _, p := range s.Players {
+		if strings.EqualFold(p.ScreenName, user) {
+			mintXML := fmt.Sprintf("<POS_MINT id=\"%d\" cid=\"89\" title=\"%s\" edl=\"%s\" db=\"%d\"/>",
+				newID, title, edl, newDB)
+			_ = p.Send(mintXML)
+		}
+	}
+	s.mu.RUnlock()
+
+	json.NewEncoder(w).Encode(map[string]any{
+		"success":       true,
+		"possession_id": newID,
+		"catalog_item":  89,
+		"song_name":     title,
+		"owner":         user,
+		"edl":           edl,
+		"new_decibels":  newDB,
+	})
 }
 
 func (s *Server) notifyMessengerRecipient(to, from, message string) {
