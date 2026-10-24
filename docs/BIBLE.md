@@ -556,6 +556,61 @@ Studio owners can customize walls, flooring, and doorbell audio in real time:
    - Server broadcasts `<KICKED roomID="..." by="Owner"/>` to the target.
    - Target is ejected back to the public Navigator / `$LOBBY$`.
 
+### J. Authentic 5-Step Registration Pipeline & Figure String Syntax
+To replicate the 2002–2004 onboarding experience, player registration is structured as a 5-step wizard with atomic MariaDB transaction persistence:
+
+1. **Pipeline Flow:**
+   - **Step 1 (Account):** Screen Name (3–15 alphanumeric characters), bcrypt/SHA-256 hashed password, and COPPA age gate.
+   - **Step 2 (V-Ego Avatar):** Interactive 14-layer Sulake avatar builder emitting canonical figure strings:
+     ```
+     hr={style}/{hair_color}&hd={skin}/1&ey={eyes}/1&fc={face}/1&bd={skin}/1&lh={skin}/1&rh={skin}/1&ch={top}/{top_color}&ls={top_color}/1&rs={top_color}/1&lg={legs}/{legs_color}&sh={shoes}/{shoes_color}&g={gender}
+     ```
+   - **Step 3 (Studio Choice):** Selection of starting studio apartment (Studio Model A, B, C, D, or Rooftop). Pre-seeds room with starter furniture pack:
+     - 1x DJ Turntable Console (Item #42)
+     - 1x Coca-Cola Red Sofa (Item #45)
+     - 1x Vintage Coca-Cola Vending Machine (Item #52)
+     - 1x Burned Starter CD (Item #89)
+   - **Step 4 (Red Cap Promo Voucher):** Starting balance of 5,000 dB and 500 V-Coins. Voucher code `COKE-MUSIC-2026` grants +1,000 dB bonus and an exclusive Red Cap trophy item.
+   - **Step 5 (Session Issuance):** Generates `SW1` (Base64 handle) and `SW2` (cryptographic session token), authenticates via `/sf/ssldocs/loginDenizen.jsp`, and transitions directly into the game viewport.
+
+### K. Dual-Engine Client Architecture
+To support 100% of devices and browser environments without compatibility friction, the rebuild implements a Dual-Engine architecture:
+
+1. **Ebitengine WebAssembly Client (1:1 Director Fidelity):**
+   - Compiled from Go to WebAssembly (`main.wasm`, ~53 MB), rendering 60 FPS isometric dimetric tiles, animated sprite frames, and full Lingo cast members via WebGL.
+   - Preferred for desktop browsers desiring the exact 2002 pixel-art aesthetic and original cast sound playback.
+2. **CokePhase HTML5 Client (Instant Lightweight & Mobile):**
+   - High-performance HTML5 Canvas engine based on Isogenic Game Engine (`sources/cokephase`).
+   - Zero-WASM download overhead, instant boot time (<100ms), native touch controls, and dynamic chat bubbles.
+3. **Unified Ingress Selector:**
+   - Both engines run behind primary port `24902` with an in-browser runtime selector and pop-out window capabilities.
+
+### L. Multi-Root Asset Cascade & Universal Sound Prefix Resolution
+Browser requests for historical Shockwave/Director assets frequently encounter path and naming disparities. The server resolves these via two core mechanisms:
+
+1. **URI Path Decoding:**
+   - Inbound HTTP request pathnames are decoded (`decodeURIComponent`) before filesystem resolution, preventing 404 errors on Lingo scripts with encoded spaces (e.g., `36_roomlist%20script.ls` -> `36_roomlist script.ls`) and array brackets (`cc_catalogue%5B1%5D` -> `cc_catalogue[1]`).
+2. **Multi-Root Cascade:**
+   - Ingress checks assets across three prioritized directory roots:
+     $$\text{tools/portal/assets} \longrightarrow \text{sources/cokephase/assets} \longrightarrow \text{sources/gocoke/web/assets}$$
+3. **Universal Sound Prefix Resolver:**
+   - Historical Director sound cast members on disk are prefixed with numeric indices (e.g. `62_rockOne_beatz00.wav`, `100_minus_1t1.wav`), whereas web audio sequencers and client scripts request canonical names (`rockOne_beatz00.wav`).
+   - The server maintains a normalized index mapping `strings.TrimPrefix(filename, "[0-9]+_")`. Any request to `/sounds/`, `/soundlibrary/`, `/Lingo/soundlibrary/`, or `/assets/soundlibrary/` automatically resolves to the correct underlying WAV file on disk.
+
+### M. Authentic Portal Minigames & V-Ego Messenger Bridge
+Beyond the isometric rooms, the portal integrates authentic mini-experiences that tie into the persistent player economy:
+
+1. **Pop Quiz Trivia (`tab-popquiz`):**
+   - Daily 2000s pop culture and Coke Music trivia.
+   - Correct answers trigger cheer audio (`misc_vocal00.wav`) and award +100 Decibels directly to the player's wallet via `/api/denizen/update`.
+2. **Musical Postcard Sender (`tab-postcard`):**
+   - Vintage greeting card composer allowing players to select 120 BPM genre music loops, write personalized messages, and dispatch cards directly to friends.
+   - Bridges to the V-Ego Messenger API (`/api/messenger/send`), delivering persistent postcard messages to the recipient's in-game inbox.
+3. **Ask Max Mascot & Safety Rules (`tab-safety`):**
+   - Preserves the classic animated Max mascot (`ask-max.gif`), offering guidance on DJ battles, room decorating, and safety guidelines.
+4. **Vintage Downloads Gallery (`tab-downloads`):**
+   - Curated gallery of original Coke Studios desktop wallpapers (`land_pic01.gif`, `land_pic02.gif`, `land_pic03.gif`) and audio packs.
+
 ---
 
 *Authored and verified for the Coke Music / Coke Studios Preservation Archive.*
