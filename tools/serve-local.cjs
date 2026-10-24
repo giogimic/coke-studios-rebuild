@@ -31,6 +31,11 @@ const mime = {
 const roomTypes = ['studio_model_b','studio_model_c','studio_model_a','studio_model_d','studio_model_rooftop','studio_wayne','pokemon'];
 const roomNames = ['Studio #1','Studio #2','Studio #3','Studio #4','Rooftop Studio','Studio Wayne','Pokemon'];
 
+const DEFAULT_PORT = parseInt(process.env.PORT || '24902', 10);
+const BACKEND_PORT = parseInt(process.env.BACKEND_PORT || '8080', 10);
+const COKEPHASE_PORT = parseInt(process.env.COKEPHASE_PORT || '8081', 10);
+const MUSICMIXER_PORT = parseInt(process.env.MUSICMIXER_PORT || '8082', 10);
+
 function send(res, status, body, type = 'text/plain; charset=utf-8') {
   res.writeHead(status, {
     'Content-Type': type,
@@ -82,7 +87,7 @@ function makeServer(project) {
       if (project === 'portal' && (url.pathname.startsWith('/sf/') || url.pathname.startsWith('/api/'))) {
         const proxyReq = http.request({
           hostname: '127.0.0.1',
-          port: 8080,
+          port: BACKEND_PORT,
           path: req.url,
           method: req.method,
           headers: req.headers
@@ -91,7 +96,7 @@ function makeServer(project) {
           proxyRes.pipe(res);
         });
         proxyReq.on('error', () => {
-          send(res, 502, 'Game server backend is offline (check port 8080)');
+          send(res, 502, `Game server backend is offline (check port ${BACKEND_PORT})`);
         });
         req.pipe(proxyReq);
         return;
@@ -229,8 +234,8 @@ if (require.main === module) {
     if (!isWin) {
       try { fsSync.chmodSync(binPath, 0o755); } catch (_) {}
     }
-    console.log(`Starting native Go backend on port 8080 (${binName})...`);
-    cokeChild = spawn(binPath, ['-addr', '127.0.0.1:8080', '-root', webDir], {
+    console.log(`Starting native Go backend on port ${BACKEND_PORT} (${binName})...`);
+    cokeChild = spawn(binPath, ['-addr', `127.0.0.1:${BACKEND_PORT}`, '-root', webDir], {
       stdio: ['ignore', 'inherit', 'inherit']
     });
     cokeChild.on('error', err => {
@@ -240,18 +245,17 @@ if (require.main === module) {
       if (code !== null && code !== 0) console.warn(`coke-server exited with code ${code}`);
     });
   } else {
-    console.warn(`[WARN] Native ${binName} not found, falling back to static preview on port 8080.`);
+    console.warn(`[WARN] Native ${binName} not found, falling back to static preview on port ${BACKEND_PORT}.`);
     const gocokeServer = makeServer('gocoke');
-    gocokeServer.listen(8080, '127.0.0.1', () => console.log('gocoke: http://127.0.0.1:8080/'));
+    gocokeServer.listen(BACKEND_PORT, '127.0.0.1', () => console.log('gocoke: http://127.0.0.1:' + BACKEND_PORT + '/'));
     servers.push(gocokeServer);
   }
 
-  // Node servers: Portal defaults to port 24902, plus secondary ports 8081 and 8082
-  const DEFAULT_PORT = parseInt(process.env.PORT || '24902', 10);
+  // Node servers: Portal defaults to port 24902, plus secondary ports
   const nodeConfigs = [
     ['portal', DEFAULT_PORT],
-    ['cokephase', 8081],
-    ['musicmixer', 8082]
+    ['cokephase', COKEPHASE_PORT],
+    ['musicmixer', MUSICMIXER_PORT]
   ];
 
   for (const [name, port] of nodeConfigs) {
@@ -264,7 +268,7 @@ if (require.main === module) {
     if (name === 'portal') {
       s.on('upgrade', (req, socket, head) => {
         if (req.url && req.url.startsWith('/ws/realtime')) {
-          const proxySocket = net.connect(8080, '127.0.0.1', () => {
+          const proxySocket = net.connect(BACKEND_PORT, '127.0.0.1', () => {
             proxySocket.write(`${req.method} ${req.url} HTTP/1.1\r\n`);
             for (let i = 0; i < req.rawHeaders.length; i += 2) {
               proxySocket.write(`${req.rawHeaders[i]}: ${req.rawHeaders[i+1]}\r\n`);

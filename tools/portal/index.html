@@ -877,6 +877,175 @@
     .btn-avatar-secondary:hover {
       background: #ffe680;
     }
+    /* --- PAGE: MESSENGER (V-EGO CONSOLE) --- */
+    .messenger-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+    }
+    .messenger-card {
+      background: #ffffff;
+      border: 2px solid #7d0000;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    .messenger-header {
+      background: linear-gradient(180deg, #e41e2b 0%, #aa000d 100%);
+      color: #fff;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: bold;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #ffcc00;
+    }
+    .messenger-friends-list {
+      list-style: none;
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 8px;
+    }
+    .messenger-friend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.15s;
+    }
+    .messenger-friend-item:hover {
+      background: #fff8ee;
+    }
+    .status-dot-sm {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-online { background: #00e676; box-shadow: 0 0 5px #00e676; }
+    .status-offline { background: #aaa; }
+    .friend-info { flex: 1; min-width: 0; }
+    .friend-name { font-weight: bold; font-size: 12px; color: #222; }
+    .friend-mission { font-size: 11px; color: #777; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .btn-msg-rm {
+      background: #eee;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      color: #777;
+      padding: 2px 6px;
+      font-size: 10px;
+      cursor: pointer;
+    }
+    .btn-msg-rm:hover { background: #e41e2b; color: #fff; border-color: #aa000d; }
+
+    .messenger-inbox-list {
+      list-style: none;
+      flex: 1;
+      min-height: 250px;
+      max-height: 350px;
+      overflow-y: auto;
+      padding: 12px;
+      background: #fdfdfd;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .msg-bubble {
+      background: #f1f3f4;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      position: relative;
+    }
+    .msg-bubble.from-me {
+      background: #fff1f2;
+      border-color: #ffccd0;
+      align-self: flex-end;
+      max-width: 80%;
+    }
+    .msg-sender {
+      font-weight: bold;
+      color: #c4000b;
+      margin-bottom: 3px;
+    }
+    .msg-time {
+      font-size: 10px;
+      color: #999;
+      margin-left: 8px;
+      font-weight: normal;
+    }
+    .msg-compose-bar {
+      padding: 12px;
+      background: #f8f9fa;
+      border-top: 1px solid #ddd;
+      display: flex;
+      gap: 8px;
+    }
+
+    /* --- PAGE: STUDIO DECOR --- */
+    .decor-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .decor-swatches-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .decor-swatch-item {
+      border: 3px solid #ccc;
+      border-radius: 6px;
+      height: 60px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 4px;
+      font-size: 10px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 1px 1px 2px #000;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .decor-swatch-item:hover {
+      transform: scale(1.05);
+      border-color: #ffcc00;
+    }
+    .decor-swatch-item.active {
+      border-color: #e41e2b;
+      box-shadow: 0 0 8px rgba(228, 30, 43, 0.6);
+      transform: scale(1.05);
+    }
+    .decor-preview-stage {
+      height: 180px;
+      border: 3px solid #7d0000;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .decor-stage-wall {
+      flex: 1;
+      transition: background 0.2s;
+    }
+    .decor-stage-floor {
+      height: 60px;
+      transition: background 0.2s;
+      border-top: 2px solid rgba(0,0,0,0.3);
+    }
 
     /* Footer */
     .mycoke-footer {
@@ -938,6 +1107,12 @@
       </div>
       <div class="nav-tab" onclick="switchTab('mixer')">
         <span class="nav-tab-icon">&#9836;</span> Music Mixer
+      </div>
+      <div class="nav-tab" onclick="switchTab('messenger')">
+        <span class="nav-tab-icon">&#9993;</span> Messenger
+      </div>
+      <div class="nav-tab" onclick="switchTab('decor')">
+        <span class="nav-tab-icon">&#128396;</span> Studio Decor
       </div>
       <div class="nav-tab" onclick="switchTab('redcaps')">
         <span class="nav-tab-icon">&#127860;</span> Red Caps Code
@@ -1307,6 +1482,102 @@
               <p style="font-size: 12px; color: #666; margin: 6px 0 12px 0;">Player personal studio model with sofa, machine, and DJ decks.</p>
               <button class="studio-pill active" onclick="switchStudio('studio_1', 'Private Studio #1'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: MESSENGER (V-EGO CONSOLE) -->
+      <section id="tab-messenger" class="tab-page">
+        <div class="messenger-layout">
+          <!-- Friends Column -->
+          <div class="messenger-card">
+            <div class="messenger-header">
+              <span>&#128101; Friends List</span>
+              <button class="btn-vp" style="padding: 2px 8px; font-size: 10px;" onclick="loadMessenger()">Refresh</button>
+            </div>
+            <ul id="messengerFriendsList" class="messenger-friends-list">
+              <li style="padding: 15px; text-align: center; color: #888; font-size: 12px;">Loading friends...</li>
+            </ul>
+            <div style="padding: 10px; border-top: 1px solid #eee; background: #fafafa;">
+              <div style="display: flex; gap: 6px;">
+                <input type="text" id="addFriendInput" placeholder="Friend Screen Name..." style="flex: 1; padding: 6px 10px; font-size: 11px; border: 1px solid #ccc; border-radius: 4px;">
+                <button class="btn-vp" onclick="addMessengerFriend()">+ Add</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Messages Column -->
+          <div class="messenger-card">
+            <div class="messenger-header">
+              <span>&#9993; V-Ego Instant Messenger</span>
+              <span id="messengerTargetLabel" style="font-size: 11px; font-weight: normal; color: #ffe6e6;">Chat with Friends</span>
+            </div>
+            <ul id="messengerInboxList" class="messenger-inbox-list">
+              <li style="padding: 20px; text-align: center; color: #888; font-size: 12px;">Select a friend or send a message below to start chatting!</li>
+            </ul>
+            <div class="msg-compose-bar">
+              <input type="text" id="msgRecipientInput" placeholder="Recipient..." style="width: 140px; padding: 8px 12px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px;">
+              <input type="text" id="msgContentInput" placeholder="Type your message..." style="flex: 1; padding: 8px 12px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px;" onkeypress="if(event.key==='Enter')sendMessengerMessage()">
+              <button class="btn-vp" style="padding: 8px 16px; font-size: 12px;" onclick="sendMessengerMessage()">Send</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: STUDIO DECORATOR -->
+      <section id="tab-decor" class="tab-page">
+        <div style="background: #fff; padding: 20px; border: 2px solid #7d0000; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 2px solid #ffcc00; padding-bottom: 10px;">
+            <div>
+              <h2 style="color: #7d0000; text-transform: uppercase; font-size: 18px;">Studio Decorator &amp; Ambiance</h2>
+              <p style="font-size: 12px; color: #666;">Customize the wallpaper, flooring, and doorbell chimes for your private studio.</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label style="font-size: 12px; font-weight: bold; color: #333;">Select Studio:</label>
+              <select id="decorStudioSelect" style="padding: 6px 10px; font-size: 12px; font-weight: bold; border: 1px solid #7d0000; border-radius: 4px;" onchange="loadStudioDecorSettings()">
+                <option value="studio_1">Private Studio #1 (studio_1)</option>
+                <option value="VIS$0">Central Park Studio (VIS$0)</option>
+                <option value="VIS$1">San Francisco Studio (VIS$1)</option>
+                <option value="VIS$2">London Studio (VIS$2)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Preview Stage -->
+          <div style="margin-bottom: 20px;">
+            <div style="font-size: 12px; font-weight: bold; color: #444; margin-bottom: 6px;">Live Visual Preview:</div>
+            <div class="decor-preview-stage">
+              <div id="decorStageWall" class="decor-stage-wall" style="background: #e41e2b;"></div>
+              <div id="decorStageFloor" class="decor-stage-floor" style="background: #8b5a2b;"></div>
+            </div>
+          </div>
+
+          <div class="decor-layout">
+            <!-- Wallpaper Chooser -->
+            <div>
+              <h4 style="color: #c4000b; font-size: 13px; text-transform: uppercase;">1. Wallpaper Patterns</h4>
+              <div id="wallpaperSwatches" class="decor-swatches-grid"></div>
+            </div>
+
+            <!-- Flooring Chooser -->
+            <div>
+              <h4 style="color: #c4000b; font-size: 13px; text-transform: uppercase;">2. Flooring Patterns</h4>
+              <div id="flooringSwatches" class="decor-swatches-grid"></div>
+            </div>
+          </div>
+
+          <!-- Doorbell Chime & Apply Bar -->
+          <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <label style="font-size: 13px; font-weight: bold; color: #333;">3. Doorbell Chime:</label>
+              <select id="decorDoorbellSelect" style="padding: 8px 12px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px;">
+                <option value="1">Classic Two-Tone Ding-Dong</option>
+                <option value="2">80s Synthesizer Chime</option>
+                <option value="3">Retro Coca-Cola 5-Note Jingle</option>
+                <option value="4">Club Airhorn</option>
+              </select>
+            </div>
+            <button class="btn-avatar-primary" style="padding: 10px 24px;" onclick="applyStudioDecor()">&#10003; Save &amp; Apply Decor to Studio</button>
           </div>
         </div>
       </section>
@@ -1968,11 +2239,246 @@
       renderAvatar();
     }
 
+    // =========================================================================
+    // V-Ego Messenger & Social Systems
+    // =========================================================================
+    async function loadMessenger() {
+      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      try {
+        const res = await fetch('/api/messenger/friends?user=' + encodeURIComponent(user));
+        if (res.ok) {
+          const data = await res.json();
+          const list = document.getElementById('messengerFriendsList');
+          if (data.friends && data.friends.length > 0) {
+            list.innerHTML = '';
+            data.friends.forEach(f => {
+              const li = document.createElement('li');
+              li.className = 'messenger-friend-item';
+              li.onclick = () => selectMessengerFriend(f.screen_name);
+              li.innerHTML = `
+                <div class="status-dot-sm ${f.online ? 'status-online' : 'status-offline'}"></div>
+                <div class="friend-info">
+                  <div class="friend-name">${escapeHtml(f.screen_name)}</div>
+                  <div class="friend-mission">${escapeHtml(f.mission || 'Coke Music Reborn')}</div>
+                </div>
+                <button class="btn-msg-rm" onclick="event.stopPropagation(); removeMessengerFriend('${escapeHtml(f.screen_name)}')" title="Remove">&times;</button>
+              `;
+              list.appendChild(li);
+            });
+          } else {
+            list.innerHTML = '<li style="padding: 15px; text-align: center; color: #888; font-size: 11px;">No friends on list yet.<br>Add someone below!</li>';
+          }
+        }
+      } catch (e) {}
+
+      // Load inbox messages
+      try {
+        const resMsg = await fetch('/api/messenger/messages?user=' + encodeURIComponent(user));
+        if (resMsg.ok) {
+          const dataMsg = await resMsg.json();
+          const inbox = document.getElementById('messengerInboxList');
+          if (dataMsg.messages && dataMsg.messages.length > 0) {
+            inbox.innerHTML = '';
+            dataMsg.messages.forEach(m => {
+              const li = document.createElement('li');
+              const isMine = m.sender_name.toLowerCase() === user.toLowerCase();
+              li.className = 'msg-bubble ' + (isMine ? 'from-me' : '');
+              li.innerHTML = `
+                <div class="msg-sender">${escapeHtml(m.sender_name)} <span class="msg-time">${m.sent_at || ''}</span></div>
+                <div class="msg-text">${escapeHtml(m.message)}</div>
+              `;
+              inbox.appendChild(li);
+            });
+            inbox.scrollTop = inbox.scrollHeight;
+          }
+        }
+      } catch (e) {}
+    }
+
+    function selectMessengerFriend(name) {
+      document.getElementById('msgRecipientInput').value = name;
+      document.getElementById('messengerTargetLabel').textContent = 'Chat with ' + name;
+      document.getElementById('msgContentInput').focus();
+    }
+
+    async function sendMessengerMessage() {
+      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const to = document.getElementById('msgRecipientInput').value.trim();
+      const msg = document.getElementById('msgContentInput').value.trim();
+      if (!to || !msg) return;
+
+      try {
+        const formData = new URLSearchParams();
+        formData.append('user', user);
+        formData.append('to', to);
+        formData.append('message', msg);
+        const res = await fetch('/api/messenger/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: formData.toString()
+        });
+        if (res.ok) {
+          document.getElementById('msgContentInput').value = '';
+          loadMessenger();
+        }
+      } catch (e) {}
+    }
+
+    async function addMessengerFriend() {
+      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const friend = document.getElementById('addFriendInput').value.trim();
+      if (!friend) return;
+      try {
+        const formData = new URLSearchParams();
+        formData.append('user', user);
+        formData.append('friend', friend);
+        const res = await fetch('/api/messenger/friend/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: formData.toString()
+        });
+        if (res.ok) {
+          document.getElementById('addFriendInput').value = '';
+          loadMessenger();
+        }
+      } catch (e) {}
+    }
+
+    async function removeMessengerFriend(friend) {
+      if (!confirm(`Are you sure you want to remove ${friend} from your friends?`)) return;
+      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      try {
+        const formData = new URLSearchParams();
+        formData.append('user', user);
+        formData.append('friend', friend);
+        const res = await fetch('/api/messenger/friend/remove', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: formData.toString()
+        });
+        if (res.ok) {
+          loadMessenger();
+        }
+      } catch (e) {}
+    }
+
+    function escapeHtml(str) {
+      return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // =========================================================================
+    // Studio Decorator System
+    // =========================================================================
+    const WALLPAPERS = [
+      { id: 1, name: 'Coke Red', color: 'linear-gradient(135deg, #e41e2b 0%, #8b0000 100%)' },
+      { id: 2, name: 'Night Club', color: 'linear-gradient(135deg, #1f1c2c 0%, #928dab 100%)' },
+      { id: 3, name: 'Woodgrain', color: 'linear-gradient(135deg, #8B5A2B 0%, #5C3A21 100%)' },
+      { id: 4, name: 'Brick Loft', color: 'linear-gradient(135deg, #b22222 0%, #551111 100%)' },
+      { id: 5, name: 'Neon Cyber', color: 'linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)' },
+      { id: 6, name: 'Teal Lounge', color: 'linear-gradient(135deg, #008080 0%, #004d4d 100%)' },
+      { id: 7, name: 'Sunset Vibe', color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
+      { id: 8, name: 'Velvet Purple', color: 'linear-gradient(135deg, #662d91 0%, #311b92 100%)' },
+      { id: 9, name: 'Retro Orange', color: 'linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%)' },
+      { id: 10, name: 'Golden VIP', color: 'linear-gradient(135deg, #f7971e 0%, #ffd200 100%)' }
+    ];
+
+    const FLOORINGS = [
+      { id: 1, name: 'Oak Wood', color: '#8b5a2b' },
+      { id: 2, name: 'Dance Neon', color: 'radial-gradient(circle, #ff007f 10%, #111111 90%)' },
+      { id: 3, name: 'Red Carpet', color: '#990000' },
+      { id: 4, name: 'Checkerboard', color: 'repeating-conic-gradient(#222 0% 25%, #eee 0% 50%) 50% / 20px 20px' },
+      { id: 5, name: 'Parquet', color: '#d2a679' },
+      { id: 6, name: 'Blue Mosaic', color: '#1e3c72' },
+      { id: 7, name: 'Steel Grid', color: '#555555' },
+      { id: 8, name: 'Linoleum', color: '#e8e8e8' },
+      { id: 9, name: 'Disco Tiles', color: 'linear-gradient(45deg, #ff00cc, #333399)' },
+      { id: 10, name: 'Studio Grey', color: '#333333' }
+    ];
+
+    let currentDecor = { wallpaper: 1, floor: 1, doorbell: 1 };
+
+    function initStudioDecorSwatches() {
+      const wallContainer = document.getElementById('wallpaperSwatches');
+      if (wallContainer) {
+        wallContainer.innerHTML = '';
+        WALLPAPERS.forEach(w => {
+          const div = document.createElement('div');
+          div.className = 'decor-swatch-item ' + (w.id === currentDecor.wallpaper ? 'active' : '');
+          div.style.background = w.color;
+          div.textContent = w.name;
+          div.onclick = () => selectWallpaper(w.id);
+          wallContainer.appendChild(div);
+        });
+      }
+
+      const floorContainer = document.getElementById('flooringSwatches');
+      if (floorContainer) {
+        floorContainer.innerHTML = '';
+        FLOORINGS.forEach(f => {
+          const div = document.createElement('div');
+          div.className = 'decor-swatch-item ' + (f.id === currentDecor.floor ? 'active' : '');
+          div.style.background = f.color;
+          div.textContent = f.name;
+          div.onclick = () => selectFlooring(f.id);
+          floorContainer.appendChild(div);
+        });
+      }
+      updateDecorPreview();
+    }
+
+    function selectWallpaper(id) {
+      currentDecor.wallpaper = id;
+      initStudioDecorSwatches();
+    }
+
+    function selectFlooring(id) {
+      currentDecor.floor = id;
+      initStudioDecorSwatches();
+    }
+
+    function updateDecorPreview() {
+      const wall = WALLPAPERS.find(w => w.id === currentDecor.wallpaper) || WALLPAPERS[0];
+      const floor = FLOORINGS.find(f => f.id === currentDecor.floor) || FLOORINGS[0];
+      const stageWall = document.getElementById('decorStageWall');
+      const stageFloor = document.getElementById('decorStageFloor');
+      if (stageWall) stageWall.style.background = wall.color;
+      if (stageFloor) stageFloor.style.background = floor.color;
+    }
+
+    async function applyStudioDecor() {
+      const studioId = document.getElementById('decorStudioSelect').value;
+      const doorbell = parseInt(document.getElementById('decorDoorbellSelect').value, 10) || 1;
+      currentDecor.doorbell = doorbell;
+
+      try {
+        const formData = new URLSearchParams();
+        formData.append('studioId', studioId);
+        formData.append('wallpaper', currentDecor.wallpaper);
+        formData.append('floor', currentDecor.floor);
+        formData.append('doorbell', currentDecor.doorbell);
+
+        const res = await fetch('/api/studio/decor', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: formData.toString()
+        });
+        if (res.ok) {
+          alert(`Successfully applied wallpaper #${currentDecor.wallpaper}, flooring #${currentDecor.floor}, and doorbell #${currentDecor.doorbell} to ${studioId}!`);
+        }
+      } catch (e) {
+        alert('Decor apply error: ' + e);
+      }
+    }
+
     // Initialize
     window.addEventListener('DOMContentLoaded', () => {
       initSkinSwatches();
       loadDenizenProfile();
       initSequencerUI();
+      loadMessenger();
+      initStudioDecorSwatches();
+      // Auto-poll messenger updates every 15 seconds
+      setInterval(loadMessenger, 15000);
       // Pre-cache primary preview sounds
       ['rockOne_beatz00.wav', 'danceOne_bass00.wav', 'misc_funkGuit00.wav'].forEach(loadSound);
     });

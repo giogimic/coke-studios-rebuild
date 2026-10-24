@@ -64,6 +64,25 @@ type PlacedFurniRecord struct {
 	Properties    map[string]any
 }
 
+type FriendRecord struct {
+	ScreenName string `json:"screen_name"`
+	Gender     int    `json:"gender"`
+	Mission    string `json:"mission"`
+	AvatarDef  string `json:"avatar_def"`
+	Online     bool   `json:"online"`
+	LastSeenIn string `json:"last_seen_in"`
+	Status     string `json:"status"`
+}
+
+type MessageRecord struct {
+	ID            int       `json:"id"`
+	SenderName    string    `json:"sender"`
+	RecipientName string    `json:"recipient"`
+	Message       string    `json:"message"`
+	SentAt        time.Time `json:"sent_at"`
+	IsRead        bool      `json:"is_read"`
+}
+
 type Store struct {
 	db     *sql.DB
 	driver string // "sqlite" or "mysql"
@@ -203,6 +222,23 @@ func (s *Store) migrate() error {
 				redeemed_by VARCHAR(64),
 				redeemed_at TIMESTAMP NULL
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+			`CREATE TABLE IF NOT EXISTS messenger_friends (
+				denizen_id VARCHAR(64) NOT NULL,
+				friend_id VARCHAR(64) NOT NULL,
+				status VARCHAR(32) NOT NULL DEFAULT 'accepted',
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+				PRIMARY KEY (denizen_id, friend_id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+			`CREATE TABLE IF NOT EXISTS messenger_messages (
+				id INT AUTO_INCREMENT PRIMARY KEY,
+				sender_name VARCHAR(64) NOT NULL,
+				recipient_name VARCHAR(64) NOT NULL,
+				message TEXT NOT NULL,
+				sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+				is_read TINYINT(1) DEFAULT 0
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
 		}
 	} else {
 		queries = []string{
@@ -270,6 +306,23 @@ func (s *Store) migrate() error {
 				reward_item_id INTEGER DEFAULT 0,
 				redeemed_by TEXT,
 				redeemed_at TIMESTAMP
+			);`,
+
+			`CREATE TABLE IF NOT EXISTS messenger_friends (
+				denizen_id TEXT NOT NULL,
+				friend_id TEXT NOT NULL,
+				status TEXT NOT NULL DEFAULT 'accepted',
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+				PRIMARY KEY (denizen_id, friend_id)
+			);`,
+
+			`CREATE TABLE IF NOT EXISTS messenger_messages (
+				id INTEGER PRIMARY KEY AUTOINCREMENT,
+				sender_name TEXT NOT NULL,
+				recipient_name TEXT NOT NULL,
+				message TEXT NOT NULL,
+				sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+				is_read BOOLEAN DEFAULT 0
 			);`,
 		}
 	}
@@ -648,3 +701,127 @@ func (s *Store) GetStudios() ([]StudioRecord, error) {
 	}
 	return list, nil
 }
+
+func (s *Store) GetFriends(screenName string) ([]FriendRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var denizenID string
+	err := s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&denizenID)
+	if err != nil {
+		return nil, err
+	}
+
+	query := `SELECT d.screen_name, d.gender, d.mission, d.avatar_def, d.last_seen_in, mf.status
+		FROM messenger_friends mf
+		JOIN denizens d ON d.id = mf.friend_id
+		WHERE mf.denizen_id = ?
+		ORDER BY d.screen_name ASC`
+	rows, err := s.db.Query(query, denizenID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var friends []FriendRecord
+	for rows.Next() {
+		var f FriendRecord
+		if err := rows.Scan(&f.ScreenName, &f.Gender, &f.Mission, &f.AvatarDef, &f.LastSeenIn, &f.Status); err == nil {
+			f.Online = true
+			friends = append(friends, f)
+		}
+	}
+	return friends, nil
+}
+
+func (s *Store) AddFriend(user1, user2 string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var id1, id2 string
+	_ = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(user1)).Scan(&id1)
+	_ = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(user2)).Scan(&id2)
+	if id1 == "" || id2 == "" || id1 == id2 {
+		return fmt.Errorf("invalid friend users")
+	}
+
+	q1 := "INSERT OR IGNORE INTO messenger_friends (denizen_id, friend_id, status) VALUES (?, ?, 'accepted')"
+	q2 := "INSERT OR IGNORE INTO messenger_friends (denizen_id, friend_id, status) VALUES (?, ?, 'accepted')"
+	if s.driver == "mysql" {
+		q1 = "INSERT IGNORE INTO messenger_friends (denizen_id, friend_id, status) VALUES (?, ?, 'accepted')"
+		q2 = "INSERT IGNORE INTO messenger_friends (denizen_id, friend_id, status) VALUES (?, ?, 'accepted')"
+	}
+	_, _ = s.db.Exec(q1, id1, id2)
+	_, _ = s.db.Exec(q2, id2, id1)
+	return nil
+}
+
+func (s *Store) RemoveFriend(user1, user2 string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var id1, id2 string
+	_ = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(user1)).Scan(&id1)
+	_ = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(user2)).Scan(&id2)
+	if id1 == "" || id2 == "" {
+		return nil
+	}
+	_, _ = s.db.Exec("DELETE FROM messenger_friends WHERE (denizen_id = ? AND friend_id = ?) OR (denizen_id = ? AND friend_id = ?)",
+		id1, id2, id2, id1)
+	return nil
+}
+
+func (s *Store) SendMessage(sender, recipient, message string) (int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	res, err := s.db.Exec("INSERT INTO messenger_messages (sender_name, recipient_name, message) VALUES (?, ?, ?)",
+		strings.TrimSpace(sender), strings.TrimSpace(recipient), message)
+	if err != nil {
+		return 0, err
+	}
+	lid, _ := res.LastInsertId()
+	return int(lid), nil
+}
+
+func (s *Store) GetMessages(recipient string, unreadOnly bool) ([]MessageRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	query := "SELECT id, sender_name, recipient_name, message, sent_at, is_read FROM messenger_messages WHERE LOWER(recipient_name) = LOWER(?)"
+	if unreadOnly {
+		query += " AND is_read = 0"
+	}
+	query += " ORDER BY id DESC"
+
+	rows, err := s.db.Query(query, strings.TrimSpace(recipient))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var msgs []MessageRecord
+	for rows.Next() {
+		var m MessageRecord
+		if err := rows.Scan(&m.ID, &m.SenderName, &m.RecipientName, &m.Message, &m.SentAt, &m.IsRead); err == nil {
+			msgs = append(msgs, m)
+		}
+	}
+	return msgs, nil
+}
+
+func (s *Store) MarkMessageRead(messageID int) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	_, err := s.db.Exec("UPDATE messenger_messages SET is_read = 1 WHERE id = ?", messageID)
+	return err
+}
+
+func (s *Store) UpdateStudioDecor(studioID string, wallpaper, floor, doorbell int) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	query := "UPDATE studios SET wallpaper = ?, floor = ?, doorbell = ? WHERE id = ?"
+	_, err := s.db.Exec(query, wallpaper, floor, doorbell, studioID)
+	return err
+}
+

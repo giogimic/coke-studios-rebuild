@@ -75,6 +75,9 @@ type Room struct {
 	ID          string
 	Name        string
 	Layout      int
+	Wallpaper   int
+	Floor       int
+	Doorbell    int
 	mu          sync.RWMutex
 	Players     map[string]*Player
 	Performance *PerformanceSession
@@ -82,10 +85,13 @@ type Room struct {
 
 func NewRoom(id, name string, layout int) *Room {
 	return &Room{
-		ID:      id,
-		Name:    name,
-		Layout:  layout,
-		Players: make(map[string]*Player),
+		ID:        id,
+		Name:      name,
+		Layout:    layout,
+		Wallpaper: 1,
+		Floor:     1,
+		Doorbell:  1,
+		Players:   make(map[string]*Player),
 	}
 }
 
@@ -133,7 +139,11 @@ func NewServer(webRoot, host, port string, store *Store) *Server {
 	s.Rooms["$LOBBY$"] = NewRoom("$LOBBY$", "Lobby", 0)
 	studios, _ := store.GetStudios()
 	for _, st := range studios {
-		s.Rooms[st.ID] = NewRoom(st.ID, st.Name, st.Layout)
+		r := NewRoom(st.ID, st.Name, st.Layout)
+		r.Wallpaper = st.Wallpaper
+		r.Floor = st.Floor
+		r.Doorbell = st.Doorbell
+		s.Rooms[st.ID] = r
 	}
 
 	return s
@@ -203,7 +213,17 @@ func main() {
 	mux.HandleFunc("/api/denizen/update", srv.handleUpdateDenizen)
 	mux.HandleFunc("/sf/ssldocs/updateDenizen.jsp", srv.handleUpdateDenizen)
 
-	// 6. Health endpoint
+	// 6. Messenger & Social APIs
+	mux.HandleFunc("/api/messenger/friends", srv.handleMessengerFriends)
+	mux.HandleFunc("/api/messenger/send", srv.handleMessengerSend)
+	mux.HandleFunc("/api/messenger/messages", srv.handleMessengerMessages)
+	mux.HandleFunc("/api/messenger/friend/add", srv.handleMessengerAddFriend)
+	mux.HandleFunc("/api/messenger/friend/remove", srv.handleMessengerRemoveFriend)
+
+	// 7. Studio Decor API
+	mux.HandleFunc("/api/studio/decor", srv.handleStudioDecor)
+
+	// 8. Health endpoint
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintf(w, `{"status":"ok","mode":"standalone-server","project":"gocoke","storage":"%s"}`, srv.store.driver)
@@ -466,7 +486,7 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	target, respURI, err := amf.ParseRemotingTarget(body)
+	target, respURI, bodyVal, err := amf.ParseRemotingMessage(body)
 	if err != nil {
 		log.Printf("[AMF] Parse target error: %v", err)
 		target = "unknown"
@@ -493,7 +513,7 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 		responseValue = float64(decibels)
 
 	case strings.Contains(target, "getBackpack"):
-		// Load from persistent SQLite database
+		// Load from persistent database
 		items, err := s.store.GetBackpack("Adam")
 		if err != nil || len(items) == 0 {
 			// Fallback starter backpack if empty
@@ -586,6 +606,9 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 					"userCount": userCount,
 					"maxUsers":  float64(25),
 					"type":      st.RoomType,
+					"wallpaper": float64(st.Wallpaper),
+					"floor":     float64(st.Floor),
+					"doorbell":  float64(st.Doorbell),
 				})
 			}
 		}
@@ -597,6 +620,194 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 			"port":   s.port,
 			"dns":    s.host,
 		}
+
+	// --- Messenger & Social AMF Endpoints ---
+	case strings.Contains(target, "getFriends"):
+		screenName := "Adam"
+		if arr, ok := bodyVal.([]any); ok && len(arr) > 0 {
+			if s, ok := arr[0].(string); ok && s != "" {
+				screenName = s
+			}
+		}
+		friends, err := s.store.GetFriends(screenName)
+		if err != nil {
+			log.Printf("[AMF] GetFriends error: %v", err)
+		}
+		var list []any
+		s.mu.RLock()
+		for _, f := range friends {
+			isOnline := false
+			for _, p := range s.Players {
+				if strings.EqualFold(p.ScreenName, f.ScreenName) {
+					isOnline = true
+					break
+				}
+			}
+			list = append(list, map[string]any{
+				"screenName": f.ScreenName,
+				"gender":     float64(f.Gender),
+				"mission":    f.Mission,
+				"avatarDef":  f.AvatarDef,
+				"online":     isOnline,
+				"lastSeen":   f.LastSeenIn,
+				"status":     f.Status,
+			})
+		}
+		s.mu.RUnlock()
+		responseValue = list
+
+	case strings.Contains(target, "getOnlineFriends"):
+		screenName := "Adam"
+		if arr, ok := bodyVal.([]any); ok && len(arr) > 0 {
+			if s, ok := arr[0].(string); ok && s != "" {
+				screenName = s
+			}
+		}
+		friends, _ := s.store.GetFriends(screenName)
+		var list []any
+		s.mu.RLock()
+		for _, f := range friends {
+			for _, p := range s.Players {
+				if strings.EqualFold(p.ScreenName, f.ScreenName) {
+					list = append(list, map[string]any{
+						"screenName": f.ScreenName,
+						"online":     true,
+						"location":   p.RoomID,
+					})
+					break
+				}
+			}
+		}
+		s.mu.RUnlock()
+		responseValue = list
+
+	case strings.Contains(target, "sendMessage"):
+		from := "Adam"
+		to := "Adam"
+		msg := ""
+		if arr, ok := bodyVal.([]any); ok {
+			if len(arr) > 0 {
+				if s, ok := arr[0].(string); ok {
+					from = s
+				}
+			}
+			if len(arr) > 1 {
+				switch v := arr[1].(type) {
+				case string:
+					to = v
+				case []any:
+					if len(v) > 0 {
+						if s, ok := v[0].(string); ok {
+							to = s
+						}
+					}
+				}
+			}
+			if len(arr) > 2 {
+				if s, ok := arr[2].(string); ok {
+					msg = s
+				}
+			}
+		}
+		msgID, _ := s.store.SendMessage(from, to, msg)
+		s.notifyMessengerRecipient(to, from, msg)
+		responseValue = float64(msgID)
+
+	case strings.Contains(target, "getMessages"):
+		screenName := "Adam"
+		if arr, ok := bodyVal.([]any); ok && len(arr) > 0 {
+			if s, ok := arr[0].(string); ok && s != "" {
+				screenName = s
+			}
+		}
+		msgs, _ := s.store.GetMessages(screenName, false)
+		var list []any
+		for _, m := range msgs {
+			list = append(list, map[string]any{
+				"id":        float64(m.ID),
+				"sender":    m.SenderName,
+				"recipient": m.RecipientName,
+				"message":   m.Message,
+				"sentAt":    m.SentAt,
+				"isRead":    m.IsRead,
+			})
+		}
+		responseValue = list
+
+	case strings.Contains(target, "removeMessage") || strings.Contains(target, "deleteMessage"):
+		if arr, ok := bodyVal.([]any); ok && len(arr) > 0 {
+			if idFloat, ok := arr[0].(float64); ok {
+				_ = s.store.MarkMessageRead(int(idFloat))
+			}
+		}
+		responseValue = true
+
+	case strings.Contains(target, "acceptInvitation"):
+		u1, u2 := "Adam", "Adam"
+		if arr, ok := bodyVal.([]any); ok && len(arr) >= 2 {
+			if s, ok := arr[0].(string); ok {
+				u1 = s
+			}
+			if s, ok := arr[1].(string); ok {
+				u2 = s
+			}
+		}
+		_ = s.store.AddFriend(u1, u2)
+		s.notifyFriendEvent(u1, u2, "accepted")
+		responseValue = true
+
+	case strings.Contains(target, "rejectInvitation") || strings.Contains(target, "removeFriend"):
+		u1, u2 := "Adam", "Adam"
+		if arr, ok := bodyVal.([]any); ok && len(arr) >= 2 {
+			if s, ok := arr[0].(string); ok {
+				u1 = s
+			}
+			if s, ok := arr[1].(string); ok {
+				u2 = s
+			}
+		}
+		_ = s.store.RemoveFriend(u1, u2)
+		responseValue = true
+
+	// --- Studio Decor AMF Endpoint ---
+	case strings.Contains(target, "updateStudio"):
+		studioID := "1"
+		wp, fl, db := 1, 1, 1
+		if arr, ok := bodyVal.([]any); ok {
+			if len(arr) > 0 {
+				if s, ok := arr[0].(string); ok {
+					studioID = s
+				} else if f, ok := arr[0].(float64); ok {
+					studioID = strconv.Itoa(int(f))
+				}
+			}
+			if len(arr) > 1 {
+				if f, ok := arr[1].(float64); ok {
+					wp = int(f)
+				}
+			}
+			if len(arr) > 2 {
+				if f, ok := arr[2].(float64); ok {
+					fl = int(f)
+				}
+			}
+			if len(arr) > 3 {
+				if f, ok := arr[3].(float64); ok {
+					db = int(f)
+				}
+			}
+		}
+		_ = s.store.UpdateStudioDecor(studioID, wp, fl, db)
+		rm := s.GetOrCreateRoom(studioID)
+		rm.mu.Lock()
+		rm.Wallpaper = wp
+		rm.Floor = fl
+		rm.Doorbell = db
+		rm.mu.Unlock()
+		decorXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><ST_DECOR wp=\"%d\" fl=\"%d\" db=\"%d\"/></Room.Action>",
+			studioID, wp, fl, db)
+		go rm.Broadcast(decorXML, "")
+		responseValue = true
 
 	default:
 		log.Printf("[AMF] Default handler for: %s", target)
@@ -719,9 +930,13 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		player.X = 0
 		player.Z = 0
 
-		// Send ST_EN room layout
-		stEnXML := fmt.Sprintf("<ST_EN layout=\"%d\" roomID=\"%s\" name=\"%s\" owner=\"Coke Studios\"/>", room.Layout, room.ID, room.Name)
+		// Send ST_EN room layout with live decor attributes
+		stEnXML := fmt.Sprintf("<ST_EN layout=\"%d\" roomID=\"%s\" name=\"%s\" owner=\"Coke Studios\" wp=\"%d\" fl=\"%d\" db=\"%d\"/>",
+			room.Layout, room.ID, room.Name, room.Wallpaper, room.Floor, room.Doorbell)
 		_ = player.Send(stEnXML)
+		decorXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><ST_DECOR wp=\"%d\" fl=\"%d\" db=\"%d\"/></Room.Action>",
+			room.ID, room.Wallpaper, room.Floor, room.Doorbell)
+		_ = player.Send(decorXML)
 
 		// Send existing occupants to this player
 		room.mu.RLock()
@@ -943,6 +1158,298 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		}
 		return
 	}
+
+	// --- Live Studio Decor (Wall, Floor, Doorbell) ---
+	if strings.Contains(xml, "<ST_DECOR") {
+		roomID := player.RoomID
+		if roomID != "" && roomID != "$LOBBY$" {
+			wpStr := extractAttr(xml, "wp")
+			flStr := extractAttr(xml, "fl")
+			dbStr := extractAttr(xml, "db")
+			wp, _ := strconv.Atoi(wpStr)
+			fl, _ := strconv.Atoi(flStr)
+			db, _ := strconv.Atoi(dbStr)
+			if wp <= 0 {
+				wp = 1
+			}
+			if fl <= 0 {
+				fl = 1
+			}
+			if db <= 0 {
+				db = 1
+			}
+
+			room := s.GetOrCreateRoom(roomID)
+			room.mu.Lock()
+			room.Wallpaper = wp
+			room.Floor = fl
+			room.Doorbell = db
+			room.mu.Unlock()
+
+			_ = s.store.UpdateStudioDecor(roomID, wp, fl, db)
+			decorXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><ST_DECOR wp=\"%d\" fl=\"%d\" db=\"%d\"/></Room.Action>",
+				room.ID, wp, fl, db)
+			room.Broadcast(decorXML, "")
+			log.Printf("[WS] Studio %s decor updated: wallpaper=%d, floor=%d, doorbell=%d", roomID, wp, fl, db)
+		}
+		return
+	}
+
+	// --- Live Messenger / Instant Messaging ---
+	if strings.Contains(xml, "<MMS_SND") || strings.Contains(xml, "<MMS_MSG") {
+		to := extractAttr(xml, "to")
+		msgHex := extractAttr(xml, "m")
+		msgText := extractAttr(xml, "msg")
+		if msgText == "" && msgHex != "" {
+			if dec, err := hex.DecodeString(msgHex); err == nil {
+				msgText = string(dec)
+			}
+		}
+		if to != "" && msgText != "" {
+			_, _ = s.store.SendMessage(player.ScreenName, to, msgText)
+			s.notifyMessengerRecipient(to, player.ScreenName, msgText)
+			log.Printf("[MESSENGER] %s -> %s: %s", player.ScreenName, to, msgText)
+		}
+		return
+	}
+
+	// --- Friend Request ---
+	if strings.Contains(xml, "<MMS_REQ") {
+		to := extractAttr(xml, "to")
+		if to != "" && !strings.EqualFold(to, player.ScreenName) {
+			s.notifyMessengerEvent(to, fmt.Sprintf("<MMS_REQ from=\"%s\"/>", player.ScreenName))
+			log.Printf("[MESSENGER] Friend request: %s -> %s", player.ScreenName, to)
+		}
+		return
+	}
+
+	// --- Friend Accept ---
+	if strings.Contains(xml, "<MMS_ACC") {
+		from := extractAttr(xml, "from")
+		if from != "" {
+			_ = s.store.AddFriend(player.ScreenName, from)
+			s.notifyFriendEvent(player.ScreenName, from, "accepted")
+			log.Printf("[MESSENGER] Friend accepted: %s and %s", player.ScreenName, from)
+		}
+		return
+	}
+}
+
+func (s *Server) notifyMessengerRecipient(to, from, message string) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	hexMsg := hex.EncodeToString([]byte(message))
+	mmsXML := fmt.Sprintf("<MMS_MSG from=\"%s\" m=\"%s\" msg=\"%s\"/>", from, hexMsg, message)
+	for _, p := range s.Players {
+		if strings.EqualFold(p.ScreenName, to) {
+			_ = p.Send(mmsXML)
+		}
+	}
+}
+
+func (s *Server) notifyMessengerEvent(to, xml string) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	for _, p := range s.Players {
+		if strings.EqualFold(p.ScreenName, to) {
+			_ = p.Send(xml)
+		}
+	}
+}
+
+func (s *Server) notifyFriendEvent(u1, u2, status string) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	xml1 := fmt.Sprintf("<MMS_ACC from=\"%s\" status=\"%s\"/>", u2, status)
+	xml2 := fmt.Sprintf("<MMS_ACC from=\"%s\" status=\"%s\"/>", u1, status)
+	for _, p := range s.Players {
+		if strings.EqualFold(p.ScreenName, u1) {
+			_ = p.Send(xml1)
+		} else if strings.EqualFold(p.ScreenName, u2) {
+			_ = p.Send(xml2)
+		}
+	}
+}
+
+func (s *Server) handleMessengerFriends(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	user := r.URL.Query().Get("user")
+	if user == "" {
+		user = "Adam"
+	}
+	friends, err := s.store.GetFriends(user)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	s.mu.RLock()
+	for i := range friends {
+		for _, p := range s.Players {
+			if strings.EqualFold(p.ScreenName, friends[i].ScreenName) {
+				friends[i].Online = true
+				break
+			}
+		}
+	}
+	s.mu.RUnlock()
+	json.NewEncoder(w).Encode(map[string]any{"success": true, "friends": friends})
+}
+
+func (s *Server) handleMessengerSend(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	user := r.FormValue("user")
+	if user == "" {
+		user = r.URL.Query().Get("user")
+	}
+	to := r.FormValue("to")
+	if to == "" {
+		to = r.URL.Query().Get("to")
+	}
+	msg := r.FormValue("message")
+	if msg == "" {
+		msg = r.URL.Query().Get("message")
+	}
+	if user == "" || to == "" || msg == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "missing parameters"})
+		return
+	}
+	msgID, err := s.store.SendMessage(user, to, msg)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	s.notifyMessengerRecipient(to, user, msg)
+	json.NewEncoder(w).Encode(map[string]any{"success": true, "id": msgID})
+}
+
+func (s *Server) handleMessengerMessages(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	user := r.URL.Query().Get("user")
+	if user == "" {
+		user = "Adam"
+	}
+	unread := r.URL.Query().Get("unread") == "true"
+	msgs, err := s.store.GetMessages(user, unread)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	json.NewEncoder(w).Encode(map[string]any{"success": true, "messages": msgs})
+}
+
+func (s *Server) handleMessengerAddFriend(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	user := r.FormValue("user")
+	if user == "" {
+		user = r.URL.Query().Get("user")
+	}
+	friend := r.FormValue("friend")
+	if friend == "" {
+		friend = r.URL.Query().Get("friend")
+	}
+	if user == "" || friend == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "missing user or friend"})
+		return
+	}
+	err := s.store.AddFriend(user, friend)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	s.notifyFriendEvent(user, friend, "accepted")
+	json.NewEncoder(w).Encode(map[string]any{"success": true})
+}
+
+func (s *Server) handleMessengerRemoveFriend(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	user := r.FormValue("user")
+	if user == "" {
+		user = r.URL.Query().Get("user")
+	}
+	friend := r.FormValue("friend")
+	if friend == "" {
+		friend = r.URL.Query().Get("friend")
+	}
+	if user == "" || friend == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "missing user or friend"})
+		return
+	}
+	err := s.store.RemoveFriend(user, friend)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	json.NewEncoder(w).Encode(map[string]any{"success": true})
+}
+
+func (s *Server) handleStudioDecor(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	studioID := r.FormValue("studioId")
+	if studioID == "" {
+		studioID = r.URL.Query().Get("studioId")
+	}
+	if studioID == "" {
+		studioID = "1"
+	}
+
+	wpStr := r.FormValue("wallpaper")
+	if wpStr == "" {
+		wpStr = r.URL.Query().Get("wallpaper")
+	}
+	flStr := r.FormValue("floor")
+	if flStr == "" {
+		flStr = r.URL.Query().Get("floor")
+	}
+	dbStr := r.FormValue("doorbell")
+	if dbStr == "" {
+		dbStr = r.URL.Query().Get("doorbell")
+	}
+
+	wp, _ := strconv.Atoi(wpStr)
+	fl, _ := strconv.Atoi(flStr)
+	db, _ := strconv.Atoi(dbStr)
+	if wp <= 0 {
+		wp = 1
+	}
+	if fl <= 0 {
+		fl = 1
+	}
+	if db <= 0 {
+		db = 1
+	}
+
+	err := s.store.UpdateStudioDecor(studioID, wp, fl, db)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+
+	rm := s.GetOrCreateRoom(studioID)
+	rm.mu.Lock()
+	rm.Wallpaper = wp
+	rm.Floor = fl
+	rm.Doorbell = db
+	rm.mu.Unlock()
+	decorXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><ST_DECOR wp=\"%d\" fl=\"%d\" db=\"%d\"/></Room.Action>",
+		studioID, wp, fl, db)
+	go rm.Broadcast(decorXML, "")
+
+	json.NewEncoder(w).Encode(map[string]any{
+		"success":   true,
+		"studio_id": studioID,
+		"wallpaper": wp,
+		"floor":     fl,
+		"doorbell":  db,
+	})
 }
 
 // startPerformance manages the 60-second DJ voting battle loop

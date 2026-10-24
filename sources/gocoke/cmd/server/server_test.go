@@ -180,3 +180,82 @@ func TestDenizenProfileAPI(t *testing.T) {
 	}
 }
 
+func TestMessengerAndDecor(t *testing.T) {
+	srv := NewServer("./web", "127.0.0.1", "8080", nil)
+
+	// Ensure denizens exist
+	_, _ = srv.store.GetOrCreateDenizen("UserA", "M", "defA", "Mission A")
+	_, _ = srv.store.GetOrCreateDenizen("UserB", "F", "defB", "Mission B")
+
+	// 1. Add friend relationship via HTTP API
+	reqAdd := httptest.NewRequest("POST", "/api/messenger/friend/add?user=UserA&friend=UserB", nil)
+	wAdd := httptest.NewRecorder()
+	srv.handleMessengerAddFriend(wAdd, reqAdd)
+	if wAdd.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", wAdd.Code)
+	}
+
+	// 2. Query friends list
+	reqFriends := httptest.NewRequest("GET", "/api/messenger/friends?user=UserA", nil)
+	wFriends := httptest.NewRecorder()
+	srv.handleMessengerFriends(wFriends, reqFriends)
+	if !strings.Contains(wFriends.Body.String(), "UserB") {
+		t.Errorf("expected UserB in friends list: %s", wFriends.Body.String())
+	}
+
+	// 3. Send message via HTTP API
+	reqSend := httptest.NewRequest("POST", "/api/messenger/send?user=UserA&to=UserB&message=Meet+me+at+Studio+Wayne!", nil)
+	wSend := httptest.NewRecorder()
+	srv.handleMessengerSend(wSend, reqSend)
+	if wSend.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", wSend.Code)
+	}
+
+	// 4. Query messages for UserB
+	reqMsgs := httptest.NewRequest("GET", "/api/messenger/messages?user=UserB", nil)
+	wMsgs := httptest.NewRecorder()
+	srv.handleMessengerMessages(wMsgs, reqMsgs)
+	if !strings.Contains(wMsgs.Body.String(), "Meet me at Studio Wayne!") {
+		t.Errorf("expected message content in response: %s", wMsgs.Body.String())
+	}
+
+	// 5. Studio Decor HTTP API
+	reqDecor := httptest.NewRequest("POST", "/api/studio/decor?studioId=1&wallpaper=5&floor=3&doorbell=2", nil)
+	wDecor := httptest.NewRecorder()
+	srv.handleStudioDecor(wDecor, reqDecor)
+	if wDecor.Code != http.StatusOK {
+		t.Fatalf("expected 200 from studio decor, got %d", wDecor.Code)
+	}
+	rm := srv.GetOrCreateRoom("1")
+	rm.mu.RLock()
+	if rm.Wallpaper != 5 || rm.Floor != 3 || rm.Doorbell != 2 {
+		t.Errorf("expected room decor (5,3,2), got (%d,%d,%d)", rm.Wallpaper, rm.Floor, rm.Doorbell)
+	}
+	rm.mu.RUnlock()
+
+	// 6. AMF RPC test for getFriends
+	reqAMFFriends, _ := amf.EncodeRemotingRequest("com.studiocom.sanfrancisco.denizen.FlashDenizenManager.getFriends", []any{"UserA"})
+	reqAF := httptest.NewRequest("POST", "/sf/gateway", strings.NewReader(string(reqAMFFriends)))
+	wAF := httptest.NewRecorder()
+	srv.handleAMFGateway(wAF, reqAF)
+	valAF, err := amf.DecodeRemotingResponse(wAF.Body.Bytes())
+	if err != nil {
+		t.Fatalf("AMF getFriends decode failed: %v", err)
+	}
+	friendsArr, ok := valAF.([]any)
+	if !ok || len(friendsArr) == 0 {
+		t.Fatalf("expected non-empty friends array via AMF, got: %v", valAF)
+	}
+
+	// 7. AMF RPC test for updateStudio
+	reqAMFDecor, _ := amf.EncodeRemotingRequest("com.studiocom.sanfrancisco.studio.FlashStudioManager.updateStudio", []any{"1", float64(7), float64(4), float64(1)})
+	reqAD := httptest.NewRequest("POST", "/sf/gateway", strings.NewReader(string(reqAMFDecor)))
+	wAD := httptest.NewRecorder()
+	srv.handleAMFGateway(wAD, reqAD)
+	rm.mu.RLock()
+	if rm.Wallpaper != 7 || rm.Floor != 4 {
+		t.Errorf("expected AMF updated decor (7,4), got (%d,%d)", rm.Wallpaper, rm.Floor)
+	}
+	rm.mu.RUnlock()
+}
+

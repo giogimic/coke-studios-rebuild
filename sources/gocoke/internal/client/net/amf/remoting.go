@@ -495,3 +495,65 @@ func ParseRemotingTarget(b []byte) (string, string, error) {
 	return target, respURI, nil
 }
 
+// ParseRemotingMessage parses target, responseURI, and body value from an AMF0 envelope.
+func ParseRemotingMessage(b []byte) (string, string, any, error) {
+	p := &parser{b: b}
+	if _, err := p.readU16(); err != nil {
+		return "", "", nil, err
+	}
+	hc, err := p.readU16()
+	if err != nil {
+		return "", "", nil, err
+	}
+	for i := 0; i < int(hc); i++ {
+		if _, err := p.readUTF(); err != nil {
+			return "", "", nil, err
+		}
+		if _, err := p.readU8(); err != nil {
+			return "", "", nil, err
+		}
+		l, err := p.readI32()
+		if err != nil {
+			return "", "", nil, err
+		}
+		if l >= 0 {
+			if _, err := p.readN(int(l)); err != nil {
+				return "", "", nil, err
+			}
+		}
+	}
+	mc, err := p.readU16()
+	if err != nil || mc < 1 {
+		return "", "", nil, errors.New("amf: no messages")
+	}
+	target, err := p.readUTF()
+	if err != nil {
+		return "", "", nil, err
+	}
+	respURI, err := p.readUTF()
+	if err != nil {
+		return "", "", nil, err
+	}
+	l, err := p.readI32()
+	if err != nil {
+		return target, respURI, nil, err
+	}
+	var bodyBytes []byte
+	if l <= 0 {
+		if p.i < len(p.b) {
+			bodyBytes = p.b[p.i:]
+		}
+	} else {
+		bodyBytes, err = p.readN(int(l))
+		if err != nil {
+			return target, respURI, nil, err
+		}
+	}
+	var val any
+	if len(bodyBytes) > 0 {
+		v, _, _ := decodeAMF0Value(bodyBytes, 0)
+		val = v
+	}
+	return target, respURI, val, nil
+}
+
