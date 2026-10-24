@@ -442,6 +442,17 @@ func TestSoundLibraryResolver(t *testing.T) {
 	if wUnprefixed.Code != http.StatusOK {
 		t.Fatalf("expected 200 for un-prefixed sound, got %d", wUnprefixed.Code)
 	}
+
+	// Test genre soundbank resolution from archive
+	reqGenre := httptest.NewRequest("GET", "/sounds/danceOne_bass00.mp3", nil)
+	wGenre := httptest.NewRecorder()
+	srv.handleSoundLibrary(wGenre, reqGenre)
+	if wGenre.Code != http.StatusOK {
+		t.Fatalf("expected 200 for genre soundbank, got %d", wGenre.Code)
+	}
+	if ct := wGenre.Header().Get("Content-Type"); ct != "audio/mpeg" {
+		t.Fatalf("expected audio/mpeg for mp3, got %s", ct)
+	}
 }
 
 

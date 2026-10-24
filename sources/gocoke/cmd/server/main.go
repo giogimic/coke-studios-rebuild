@@ -722,29 +722,104 @@ func (s *Server) handleSoundLibrary(w http.ResponseWriter, r *http.Request) {
 	}
 
 	name := filepath.Base(r.URL.Path)
-	soundDir := filepath.Join(s.webRoot, "Lingo", "soundlibrary")
-	targetPath := filepath.Join(soundDir, name)
+	lowerName := strings.ToLower(name)
+	nameNoExt := strings.TrimSuffix(lowerName, filepath.Ext(lowerName))
 
-	if _, err := os.Stat(targetPath); err != nil {
-		entries, err := os.ReadDir(soundDir)
-		if err == nil {
-			lowerName := strings.ToLower(name)
+	repoRoot := findRepoRoot()
+	searchDirs := []string{
+		filepath.Join(s.webRoot, "Lingo", "soundlibrary"),
+		filepath.Join(s.webRoot, "assets", "audio"),
+		filepath.Join(repoRoot, "sources", "music-mixer", "assets", "audio"),
+		filepath.Join(repoRoot, "archives", "Coke Studios Archive", "Original Files", "Mixer Sounds", "Dance Sounds"),
+		filepath.Join(repoRoot, "archives", "Coke Studios Archive", "Original Files", "Mixer Sounds", "Hiphop Sounds"),
+		filepath.Join(repoRoot, "archives", "Coke Studios Archive", "Original Files", "Mixer Sounds", "Pop Sounds"),
+		filepath.Join(repoRoot, "archives", "Coke Studios Archive", "Original Files", "Mixer Sounds", "Rock Sounds"),
+		filepath.Join(repoRoot, "archives", "Coke Studios Archive", "Original Files", "Mixer Sounds", "Latin Sounds"),
+		filepath.Join(repoRoot, "archives", "Coke Studios Archive", "Original Files", "Mixer Sounds", "Country Sounds"),
+	}
+
+	var targetPath string
+	// Pass 1: exact extension match across all directories
+	for _, dir := range searchDirs {
+		if fi, err := os.Stat(dir); err != nil || !fi.IsDir() {
+			continue
+		}
+		// Direct file check
+		direct := filepath.Join(dir, name)
+		if fi, err := os.Stat(direct); err == nil && !fi.IsDir() {
+			targetPath = direct
+			break
+		}
+		entries, err := os.ReadDir(dir)
+		if err != nil {
+			continue
+		}
+		for _, entry := range entries {
+			if entry.IsDir() {
+				continue
+			}
+			fn := entry.Name()
+			if strings.EqualFold(fn, name) {
+				targetPath = filepath.Join(dir, fn)
+				break
+			}
+			idx := strings.Index(fn, "_")
+			if idx != -1 && strings.EqualFold(fn[idx+1:], name) {
+				targetPath = filepath.Join(dir, fn)
+				break
+			}
+		}
+		if targetPath != "" {
+			break
+		}
+	}
+
+	// Pass 2: stem match ignoring extension if not found in Pass 1
+	if targetPath == "" {
+		for _, dir := range searchDirs {
+			if fi, err := os.Stat(dir); err != nil || !fi.IsDir() {
+				continue
+			}
+			entries, err := os.ReadDir(dir)
+			if err != nil {
+				continue
+			}
 			for _, entry := range entries {
+				if entry.IsDir() {
+					continue
+				}
 				fn := entry.Name()
-				if strings.EqualFold(fn, name) {
-					targetPath = filepath.Join(soundDir, fn)
+				fnLower := strings.ToLower(fn)
+				fnNoExt := strings.TrimSuffix(fnLower, filepath.Ext(fnLower))
+
+				if fnNoExt == nameNoExt {
+					targetPath = filepath.Join(dir, fn)
 					break
 				}
 				idx := strings.Index(fn, "_")
-				if idx != -1 && strings.EqualFold(fn[idx+1:], lowerName) {
-					targetPath = filepath.Join(soundDir, fn)
-					break
+				if idx != -1 {
+					afterPrefix := strings.ToLower(fn[idx+1:])
+					if strings.TrimSuffix(afterPrefix, filepath.Ext(afterPrefix)) == nameNoExt {
+						targetPath = filepath.Join(dir, fn)
+						break
+					}
 				}
+			}
+			if targetPath != "" {
+				break
 			}
 		}
 	}
 
-	w.Header().Set("Content-Type", "audio/wav")
+	if targetPath == "" {
+		targetPath = filepath.Join(s.webRoot, "Lingo", "soundlibrary", name)
+	}
+
+	if strings.HasSuffix(strings.ToLower(targetPath), ".mp3") {
+		w.Header().Set("Content-Type", "audio/mpeg")
+	} else {
+		w.Header().Set("Content-Type", "audio/wav")
+	}
 	http.ServeFile(w, r, targetPath)
 }
 
