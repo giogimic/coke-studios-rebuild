@@ -70,7 +70,9 @@ const MUSICMIXER_PORT = parseInt(process.env.MUSICMIXER_PORT || '8082', 10);
 function send(res, status, body, type = 'text/plain; charset=utf-8') {
   res.writeHead(status, {
     'Content-Type': type,
-    'Cache-Control': 'no-store',
+    'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+    'Pragma': 'no-cache',
+    'Expires': '0',
     'X-Content-Type-Options': 'nosniff',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, HEAD',

@@ -2,12 +2,15 @@ if (!igeRoot) {
 	igeRoot = './';
 }
 window.igeLoader = (function () {
-	// Load the engine stylesheet
+	// Generate cache-busting timestamp tag
+	var cacheTag = '_t=' + Date.now();
+
+	// Load the engine stylesheet with cache buster
 	var css = document.createElement('link');
 	css.rel = 'stylesheet';
 	css.type = 'text/css';
 	css.media = 'all';
-	css.href = igeRoot + 'css/ige.css';
+	css.href = igeRoot + 'css/ige.css?' + cacheTag;
 	
 	document.getElementsByTagName('head')[0].appendChild(css);
 	
@@ -17,9 +20,9 @@ window.igeLoader = (function () {
 
 		this._loadingCount = 0;
 
-		// Load the clientConfig.js file into browser memory
+		// Load CoreConfig.js with cache buster
 		ccScript = document.createElement('script');
-		ccScript.src = igeRoot + 'CoreConfig.js';
+		ccScript.src = igeRoot + 'CoreConfig.js?' + cacheTag;
 		ccScript.onload = function () {
 			self.coreConfigReady();
 		};
@@ -34,9 +37,9 @@ window.igeLoader = (function () {
 		var self = this;
 
 		if (typeof(igeCoreConfig) !== 'undefined') {
-			// Load the client config
-			ccScript = document.createElement('script');
-			ccScript.src = './ClientConfig.js';
+			// Load ClientConfig.js with cache buster
+			var ccScript = document.createElement('script');
+			ccScript.src = './ClientConfig.js?' + cacheTag;
 			ccScript.onload = function () {
 				self.clientConfigReady();
 			};
@@ -51,20 +54,18 @@ window.igeLoader = (function () {
 	};
 
 	IgeLoader.prototype.clientConfigReady = function () {
-		// Add the two array items into a single array
 		this._coreList = igeCoreConfig.include;
 		this._clientList = igeClientConfig.include;
 
 		this._fileList = [];
-		for (i = 0; i < this._coreList.length; i++) {
-			// Check that the file should be loaded on the client
+		for (var i = 0; i < this._coreList.length; i++) {
 			if (this._coreList[i][0].indexOf('c') > -1) {
 				this._fileList.push(igeRoot + this._coreList[i][2]);
 			}
 		}
 
-		for (i = 0; i < this._clientList.length; i++) {
-			this._fileList.push(this._clientList[i]);
+		for (var j = 0; j < this._clientList.length; j++) {
+			this._fileList.push(this._clientList[j]);
 		}
 
 		this.loadNext();
@@ -76,7 +77,8 @@ window.igeLoader = (function () {
 			self = this;
 
 		if (url !== undefined) {
-			script.src = url;
+			var sep = (url.indexOf('?') === -1) ? '?' : '&';
+			script.src = url + sep + cacheTag;
 			script.onload = function () {
 				self.loadNext();
 			};

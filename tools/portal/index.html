@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>MyCoke - Coke Studios & Music Mixer Official Portal</title>
   <link rel="icon" href="assets/images/start_logo.gif" type="image/gif">
   <style>
@@ -2365,7 +2368,9 @@
 
     function reloadClient() {
       const iframe = document.getElementById('gameIframe');
-      iframe.src = iframe.src;
+      const url = new URL(iframe.src, window.location.origin);
+      url.searchParams.set('_t', Date.now());
+      iframe.src = url.toString();
     }
 
     function toggleFullscreen() {

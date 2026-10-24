@@ -357,7 +357,14 @@ func main() {
 	log.Printf(" AMF0 Flash Gateway:        http://%s/sf/gateway", *addr)
 	log.Printf("==========================================================")
 
-	if err := http.ListenAndServe(*addr, mux); err != nil {
+	noCacheHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0")
+		w.Header().Set("Pragma", "no-cache")
+		w.Header().Set("Expires", "0")
+		mux.ServeHTTP(w, r)
+	})
+
+	if err := http.ListenAndServe(*addr, noCacheHandler); err != nil {
 		log.Fatalf("Server error: %v", err)
 	}
 }
