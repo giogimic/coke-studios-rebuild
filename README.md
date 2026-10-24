@@ -1,145 +1,52 @@
-# Coke Music / Coke Studios Recovery & Preservation Workspace
+# Coke Music / Coke Studios — faithful recreation in Go
 
-**Focus Architecture:** Debian 12 (Bookworm) / Linux First  
-*(Windows compatibility options provided for dual-environment workflows)*  
-**Collection Date:** October 2026  
-**Engineering Bible:** [📘 docs/BIBLE.md](docs/BIBLE.md) *(Complete reverse-engineered architecture, formulas, and protocols)*
+The goal is a **playable 1:1 recreation of the historical game**, including its website, V-egos, rooms, music, economy and social life. The gameplay client is Go/Ebitengine compiled to WebAssembly; the authoritative server is Go.
 
----
+**Current status: incomplete recreation.** There is substantial recovered source/assets and useful Go client/server code. The current launcher still defaults to a JavaScript client, and parts of the server use demo identity/economy behavior. The 2026-10-24 review identifies these defects and sets the repair order. A working endpoint or a compiled binary does not establish historical parity.
 
-## 🚀 Single-File Setup & Auto-Updater (Debian / Linux First)
+## Start here
 
-### 1. One-Command Setup & Launch
-Execute `setup.sh` to automatically install prerequisites, provision the scalable MariaDB 11 container, and launch the complete game portal on default port **24902**:
-```bash
-chmod +x ./setup.sh
-./setup.sh
+- [Project specification](docs/BIBLE.md): what 1:1 means, Go architecture, evidence rules and acceptance.
+- [Implementation plan](docs/RECREATION-PLAN.md): ordered, file-specific changes and player milestones.
+- [Progress review](docs/PROGRESS-REVIEW.md): verified findings, useful work to keep, and testing limits.
+- [Parity register](docs/PARITY.md): actual status and evidence needed for completion.
+- [Agent instructions](AGENTS.md): durable direction for future work.
+
+The next milestone is a reference-matched entrance into the Go world with two separate players, real identity, synchronized room activity and persistent state. The next connected loop is compose -> save -> burn -> perform -> vote/reward -> buy/decorate.
+
+## Working code and reference material
+
+| Location | Role |
+|---|---|
+| `sources/gocoke/cmd/client`, `internal/client` | Go gameplay implementation to continue and repair |
+| `sources/gocoke/cmd/server` | Local Go server, protocol handlers and SQLite/MariaDB store |
+| `sources/gocoke/web` | WASM shell and recovered game assets |
+| `tools/portal` | Existing website/launcher requiring fidelity and Go-entry correction |
+| `sources/original-client-source` | Recovered original scripts for historical behavior research |
+| `sources/cokephase`, `music-mixer`, other collected projects | Reference implementations and assets, not alternate production engines |
+| `archives`, `reference-source` | Preserved releases and earlier source snapshots |
+| `docs/SOURCE-MANIFEST.json`, `DOWNLOAD-RESULTS.json` | Acquisition/provenance records; these do not measure game completion |
+
+Keep licenses and upstream attribution. [CREDITS.md](docs/CREDITS.md) and [RESEARCH.md](docs/RESEARCH.md) provide leads and provenance. Acquisition records and older research claims require their own checks before being used as release guarantees.
+
+## Inspecting the current build
+
+Existing Windows entry: `Start-Local.cmd`. Existing Linux entry: `./start.sh`. These still start the legacy Node-managed environment; the plan replaces that as the standard runtime after the Go player path is validated.
+
+The existing portal URL is [http://127.0.0.1:24902/](http://127.0.0.1:24902/); the Go shell route is [http://127.0.0.1:24902/game/](http://127.0.0.1:24902/game/). These are current development entry points, not a claim that a faithful end-to-end game is ready. The portal's default Phase route is a known defect.
+
+Run the existing Go server checks from `sources/gocoke`:
+
+```powershell
+go test ./cmd/server -count=1
 ```
 
-### 2. Zero-Downtime Updates
-To update the game server, pull the latest git code, apply database migrations, and rebuild the Docker containers with zero data loss:
-```bash
-./setup.sh --update
-```
+This suite passed during the review. Full browser gameplay, two-player persistence and historical visual/audio parity still require the checks in the plan.
 
-### 3. Native Service Alternative (Without Docker)
-If you prefer running natively on Debian 12 without Docker:
-```bash
-chmod +x ./start.sh ./stop.sh
-./start.sh
-```
-*(Stop background servers with `./stop.sh` or run in foreground with `./start.sh -f`)*
+## Scope and completion
 
-### 4. Windows Compatibility Options
-If running directly on Windows:
-- Run **`.\setup.ps1`** (or `.\setup.ps1 -Update` for updates) in PowerShell with Docker Desktop.
-- Or double-click **`Start-Local.cmd`** for standalone mode.
+Pin one historical release at a time; preserve V1, Beta, V2 and promotions as separate evidence/content profiles. Match the original controls, artwork, screen structure, sounds, timing and rules. Unknown details remain visible gaps rather than invented mechanics.
 
----
+A completed feature must work in the actual Go player journey, update authoritative shared state, persist where appropriate, handle relevant failures, and match a recorded historical reference.
 
-## 🌐 Live Service Endpoints
-
-Once launched, the following endpoints are accessible:
-
-| Service | Port | Description |
-|---|---|---|
-| **Official MyCoke Game Portal** | [http://127.0.0.1:24902/](http://127.0.0.1:24902/) | **Primary entry point**: Authentic 2004–2007 Coke Music website with embedded client, 4-track sequencer, Top 40 charts, and Red Caps bottle pin redemption. |
-| **GoCoke Game Client & Server** | [http://127.0.0.1:24902/game/](http://127.0.0.1:24902/game/) *(or [8080](http://127.0.0.1:8080/))* | **Authoritative Rebuild**: Ebitengine/WASM client with avatars, isometric rooms, mixer, items, AMF gateway, MariaDB persistence, and realtime WebSocket. |
-| **Integrated Music Mixer** | [http://127.0.0.1:24902/mixer/](http://127.0.0.1:24902/mixer/) *(or [8082](http://127.0.0.1:8082/))* | Standalone and in-portal recreation of the Coke Studios Music Mixer with 94 sound library loops. |
-| **CokePhase Demo** | [http://127.0.0.1:8081/](http://127.0.0.1:8081/) | HTML5 Canvas / Isogenic engine remake with 7 public & private rooms. |
-
----
-
-## 🏆 Project with the "Most Meat on the Bones"
-
-### **GoCoke (`sources/gocoke`)**
-**GoCoke** by bolognesandwiches is conclusively the most sophisticated and complete Coke Studios recreation produced to date:
-* **Client Architecture:** Built in Go using Ebitengine and compiled to a self-contained ~53 MB WebAssembly binary (`web/main.wasm`). Runs in any modern browser without Flash or Shockwave plugins.
-* **Rendering & Systems:** Full isometric tile rendering, multi-layer depth sorting, A* pathfinding, avatar engine (clothing, animations, carry/drink states, emotes), chat bubbles, room navigator, catalogue shopping, backpack inventory, and furniture placing/rotating/stacking.
-* **Audio Engine:** Embedded Coke Music Mixer sequencer with 94 original audio loop WAV files (Country, Dance, Hip-Hop, Latin, Pop, Rock) in `web/Lingo/soundlibrary`.
-* **Server Protocol:** Implements the legacy StudioCom San Francisco AMF0 remoting gateway and XMLSocket realtime protocol. The included standalone Go server provides authoritative realtime multiplayer, AMF RPC, and Denizen XML authentication.
-* **Binaries Built:**
-  - `tools/bin/coke-server-linux` & `tools/bin/coke-server.exe` (Standalone Authoritative Game Server)
-  - `tools/bin/gocoke-serve-linux` & `tools/bin/gocoke-static-linux` (Linux x86-64 ELF)
-  - `tools/bin/gocoke-serve.exe` & `tools/bin/gocoke-static.exe` (Windows x64 PE)
-
----
-
-## 📦 What is Saved in this Directory
-
-All 20 identified community repositories, the full 84.3 MB Clint preservation pack, and extraction tools have been collected and verified:
-
-| Location | Contents | Upstream / Origin | State |
-|---|---|---|---|
-| `sources/gocoke` | GoCoke complete source & assets | `bolognesandwiches/GoCoke` | Complete Git clone & compiled binaries |
-| `sources/cokephase` | CokePhase HTML5 client | `michaelowens/cokemusic-cokephase` | Complete Git clone & local demo adapter |
-| `sources/music-mixer` | Modern Music Mixer | `markhughes/CSMusicMixer` | Complete Git clone & compiled `dist/` bundle |
-| `sources/original-client-source` | Decompiled Sulake Lingo sources (2006 & 2007) | `jtieri/Coke-Studios-Source` | Complete Git clone (2,994 cast scripts) |
-| `sources/avatar-assets` | Full Coke Studios avatar sprite set | `markhughes/CSAvatarAssets` | Complete Git clone (1,316 sprite assets) |
-| `sources/avatar-engine` | Avatar canvas renderer library | `markhughes/CSAvatarEngine` | Complete Git clone |
-| `sources/cs-ui` | Coke Studios UI library | `markhughes/CSUI` | Complete Git clone |
-| `sources/cs-chat` | Coke Studios chat library | `markhughes/CSChat` | Complete Git clone |
-| `sources/cs-website` | Legacy website rebuild | `markhughes/CSWebsite` | Complete Git clone |
-| `sources/catalogue-parser` | Catalogue parser & data | `markhughes/CSCatalogueParser` | Complete Git clone |
-| `sources/screensavers` | Recovered screensaver files | `markhughes/CSScreenSavers` | Complete Git clone |
-| `sources/uncover-the-music` | Uncover The Music game & Colyseus server | `markhughes/uncover-the-music` | Complete Git clone (7,225 files) |
-| `sources/yeomans-client` | Early JavaScript remake | `YeomansIII/cokemusic` | Complete Git clone |
-| `sources/cokemusic-extractor` | Cast extraction toolchain | `reowens/cokemusic-extractor` | Complete Git clone |
-| `sources/cokeitems` | Item analysis & definitions | `bolognesandwiches/cokeitems` | Complete Git clone |
-| `sources/cache-finder` | Coke Studios cache finder utility (C source) | `Lost-Media-Hunt/Coke-Studios` | Complete Git clone |
-| `sources/shockrays` | ProjectorRays CLI wrapper | `jtieri/shockrays` | Complete Git clone |
-| `sources/cokephase-upstream` | Original CokePhase repository | `NewyorkDev/cokemusic` | Complete Git clone |
-| `sources/projector-rays` | Director/Shockwave decompiler | `ProjectorRays/ProjectorRays` | Complete Git clone |
-| `sources/dirplayer-rs` | Extraction backend | `reowens/dirplayer-rs` | Complete Git clone (pinned commit `cfd7329`) |
-| `archives/CokeStudios-The-Complete-Pack.rar` | Legacy Clint Complete Pack (84.3 MB) | Clint / RaGEZONE / h4bbo.net | Verified SHA-256 archive |
-| `archives/extracted-complete-pack` | Extracted Clint Complete Pack | Clint / RaGEZONE | Extracted files, sounds, Flash .FLAs, ElectroServer |
-| `tools/portal` | Master Web Dashboard | Local | Complete single-page recovery hub |
-
----
-
-## 🔍 Game Server Architecture Analysis
-
-Investigation of surviving server sources, protocol dumps, and emulators reveals three distinct eras of Coke Music / Coke Studios server architecture:
-
-1. **Sulake Fuse Era (2002–2004):**
-   - Similar to early Habbo Hotel (v1–v14).
-   - Raw TCP binary/text socket protocol (EVA / VL64 / Fuse protocol).
-   - Decompiled Lingo cast scripts in `sources/original-client-source` detail the low-level socket packet builders and message dispatchers.
-
-2. **StudioCom "San Francisco" Era (2004–2007, MyCoke):**
-   - **HTTP / AMF0 Gateway:** Flash Remoting gateway (`/sf/gateway`) for RPC calls:
-     - Authentication: `/sf/ssldocs/loginDenizen.jsp` returning session credentials.
-     - Economy & Inventory: `FlashDenizenManager.getDenizenBalance`, `FlashPossessionManager.getBackpack`.
-     - Room Directory: `FlashDenizenManager.getGameServerByStudioID`, `FlashStudioManager.getAllPrivateStudios`.
-   - **XMLSocket Realtime Server:** Multi-client TCP socket server framed with NUL (`\x00`) bytes.
-     - Flash cross-domain policy handshake: `<policy-file-request/>\x00` -> `<cross-domain-policy>...`.
-     - Room lifecycle: `<Room.Enter msgID="n" roomID="..."/>\x00` -> `<Accepted msgID="n"/>\x00` -> `<ST_EN ... layout="n"/>\x00`.
-     - Avatar coordination: `<Room.Action><AV id="..." x="..." y="..." z="..." dir="..."/></Room.Action>`.
-
-3. **Clint Private Server Era (2009–2012):**
-   - Packaged in `archives/extracted-complete-pack/`.
-   - Utilizes **ElectroServer 3** (`ElectroServer3.jar`), a Java XMLSocket server designed for Flash ActionScript 2 clients (`Client.fla`, `Client.swf`).
-   - Configured via `configuration.xml` with room definitions and admin user credentials.
-
----
-
-## 🛠️ Verification & Test Suite
-
-Run the full local test suite:
-```bash
-node tools/test-local.cjs
-node tools/check-browser-assets.cjs
-node tools/verify-sources.cjs
-```
-All tests verify document roots, jQuery/analytics cleaning, 7 room endpoints, catalogue parsing, WebAssembly signatures, MIME headers, and file integrity.
-
----
-
-## 📜 Credits & Licensing
-- **GoCoke:** bolognesandwiches (Ebitengine, WebAssembly client)
-- **CokePhase:** Michael Owens & NewyorkDev
-- **MusicMixer & Libraries:** Mark Hughes (MIT / AGPL-3.0)
-- **Coke-Studios-Source & Shockrays:** jtieri & ProjectorRays team
-- **Extraction Tools:** reowens
-- **Legacy Preservation:** Clint (RaGEZONE / h4bbo.net)
-- **Original IP:** The Coca-Cola Company & Sulake Corporation. Preserved under digital archive fair-use for historical research.
+The previous README and Bible are preserved under [docs/history](docs/history). They contain superseded architecture and completion assertions and must not direct new implementation.

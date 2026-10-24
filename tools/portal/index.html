@@ -1465,17 +1465,13 @@
               <span id="currentRoomTitle">Central Park Studio (VIS$0)</span>
             </div>
             <div class="viewport-controls">
-              <select id="engineSelector" class="btn-vp" onchange="switchEngine(this.value)" style="background:#111;color:#ffcc00;border:1px solid #ffcc00;font-weight:bold;cursor:pointer;">
-                <option value="phase" selected>⚡ HTML5 CokePhase Engine (Instant Play)</option>
-                <option value="wasm">⚡ Director Classic Engine (WASM)</option>
-              </select>
               <button class="btn-vp" onclick="reloadClient()">&#8635; Reload</button>
               <button class="btn-vp" onclick="toggleFullscreen()">&#9974; Fullscreen</button>
               <button class="btn-vp" onclick="openPopoutGame()">&#8599; Pop-out Window</button>
             </div>
           </div>
           <div class="game-iframe-wrapper" id="gameFrameWrapper">
-            <iframe id="gameIframe" src="/phase/?user=Adam&room=studio_model_b" allow="autoplay"></iframe>
+            <iframe id="gameIframe" src="/game/?user=Adam&sw1=QWRhbQ==" allow="autoplay"></iframe>
           </div>
         </div>
 
@@ -2547,10 +2543,9 @@
       const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || 'Adam';
       const avatarDef = localStorage.getItem('coke_avatarDef') || (document.getElementById('avatarDefText') ? document.getElementById('avatarDefText').textContent : '');
       const iframe = document.getElementById('gameIframe');
-      const isPhase = (document.getElementById('engineSelector')?.value === 'phase' || iframe.src.includes('/phase/'));
-      const base = isPhase ? '/phase/' : '/game/';
+      const base = '/game/';
       try { localStorage.setItem('coke_studioType', roomId); } catch (_) {}
-      iframe.src = base + '?user=' + encodeURIComponent(user) + '&room=' + encodeURIComponent(roomId) + (avatarDef ? '&avatarDef=' + encodeURIComponent(avatarDef) : '') + '&_t=' + Date.now();
+      iframe.src = base + '?user=' + encodeURIComponent(user) + '&sw1=' + btoa(user) + '&room=' + encodeURIComponent(roomId) + (avatarDef ? '&avatarDef=' + encodeURIComponent(avatarDef) : '') + '&_t=' + Date.now();
     }
 
     function reloadClient() {
@@ -2735,7 +2730,8 @@
     async function fetchBalance() {
       const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
       try {
-        const resp = await fetch(`/sf/ssldocs/loginDenizen.jsp?user=${encodeURIComponent(user)}`);
+        const sid = localStorage.getItem('coke_session') || sessionStorage.getItem('coke_sw2') || '';
+        const resp = await fetch(`/sf/ssldocs/loginDenizen.jsp?user=${encodeURIComponent(user)}&sid=${encodeURIComponent(sid)}`);
         const text = await resp.text();
         // Server returns XML; update if available
       } catch (e) {}
@@ -3155,7 +3151,7 @@
       const activeRoom = localStorage.getItem('coke_studioType') || 'studio_model_b';
       const iframe = document.getElementById('gameIframe');
       if (iframe && !iframe.src.includes('avatarDef')) {
-        iframe.src = `/phase/?user=${encodeURIComponent(user)}&room=${encodeURIComponent(activeRoom)}${activeDef ? '&avatarDef=' + encodeURIComponent(activeDef) : ''}&_t=${Date.now()}`;
+        iframe.src = `/game/?user=${encodeURIComponent(user)}&sw1=${btoa(user)}&room=${encodeURIComponent(activeRoom)}${activeDef ? '&avatarDef=' + encodeURIComponent(activeDef) : ''}&_t=${Date.now()}`;
       }
     }
 
@@ -3393,24 +3389,11 @@
     // --- ENGINE & POP-OUT WINDOW CONTROLS ---
     function openPopoutGame() {
       const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
-      const engine = document.getElementById('engineSelector').value;
-      const targetUrl = engine === 'phase' 
-        ? `/phase/?user=${encodeURIComponent(user)}` 
-        : `/game/?user=${encodeURIComponent(user)}`;
+      const targetUrl = `/game/?user=${encodeURIComponent(user)}&sw1=${btoa(user)}`;
       const w = 960, h = 640;
       const left = Math.max(0, (screen.width - w) / 2);
       const top = Math.max(0, (screen.height - h) / 2);
       window.open(targetUrl, 'CokeStudiosGame', `width=${w},height=${h},top=${top},left=${left},resizable=yes,scrollbars=no`);
-    }
-
-    function switchEngine(engine) {
-      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
-      const iframe = document.getElementById('gameIframe');
-      if (engine === 'phase') {
-        iframe.src = `/phase/?user=${encodeURIComponent(user)}`;
-      } else {
-        iframe.src = `/game/?user=${encodeURIComponent(user)}`;
-      }
     }
 
     // --- REGISTRATION WIZARD STATE & LOGIC ---
@@ -3611,7 +3594,10 @@
             localStorage.setItem('coke_studioType', chosenRoom);
             localStorage.setItem('coke_gender', String(regWizard.gender === 'male' ? 1 : 2));
             if (data.sw1) sessionStorage.setItem('coke_sw1', data.sw1);
-            if (data.sw2) sessionStorage.setItem('coke_sw2', data.sw2);
+            if (data.sw2) {
+              sessionStorage.setItem('coke_sw2', data.sw2);
+              localStorage.setItem('coke_session', data.sw2);
+            }
           } catch (_) {}
 
           document.getElementById('screenNameInput').value = data.screenName;
@@ -3628,12 +3614,7 @@
             closeRegisterModal();
             switchTab('play');
             const iframe = document.getElementById('gameIframe');
-            const engine = document.getElementById('engineSelector').value;
-            if (engine === 'phase') {
-              iframe.src = `/phase/?user=${encodeURIComponent(data.screenName)}&room=${encodeURIComponent(chosenRoom)}&avatarDef=${encodeURIComponent(figureDef)}&_t=${Date.now()}`;
-            } else {
-              iframe.src = data.gameUrl || `/game/?user=${encodeURIComponent(data.screenName)}&sw1=${encodeURIComponent(data.sw1)}&sw2=${encodeURIComponent(data.sw2)}`;
-            }
+            iframe.src = data.gameUrl || `/game/?user=${encodeURIComponent(data.screenName)}&sw1=${encodeURIComponent(data.sw1 || btoa(data.screenName))}&sw2=${encodeURIComponent(data.sw2 || '')}&room=${encodeURIComponent(chosenRoom)}&avatarDef=${encodeURIComponent(figureDef)}`;
           }, 1000);
         } else {
           statusMsg.style.background = '#b71c1c';

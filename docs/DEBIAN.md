@@ -1,3 +1,5 @@
+> Status note (2026-10-24): This runbook describes the existing Node-managed recovery environment and contains stale ports/version advice. It is not the target Go product architecture or a production-readiness guarantee. The Go module currently declares Go 1.26.0. Follow [RECREATION-PLAN.md](RECREATION-PLAN.md) Task 9 for the replacement runtime; preserve existing data during migration.
+
 # Debian Deployment & Server Guide for Coke Studios Recovery
 
 This document outlines deployment, service configuration, and production hosting instructions specifically targeted for **Debian 12 (Bookworm)** and modern Linux distributions.

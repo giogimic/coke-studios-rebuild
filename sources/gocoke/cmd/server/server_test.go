@@ -7,12 +7,17 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"gocoke/internal/client/net/amf"
 )
 
 func TestLoginDenizen(t *testing.T) {
 	srv := NewServer("./web", "127.0.0.1", "8080", nil)
+
+	// Seed prototype accounts without passwords
+	_, _ = srv.store.GetOrCreateDenizen("Matth", "M", "", "")
+	_, _ = srv.store.GetOrCreateDenizen("Alice", "F", "", "")
 
 	// Test 1: Query param user=Matth
 	req := httptest.NewRequest("GET", "/sf/ssldocs/loginDenizen.jsp?user=Matth&gender=M", nil)
@@ -69,6 +74,8 @@ func TestAMFGateway(t *testing.T) {
 	}
 
 	// Test getBackpack
+	_, _ = srv.store.GetOrCreateDenizen("Adam", "M", "", "")
+	_, _ = srv.store.AddBackpackItem("Adam", 45, map[string]any{"color": "classic"})
 	reqBPBytes, _ := amf.EncodeRemotingRequest("com.studiocom.sanfrancisco.catalog.FlashPossessionManager.getBackpack", []any{"Adam", "secret"})
 	reqBP := httptest.NewRequest("POST", "/sf/gateway", strings.NewReader(string(reqBPBytes)))
 	wBP := httptest.NewRecorder()
@@ -91,9 +98,10 @@ func TestAMFGateway(t *testing.T) {
 func TestMessageHandling(t *testing.T) {
 	srv := NewServer("./web", "127.0.0.1", "8080", nil)
 	p := &Player{
-		ID:         "test_p1",
-		ScreenName: "Adam",
-		RoomID:     "VIS$0",
+		ID:            "test_p1",
+		ScreenName:    "Adam",
+		RoomID:        "VIS$0",
+		Authenticated: true,
 	}
 	rm := srv.GetOrCreateRoom("VIS$0")
 	rm.Players[p.ID] = p
@@ -138,7 +146,7 @@ func TestMessageHandling(t *testing.T) {
 	}
 
 	// Test Thumbs Up cheer vote from a second player
-	p2 := &Player{ID: "test_p2", ScreenName: "Bob", RoomID: "VIS$0"}
+	p2 := &Player{ID: "test_p2", ScreenName: "Bob", RoomID: "VIS$0", Authenticated: true}
 	rm.Players[p2.ID] = p2
 	voteXML := `<Room.Action roomID="VIS$0"><CD_TU/></Room.Action>`
 	srv.handlePlayerMessage(p2, voteXML)
@@ -151,6 +159,16 @@ func TestMessageHandling(t *testing.T) {
 func TestDenizenProfileAPI(t *testing.T) {
 	srv := NewServer("./web", "127.0.0.1", "8080", nil)
 
+	// Register Tester
+	d, err := srv.store.RegisterDenizen("Tester", "testPassword123", "1", "avatar", "mission")
+	if err != nil {
+		t.Fatalf("failed to register Tester: %v", err)
+	}
+	sess, err := srv.store.CreateSession(d.ID, d.ScreenName, 24*time.Hour)
+	if err != nil {
+		t.Fatalf("failed to create session: %v", err)
+	}
+
 	// 1. Get initial profile
 	req := httptest.NewRequest("GET", "/api/denizen/profile?user=Tester", nil)
 	w := httptest.NewRecorder()
@@ -160,7 +178,7 @@ func TestDenizenProfileAPI(t *testing.T) {
 	}
 
 	// 2. Update profile
-	reqUp := httptest.NewRequest("POST", "/api/denizen/update?user=Tester&gender=2&avatarDef=hr=003/1&hd=002/1&ch=005/1&mission=Rockstar", nil)
+	reqUp := httptest.NewRequest("POST", "/api/denizen/update?user=Tester&gender=2&avatarDef=hr=003/1&hd=002/1&ch=005/1&mission=Rockstar&sid="+sess.Token, nil)
 	wUp := httptest.NewRecorder()
 	srv.handleUpdateDenizen(wUp, reqUp)
 	if wUp.Code != http.StatusOK {
@@ -172,7 +190,7 @@ func TestDenizenProfileAPI(t *testing.T) {
 	}
 
 	// 3. Verify persistence
-	d, err := srv.store.GetDenizenByName("Tester")
+	d, err = srv.store.GetDenizenByName("Tester")
 	if err != nil || d == nil {
 		t.Fatalf("failed to retrieve updated denizen: %v", err)
 	}
@@ -184,9 +202,10 @@ func TestDenizenProfileAPI(t *testing.T) {
 func TestMessengerAndDecor(t *testing.T) {
 	srv := NewServer("./web", "127.0.0.1", "8080", nil)
 
-	// Ensure denizens exist
+	// Ensure denizens and studio exist
 	_, _ = srv.store.GetOrCreateDenizen("UserA", "M", "defA", "Mission A")
 	_, _ = srv.store.GetOrCreateDenizen("UserB", "F", "defB", "Mission B")
+	_, _ = srv.store.CreateStudio("1", "u_a", "UserA", "UserA Studio", "studio_model_c", 3)
 
 	// 1. Add friend relationship via HTTP API
 	reqAdd := httptest.NewRequest("POST", "/api/messenger/friend/add?user=UserA&friend=UserB", nil)
@@ -305,8 +324,9 @@ func TestCDBurnAndModeration(t *testing.T) {
 	}
 
 	// 2. Test Studio Moderation Kick
-	p1 := &Player{ID: "p_owner", ScreenName: "OwnerUser", RoomID: "studio_test"}
-	p2 := &Player{ID: "p_guest", ScreenName: "TrollUser", RoomID: "studio_test"}
+	_, _ = srv.store.CreateStudio("studio_test", "u_owner", "OwnerUser", "Owner Studio", "studio_model_c", 3)
+	p1 := &Player{ID: "p_owner", ScreenName: "OwnerUser", RoomID: "studio_test", Authenticated: true}
+	p2 := &Player{ID: "p_guest", ScreenName: "TrollUser", RoomID: "studio_test", Authenticated: true}
 	room := srv.GetOrCreateRoom("studio_test")
 	room.mu.Lock()
 	room.Players[p1.ID] = p1
@@ -391,7 +411,7 @@ func TestRegisterDenizen(t *testing.T) {
 	}
 
 	// Verify legacy login compatibility endpoint
-	reqLogin := httptest.NewRequest("POST", "/login/Login?screenName=NeoCokeDJ", nil)
+	reqLogin := httptest.NewRequest("POST", "/login/Login?screenName=NeoCokeDJ&password=secretPassword123", nil)
 	wLogin := httptest.NewRecorder()
 	srv.handleLegacyLogin(wLogin, reqLogin)
 	if !strings.Contains(wLogin.Body.String(), "rCode=CMLOGGEDIN") {

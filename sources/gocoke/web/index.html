@@ -58,32 +58,32 @@
       // Configure SW1 (Base64-encoded screen name) and SW2 (session secret)
       // These will be passed to the WASM client automatically
       
-      // Try to read SW1 and SW2 from URL parameters, with fallback to username
+      // Read SW1 (Base64-encoded screenName) and SW2 (authoritative session ticket) from URL or storage
       const urlParams = new URLSearchParams(window.location.search);
       let sw1 = urlParams.get('sw1');
-      let sw2 = urlParams.get('sw2');
+      let sw2 = urlParams.get('sw2') || urlParams.get('sid');
       const user = urlParams.get('user') || urlParams.get('name') || urlParams.get('screenName');
 
-      if (!sw1) {
-        const defaultName = user || "Adam";
+      if (!sw1 && user) {
         try {
-          sw1 = btoa(defaultName);
-        } catch (_) {
-          sw1 = "QWRhbQ==";
-        }
+          sw1 = btoa(user);
+        } catch (_) {}
+      }
+      if (!sw1) {
+        try {
+          const storedUser = localStorage.getItem('coke_user');
+          if (storedUser) sw1 = btoa(storedUser);
+        } catch (_) {}
       }
 
       if (!sw2) {
-        let decodedName = "Adam";
         try {
-          decodedName = atob(sw1);
+          sw2 = localStorage.getItem('coke_session') || sessionStorage.getItem('coke_session') || '';
         } catch (_) {}
-        const randHex = Math.random().toString(36).substring(2, 8);
-        sw2 = decodedName + "_" + randHex;
       }
 
-      window.sw1 = sw1;
-      window.sw2 = sw2;
+      window.sw1 = sw1 || "";
+      window.sw2 = sw2 || "";
 
       console.log('[GoCoke] Session configured:', {
         screenName: (() => { try { return atob(sw1); } catch (_) { return sw1; } })(),
@@ -140,7 +140,7 @@
           statusEl.style.maxWidth = "80%";
           statusEl.innerHTML = `<div style="font-weight:bold;margin-bottom:8px;">Client Launch Error</div>
             <div style="font-size:12px;text-align:left;white-space:pre-wrap;font-family:monospace;">${String(err && err.stack ? err.stack : err)}</div>
-            <div style="margin-top:12px;"><a href="/phase/" style="color:#FFF;background:#222;padding:6px 12px;text-decoration:none;border-radius:4px;display:inline-block;">Launch HTML5 Engine (CokePhase) &rarr;</a></div>`;
+            <div style="margin-top:12px;"><button onclick="location.reload()" style="color:#000;background:#ffcc00;border:none;padding:8px 16px;border-radius:4px;font-weight:bold;cursor:pointer;">Retry Loading Coke Studios &rarr;</button></div>`;
         }
       }
       launchGameEngine();

@@ -1,0 +1,116 @@
+[
+  {
+    "id": "EVID-001-VIEWPORT",
+    "release": "March 14, 2006",
+    "sourcePathOrURL": "sources/gocoke/web/Lingo/Movies.csv",
+    "sourceHash": "b3e3ddca2866676cfec55bc080df75152865beebf59d99723ec08dcf92bdf2ee",
+    "locator": "Row 2: SF_Client.dir",
+    "observation": "Director 10.0 Stage Rect: (89, 50) => (849, 570), Logical resolution 760x520 pixels.",
+    "confidence": "HIGH",
+    "implementationPaths": [
+      "sources/gocoke/cmd/client/main.go",
+      "sources/gocoke/internal/client/scene/studio/studio.go"
+    ],
+    "verification": "Movies.csv stage bounds extraction matched to SF_Client.dir headers"
+  },
+  {
+    "id": "EVID-002-CASTS",
+    "release": "March 14, 2006",
+    "sourcePathOrURL": "sources/gocoke/web/Lingo/SF_Client/Casts.csv",
+    "sourceHash": "c074474771d9d9685a113a3a609d94944d18ec3b772099f66bb6b5791fc54930",
+    "locator": "Lines 1-20",
+    "observation": "Core 19 Director cast libraries: entry, cc_interface, cc_navigator, SF_Gateway, chatengine, cc_room, cc_furniture_small, cc_catalogue, cc_messenger, avatarengine, cc_furniture, isoengine, soundlibrary, people, cc_items, sequencer, mixer, Studio.",
+    "confidence": "HIGH",
+    "implementationPaths": [
+      "sources/gocoke/internal/client/assets/",
+      "sources/gocoke/cmd/client/main.go"
+    ],
+    "verification": "Extracted Lingo script cast references in 2_MAIN.ls match Casts.csv"
+  },
+  {
+    "id": "EVID-003-BOOT-PARAMS",
+    "release": "March 14, 2006",
+    "sourcePathOrURL": "sources/gocoke/web/Lingo/SF_Client/28_LoginScreenName.ls",
+    "sourceHash": "1ffac67fe6a73c0be85050fbe7248ba7f093f40f2e0f40d7e63b6a2267f1b218",
+    "locator": "on Init me",
+    "observation": "Shockwave external parameters sw1 (base64 screen name) and sw2 (session ticket/sid) used to authenticate via loginDenizen.",
+    "confidence": "HIGH",
+    "implementationPaths": [
+      "sources/gocoke/cmd/client/main.go",
+      "sources/gocoke/internal/client/auth/login.go",
+      "sources/gocoke/cmd/server/main.go"
+    ],
+    "verification": "Lingo externalParamValue calls in 28_LoginScreenName.ls"
+  },
+  {
+    "id": "EVID-004-ROOM-ENTER",
+    "release": "March 14, 2006",
+    "sourcePathOrURL": "sources/gocoke/web/Lingo/SF_Client/19_ENTER STUDIO.ls",
+    "sourceHash": "a17fbe944e8ec6b50e3ceb0db2be8374d9cf4dca6f811b702ec4fa6a29ec608d",
+    "locator": "on initGetGameServerResult me, oGameServer",
+    "observation": "Studio entry calls FlashStudioManager.getGameServerByStudioID, connects socket, sends login, and then sends enter room request.",
+    "confidence": "HIGH",
+    "implementationPaths": [
+      "sources/gocoke/cmd/server/main.go",
+      "sources/gocoke/cmd/server/rooms.go",
+      "sources/gocoke/internal/client/net/"
+    ],
+    "verification": "Lingo event trace in 19_ENTER STUDIO.ls"
+  },
+  {
+    "id": "EVID-005-FEATURES",
+    "release": "March 14, 2006",
+    "sourcePathOrURL": "sources/gocoke/web/Lingo/SF_Client/31_FEATURE_SET.ls",
+    "sourceHash": "7a8de9cbba3a78dd01c7423e800d9841ca4ebfc1cf88aebe1823ebca30b9101c",
+    "locator": "on Init me",
+    "observation": "22 core capability flags defined: MESSENGER, CHECK_DECIBELS, BACKPACK, CATALOG, PURCHASING, TRADING, PERFORMANCE, VOTING, FURNITURE_MOVE, FURNITURE_PICKUP, FURNITURE_PUTDOWN, FURNITURE_DELETE, FURNITURE_ROTATE, FURNITURE_USE, CALL_FOR_HELP, DANCING, TELEPORTING, MIXER, CDPLAYER, DRINK_DISPENSER, CHARTS, ITEM_DISPENSER.",
+    "confidence": "HIGH",
+    "implementationPaths": [
+      "sources/gocoke/internal/client/scene/boot/boot.go",
+      "sources/gocoke/cmd/server/main.go"
+    ],
+    "verification": "Lingo feature dictionary in 31_FEATURE_SET.ls"
+  },
+  {
+    "id": "EVID-006-CHAT-RENDERER",
+    "release": "March 14, 2006",
+    "sourcePathOrURL": "sources/gocoke/web/Lingo/chatengine/3_ChatRenderer.ls",
+    "sourceHash": "a90a1e39a3ea7eeae3e0bfa9da137a1f5926ec037cfd36a3e2a5d207ec2bb1c2",
+    "locator": "ChatRenderer class & 70_Bubble specs.txt",
+    "observation": "Speech modes: speak=1 (dropped if dist>=9, filtered if dist>=6), shout=2, sing=3. Max 5 bubble lines, 5px gap, 60s lifetime. Fonts: Verdana 10px bold name, 10px plain speak, 10px bold shout, 9px bold sing.",
+    "confidence": "HIGH",
+    "implementationPaths": [
+      "sources/gocoke/internal/client/scene/studio/chat.go",
+      "sources/gocoke/cmd/server/rooms.go"
+    ],
+    "verification": "Direct Lingo code analysis of 3_ChatRenderer.ls and 70_Bubble specs.txt"
+  },
+  {
+    "id": "EVID-007-ROOM-EXIT",
+    "release": "March 14, 2006",
+    "sourcePathOrURL": "sources/gocoke/web/Lingo/SF_Gateway/20_Room.ls",
+    "sourceHash": "1a1795c2ec58597305d2c206cfd7fa855c3258c70d47ad8f8cb96417fae87053",
+    "locator": "on sendExitRoom me",
+    "observation": "Room exit sends <Room.Exit/> frame to server, server must remove player and broadcast <AV_RM av=\"name\"/> to remaining room occupants so no phantom avatars linger.",
+    "confidence": "HIGH",
+    "implementationPaths": [
+      "sources/gocoke/cmd/server/rooms.go",
+      "sources/gocoke/cmd/server/main.go"
+    ],
+    "verification": "Lingo exit dispatch in 20_Room.ls and 19_ENTER STUDIO.ls"
+  },
+  {
+    "id": "EVID-008-ROOM-COLLISION",
+    "release": "March 14, 2006",
+    "sourcePathOrURL": "sources/gocoke/web/Lingo/isoengine/142_Studio_A_MapXml.txt",
+    "sourceHash": "7bb70942ff903c72b22ec647dfd6ff732890ae15df6d4bfab37ce33daecb9c02",
+    "locator": "PathMap XML layout nodes",
+    "observation": "PathMap defines walkable nodes (w=0), door entrance/exit (w=10), seating (w=110, 200) and portals (w=150, 155). Studio A door at row 4 col 8. All coordinates outside declared nodes are impassable walls.",
+    "confidence": "HIGH",
+    "implementationPaths": [
+      "sources/gocoke/cmd/server/rooms.go",
+      "sources/gocoke/internal/client/isoengine/parser.go"
+    ],
+    "verification": "Lingo Studio XML <Door row=\"4\" col=\"8\"> and 142_Studio_A_MapXml.txt"
+  }
+]

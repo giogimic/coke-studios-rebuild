@@ -331,7 +331,7 @@ func (cm *ChatManager) EmitChatBubble(message string, playerAvatar *isoengine.Is
 	if x < 0 {
 		x = 0
 	}
-	stageW := float64(960) // Layout width
+	stageW := float64(760) // Logical viewport width matching Lingo
 	if x+float64(bubbleW) > stageW {
 		x = stageW - float64(bubbleW) - 75 // match Lingo right padding
 	}
@@ -368,8 +368,8 @@ func (cm *ChatManager) EmitChatBubble(message string, playerAvatar *isoengine.Is
 	})
 	// Clean up very old expired bubbles to prevent memory leak
 	// Keep the last 10 bubbles maximum (even if expired)
-	if len(cm.bubbles) > 10 {
-		cm.bubbles = cm.bubbles[len(cm.bubbles)-10:]
+	if len(cm.bubbles) > 5 {
+		cm.bubbles = cm.bubbles[len(cm.bubbles)-5:]
 	}
 	log.Printf("ChatManager: bubble created at %.0f,%.0f lifetime=%v total=%d", x, y, life, len(cm.bubbles))
 }

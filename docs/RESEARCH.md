@@ -1,3 +1,5 @@
+> Status note (2026-10-24): This is an earlier acquisition/research summary. Its completion, historical-architecture and fidelity claims have not all been substantiated. Use [BIBLE.md](BIBLE.md), [PROGRESS-REVIEW.md](PROGRESS-REVIEW.md), and [PARITY.md](PARITY.md) for current direction and verified status. Source collection is evidence gathering, not game completion.
+
 # Source and Release Findings: Coke Music / Coke Studios
 
 Updated: October 2026. Complete collection and verification of publicly discoverable rebuild, emulation, and preservation work.

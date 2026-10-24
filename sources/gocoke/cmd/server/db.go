@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -18,15 +19,24 @@ import (
 var denizenSeq int64
 
 type DenizenRecord struct {
-	ID         string
+	ID           string
+	ScreenName   string
+	PasswordHash string
+	Secret       string
+	Gender       int
+	Mission      string
+	AvatarDef    string
+	Decibels     int
+	VCoins       int
+	LastSeenIn   string
+}
+
+type SessionRecord struct {
+	Token      string
+	DenizenID  string
 	ScreenName string
-	Secret     string
-	Gender     int
-	Mission    string
-	AvatarDef  string
-	Decibels   int
-	VCoins     int
-	LastSeenIn string
+	CreatedAt  time.Time
+	ExpiresAt  time.Time
 }
 
 type StudioRecord struct {
@@ -180,6 +190,7 @@ func (s *Store) migrate() error {
 			`CREATE TABLE IF NOT EXISTS denizens (
 				id VARCHAR(64) PRIMARY KEY,
 				screen_name VARCHAR(64) UNIQUE NOT NULL,
+				password_hash VARCHAR(255) NOT NULL DEFAULT '',
 				secret VARCHAR(128) NOT NULL,
 				gender INT NOT NULL DEFAULT 1,
 				mission VARCHAR(255) NOT NULL DEFAULT 'Coke Music',
@@ -281,12 +292,22 @@ func (s *Store) migrate() error {
 				total_wins INT NOT NULL DEFAULT 0,
 				updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+			`CREATE TABLE IF NOT EXISTS sessions (
+				token VARCHAR(128) PRIMARY KEY,
+				denizen_id VARCHAR(64) NOT NULL,
+				screen_name VARCHAR(64) NOT NULL,
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+				expires_at TIMESTAMP NOT NULL,
+				INDEX idx_sessions_screen (screen_name)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
 		}
 	} else {
 		queries = []string{
 			`CREATE TABLE IF NOT EXISTS denizens (
 				id TEXT PRIMARY KEY,
 				screen_name TEXT UNIQUE NOT NULL,
+				password_hash TEXT DEFAULT '',
 				secret TEXT NOT NULL,
 				gender INTEGER NOT NULL DEFAULT 1,
 				mission TEXT NOT NULL DEFAULT 'Coke Music',
@@ -388,6 +409,15 @@ func (s *Store) migrate() error {
 				total_wins INTEGER NOT NULL DEFAULT 0,
 				updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 			);`,
+
+			`CREATE TABLE IF NOT EXISTS sessions (
+				token TEXT PRIMARY KEY,
+				denizen_id TEXT NOT NULL,
+				screen_name TEXT NOT NULL,
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+				expires_at TIMESTAMP NOT NULL
+			);`,
+			`CREATE INDEX IF NOT EXISTS idx_sessions_screen ON sessions(screen_name);`,
 		}
 	}
 
@@ -395,6 +425,13 @@ func (s *Store) migrate() error {
 		if _, err := s.db.Exec(q); err != nil {
 			return fmt.Errorf("migration query failed: %w (%s)", err, q)
 		}
+	}
+
+	// Safe column migration for existing databases
+	if s.driver == "mysql" {
+		_, _ = s.db.Exec("ALTER TABLE denizens ADD COLUMN password_hash VARCHAR(255) NOT NULL DEFAULT ''")
+	} else {
+		_, _ = s.db.Exec("ALTER TABLE denizens ADD COLUMN password_hash TEXT DEFAULT ''")
 	}
 
 	// Seed public default studios
@@ -438,10 +475,10 @@ func (s *Store) GetOrCreateDenizen(screenName, gender, avatarDef, mission string
 	}
 
 	var d DenizenRecord
-	row := s.db.QueryRow(`SELECT id, screen_name, secret, gender, mission, avatar_def, decibels, vcoins, last_seen_in 
+	row := s.db.QueryRow(`SELECT id, screen_name, COALESCE(password_hash, ''), secret, gender, mission, avatar_def, decibels, vcoins, last_seen_in 
 		FROM denizens WHERE LOWER(screen_name) = LOWER(?)`, cleanName)
 
-	err := row.Scan(&d.ID, &d.ScreenName, &d.Secret, &d.Gender, &d.Mission, &d.AvatarDef, &d.Decibels, &d.VCoins, &d.LastSeenIn)
+	err := row.Scan(&d.ID, &d.ScreenName, &d.PasswordHash, &d.Secret, &d.Gender, &d.Mission, &d.AvatarDef, &d.Decibels, &d.VCoins, &d.LastSeenIn)
 	if err == nil {
 		newSecret := "coke_secret_" + fmt.Sprintf("%x", time.Now().UnixNano())
 		_, _ = s.db.Exec("UPDATE denizens SET secret = ? WHERE id = ?", newSecret, d.ID)
@@ -468,41 +505,126 @@ func (s *Store) GetOrCreateDenizen(screenName, gender, avatarDef, mission string
 	}
 
 	d = DenizenRecord{
-		ID:         newID,
-		ScreenName: cleanName,
-		Secret:     newSecret,
-		Gender:     g,
-		Mission:    mission,
-		AvatarDef:  avatarDef,
-		Decibels:   5000,
-		VCoins:     500,
-		LastSeenIn: "VIS$0",
+		ID:           newID,
+		ScreenName:   cleanName,
+		PasswordHash: "",
+		Secret:       newSecret,
+		Gender:       g,
+		Mission:      mission,
+		AvatarDef:    avatarDef,
+		Decibels:     5000,
+		VCoins:       500,
+		LastSeenIn:   "VIS$0",
 	}
 
 	_, err = s.db.Exec(`INSERT INTO denizens 
-		(id, screen_name, secret, gender, mission, avatar_def, decibels, vcoins, last_seen_in) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		d.ID, d.ScreenName, d.Secret, d.Gender, d.Mission, d.AvatarDef, d.Decibels, d.VCoins, d.LastSeenIn)
+		(id, screen_name, password_hash, secret, gender, mission, avatar_def, decibels, vcoins, last_seen_in) 
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		d.ID, d.ScreenName, d.PasswordHash, d.Secret, d.Gender, d.Mission, d.AvatarDef, d.Decibels, d.VCoins, d.LastSeenIn)
 	if err != nil {
 		return nil, err
 	}
 
-	// Give starter backpack items to new player:
-	starterItems := []struct {
-		cid   int
-		props map[string]any
-	}{
-		{45, map[string]any{}},
-		{52, map[string]any{}},
-		{89, map[string]any{"songName": "Coke Anthem", "ownerName": cleanName, "edl": "^50,countryOne_guitar00{2,0{4,4{^50,danceOne_bass00{4,0{^"}},
+	log.Printf("[DB] Created new denizen: %s (ID: %s, Starting dB: %d, Starting V-Coins: %d)", d.ScreenName, d.ID, d.Decibels, d.VCoins)
+	return &d, nil
+}
+
+func (s *Store) RegisterDenizen(screenName, password, gender, avatarDef, mission string) (*DenizenRecord, error) {
+	cleanName := strings.TrimSpace(screenName)
+	if cleanName == "" {
+		return nil, errors.New("screen name is required")
 	}
-	for _, it := range starterItems {
-		pj, _ := json.Marshal(it.props)
-		_, _ = s.db.Exec("INSERT INTO backpack_items (denizen_id, catalog_item_id, properties_json) VALUES (?, ?, ?)",
-			d.ID, it.cid, string(pj))
+	if password == "" {
+		return nil, errors.New("password is required")
 	}
 
-	log.Printf("[DB] Created new denizen: %s (ID: %s, Starting dB: %d, Starting V-Coins: %d)", d.ScreenName, d.ID, d.Decibels, d.VCoins)
+	hash, err := HashPassword(password)
+	if err != nil {
+		return nil, fmt.Errorf("failed to hash password: %w", err)
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var existingID string
+	err = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", cleanName).Scan(&existingID)
+	if err == nil {
+		return nil, ErrDenizenExists
+	}
+	if err != sql.ErrNoRows {
+		return nil, err
+	}
+
+	newSeq := atomic.AddInt64(&denizenSeq, 1)
+	newID := fmt.Sprintf("usr_%d_%d", time.Now().UnixNano(), newSeq)
+	newSecret := fmt.Sprintf("coke_secret_%x_%d", time.Now().UnixNano(), newSeq)
+	g := 1
+	if strings.ToUpper(gender) == "F" || gender == "2" {
+		g = 2
+	}
+	if avatarDef == "" {
+		avatarDef = "ch=01/01/01&fa=01/01/01&cl=01/01/01"
+	}
+	if mission == "" {
+		mission = "Coke Music"
+	}
+
+	d := DenizenRecord{
+		ID:           newID,
+		ScreenName:   cleanName,
+		PasswordHash: hash,
+		Secret:       newSecret,
+		Gender:       g,
+		Mission:      mission,
+		AvatarDef:    avatarDef,
+		Decibels:     5000,
+		VCoins:       500,
+		LastSeenIn:   "VIS$0",
+	}
+
+	_, err = s.db.Exec(`INSERT INTO denizens 
+		(id, screen_name, password_hash, secret, gender, mission, avatar_def, decibels, vcoins, last_seen_in) 
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		d.ID, d.ScreenName, d.PasswordHash, d.Secret, d.Gender, d.Mission, d.AvatarDef, d.Decibels, d.VCoins, d.LastSeenIn)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Printf("[DB] Registered new denizen: %s (ID: %s)", d.ScreenName, d.ID)
+	return &d, nil
+}
+
+func (s *Store) VerifyCredentials(screenName, password string) (*DenizenRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	cleanName := strings.TrimSpace(screenName)
+	if cleanName == "" {
+		return nil, ErrInvalidCredentials
+	}
+
+	var d DenizenRecord
+	row := s.db.QueryRow(`SELECT id, screen_name, COALESCE(password_hash, ''), secret, gender, mission, avatar_def, decibels, vcoins, last_seen_in 
+		FROM denizens WHERE LOWER(screen_name) = LOWER(?)`, cleanName)
+
+	if err := row.Scan(&d.ID, &d.ScreenName, &d.PasswordHash, &d.Secret, &d.Gender, &d.Mission, &d.AvatarDef, &d.Decibels, &d.VCoins, &d.LastSeenIn); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, ErrInvalidCredentials
+		}
+		return nil, err
+	}
+
+	if d.PasswordHash != "" {
+		if !VerifyPassword(password, d.PasswordHash) {
+			return nil, ErrInvalidCredentials
+		}
+	} else {
+		// Existing prototype account without password: only allowed if password is empty
+		if password != "" {
+			return nil, ErrInvalidCredentials
+		}
+	}
+
 	return &d, nil
 }
 
@@ -511,12 +633,101 @@ func (s *Store) GetDenizenByName(screenName string) (*DenizenRecord, error) {
 	defer s.mu.Unlock()
 
 	var d DenizenRecord
-	row := s.db.QueryRow(`SELECT id, screen_name, secret, gender, mission, avatar_def, decibels, vcoins, last_seen_in 
+	row := s.db.QueryRow(`SELECT id, screen_name, COALESCE(password_hash, ''), secret, gender, mission, avatar_def, decibels, vcoins, last_seen_in 
 		FROM denizens WHERE LOWER(screen_name) = LOWER(?)`, strings.TrimSpace(screenName))
-	if err := row.Scan(&d.ID, &d.ScreenName, &d.Secret, &d.Gender, &d.Mission, &d.AvatarDef, &d.Decibels, &d.VCoins, &d.LastSeenIn); err != nil {
+	if err := row.Scan(&d.ID, &d.ScreenName, &d.PasswordHash, &d.Secret, &d.Gender, &d.Mission, &d.AvatarDef, &d.Decibels, &d.VCoins, &d.LastSeenIn); err != nil {
 		return nil, err
 	}
 	return &d, nil
+}
+
+func (s *Store) GetDenizenByID(id string) (*DenizenRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var d DenizenRecord
+	row := s.db.QueryRow(`SELECT id, screen_name, COALESCE(password_hash, ''), secret, gender, mission, avatar_def, decibels, vcoins, last_seen_in 
+		FROM denizens WHERE id = ?`, strings.TrimSpace(id))
+	if err := row.Scan(&d.ID, &d.ScreenName, &d.PasswordHash, &d.Secret, &d.Gender, &d.Mission, &d.AvatarDef, &d.Decibels, &d.VCoins, &d.LastSeenIn); err != nil {
+		return nil, err
+	}
+	return &d, nil
+}
+
+func (s *Store) GetDenizenBySecret(secret string) (*DenizenRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var d DenizenRecord
+	row := s.db.QueryRow(`SELECT id, screen_name, COALESCE(password_hash, ''), secret, gender, mission, avatar_def, decibels, vcoins, last_seen_in 
+		FROM denizens WHERE secret = ?`, strings.TrimSpace(secret))
+	if err := row.Scan(&d.ID, &d.ScreenName, &d.PasswordHash, &d.Secret, &d.Gender, &d.Mission, &d.AvatarDef, &d.Decibels, &d.VCoins, &d.LastSeenIn); err != nil {
+		return nil, err
+	}
+	return &d, nil
+}
+
+func (s *Store) CreateSession(denizenID, screenName string, duration time.Duration) (*SessionRecord, error) {
+	token, err := GenerateSessionToken()
+	if err != nil {
+		return nil, err
+	}
+	if duration == 0 {
+		duration = defaultSessionTTL
+	}
+	now := time.Now().UTC()
+	expiresAt := now.Add(duration)
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	query := `INSERT INTO sessions (token, denizen_id, screen_name, created_at, expires_at) VALUES (?, ?, ?, ?, ?)`
+	_, err = s.db.Exec(query, token, denizenID, screenName, now.Format(time.RFC3339), expiresAt.Format(time.RFC3339))
+	if err != nil {
+		return nil, fmt.Errorf("failed to insert session: %w", err)
+	}
+
+	return &SessionRecord{
+		Token:      token,
+		DenizenID:  denizenID,
+		ScreenName: screenName,
+		CreatedAt:  now,
+		ExpiresAt:  expiresAt,
+	}, nil
+}
+
+func (s *Store) GetSession(token string) (*SessionRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var sess SessionRecord
+	var createdStr, expiresStr string
+	row := s.db.QueryRow(`SELECT token, denizen_id, screen_name, created_at, expires_at FROM sessions WHERE token = ?`, strings.TrimSpace(token))
+	if err := row.Scan(&sess.Token, &sess.DenizenID, &sess.ScreenName, &createdStr, &expiresStr); err != nil {
+		return nil, err
+	}
+	sess.CreatedAt, _ = time.Parse(time.RFC3339, createdStr)
+	sess.ExpiresAt, _ = time.Parse(time.RFC3339, expiresStr)
+	if sess.ExpiresAt.IsZero() {
+		sess.ExpiresAt, _ = time.Parse("2006-01-02 15:04:05", expiresStr)
+	}
+	return &sess, nil
+}
+
+func (s *Store) DeleteSession(token string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	_, err := s.db.Exec(`DELETE FROM sessions WHERE token = ?`, strings.TrimSpace(token))
+	return err
+}
+
+func (s *Store) CleanExpiredSessions() error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	_, err := s.db.Exec(`DELETE FROM sessions WHERE expires_at < ?`, time.Now())
+	return err
 }
 
 func (s *Store) UpdateDenizenProfile(screenName string, gender int, avatarDef, mission string) (*DenizenRecord, error) {
@@ -750,7 +961,7 @@ func (s *Store) GetStudios() ([]StudioRecord, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	rows, err := s.db.Query("SELECT id, owner_id, owner_name, name, layout, room_type, is_public FROM studios ORDER BY id ASC")
+	rows, err := s.db.Query("SELECT id, owner_id, owner_name, name, layout, room_type, wallpaper, floor, doorbell, is_public FROM studios ORDER BY id ASC")
 	if err != nil {
 		return nil, err
 	}
@@ -759,11 +970,23 @@ func (s *Store) GetStudios() ([]StudioRecord, error) {
 	var list []StudioRecord
 	for rows.Next() {
 		var st StudioRecord
-		if err := rows.Scan(&st.ID, &st.OwnerID, &st.OwnerName, &st.Name, &st.Layout, &st.RoomType, &st.IsPublic); err == nil {
+		if err := rows.Scan(&st.ID, &st.OwnerID, &st.OwnerName, &st.Name, &st.Layout, &st.RoomType, &st.Wallpaper, &st.Floor, &st.Doorbell, &st.IsPublic); err == nil {
 			list = append(list, st)
 		}
 	}
 	return list, nil
+}
+
+func (s *Store) GetStudio(studioID string) (*StudioRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var st StudioRecord
+	row := s.db.QueryRow("SELECT id, owner_id, owner_name, name, layout, room_type, wallpaper, floor, doorbell, is_public FROM studios WHERE id = ?", strings.TrimSpace(studioID))
+	if err := row.Scan(&st.ID, &st.OwnerID, &st.OwnerName, &st.Name, &st.Layout, &st.RoomType, &st.Wallpaper, &st.Floor, &st.Doorbell, &st.IsPublic); err != nil {
+		return nil, err
+	}
+	return &st, nil
 }
 
 func (s *Store) GetFriends(screenName string) ([]FriendRecord, error) {
