@@ -1,6 +1,10 @@
 package main
 
 import (
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
@@ -237,3 +241,116 @@ func TestCallForHelpReport(t *testing.T) {
 		t.Fatalf("CFH record mismatch: reporter=%q suspect=%q msg=%q status=%q", reporter, suspect, msg, status)
 	}
 }
+
+func TestPostcardSubmissionAndDelivery(t *testing.T) {
+	store, err := OpenStore(":memory:")
+	if err != nil {
+		t.Fatalf("OpenStore failed: %v", err)
+	}
+	defer store.Close()
+
+	srv := NewServer(".", "127.0.0.1", "8080", store)
+	_, _ = store.RegisterDenizen("PostcardBob", "pass123", "1", "hr=001/1", "Bob")
+
+	// 1. Postcard submission with preset message msgID=2 and 2 recipients
+	formData := strings.NewReader("name=SenderAlice&from=alice@test.com&msgID=2&moviefilename=guitar&name1=PostcardBob&to1=bob@test.com&name2=FriendDave&to2=dave@test.com")
+	req, _ := http.NewRequest("POST", "/servlet/PostCard", formData)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	w := httptest.NewRecorder()
+	srv.Handler().ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("Expected 200 OK from /servlet/PostCard, got %d", w.Code)
+	}
+	body := w.Body.String()
+	if !strings.Contains(body, "Your Virtual Musical Postcard Has Been Sent!") {
+		t.Fatalf("Expected confirmation HTML in body, got: %s", body)
+	}
+
+	// Verify postcards in store for PostcardBob
+	bobsCards, err := store.GetPostcards("PostcardBob")
+	if err != nil || len(bobsCards) != 1 {
+		t.Fatalf("Expected 1 postcard for PostcardBob, got %d (err: %v)", len(bobsCards), err)
+	}
+	if bobsCards[0].MessageText != "Heard this. Thought of you. Come check it out." {
+		t.Fatalf("Expected preset message #2, got %q", bobsCards[0].MessageText)
+	}
+
+	// Verify in-game messenger notification was dropped for PostcardBob
+	msgs, err := store.GetMessages("PostcardBob", false)
+	if err != nil || len(msgs) != 1 {
+		t.Fatalf("Expected 1 messenger message for PostcardBob, got %d (err: %v)", len(msgs), err)
+	}
+	if !strings.Contains(msgs[0].Message, "[POSTCARD: guitar]") {
+		t.Fatalf("Expected message to contain postcard tag, got %q", msgs[0].Message)
+	}
+
+	// 2. Postcard API JSON request
+	jsonReq, _ := http.NewRequest("POST", "/api/postcard/send", strings.NewReader("user=Alice&to=PostcardBob&message=Custom+Jam+Invite&card=turntable"))
+	jsonReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	jsonReq.Header.Set("Accept", "application/json")
+	wJson := httptest.NewRecorder()
+	srv.Handler().ServeHTTP(wJson, jsonReq)
+
+	if wJson.Code != http.StatusOK {
+		t.Fatalf("Expected 200 OK from /api/postcard/send, got %d", wJson.Code)
+	}
+	var respData map[string]any
+	if err := json.Unmarshal(wJson.Body.Bytes(), &respData); err != nil || respData["success"] != true {
+		t.Fatalf("Expected JSON success=true, got %v", respData)
+	}
+
+	// 3. Postcard Preview
+	prevReq, _ := http.NewRequest("GET", "/postcardpreview.jsp?message=Rock+On&name=Dave", nil)
+	wPrev := httptest.NewRecorder()
+	srv.Handler().ServeHTTP(wPrev, prevReq)
+	if wPrev.Code != http.StatusOK || !strings.Contains(wPrev.Body.String(), "Rock On") {
+		t.Fatalf("Expected preview to contain 'Rock On', got %d: %s", wPrev.Code, wPrev.Body.String())
+	}
+
+	// 4. Bad request without recipients
+	emptyReq, _ := http.NewRequest("POST", "/api/postcard/send", strings.NewReader("user=Alice"))
+	emptyReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	emptyReq.Header.Set("Accept", "application/json")
+	wEmpty := httptest.NewRecorder()
+	srv.Handler().ServeHTTP(wEmpty, emptyReq)
+	if wEmpty.Code != http.StatusBadRequest {
+		t.Fatalf("Expected 400 Bad Request, got %d", wEmpty.Code)
+	}
+}
+
+func TestRoomAliases(t *testing.T) {
+	srv := NewServer(".", "127.0.0.1", "8080", nil)
+
+	testCases := []struct {
+		slug       string
+		expectName string
+		expectLyt  int
+	}{
+		{"centralpark", "Central Park I", 5},
+		{"tokyo", "Tokyo I", 5},
+		{"london", "London I", 5},
+		{"sanfrancisco", "San Francisco I", 3},
+		{"raysrooftopparty", "Ray's Rooftop Party", 5},
+		{"studio_model_b", "Central Park Studio", 5},
+		{"studio_model_a", "San Francisco Studio", 3},
+		{"studio_model_c", "London Studio", 5},
+		{"studio_model_d", "Private Studio #1", 4},
+		{"studio_model_rooftop", "Ray's Rooftop Party", 5},
+		{"studio_wayne", "Studio Wayne", 2},
+	}
+
+	for _, tc := range testCases {
+		rm, err := srv.GetRoom(tc.slug)
+		if err != nil {
+			t.Fatalf("Failed to resolve room slug %q: %v", tc.slug, err)
+		}
+		if rm.Name != tc.expectName {
+			t.Errorf("Room %q: expected name %q, got %q", tc.slug, tc.expectName, rm.Name)
+		}
+		if rm.Layout != tc.expectLyt {
+			t.Errorf("Room %q: expected layout %d, got %d", tc.slug, tc.expectLyt, rm.Layout)
+		}
+	}
+}
+

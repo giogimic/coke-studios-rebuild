@@ -327,6 +327,18 @@ func (s *Store) migrate() error {
 				total_earned INT NOT NULL DEFAULT 0,
 				PRIMARY KEY (denizen_id, game, earnings_date)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+			`CREATE TABLE IF NOT EXISTS postcards (
+				id INT AUTO_INCREMENT PRIMARY KEY,
+				sender_name VARCHAR(64) NOT NULL,
+				sender_email VARCHAR(128) NOT NULL,
+				recipient_name VARCHAR(64) NOT NULL,
+				recipient_email VARCHAR(128) NOT NULL,
+				movie_filename VARCHAR(64) NOT NULL,
+				message_text TEXT NOT NULL,
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+				INDEX idx_postcards_recipient (recipient_name)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
 		}
 	} else {
 		queries = []string{
@@ -468,6 +480,17 @@ func (s *Store) migrate() error {
 				earnings_date TEXT NOT NULL,
 				total_earned INTEGER NOT NULL DEFAULT 0,
 				PRIMARY KEY (denizen_id, game, earnings_date)
+			);`,
+
+			`CREATE TABLE IF NOT EXISTS postcards (
+				id INTEGER PRIMARY KEY AUTOINCREMENT,
+				sender_name TEXT NOT NULL,
+				sender_email TEXT NOT NULL,
+				recipient_name TEXT NOT NULL,
+				recipient_email TEXT NOT NULL,
+				movie_filename TEXT NOT NULL,
+				message_text TEXT NOT NULL,
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 			);`,
 		}
 	}
@@ -2011,3 +2034,48 @@ func (s *Store) RecordDailyMinigameEarnings(denizenID, game string, amount int) 
 		denizenID, game, today, amount)
 	return err
 }
+
+type PostcardRecord struct {
+	ID             int64     `json:"id"`
+	SenderName     string    `json:"senderName"`
+	SenderEmail    string    `json:"senderEmail"`
+	RecipientName  string    `json:"recipientName"`
+	RecipientEmail string    `json:"recipientEmail"`
+	MovieFilename  string    `json:"movieFilename"`
+	MessageText    string    `json:"messageText"`
+	CreatedAt      time.Time `json:"createdAt"`
+}
+
+func (s *Store) SavePostcard(senderName, senderEmail, recipientName, recipientEmail, movieFilename, messageText string) (int64, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	query := "INSERT INTO postcards (sender_name, sender_email, recipient_name, recipient_email, movie_filename, message_text) VALUES (?, ?, ?, ?, ?, ?)"
+	res, err := s.db.Exec(query, strings.TrimSpace(senderName), strings.TrimSpace(senderEmail), strings.TrimSpace(recipientName), strings.TrimSpace(recipientEmail), strings.TrimSpace(movieFilename), strings.TrimSpace(messageText))
+	if err != nil {
+		return 0, err
+	}
+	return res.LastInsertId()
+}
+
+func (s *Store) GetPostcards(recipientName string) ([]PostcardRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	query := "SELECT id, sender_name, sender_email, recipient_name, recipient_email, movie_filename, message_text, created_at FROM postcards WHERE LOWER(recipient_name) = LOWER(?) ORDER BY id DESC"
+	rows, err := s.db.Query(query, strings.TrimSpace(recipientName))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var list []PostcardRecord
+	for rows.Next() {
+		var pc PostcardRecord
+		if err := rows.Scan(&pc.ID, &pc.SenderName, &pc.SenderEmail, &pc.RecipientName, &pc.RecipientEmail, &pc.MovieFilename, &pc.MessageText, &pc.CreatedAt); err == nil {
+			list = append(list, pc)
+		}
+	}
+	return list, nil
+}
+

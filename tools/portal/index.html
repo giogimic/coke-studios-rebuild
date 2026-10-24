@@ -2171,30 +2171,309 @@
       <!-- TAB 5: STUDIOS DIRECTORY -->
       <section id="tab-studios" class="tab-page">
         <div style="background: #fff; padding: 20px; border: 2px solid #ddd; border-radius: 8px;">
-          <h2 style="color: #7d0000; margin-bottom: 12px;">Official Coke Studios Directory</h2>
-          <p style="font-size: 13px; color: #555; margin-bottom: 20px;">Explore authentic public hangouts or visit player-decorated studios equipped with custom stereos and Coke vending machines.</p>
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #e41e2b; padding-bottom:12px; margin-bottom:16px;">
+            <div>
+              <h2 style="color: #7d0000; margin: 0; font-size: 22px;">Official Coke Studios Directory</h2>
+              <p style="font-size: 12px; color: #666; margin-top: 4px;">Explore 21 authentic public hangouts or visit player-decorated studios equipped with custom stereos and Coke vending machines.</p>
+            </div>
+            <div style="background:#231f20; border:1px solid #ffcc00; border-radius:6px; padding:6px 14px; color:#fff; font-size:11px; text-align:center;">
+              <span style="color:#aaa; display:block; font-size:10px;">Preserved Studios</span>
+              <strong style="color:#ffcc00; font-size:14px;">21 Venues / 44 Rooms</strong>
+            </div>
+          </div>
+
+          <!-- Region Navigation Tabs -->
+          <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+            <button class="genre-btn active" onclick="filterStudioRegion('all', event)">All Venues (21)</button>
+            <button class="genre-btn" onclick="filterStudioRegion('americas', event)">Americas (9)</button>
+            <button class="genre-btn" onclick="filterStudioRegion('europe', event)">Europe &amp; Global (3)</button>
+            <button class="genre-btn" onclick="filterStudioRegion('asia', event)">Asia &amp; Pacific (4)</button>
+            <button class="genre-btn" onclick="filterStudioRegion('special', event)">Special Stages (7)</button>
+            <button class="genre-btn" onclick="filterStudioRegion('private', event)">Private Studios (2)</button>
+          </div>
           
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
-            <div style="border: 2px solid #e41e2b; border-radius: 6px; padding: 15px; background: #fff8ee;">
-              <h3 style="color: #c4000b;">Central Park Studio (VIS$0)</h3>
-              <p style="font-size: 12px; color: #666; margin: 6px 0 12px 0;">The legendary main public studio overlooking Central Park.</p>
-              <button class="studio-pill active" onclick="switchStudio('VIS$0', 'Central Park Studio'); switchTab('play');">Enter Studio &rarr;</button>
+          <div id="studiosDirectoryGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px;">
+            
+            <!-- AMERICAS -->
+            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Central Park Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$27</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">The iconic flagship lounge overlooking Central Park with double DJ turntables and outdoor patio.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('centralpark', 'Central Park Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
-            <div style="border: 2px solid #e41e2b; border-radius: 6px; padding: 15px; background: #fff8ee;">
-              <h3 style="color: #c4000b;">San Francisco Studio (VIS$1)</h3>
-              <p style="font-size: 12px; color: #666; margin: 6px 0 12px 0;">StudioCom headquarters lounge with custom bay view acoustics.</p>
-              <button class="studio-pill active" onclick="switchStudio('VIS$1', 'San Francisco Studio'); switchTab('play');">Enter Studio &rarr;</button>
+
+            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">San Francisco Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$25</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">StudioCom headquarters lounge with custom bay view acoustics and velvet club seating.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('sanfrancisco', 'San Francisco Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
-            <div style="border: 2px solid #e41e2b; border-radius: 6px; padding: 15px; background: #fff8ee;">
-              <h3 style="color: #c4000b;">London Studio (VIS$2)</h3>
-              <p style="font-size: 12px; color: #666; margin: 6px 0 12px 0;">British lounge with high-tempo rock beats and neon fixtures.</p>
-              <button class="studio-pill active" onclick="switchStudio('VIS$2', 'London Studio'); switchTab('play');">Enter Studio &rarr;</button>
+
+            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">New York Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$7</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Times Square urban studio featuring high-energy hip hop beats, neon billboards, and dancefloor.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('newyork', 'New York Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
-            <div style="border: 2px solid #e41e2b; border-radius: 6px; padding: 15px; background: #fff8ee;">
-              <h3 style="color: #c4000b;">Private Studio #1</h3>
-              <p style="font-size: 12px; color: #666; margin: 6px 0 12px 0;">Player personal studio model with sofa, machine, and DJ decks.</p>
-              <button class="studio-pill active" onclick="switchStudio('studio_1', 'Private Studio #1'); switchTab('play');">Enter Studio &rarr;</button>
+
+            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Miami Beach Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$3</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">South Beach ocean breeze lounge with palm trees, pastel lighting, and summer Latin percussion.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('miami', 'Miami Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
+
+            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">New Orleans Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$29</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">French Quarter jazz &amp; blues parlor with wrought iron accents, brass instruments, and velvet sofas.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('neworleans', 'New Orleans Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Seattle Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$11</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Pacific Northwest grunge &amp; indie rock coffeehouse lounge with vintage brickwork and guitar amps.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('seattle', 'Seattle Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Mexico Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$31</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Sunlit festive courtyard studio filled with mariachi rhythms, terracotta tiles, and vibrant colors.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('mexico', 'Mexico Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Rio de Janeiro Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$9</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Carnival samba terrace overlooking Copacabana with tropical percussion and beachside vibes.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('rio', 'Rio de Janeiro Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Alaska Lodge Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$19</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Cozy pine timber lodge with crackling fireplace, snowy panoramic windows, and acoustic warmth.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('alaska', 'Alaska Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <!-- EUROPE & GLOBAL -->
+            <div class="studio-dir-card" data-region="europe" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">London Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$1</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Soho underground club with high-tempo British rock beats, Union Jack decor, and neon lighting.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('london', 'London Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="europe" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Moscow Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$21</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Grand neoclassical palace hall with marble pillars, gold chandeliers, and electronic synth tracks.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('moscow', 'Moscow Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="europe" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Coca-Cola Red Room</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$23</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">The VIP red velvet lounge featuring custom Coke contour neon signs and exclusive DJ showdowns.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('redroom', 'Coca-Cola Red Room'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <!-- ASIA & PACIFIC -->
+            <div class="studio-dir-card" data-region="asia" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Tokyo Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$15</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Shibuya futuristic high-tech skyscraper suite with glowing LED screens and J-Pop synth rhythms.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('tokyo', 'Tokyo Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="asia" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Sydney Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$13</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Harbourfront studio featuring open-air harbor views, acoustic guitar jams, and coastal sunshine.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('sydney', 'Sydney Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="asia" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Goa Beach Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$17</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Moonlit trance beach hangout under the stars with sitar melodies, bonfires, and chillout cushions.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('goa', 'Goa Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="asia" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Mombasa Safari Studio</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$5</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Savannah sunset pavilion featuring djembe drums, safari wood carvings, and deep rhythmic grooves.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('mombasa', 'Mombasa Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <!-- SPECIAL VENUES & COMPETITIONS -->
+            <div class="studio-dir-card" data-region="special" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Neptune / Atlantis</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$33</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Underwater sunken dome featuring glowing sea life, coral DJ booth, and oceanic reverb acoustics.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('atlantis', 'Neptune Atlantis'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="special" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Ray's Rooftop Party</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$43</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Skyscraper penthouse with outdoor swimming pool, barbecue grill, and 360-degree skyline views.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('raysrooftopparty', 'Ray\'s Rooftop Party'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="special" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Audition Gold Stage</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$40</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Official tournament stage where premier DJs duel for gold trophies and community chart points.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('auditiongold', 'Audition Gold'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="special" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Casting Call Room</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$35</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Studio audition theater where emerging musicians debut original tracks before live audiences.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('castingcallroom', 'Casting Call Room'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="special" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">mycoke Arena</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$41</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Massive stadium venue with elevated DJ booth, laser light cannons, and amphitheater seating.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('$SYSTEM$41', 'mycoke Arena'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="special" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Audition Red Hall</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$44</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">High-stakes red battle chamber for veteran DJs competing for the coveted weekly crown.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('auditionred', 'Audition Red'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="special" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Club Cherry</h3>
+                  <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$42</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Cherry Coke themed dance club with crimson laser walls, disco mirror balls, and upbeat mixes.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('$SYSTEM$42', 'Club Cherry'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <!-- PRIVATE STUDIOS -->
+            <div class="studio-dir-card" data-region="private" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Private Studio #1</h3>
+                  <span style="background:#555; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">Custom Model D</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Classic personal apartment lounge with personal Coke machine, sofa seating, and stereo decks.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('studio_1', 'Private Studio #1'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
+            <div class="studio-dir-card" data-region="private" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Wayne's Studio Lounge</h3>
+                  <span style="background:#555; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">Custom Model B</span>
+                </div>
+                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Decorated community studio with parquet flooring, neon wall sconces, and custom CD jukebox.</p>
+              </div>
+              <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('studio_wayne', 'Wayne\'s Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+
           </div>
         </div>
       </section>
@@ -2401,127 +2680,279 @@
         <!-- 3. MUSICAL POSTCARDS -->
         <div id="arcadePane-postcards" class="postcard-card" style="display: none;">
           <div class="postcard-banner">
-            <img src="assets/images/postcard/postreg_topbanner.jpg" alt="Send a Musical Postcard">
+            <img src="assets/images/postcard/postreg_topbanner.jpg" alt="Send a Musical Postcard" style="width:100%; display:block; border-bottom:2px solid #ffcc00;">
           </div>
-          <div class="postcard-layout">
+          <div class="postcard-layout" style="display:flex; gap:20px; padding:20px; background:#fff8ee;">
+            
             <!-- Left: Live Preview Envelope -->
-            <div class="postcard-preview-stage">
-              <img src="assets/images/postcard/postreg_pre-guitar2.gif" alt="Postcard Visual" style="width:100%; border:2px solid #fff; margin-bottom:12px;">
-              <div id="cardPreviewNote" style="background:#fff; border:1px solid #ccc; border-radius:4px; padding:10px; font-family:'Courier New', monospace; font-size:12px; color:#333; min-height:60px; text-align:left;">
-                "Hey! Come check out my new studio lounge in Central Park! Play our favorite tunes and battle on the DJ booth!"
+            <div class="postcard-preview-stage" style="flex:1; max-width:320px; background:#231f20; border:2px solid #d2a679; border-radius:6px; padding:14px; box-shadow:0 4px 10px rgba(0,0,0,0.25);">
+              <div style="font-size:11px; font-weight:900; color:#ffcc00; text-transform:uppercase; margin-bottom:8px; display:flex; justify-content:space-between;">
+                <span>Live Card Preview</span>
+                <span id="cardVisualBadge">Style: Guitar Solo</span>
               </div>
-              <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
-                <span id="cardAudioTag" style="font-size:11px; font-weight:bold; color:#7d0000;">&#9835; Audio: Rock Beats</span>
-                <button class="btn-vp" style="padding:4px 8px; font-size:10px;" onclick="previewPostcardAudio()">&#9654; Listen</button>
+              <img id="cardPreviewImg" src="assets/images/postcard/postreg_pre-guitar2.gif" alt="Postcard Visual" style="width:100%; border:2px solid #fff; border-radius:4px; margin-bottom:12px; background:#000;">
+              
+              <div id="cardPreviewNote" style="background:#fff; border:1px solid #ccc; border-radius:4px; padding:12px; font-family:'Courier New', monospace; font-size:12px; color:#333; min-height:68px; text-align:left; line-height:1.4;">
+                "Here's something new for a change!"
+              </div>
+              
+              <div style="margin-top:12px; display:flex; justify-content:space-between; align-items:center; background:#111; padding:8px 10px; border-radius:4px; border:1px solid #443;">
+                <span id="cardAudioTag" style="font-size:11px; font-weight:bold; color:#ffcc00;">&#9835; Audio: Rock Beats</span>
+                <button class="btn-vp" style="padding:4px 10px; font-size:10px;" onclick="previewPostcardAudio()">&#9654; Listen</button>
               </div>
             </div>
 
             <!-- Right: Compose Form -->
-            <div style="display:flex; flex-direction:column; gap:14px;">
-              <div>
-                <label style="display:block; font-size:11px; font-weight:bold; color:#7d0000; margin-bottom:4px; text-transform:uppercase;">Recipient (Screen Name or Friend)</label>
-                <input type="text" id="cardRecipientInput" class="reg-input" placeholder="e.g. Adam" style="background:#fff; color:#333; border:2px solid #ddd; font-weight:bold;">
-              </div>
-              <div>
-                <label style="display:block; font-size:11px; font-weight:bold; color:#7d0000; margin-bottom:4px; text-transform:uppercase;">Attach Musical Loop</label>
-                <select id="cardTrackSelect" class="reg-input" style="background:#fff; color:#333; border:2px solid #ddd;" onchange="updatePostcardAudioLabel()">
-                  <option value="rockOne_beatz00.wav">Rock Beats Vol. 1</option>
-                  <option value="danceOne_bass00.wav">Dance Bass Groove</option>
-                  <option value="misc_funkGuit00.wav">Funk Guitar Riff</option>
-                  <option value="latin_congas00.wav">Latin Congas Fiesta</option>
-                </select>
-              </div>
-              <div>
-                <label style="display:block; font-size:11px; font-weight:bold; color:#7d0000; margin-bottom:4px; text-transform:uppercase;">Personal Message</label>
-                <textarea id="cardNoteInput" class="reg-input" rows="3" style="background:#fff; color:#333; border:2px solid #ddd; resize:none;" oninput="updatePostcardNote()">Come chill at my private Coke Studio! Let's trade vinyl and jam on the mixer!</textarea>
-              </div>
-              <button class="btn-vp" style="background:linear-gradient(180deg, #d80000 0%, #a00000 100%); font-size:13px; padding:10px; font-weight:bold;" onclick="sendPostcard()">&#9993; Send Musical Postcard</button>
-              <div id="cardStatusMsg" style="display:none; padding:8px 12px; border-radius:4px; font-size:11px;"></div>
+            <div style="flex:1.4; display:flex; flex-direction:column; gap:12px;">
+              <form id="postcardRealForm" onsubmit="event.preventDefault(); sendPostcard();">
+                
+                <!-- Sender Info -->
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                  <div>
+                    <label style="display:block; font-size:10px; font-weight:900; color:#7d0000; margin-bottom:3px; text-transform:uppercase;">From (Your Name)</label>
+                    <input type="text" id="postCardSenderName" class="reg-input" placeholder="e.g. Adam" style="background:#fff; color:#333; border:2px solid #ddd; font-weight:bold; width:100%;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:10px; font-weight:900; color:#7d0000; margin-bottom:3px; text-transform:uppercase;">Your Email</label>
+                    <input type="email" id="postCardSenderEmail" class="reg-input" placeholder="fan@cokemusic.com" style="background:#fff; color:#333; border:2px solid #ddd; width:100%;">
+                  </div>
+                </div>
+
+                <!-- Card Art & Music Selection -->
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:6px;">
+                  <div>
+                    <label style="display:block; font-size:10px; font-weight:900; color:#7d0000; margin-bottom:3px; text-transform:uppercase;">Card Visual Style</label>
+                    <select id="postCardMovieSelect" class="reg-input" style="background:#fff; color:#333; border:2px solid #ddd; width:100%;" onchange="updatePostcardMovieStyle()">
+                      <option value="1">1. Electric Guitar Solo</option>
+                      <option value="2">2. Hip Hop Turntable Spin</option>
+                      <option value="3">3. Dancefloor Club Lights</option>
+                      <option value="4">4. Studio Lounge Chillout</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:10px; font-weight:900; color:#7d0000; margin-bottom:3px; text-transform:uppercase;">Attach Musical Loop</label>
+                    <select id="cardTrackSelect" class="reg-input" style="background:#fff; color:#333; border:2px solid #ddd; width:100%;" onchange="updatePostcardAudioLabel()">
+                      <option value="rockOne_beatz00.mp3">Rock Beats Vol. 1 (120 BPM)</option>
+                      <option value="danceOne_bass00.mp3">Dance Bass Groove (120 BPM)</option>
+                      <option value="hipHopOne_beatz01.mp3">Hip Hop Red Alert (120 BPM)</option>
+                      <option value="latinOne_sax00.mp3">Latin Sax Fiesta (120 BPM)</option>
+                      <option value="countryTwo_banjo00.mp3">Country Pickin' Banjo (120 BPM)</option>
+                      <option value="popOne_kbd00.mp3">Pop Melodic Keyboard (120 BPM)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Message Selector & Custom Message -->
+                <div style="margin-top:6px;">
+                  <label style="display:block; font-size:10px; font-weight:900; color:#7d0000; margin-bottom:3px; text-transform:uppercase;">Choose Message (or Write Custom)</label>
+                  <select id="postCardPresetSelect" class="reg-input" style="background:#fff; color:#333; border:2px solid #ddd; width:100%; font-weight:bold;" onchange="handlePostcardPresetChange()">
+                    <option value="1">1. Here's something new for a change!</option>
+                    <option value="2">2. Heard this. Thought of you. Come check it out.</option>
+                    <option value="3">3. Show some love for these slammin new artists!</option>
+                    <option value="4">4. Get the hook up for new music first</option>
+                    <option value="5">5. Flip the script on tired music</option>
+                    <option value="6">6. Silly rabbit, all the cool music is right here!</option>
+                    <option value="custom">Custom: Write your own message... (Music Pass)</option>
+                  </select>
+                </div>
+
+                <div id="customMsgBox" style="margin-top:6px; display:none;">
+                  <textarea id="cardMessageInput" class="reg-input" rows="2" style="background:#fff; color:#333; border:2px solid #ddd; resize:vertical; width:100%; font-family:Verdana,sans-serif;" oninput="updatePostcardPreviewText()" placeholder="Type your personalized message here..."></textarea>
+                </div>
+
+                <!-- Primary Recipient -->
+                <div style="margin-top:8px;">
+                  <label style="display:block; font-size:10px; font-weight:900; color:#7d0000; margin-bottom:3px; text-transform:uppercase;">Recipient 1 (Friend's Screen Name or Email)</label>
+                  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <input type="text" id="cardRecipientInput" class="reg-input" placeholder="Screen Name (e.g. Adam)" style="background:#fff; color:#333; border:2px solid #ddd; font-weight:bold; width:100%;">
+                    <input type="email" id="cardRecipientEmail" class="reg-input" placeholder="friend@email.com" style="background:#fff; color:#333; border:2px solid #ddd; width:100%;">
+                  </div>
+                </div>
+
+                <!-- Additional Recipients (Collapsible) -->
+                <div style="margin-top:8px;">
+                  <button type="button" class="btn-vp" style="font-size:10px; padding:3px 8px; background:#4a0005;" onclick="toggleExtraRecipients()">
+                    <span id="extraRecBtnText">+ Add More Recipients (Up to 5)</span>
+                  </button>
+                  <div id="extraRecipientsPane" style="display:none; margin-top:8px; padding:10px; background:#f4ece2; border:1px solid #d2a679; border-radius:4px; gap:6px; flex-direction:column;">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                      <input type="text" id="recName2" placeholder="Recipient 2 Name" class="reg-input" style="background:#fff; font-size:11px;">
+                      <input type="email" id="recEmail2" placeholder="Recipient 2 Email" class="reg-input" style="background:#fff; font-size:11px;">
+                    </div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:4px;">
+                      <input type="text" id="recName3" placeholder="Recipient 3 Name" class="reg-input" style="background:#fff; font-size:11px;">
+                      <input type="email" id="recEmail3" placeholder="Recipient 3 Email" class="reg-input" style="background:#fff; font-size:11px;">
+                    </div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:4px;">
+                      <input type="text" id="recName4" placeholder="Recipient 4 Name" class="reg-input" style="background:#fff; font-size:11px;">
+                      <input type="email" id="recEmail4" placeholder="Recipient 4 Email" class="reg-input" style="background:#fff; font-size:11px;">
+                    </div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:4px;">
+                      <input type="text" id="recName5" placeholder="Recipient 5 Name" class="reg-input" style="background:#fff; font-size:11px;">
+                      <input type="email" id="recEmail5" placeholder="Recipient 5 Email" class="reg-input" style="background:#fff; font-size:11px;">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Submit Button & Feedback -->
+                <div id="postcardStatus" style="display:none; font-size:12px; font-weight:bold; padding:8px 12px; border-radius:4px; margin-top:10px;"></div>
+                <div style="display:flex; gap:10px; margin-top:12px;">
+                  <button type="submit" class="btn-avatar-primary" style="flex:1; padding:10px; font-size:13px; font-weight:bold;">
+                    &#128140; Send Virtual Musical Postcard
+                  </button>
+                  <button type="button" class="btn-vp" style="padding:10px 14px; font-size:12px; background:#4a0005;" onclick="openPostcardPreviewPopup()">
+                    &#128065; Preview Popup
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
 
-      </section>
-
-      <!-- TAB: MUSICAL POSTCARDS -->
-      <section id="tab-postcard" class="tab-page">
-        <div class="postcard-card">
-          <div class="postcard-banner">
-            <img src="assets/images/postcard/postreg_topbanner.jpg" alt="Send a Musical Postcard">
-          </div>
-          <div class="postcard-layout">
-            <!-- Left: Live Preview Envelope -->
-            <div class="postcard-preview-stage">
-              <img src="assets/images/postcard/postreg_pre-guitar2.gif" alt="Postcard Visual" style="width:100%; border:2px solid #fff; margin-bottom:12px;">
-              <div id="cardPreviewNote" style="background:#fff; border:1px solid #ccc; border-radius:4px; padding:10px; font-family:'Courier New', monospace; font-size:12px; color:#333; min-height:60px; text-align:left;">
-                "Hey! Come check out my new studio lounge in Central Park! Play our favorite tunes and battle on the DJ booth!"
-              </div>
-              <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
-                <span id="cardAudioTag" style="font-size:11px; font-weight:bold; color:#7d0000;">&#9835; Audio: Rock Beats</span>
-                <button class="btn-vp" style="padding:4px 8px; font-size:10px;" onclick="previewPostcardAudio()">&#9654; Listen</button>
-              </div>
-            </div>
-
-            <!-- Right: Compose Form -->
-            <div style="display:flex; flex-direction:column; gap:14px;">
-              <div>
-                <label style="display:block; font-size:11px; font-weight:bold; color:#7d0000; margin-bottom:4px; text-transform:uppercase;">Recipient (Screen Name or Friend)</label>
-                <input type="text" id="cardRecipientInput" class="reg-input" placeholder="e.g. Adam" style="background:#fff; color:#333; border:2px solid #ddd; font-weight:bold;">
-              </div>
-              <div>
-                <label style="display:block; font-size:11px; font-weight:bold; color:#7d0000; margin-bottom:4px; text-transform:uppercase;">Attach Musical Loop</label>
-                <select id="cardTrackSelect" class="reg-input" style="background:#fff; color:#333; border:2px solid #ddd;" onchange="updatePostcardAudioLabel()">
-                  <option value="rockOne_beatz00.wav">Rock Beats (120 BPM)</option>
-                  <option value="danceOne_bass00.wav">Dance Synthwave (120 BPM)</option>
-                  <option value="misc_funkGuit00.wav">Funky Studio Guitar (120 BPM)</option>
-                  <option value="latinoTwo_piano00.wav">Latin Piano Combo (120 BPM)</option>
-                  <option value="hipHopOne_beatz01.wav">Hip Hop Red Alert (120 BPM)</option>
-                </select>
-              </div>
-              <div>
-                <label style="display:block; font-size:11px; font-weight:bold; color:#7d0000; margin-bottom:4px; text-transform:uppercase;">Your Message</label>
-                <textarea id="cardMessageInput" class="reg-input" rows="4" style="background:#fff; color:#333; border:2px solid #ddd; resize:vertical; font-family:Verdana,sans-serif;" oninput="updatePostcardPreviewText()">Hey! Come check out my new studio lounge in Central Park! Play our favorite tunes and battle on the DJ booth!</textarea>
-              </div>
-              <div id="postcardStatus" style="display:none; font-size:12px; font-weight:bold; padding:8px; border-radius:4px;"></div>
-              <button class="btn-avatar-primary" style="padding:12px; font-size:14px;" onclick="sendPostcard()">&#128140; Send Musical Postcard to V-Ego Messenger</button>
-            </div>
-          </div>
-        </div>
       </section>
 
       <!-- TAB: RETRO DOWNLOADS -->
       <section id="tab-downloads" class="tab-page">
         <div class="downloads-card">
-          <div style="border-bottom:2px solid #e41e2b; padding-bottom:12px; margin-bottom:16px;">
-            <img src="assets/images/downloads/download_tittle.jpg" alt="Downloads" style="max-height:40px;">
-            <p style="font-size:12px; color:#666; margin-top:4px;">Download authentic desktop wallpapers, Coke Studios screen savers, and original soundtrack MP3s!</p>
-          </div>
-          <div class="downloads-grid">
-            <div class="download-item">
-              <img src="assets/images/downloads/land_pic01.gif" alt="Wallpaper 1" class="download-thumb">
-              <div style="font-weight:bold; font-size:12px; color:#333;">Central Park Studio (1920x1080)</div>
-              <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Official Studio Wallpaper</div>
-              <a href="assets/images/downloads/land_pic01.gif" download="coke_studios_central_park.gif" class="btn-vp" style="display:inline-block; font-size:10px;">Download Wallpaper</a>
+          <div style="border-bottom:2px solid #e41e2b; padding-bottom:12px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <img src="assets/images/downloads/download_tittle.jpg" alt="Downloads" style="max-height:40px;">
+              <p style="font-size:12px; color:#666; margin-top:4px;">Official archived desktop wallpapers, original interactive Shockwave Flash screensavers, and soundtrack MP3s!</p>
             </div>
-            <div class="download-item">
-              <img src="assets/images/downloads/land_pic02.gif" alt="Wallpaper 2" class="download-thumb">
-              <div style="font-weight:bold; font-size:12px; color:#333;">San Francisco Bay Lounge</div>
-              <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Headquarters Studio Art</div>
-              <a href="assets/images/downloads/land_pic02.gif" download="coke_studios_sf.gif" class="btn-vp" style="display:inline-block; font-size:10px;">Download Wallpaper</a>
-            </div>
-            <div class="download-item">
-              <img src="assets/images/downloads/land_pic03.gif" alt="Wallpaper 3" class="download-thumb">
-              <div style="font-weight:bold; font-size:12px; color:#333;">Rooftop Sunset Neon</div>
-              <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Skyline DJ Panorama</div>
-              <a href="assets/images/downloads/land_pic03.gif" download="coke_studios_rooftop.gif" class="btn-vp" style="display:inline-block; font-size:10px;">Download Wallpaper</a>
-            </div>
-            <div class="download-item">
-              <img src="assets/images/downloads/land_ssavers.jpg" alt="Screensaver" class="download-thumb">
-              <div style="font-weight:bold; font-size:12px; color:#333;">Coke Studios Animated Screensaver</div>
-              <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Classic V-Ego Jam Pack</div>
-              <a href="assets/images/downloads/land_ssavers.jpg" download="coke_studios_screensaver.jpg" class="btn-vp" style="display:inline-block; font-size:10px;">Download Pack</a>
+            <div style="background:#fff8ee; border:1px solid #d2a679; padding:6px 12px; border-radius:4px; font-size:11px; color:#7d0000; font-weight:bold;">
+              &#128190; Authentic 2002&ndash;2006 Media Pack
             </div>
           </div>
+
+          <!-- Category 1: Interactive Screensavers -->
+          <div style="margin-bottom:28px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+              <span style="font-size:14px; font-weight:900; color:#c4000b; text-transform:uppercase; letter-spacing:0.5px;">1. Preserved Flash Screensavers (.swf)</span>
+              <span style="font-size:11px; background:#7d0000; color:#fff; padding:2px 8px; border-radius:3px;">Historical SWF Archives</span>
+            </div>
+            <div class="downloads-grid">
+              <div class="download-item">
+                <img src="assets/images/downloads/land_pic02.gif" alt="Lights Out Screensaver" class="download-thumb">
+                <div style="font-weight:bold; font-size:12px; color:#333;">Lights Out Screensaver</div>
+                <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Studio lounge nightjam animation (222 KB)</div>
+                <div style="display:flex; gap:6px;">
+                  <a href="/screensavers/lights_out.swf" target="_blank" class="btn-vp" style="flex:1; text-align:center; font-size:10px;">Launch SWF</a>
+                  <a href="/screensavers/lights_out.swf" download="coke_lights_out.swf" class="btn-vp" style="flex:1; text-align:center; font-size:10px; background:#4a0005;">Download</a>
+                </div>
+              </div>
+              <div class="download-item">
+                <img src="assets/images/downloads/land_pic01.gif" alt="Launching Pad Screensaver" class="download-thumb">
+                <div style="font-weight:bold; font-size:12px; color:#333;">Launching Pad Screensaver</div>
+                <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Official Launching Pad DJ sequence (131 KB)</div>
+                <div style="display:flex; gap:6px;">
+                  <a href="/screensavers/lpad.swf" target="_blank" class="btn-vp" style="flex:1; text-align:center; font-size:10px;">Launch SWF</a>
+                  <a href="/screensavers/lpad.swf" download="coke_lpad.swf" class="btn-vp" style="flex:1; text-align:center; font-size:10px; background:#4a0005;">Download</a>
+                </div>
+              </div>
+              <div class="download-item">
+                <img src="assets/images/downloads/land_pic03.gif" alt="Parachute Jump Screensaver" class="download-thumb">
+                <div style="font-weight:bold; font-size:12px; color:#333;">Parachute Jump Screensaver</div>
+                <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Extreme V-Ego skydive drops (176 KB)</div>
+                <div style="display:flex; gap:6px;">
+                  <a href="/screensavers/parachute.swf" target="_blank" class="btn-vp" style="flex:1; text-align:center; font-size:10px;">Launch SWF</a>
+                  <a href="/screensavers/parachute.swf" download="coke_parachute.swf" class="btn-vp" style="flex:1; text-align:center; font-size:10px; background:#4a0005;">Download</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 2: Desktop Wallpapers -->
+          <div style="margin-bottom:28px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+              <span style="font-size:14px; font-weight:900; color:#c4000b; text-transform:uppercase; letter-spacing:0.5px;">2. Official Studio Wallpapers</span>
+              <span style="font-size:11px; background:#7d0000; color:#fff; padding:2px 8px; border-radius:3px;">High Resolution</span>
+            </div>
+            <div class="downloads-grid">
+              <div class="download-item">
+                <img src="assets/images/downloads/land_pic01.gif" alt="Wallpaper 1" class="download-thumb">
+                <div style="font-weight:bold; font-size:12px; color:#333;">Central Park Studio (1920x1080)</div>
+                <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Official Flagship Studio Artwork</div>
+                <a href="assets/images/downloads/land_pic01.gif" download="coke_studios_central_park.gif" class="btn-vp" style="display:block; text-align:center; font-size:10px;">Download Wallpaper</a>
+              </div>
+              <div class="download-item">
+                <img src="assets/images/downloads/land_pic02.gif" alt="Wallpaper 2" class="download-thumb">
+                <div style="font-weight:bold; font-size:12px; color:#333;">San Francisco Bay Lounge</div>
+                <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">StudioCom Headquarters Panorama</div>
+                <a href="assets/images/downloads/land_pic02.gif" download="coke_studios_sf.gif" class="btn-vp" style="display:block; text-align:center; font-size:10px;">Download Wallpaper</a>
+              </div>
+              <div class="download-item">
+                <img src="assets/images/downloads/land_pic03.gif" alt="Wallpaper 3" class="download-thumb">
+                <div style="font-weight:bold; font-size:12px; color:#333;">Rooftop Sunset Neon</div>
+                <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Ray's Rooftop Skyline DJ Art</div>
+                <a href="assets/images/downloads/land_pic03.gif" download="coke_studios_rooftop.gif" class="btn-vp" style="display:block; text-align:center; font-size:10px;">Download Wallpaper</a>
+              </div>
+              <div class="download-item">
+                <img src="assets/images/downloads/land_ssavers.jpg" alt="Screensaver Pack" class="download-thumb">
+                <div style="font-weight:bold; font-size:12px; color:#333;">Classic V-Ego Jam Poster</div>
+                <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Vintage 2002 Promo Art</div>
+                <a href="assets/images/downloads/land_ssavers.jpg" download="coke_studios_poster.jpg" class="btn-vp" style="display:block; text-align:center; font-size:10px;">Download Poster</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 3: Genre Soundtrack MP3s -->
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+              <span style="font-size:14px; font-weight:900; color:#c4000b; text-transform:uppercase; letter-spacing:0.5px;">3. Original Genre Soundtracks (6 Soundbanks)</span>
+              <span style="font-size:11px; background:#7d0000; color:#fff; padding:2px 8px; border-radius:3px;">Preview &amp; Download</span>
+            </div>
+            <div class="downloads-grid">
+              <div class="download-item">
+                <div style="font-weight:bold; font-size:12px; color:#c4000b;">&#9835; Dance Grooves Vol. 1</div>
+                <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Synth Bass &amp; Club Beats (120 BPM)</div>
+                <div style="display:flex; gap:6px;">
+                  <button class="btn-vp" style="flex:1; font-size:10px;" onclick="previewSample('danceOne_beatz00.mp3')">&#9654; Listen</button>
+                  <a href="/sounds/danceOne_beatz00.mp3" download="coke_dance_beats.mp3" class="btn-vp" style="flex:1; text-align:center; font-size:10px; background:#4a0005;">Download</a>
+                </div>
+              </div>
+              <div class="download-item">
+                <div style="font-weight:bold; font-size:12px; color:#c4000b;">&#9835; Hip Hop Urban Beats</div>
+                <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Heavy Sub-bass &amp; Scratch Cuts</div>
+                <div style="display:flex; gap:6px;">
+                  <button class="btn-vp" style="flex:1; font-size:10px;" onclick="previewSample('hipHopOne_beatz01.mp3')">&#9654; Listen</button>
+                  <a href="/sounds/hipHopOne_beatz01.mp3" download="coke_hiphop_beats.mp3" class="btn-vp" style="flex:1; text-align:center; font-size:10px; background:#4a0005;">Download</a>
+                </div>
+              </div>
+              <div class="download-item">
+                <div style="font-weight:bold; font-size:12px; color:#c4000b;">&#9835; Rock Anthem Power Chords</div>
+                <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Distortion Guitar Solo &amp; Drums</div>
+                <div style="display:flex; gap:6px;">
+                  <button class="btn-vp" style="flex:1; font-size:10px;" onclick="previewSample('rockOne_guitar00.mp3')">&#9654; Listen</button>
+                  <a href="/sounds/rockOne_guitar00.mp3" download="coke_rock_anthem.mp3" class="btn-vp" style="flex:1; text-align:center; font-size:10px; background:#4a0005;">Download</a>
+                </div>
+              </div>
+              <div class="download-item">
+                <div style="font-weight:bold; font-size:12px; color:#c4000b;">&#9835; Latin Fiesta Percussion</div>
+                <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Piano Montuno &amp; Brass Saxophone</div>
+                <div style="display:flex; gap:6px;">
+                  <button class="btn-vp" style="flex:1; font-size:10px;" onclick="previewSample('latinOne_sax00.mp3')">&#9654; Listen</button>
+                  <a href="/sounds/latinOne_sax00.mp3" download="coke_latin_sax.mp3" class="btn-vp" style="flex:1; text-align:center; font-size:10px; background:#4a0005;">Download</a>
+                </div>
+              </div>
+              <div class="download-item">
+                <div style="font-weight:bold; font-size:12px; color:#c4000b;">&#9835; Country Pickin' Banjo</div>
+                <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Acoustic Banjo &amp; Upright Bass</div>
+                <div style="display:flex; gap:6px;">
+                  <button class="btn-vp" style="flex:1; font-size:10px;" onclick="previewSample('countryTwo_banjo00.mp3')">&#9654; Listen</button>
+                  <a href="/sounds/countryTwo_banjo00.mp3" download="coke_country_banjo.mp3" class="btn-vp" style="flex:1; text-align:center; font-size:10px; background:#4a0005;">Download</a>
+                </div>
+              </div>
+              <div class="download-item">
+                <div style="font-weight:bold; font-size:12px; color:#c4000b;">&#9835; Pop Melodic Keyboard</div>
+                <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Catchy Synth Leads &amp; Claps</div>
+                <div style="display:flex; gap:6px;">
+                  <button class="btn-vp" style="flex:1; font-size:10px;" onclick="previewSample('popOne_kbd00.mp3')">&#9654; Listen</button>
+                  <a href="/sounds/popOne_kbd00.mp3" download="coke_pop_chords.mp3" class="btn-vp" style="flex:1; text-align:center; font-size:10px; background:#4a0005;">Download</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -2814,13 +3245,20 @@
     let audioCtx = null;
     const soundCache = {};
     const sampleFiles = [
-      'danceOne_beatz00.wav', 'danceOne_bass00.wav', 'danceTwo_strings00.wav',
-      'rockOne_beatz00.wav', 'rockOne_bass00.wav', 'rockOne_guitar00.wav', 'rockOne_guitar01.wav',
-      'hipHopOne_beatz01.wav', 'hipHopOne_bass00.wav', 'hipHopOne_kbd00.wav',
-      'latinoTwo_percCombo00.wav', 'latinoTwo_piano00.wav', 'latinoOne_percCombo00.wav',
-      'countryOne_guitar00.wav', 'countryOne_bass00.wav', 'countryTwo_banjo00.wav',
-      'popOne_kbd00.wav', 'popOne_vocal00.wav', 'popTwo_bass00.wav', 'popTwo_beatz00.wav',
-      'misc_fastScratch00.wav', 'misc_funkGuit00.wav', 'misc_vocal00.wav', 'misc_vocal04.wav'
+      // Dance Sounds
+      'danceOne_beatz00.mp3', 'danceOne_bass00.mp3', 'danceOne_beatz01.mp3', 'danceTwo_effect00.mp3', 'danceTwo_strings00.mp3',
+      // Rock Sounds
+      'rockOne_beatz00.mp3', 'rockOne_bass00.mp3', 'rockOne_guitar00.mp3', 'rockOne_guitar01.mp3', 'rockOne_cymbal00.mp3', 'rockTwo_beatz00.mp3',
+      // Hip Hop Sounds
+      'hipHopOne_beatz01.mp3', 'hipHopOne_bass00.mp3', 'hipHopOne_kbd00.mp3', 'hipHopTwo_beatz00.mp3', 'misc_fastScratch00.mp3', 'misc_vocal02.mp3',
+      // Latin Sounds
+      'latinOne_sax00.mp3', 'latinoTwo_piano00.mp3', 'latinoOne_percCombo00.mp3', 'latinoTwo_percCombo00.mp3', 'latinoTwo_marracas00.mp3', 'shared_latinoBells00.mp3',
+      // Country Sounds
+      'countryTwo_banjo00.mp3', 'countryOne_guitar00.mp3', 'countryOne_bass00.mp3', 'countryTwo_bass00.mp3', 'countryTwo_beatz00.mp3', 'misc_harmonica00.mp3',
+      // Pop Sounds
+      'popOne_kbd00.mp3', 'popOne_vocal00.mp3', 'popTwo_bass00.mp3', 'popTwo_beatz00.mp3', 'popTwo_kbd00.mp3', 'misc_spanishGuit00.mp3',
+      // Misc & Vocals
+      'misc_funkGuit00.mp3', 'misc_vocal00.mp3', 'misc_vocal04.mp3', 'misc_cowbell00.mp3', 'misc_jazzTrumpet00.mp3'
     ];
 
     // Sequencer Grid State: 4 tracks x 16 steps
@@ -2997,21 +3435,42 @@
       sampleFiles.forEach(file => {
         const chip = document.createElement('div');
         chip.className = 'loop-chip';
-        chip.innerHTML = '&#9658; ' + file.replace('.wav', '');
+        chip.innerHTML = '&#9658; ' + file.replace('.wav', '').replace('.mp3', '');
         chip.onclick = () => previewSample(file);
         chipsBox.appendChild(chip);
       });
     }
 
-    function filterGenre(genre) {
-      document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+    function filterGenre(genre, ev) {
+      document.querySelectorAll('.loop-genre-tabs .genre-btn').forEach(b => b.classList.remove('active'));
+      if (ev && ev.target) ev.target.classList.add('active');
+      else if (window.event && window.event.target) window.event.target.classList.add('active');
       const chips = document.querySelectorAll('.loop-chip');
       chips.forEach(chip => {
-        if (genre === 'all' || chip.textContent.toLowerCase().includes(genre)) {
-          chip.style.display = 'flex';
+        const text = chip.textContent.toLowerCase();
+        let match = false;
+        if (genre === 'all') match = true;
+        else if (genre === 'dance' && (text.includes('dance') || text.includes('club'))) match = true;
+        else if (genre === 'rock' && (text.includes('rock') || text.includes('cymbal'))) match = true;
+        else if (genre === 'hiphop' && (text.includes('hip') || text.includes('scratch'))) match = true;
+        else if (genre === 'latin' && (text.includes('latin') || text.includes('marracas') || text.includes('bells'))) match = true;
+        else if (genre === 'country' && (text.includes('country') || text.includes('banjo') || text.includes('harmonica'))) match = true;
+        else if (genre === 'pop' && (text.includes('pop') || text.includes('spanish'))) match = true;
+        chip.style.display = match ? 'flex' : 'none';
+      });
+    }
+
+    function filterStudioRegion(region, ev) {
+      if (ev && ev.target) {
+        ev.target.parentElement.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+        ev.target.classList.add('active');
+      }
+      const cards = document.querySelectorAll('.studio-dir-card');
+      cards.forEach(card => {
+        if (region === 'all' || card.getAttribute('data-region') === region) {
+          card.style.display = 'flex';
         } else {
-          chip.style.display = 'none';
+          card.style.display = 'none';
         }
       });
     }
@@ -3551,6 +4010,9 @@ function applyFigureDef(fig) {
       let user = localStorage.getItem('coke_user') || (document.getElementById('screenNameInput') ? document.getElementById('screenNameInput').value.trim() : '') || '';
       if (document.getElementById('screenNameInput')) {
         document.getElementById('screenNameInput').value = user;
+      }
+      if (user && document.getElementById('postCardSenderName') && !document.getElementById('postCardSenderName').value) {
+        document.getElementById('postCardSenderName').value = user;
       }
       if (user) {
         try {
@@ -4409,9 +4871,66 @@ function applyFigureDef(fig) {
     // =========================================================================
     // Musical Postcards Logic
     // =========================================================================
+    const postcardPresetTexts = {
+      '1': "Here's something new for a change!",
+      '2': "Heard this. Thought of you. Come check it out.",
+      '3': "Show some love for these slammin new artists!",
+      '4': "Get the hook up for new music first",
+      '5': "Flip the script on tired music",
+      '6': "Silly rabbit, all the cool music is right here!"
+    };
+
+    function handlePostcardPresetChange() {
+      const sel = document.getElementById('postCardPresetSelect').value;
+      const customBox = document.getElementById('customMsgBox');
+      const noteEl = document.getElementById('cardPreviewNote');
+      if (sel === 'custom') {
+        customBox.style.display = 'block';
+        updatePostcardPreviewText();
+      } else {
+        customBox.style.display = 'none';
+        const txt = postcardPresetTexts[sel] || postcardPresetTexts['1'];
+        noteEl.textContent = `"${txt}"`;
+      }
+    }
+
     function updatePostcardPreviewText() {
-      const msg = document.getElementById('cardMessageInput').value || 'Greetings from Coke Studios!';
-      document.getElementById('cardPreviewNote').textContent = `"${msg}"`;
+      const sel = document.getElementById('postCardPresetSelect').value;
+      const noteEl = document.getElementById('cardPreviewNote');
+      if (sel === 'custom') {
+        const customTxt = (document.getElementById('cardMessageInput').value || '').trim() || 'Greetings from Coke Studios!';
+        noteEl.textContent = `"${customTxt}"`;
+      } else {
+        const txt = postcardPresetTexts[sel] || postcardPresetTexts['1'];
+        noteEl.textContent = `"${txt}"`;
+      }
+    }
+
+    function updatePostcardMovieStyle() {
+      const sel = document.getElementById('postCardMovieSelect').value;
+      const badge = document.getElementById('cardVisualBadge');
+      const img = document.getElementById('cardPreviewImg');
+      const map = {
+        '1': { title: 'Style: Guitar Solo', src: 'assets/images/postcard/postreg_pre-guitar2.gif' },
+        '2': { title: 'Style: DJ Turntables', src: 'assets/images/downloads/land_pic02.gif' },
+        '3': { title: 'Style: Club Lights', src: 'assets/images/downloads/land_pic03.gif' },
+        '4': { title: 'Style: Studio Lounge', src: 'assets/images/downloads/land_pic01.gif' }
+      };
+      const info = map[sel] || map['1'];
+      badge.textContent = info.title;
+      img.src = info.src;
+    }
+
+    function toggleExtraRecipients() {
+      const pane = document.getElementById('extraRecipientsPane');
+      const btn = document.getElementById('extraRecBtnText');
+      if (pane.style.display === 'none' || !pane.style.display) {
+        pane.style.display = 'flex';
+        btn.textContent = '- Hide Extra Recipients';
+      } else {
+        pane.style.display = 'none';
+        btn.textContent = '+ Add More Recipients (Up to 5)';
+      }
     }
 
     function updatePostcardAudioLabel() {
@@ -4425,50 +4944,92 @@ function applyFigureDef(fig) {
       previewSample(file);
     }
 
+    function openPostcardPreviewPopup() {
+      const sel = document.getElementById('postCardPresetSelect').value;
+      let msg = postcardPresetTexts[sel] || '';
+      if (sel === 'custom') {
+        msg = document.getElementById('cardMessageInput').value.trim();
+      }
+      const movie = document.getElementById('postCardMovieSelect').value;
+      const name = document.getElementById('postCardSenderName').value.trim() || 'Coke Music Fan';
+      const url = `/postcardpreview.jsp?moviefilename=${encodeURIComponent(movie)}&message_text=${encodeURIComponent(msg)}&name=${encodeURIComponent(name)}`;
+      window.open(url, 'CntrlWindow', 'top=100,left=100,toolbar=0,width=510,height=460,resizable=0,scrollbars=0');
+    }
+
     async function sendPostcard() {
-      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
-      const to = document.getElementById('cardRecipientInput').value.trim();
-      const track = document.getElementById('cardTrackSelect').value;
-      const text = document.getElementById('cardMessageInput').value.trim();
+      const senderName = document.getElementById('postCardSenderName').value.trim() || localStorage.getItem('coke_user') || 'Coke Music Guest';
+      const senderEmail = document.getElementById('postCardSenderEmail').value.trim() || 'fan@cokemusic.com';
+      const movie = document.getElementById('postCardMovieSelect').value;
+      const presetSel = document.getElementById('postCardPresetSelect').value;
+      let msgText = postcardPresetTexts[presetSel] || '';
+      if (presetSel === 'custom') {
+        msgText = document.getElementById('cardMessageInput').value.trim();
+      }
+      if (!msgText) {
+        msgText = "Here's something new for a change!";
+      }
+
+      const rec1Name = document.getElementById('cardRecipientInput').value.trim();
+      const rec1Email = document.getElementById('cardRecipientEmail').value.trim();
+
       const statusEl = document.getElementById('postcardStatus');
 
-      if (!to) {
+      if (!rec1Name && !rec1Email) {
         statusEl.style.display = 'block';
         statusEl.style.background = '#ffebee';
         statusEl.style.color = '#c62828';
-        statusEl.textContent = 'Please enter a recipient screen name!';
+        statusEl.textContent = 'Please enter a recipient screen name or email address!';
         return;
       }
 
-      const fullMsg = `[POSTCARD: ${track}] ${text}`;
+      const formData = new URLSearchParams();
+      formData.append('name', senderName);
+      formData.append('from', senderEmail);
+      formData.append('moviefilename', movie);
+      formData.append('msgID', presetSel);
+      formData.append('message_text', msgText);
+      formData.append('name1', rec1Name);
+      formData.append('to1', rec1Email || `${rec1Name}@cokemusic.com`);
+
+      // Add extra recipients if present
+      for (let i = 2; i <= 5; i++) {
+        const nEl = document.getElementById(`recName${i}`);
+        const eEl = document.getElementById(`recEmail${i}`);
+        if (nEl && eEl && (nEl.value.trim() || eEl.value.trim())) {
+          formData.append(`name${i}`, nEl.value.trim() || eEl.value.trim());
+          formData.append(`to${i}`, eEl.value.trim() || `${nEl.value.trim()}@cokemusic.com`);
+        }
+      }
+
+      statusEl.style.display = 'block';
+      statusEl.style.background = '#fff8ee';
+      statusEl.style.color = '#7d0000';
+      statusEl.textContent = 'Delivering musical postcard...';
+
       try {
-        const formData = new URLSearchParams();
-        formData.append('user', user);
-        formData.append('to', to);
-        formData.append('message', fullMsg);
-        const res = await fetch('/api/messenger/send', {
+        const res = await fetch('/servlet/PostCard', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json'
+          },
           body: formData.toString()
         });
         if (res.ok) {
-          statusEl.style.display = 'block';
+          const data = await res.json();
           statusEl.style.background = '#e8f5e9';
           statusEl.style.color = '#2e7d32';
-          statusEl.innerHTML = `&#10004; Musical Postcard successfully sent to <strong>${to}</strong>!`;
-          document.getElementById('cardRecipientInput').value = '';
-          previewSample('misc_vocal04.wav');
+          statusEl.innerHTML = `&#10004; Musical Postcard successfully delivered to <strong>${rec1Name || rec1Email}</strong> (${data.saved || 1} recipient${(data.saved || 1) > 1 ? 's' : ''})!`;
+          previewSample('misc_vocal04.mp3');
         } else {
-          statusEl.style.display = 'block';
           statusEl.style.background = '#ffebee';
           statusEl.style.color = '#c62828';
-          statusEl.textContent = 'Error sending postcard. Check recipient screen name.';
+          statusEl.textContent = 'Error delivering postcard. Please check recipient details.';
         }
-      } catch (e) {
-        statusEl.style.display = 'block';
+      } catch (err) {
         statusEl.style.background = '#e8f5e9';
         statusEl.style.color = '#2e7d32';
-        statusEl.textContent = `Postcard sent to ${to}!`;
+        statusEl.innerHTML = `&#10004; Musical Postcard sent to <strong>${rec1Name || rec1Email}</strong>!`;
       }
     }
 

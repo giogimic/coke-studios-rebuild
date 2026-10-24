@@ -82,6 +82,14 @@ func TestPlayerRoutesUseGoClient(t *testing.T) {
 	if strings.Contains(gameURL, "/phase/") {
 		t.Errorf("registration gameUrl must not contain /phase/")
 	}
+
+	// 4. Verify screensavers route
+	reqScreensaver := httptest.NewRequest("GET", "/screensavers/lights_out.swf", nil)
+	wScreensaver := httptest.NewRecorder()
+	handler.ServeHTTP(wScreensaver, reqScreensaver)
+	if wScreensaver.Code != http.StatusOK {
+		t.Errorf("expected 200 OK from /screensavers/lights_out.swf, got %d", wScreensaver.Code)
+	}
 }
 
 func min(a, b int) int {

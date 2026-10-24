@@ -9,6 +9,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"html"
 	"io"
 	"log"
 	"mime"
@@ -2222,6 +2223,227 @@ func (s *Server) handleMessengerRemoveFriend(w http.ResponseWriter, r *http.Requ
 		return
 	}
 	json.NewEncoder(w).Encode(map[string]any{"success": true})
+}
+
+var postcardPresets = map[string]string{
+	"1": "Here's something new for a change!",
+	"2": "Heard this. Thought of you. Come check it out.",
+	"3": "Show some love for these slammin new artists!",
+	"4": "Get the hook up for new music first",
+	"5": "Flip the script on tired music",
+	"6": "Silly rabbit, all the cool music is right here!",
+}
+
+func (s *Server) handlePostcard(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		s.handlePostcardPreview(w, r)
+		return
+	}
+
+	authD, _ := s.authenticatedDenizen(r)
+	_ = r.ParseForm()
+
+	senderName := strings.TrimSpace(r.FormValue("name"))
+	if senderName == "" {
+		senderName = strings.TrimSpace(r.FormValue("fromName"))
+	}
+	if senderName == "" {
+		senderName = strings.TrimSpace(r.FormValue("user"))
+	}
+	if senderName == "" && authD != nil {
+		senderName = authD.ScreenName
+	}
+	if senderName == "" {
+		senderName = "Coke Music Guest"
+	}
+
+	senderEmail := strings.TrimSpace(r.FormValue("from"))
+	if senderEmail == "" {
+		senderEmail = strings.TrimSpace(r.FormValue("fromEmail"))
+	}
+	if senderEmail == "" && authD != nil {
+		senderEmail = fmt.Sprintf("%s@cokemusic.com", authD.ScreenName)
+	}
+	if senderEmail == "" {
+		senderEmail = "fan@cokemusic.com"
+	}
+
+	movieFilename := strings.TrimSpace(r.FormValue("moviefilename"))
+	if movieFilename == "" {
+		movieFilename = strings.TrimSpace(r.FormValue("card"))
+	}
+	if movieFilename == "" {
+		movieFilename = strings.TrimSpace(r.FormValue("movie"))
+	}
+	if movieFilename == "" {
+		movieFilename = "1"
+	}
+
+	msgID := strings.TrimSpace(r.FormValue("msgID"))
+	messageText := strings.TrimSpace(r.FormValue("message_text"))
+	if messageText == "" {
+		messageText = strings.TrimSpace(r.FormValue("message"))
+	}
+	if messageText == "" && msgID != "" {
+		if preset, ok := postcardPresets[msgID]; ok {
+			messageText = preset
+		}
+	}
+	if messageText == "" {
+		messageText = "Here's something new for a change!"
+	}
+
+	type Recipient struct {
+		Name  string `json:"name"`
+		Email string `json:"email"`
+	}
+	var recipients []Recipient
+
+	// Read form fields to1..to5 & name1..name5
+	for i := 1; i <= 5; i++ {
+		toVal := strings.TrimSpace(r.FormValue(fmt.Sprintf("to%d", i)))
+		nameVal := strings.TrimSpace(r.FormValue(fmt.Sprintf("name%d", i)))
+		if toVal != "" || nameVal != "" {
+			if nameVal == "" {
+				nameVal = toVal
+			}
+			if toVal == "" {
+				toVal = fmt.Sprintf("%s@cokemusic.com", nameVal)
+			}
+			recipients = append(recipients, Recipient{Name: nameVal, Email: toVal})
+		}
+	}
+
+	// Also support single 'to' and 'recipient'
+	if len(recipients) == 0 {
+		singleTo := strings.TrimSpace(r.FormValue("to"))
+		singleName := strings.TrimSpace(r.FormValue("recipient"))
+		if singleTo != "" || singleName != "" {
+			if singleName == "" {
+				singleName = singleTo
+			}
+			if singleTo == "" {
+				singleTo = fmt.Sprintf("%s@cokemusic.com", singleName)
+			}
+			recipients = append(recipients, Recipient{Name: singleName, Email: singleTo})
+		}
+	}
+
+	if len(recipients) == 0 {
+		if strings.Contains(r.Header.Get("Accept"), "application/json") || strings.HasPrefix(r.URL.Path, "/api/") {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "Please provide at least one recipient email or screen name."})
+			return
+		}
+		http.Error(w, "Please provide at least one recipient email or screen name.", http.StatusBadRequest)
+		return
+	}
+
+	var savedCount int
+	for _, rec := range recipients {
+		_, err := s.store.SavePostcard(senderName, senderEmail, rec.Name, rec.Email, movieFilename, messageText)
+		if err == nil {
+			savedCount++
+			// Deliver live notification and persistent message if recipient exists as a denizen
+			postcardMsg := fmt.Sprintf("[POSTCARD: %s] %s", movieFilename, messageText)
+			_, _ = s.store.SendMessage(senderName, rec.Name, postcardMsg)
+			s.notifyMessengerRecipient(rec.Name, senderName, postcardMsg)
+		}
+	}
+
+	if strings.Contains(r.Header.Get("Accept"), "application/json") || strings.HasPrefix(r.URL.Path, "/api/") {
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(map[string]any{
+			"success":    true,
+			"saved":      savedCount,
+			"recipients": recipients,
+			"sender":     senderName,
+			"movie":      movieFilename,
+			"message":    messageText,
+		})
+		return
+	}
+
+	// Render authentic confirmation HTML (postcardconf.htm)
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	fmt.Fprintf(w, `<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Musical Postcard Sent - Coke Studios</title>
+	<style>
+		body { background: #c00000; font-family: Tahoma, Verdana, sans-serif; color: #333; margin: 0; padding: 20px; display: flex; justify-content: center; }
+		.card-conf { background: #fff; width: 600px; max-width: 95%%; border: 3px solid #7d0000; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
+		.conf-head { background: linear-gradient(180deg, #ff1a26 0%%, #c4000b 100%%); padding: 14px 20px; border-bottom: 2px solid #ffcc00; color: #fff; }
+		.conf-body { padding: 24px; text-align: center; }
+		.conf-body h2 { color: #c4000b; font-size: 20px; margin-bottom: 12px; }
+		.conf-body p { font-size: 13px; line-height: 1.6; color: #555; }
+		.rec-list { margin: 16px auto; background: #fff8ee; border: 1px solid #d2a679; border-radius: 4px; padding: 12px; max-width: 400px; text-align: left; font-size: 12px; }
+		.btn-close { display: inline-block; background: #ffcc00; color: #000; font-weight: bold; padding: 8px 18px; border-radius: 4px; text-decoration: none; border: 1px solid #7d0000; margin-top: 14px; cursor: pointer; }
+	</style>
+</head>
+<body>
+	<div class="card-conf">
+		<div class="conf-head">
+			<h1 style="font-size:18px; margin:0; text-transform:uppercase;">Coke Music &bull; Virtual Postcard</h1>
+		</div>
+		<div class="conf-body">
+			<h2>Your Virtual Musical Postcard Has Been Sent!</h2>
+			<p>Your postcard and audio loop have been delivered to your friends. A copy was also sent to their V-Ego console.</p>
+			<div class="rec-list">
+				<strong>Recipients:</strong><br>`)
+	for _, rec := range recipients {
+		fmt.Fprintf(w, `&bull; %s &lt;%s&gt;<br>`, html.EscapeString(rec.Name), html.EscapeString(rec.Email))
+	}
+	fmt.Fprintf(w, `</div>
+			<p><em>Message:</em> "%s"</p>
+			<button class="btn-close" onclick="window.close(); if(window.opener){window.opener.focus();}">Close Window</button>
+		</div>
+	</div>
+</body>
+</html>`, html.EscapeString(messageText))
+}
+
+func (s *Server) handlePostcardPreview(w http.ResponseWriter, r *http.Request) {
+	movie := r.URL.Query().Get("moviename")
+	if movie == "" {
+		movie = r.URL.Query().Get("moviefilename")
+	}
+	if movie == "" {
+		movie = "1"
+	}
+	msg := r.URL.Query().Get("message_text")
+	if msg == "" {
+		msg = r.URL.Query().Get("message")
+	}
+	name := r.URL.Query().Get("name")
+	if name == "" {
+		name = "Coke Music Fan"
+	}
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	fmt.Fprintf(w, `<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Postcard Preview - Coke Studios</title>
+	<style>
+		body { background: #1c1819; font-family: Tahoma, Verdana, sans-serif; color: #fff; margin: 0; padding: 15px; text-align: center; }
+		.preview-box { border: 2px solid #ffcc00; border-radius: 6px; padding: 15px; background: #2a0305; max-width: 480px; margin: 0 auto; }
+		.msg-note { background: #fff; color: #222; padding: 12px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 12px 0; min-height: 50px; text-align: left; }
+		.btn-close { background: #e41e2b; color: #fff; border: 1px solid #ffcc00; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+	</style>
+</head>
+<body>
+	<div class="preview-box">
+		<h3 style="color:#ffcc00; margin-top:0;">Virtual Musical Postcard</h3>
+		<img src="/assets/images/postcard/postreg_pre-guitar2.gif" alt="Postcard Visual" style="width:100%%; max-height:180px; object-fit:contain; border:1px solid #ffcc00;">
+		<div class="msg-note">"%s"<br><br>&mdash; %s</div>
+		<button class="btn-close" onclick="window.close()">Close Preview</button>
+	</div>
+</body>
+</html>`, html.EscapeString(msg), html.EscapeString(name))
 }
 
 func (s *Server) handleStudioDecor(w http.ResponseWriter, r *http.Request) {

@@ -45,6 +45,11 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/api/messenger/friend/add", s.handleMessengerAddFriend)
 	mux.HandleFunc("/api/messenger/friend/remove", s.handleMessengerRemoveFriend)
 
+	// 6b. Postcard Flow (Historical /servlet/PostCard and REST API)
+	mux.HandleFunc("/servlet/PostCard", s.handlePostcard)
+	mux.HandleFunc("/api/postcard/send", s.handlePostcard)
+	mux.HandleFunc("/postcardpreview.jsp", s.handlePostcardPreview)
+
 	// 7. Studio Decor API
 	mux.HandleFunc("/api/studio/decor", s.handleStudioDecor)
 
@@ -128,6 +133,11 @@ func (s *Server) Handler() http.Handler {
 	// 18. Portal & Assets Cascade
 	if fi, err := os.Stat(portalDir); err == nil && fi.IsDir() {
 		mux.Handle("/portal/", http.StripPrefix("/portal/", http.FileServer(http.Dir(portalDir))))
+	}
+
+	screensaversDir := filepath.Join(repoRoot, "sources", "screensavers", "swf")
+	if fi, err := os.Stat(screensaversDir); err == nil && fi.IsDir() {
+		mux.Handle("/screensavers/", http.StripPrefix("/screensavers/", http.FileServer(http.Dir(screensaversDir))))
 	}
 
 	csWebsiteDir := filepath.Join(repoRoot, "sources", "cs-website", "www")
