@@ -13,7 +13,8 @@ var Chat = {
             var message = $("#chat-input").val().trim();
 
             // If the message isn't blank, create it
-            if (message != "" && ! Chat.handleAsLocalCommand(message)) Chat.create("Mark", message, null);
+            var user = new URLSearchParams(window.location.search).get('user') || 'Adam';
+            if (message != "" && ! Chat.handleAsLocalCommand(message)) Chat.create(user, message, null);
 
             // Clear chat field
             $("#chat-input").val("");
@@ -64,10 +65,10 @@ var Chat = {
         // maybe with logging or something ?
         var id = name + "-" + Math.floor(Math.random()*10000) + "-" + left;
 
-        $ ("<x-bubble id='" + id + "'>" +
+        $("<x-bubble id='" + id + "'>" +
                 "<x-chat-name>" + name + "</x-chat-name>" +
                 "<x-chat-msg>" + message + "</x-chat-msg>" +
-            "</<x-chat-msg>")
+            "</x-bubble>")
         .appendTo("body")
         .css({
             "top": 200,
