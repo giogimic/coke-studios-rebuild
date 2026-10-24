@@ -83,17 +83,18 @@ type PerformanceSession struct {
 
 
 type Server struct {
-	mu          sync.RWMutex
-	Rooms       map[string]*Room
-	Players     map[string]*Player
-	webRoot     string
-	host        string
-	port        string
-	store       *Store
-	nextPosID   int
-	catalogMu   sync.RWMutex
-	catalog     map[int]*CatalogItem
-	catalogList []*CatalogItem
+	mu           sync.RWMutex
+	Rooms        map[string]*Room
+	Players      map[string]*Player
+	webRoot      string
+	host         string
+	port         string
+	store        *Store
+	nextPosID    int
+	catalogMu    sync.RWMutex
+	catalog      map[int]*CatalogItem
+	catalogList  []*CatalogItem
+	tradeManager *TradeManager
 }
 
 func NewServer(webRoot, host, port string, store *Store) *Server {
@@ -114,6 +115,21 @@ func NewServer(webRoot, host, port string, store *Store) *Server {
 		store:     store,
 		nextPosID: 2000,
 	}
+
+	s.tradeManager = NewTradeManager(s.store, func(roomID, xml string) {
+		if rm := s.GetOrCreateRoom(roomID); rm != nil {
+			rm.Broadcast(xml, "")
+		}
+	}, func(screenName, xml string) error {
+		s.mu.RLock()
+		defer s.mu.RUnlock()
+		for _, p := range s.Players {
+			if strings.EqualFold(p.ScreenName, screenName) {
+				return p.Send(xml)
+			}
+		}
+		return nil
+	})
 
 	// Initialize default rooms in memory from store
 	s.Rooms["$LOBBY$"] = NewRoom("$LOBBY$", "Lobby", 0)
@@ -953,11 +969,20 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 
 	// --- Messenger & Social AMF Endpoints ---
 	case strings.Contains(target, "getFriends"):
-		screenName := "Adam"
+		screenName := ""
 		if arr, ok := bodyVal.([]any); ok && len(arr) > 0 {
 			if s, ok := arr[0].(string); ok && s != "" {
 				screenName = s
 			}
+		}
+		if screenName == "" {
+			if authD, _ := s.authenticatedDenizen(r); authD != nil {
+				screenName = authD.ScreenName
+			}
+		}
+		if screenName == "" {
+			responseValue = []any{}
+			break
 		}
 		friends, err := s.store.GetFriends(screenName)
 		if err != nil {
@@ -987,11 +1012,20 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 		responseValue = list
 
 	case strings.Contains(target, "getOnlineFriends"):
-		screenName := "Adam"
+		screenName := ""
 		if arr, ok := bodyVal.([]any); ok && len(arr) > 0 {
 			if s, ok := arr[0].(string); ok && s != "" {
 				screenName = s
 			}
+		}
+		if screenName == "" {
+			if authD, _ := s.authenticatedDenizen(r); authD != nil {
+				screenName = authD.ScreenName
+			}
+		}
+		if screenName == "" {
+			responseValue = []any{}
+			break
 		}
 		friends, _ := s.store.GetFriends(screenName)
 		var list []any
@@ -1012,11 +1046,14 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 		responseValue = list
 
 	case strings.Contains(target, "sendMessage"):
-		from := "Adam"
-		to := "Adam"
+		from := ""
+		if authD, _ := s.authenticatedDenizen(r); authD != nil {
+			from = authD.ScreenName
+		}
+		to := ""
 		msg := ""
 		if arr, ok := bodyVal.([]any); ok {
-			if len(arr) > 0 {
+			if len(arr) > 0 && from == "" {
 				if s, ok := arr[0].(string); ok {
 					from = s
 				}
@@ -1039,16 +1076,29 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		}
-		msgID, _ := s.store.SendMessage(from, to, msg)
-		s.notifyMessengerRecipient(to, from, msg)
-		responseValue = float64(msgID)
+		if from != "" && to != "" && msg != "" {
+			msgID, _ := s.store.SendMessage(from, to, msg)
+			s.notifyMessengerRecipient(to, from, msg)
+			responseValue = float64(msgID)
+		} else {
+			responseValue = float64(0)
+		}
 
 	case strings.Contains(target, "getMessages"):
-		screenName := "Adam"
+		screenName := ""
 		if arr, ok := bodyVal.([]any); ok && len(arr) > 0 {
 			if s, ok := arr[0].(string); ok && s != "" {
 				screenName = s
 			}
+		}
+		if screenName == "" {
+			if authD, _ := s.authenticatedDenizen(r); authD != nil {
+				screenName = authD.ScreenName
+			}
+		}
+		if screenName == "" {
+			responseValue = []any{}
+			break
 		}
 		msgs, _ := s.store.GetMessages(screenName, false)
 		var list []any
@@ -1073,7 +1123,7 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 		responseValue = true
 
 	case strings.Contains(target, "acceptInvitation"):
-		u1, u2 := "Adam", "Adam"
+		u1, u2 := "", ""
 		if arr, ok := bodyVal.([]any); ok && len(arr) >= 2 {
 			if s, ok := arr[0].(string); ok {
 				u1 = s
@@ -1082,12 +1132,21 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 				u2 = s
 			}
 		}
-		_ = s.store.AddFriend(u1, u2)
-		s.notifyFriendEvent(u1, u2, "accepted")
-		responseValue = true
+		if authD, _ := s.authenticatedDenizen(r); authD != nil {
+			if u1 == "" {
+				u1 = authD.ScreenName
+			}
+		}
+		if u1 != "" && u2 != "" {
+			_ = s.store.AcceptFriendRequest(u1, u2)
+			s.notifyFriendEvent(u1, u2, "accepted")
+			responseValue = true
+		} else {
+			responseValue = false
+		}
 
 	case strings.Contains(target, "rejectInvitation") || strings.Contains(target, "removeFriend"):
-		u1, u2 := "Adam", "Adam"
+		u1, u2 := "", ""
 		if arr, ok := bodyVal.([]any); ok && len(arr) >= 2 {
 			if s, ok := arr[0].(string); ok {
 				u1 = s
@@ -1096,8 +1155,18 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 				u2 = s
 			}
 		}
-		_ = s.store.RemoveFriend(u1, u2)
-		responseValue = true
+		if authD, _ := s.authenticatedDenizen(r); authD != nil {
+			if u1 == "" {
+				u1 = authD.ScreenName
+			}
+		}
+		if u1 != "" && u2 != "" {
+			_ = s.store.RejectFriendRequest(u1, u2)
+			_ = s.store.RemoveFriend(u1, u2)
+			responseValue = true
+		} else {
+			responseValue = false
+		}
 
 	// --- Studio Decor AMF Endpoint ---
 	case strings.Contains(target, "updateStudio"):
@@ -1205,6 +1274,10 @@ func (s *Server) handleWebSocketRealtime(w http.ResponseWriter, r *http.Request)
 		s.mu.Lock()
 		delete(s.Players, playerID)
 		s.mu.Unlock()
+
+		if s.tradeManager != nil && player.ScreenName != "" {
+			s.tradeManager.AbortTradeForPlayer(player.ScreenName)
+		}
 
 		if player.RoomID != "" && player.ScreenName != "" {
 			s.removePlayerFromRoom(player, player.RoomID)
@@ -1528,78 +1601,67 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 
 	// --- Live Studio Decor (Wall, Floor, Doorbell) ---
 	if strings.Contains(xml, "<ST_DECOR") {
-		roomID := player.RoomID
-		if roomID != "" && roomID != "$LOBBY$" {
-			wpStr := extractAttr(xml, "wp")
-			flStr := extractAttr(xml, "fl")
-			dbStr := extractAttr(xml, "db")
-			wp, _ := strconv.Atoi(wpStr)
-			fl, _ := strconv.Atoi(flStr)
-			db, _ := strconv.Atoi(dbStr)
-			if wp <= 0 {
-				wp = 1
-			}
-			if fl <= 0 {
-				fl = 1
-			}
-			if db <= 0 {
-				db = 1
-			}
-
-			rm, err := s.GetRoom(roomID)
-			if err == nil && rm != nil {
-				rm.mu.Lock()
-				rm.Wallpaper = wp
-				rm.Floor = fl
-				rm.Doorbell = db
-				rm.mu.Unlock()
-
-				_ = s.store.UpdateStudioDecor(roomID, wp, fl, db)
-				decorXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><ST_DECOR wp=\"%d\" fl=\"%d\" db=\"%d\"/></Room.Action>",
-					rm.ID, wp, fl, db)
-				rm.Broadcast(decorXML, "")
-				log.Printf("[WS] Studio %s decor updated: wallpaper=%d, floor=%d, doorbell=%d", roomID, wp, fl, db)
-			}
-		}
+		wp, _ := strconv.Atoi(extractAttr(xml, "wp"))
+		fl, _ := strconv.Atoi(extractAttr(xml, "fl"))
+		db, _ := strconv.Atoi(extractAttr(xml, "db"))
+		s.applyRealtimeStudioDecor(player, wp, fl, db)
 		return
 	}
 
 	// --- Live Messenger / Instant Messaging ---
-	if strings.Contains(xml, "<MMS_SND") || strings.Contains(xml, "<MMS_MSG") {
+	if strings.Contains(xml, "<MMS_SND") || strings.Contains(xml, "<MMS_MSG") || strings.Contains(xml, "<MSGR_SND_M") {
 		to := extractAttr(xml, "to")
-		msgHex := extractAttr(xml, "m")
+		if to == "" {
+			to = extractAttr(xml, "rcv")
+		}
 		msgText := extractAttr(xml, "msg")
-		if msgText == "" && msgHex != "" {
-			if dec, err := hex.DecodeString(msgHex); err == nil {
-				msgText = string(dec)
+		if msgText == "" {
+			msgHex := extractAttr(xml, "m")
+			if msgHex != "" {
+				if dec, err := hex.DecodeString(msgHex); err == nil {
+					msgText = string(dec)
+				}
 			}
 		}
-		if to != "" && msgText != "" {
-			_, _ = s.store.SendMessage(player.ScreenName, to, msgText)
-			s.notifyMessengerRecipient(to, player.ScreenName, msgText)
-			log.Printf("[MESSENGER] %s -> %s: %s", player.ScreenName, to, msgText)
-		}
+		s.deliverRealtimeMessengerMessage(player, to, msgText)
 		return
 	}
 
 	// --- Friend Request ---
-	if strings.Contains(xml, "<MMS_REQ") {
+	if strings.Contains(xml, "<MMS_REQ") || strings.Contains(xml, "<MSGR_INV") {
 		to := extractAttr(xml, "to")
-		if to != "" && !strings.EqualFold(to, player.ScreenName) {
-			s.notifyMessengerEvent(to, fmt.Sprintf("<MMS_REQ from=\"%s\"/>", player.ScreenName))
-			log.Printf("[MESSENGER] Friend request: %s -> %s", player.ScreenName, to)
+		if to == "" {
+			to = extractAttr(xml, "sn")
 		}
+		s.handleMessengerRequest(player, to)
 		return
 	}
 
 	// --- Friend Accept ---
-	if strings.Contains(xml, "<MMS_ACC") {
+	if strings.Contains(xml, "<MMS_ACC") || strings.Contains(xml, "<MSGR_AC_INV") {
 		from := extractAttr(xml, "from")
-		if from != "" {
-			_ = s.store.AddFriend(player.ScreenName, from)
-			s.notifyFriendEvent(player.ScreenName, from, "accepted")
-			log.Printf("[MESSENGER] Friend accepted: %s and %s", player.ScreenName, from)
+		if from == "" {
+			from = extractAttr(xml, "inviter")
 		}
+		s.handleMessengerAccept(player, from)
+		return
+	}
+
+	// --- Friend Reject / Refuse ---
+	if strings.Contains(xml, "<MMS_REJ") || strings.Contains(xml, "<MSGR_RJ_INV") {
+		from := extractAttr(xml, "from")
+		if from == "" {
+			from = extractAttr(xml, "inviter")
+		}
+		s.handleMessengerReject(player, from)
+		return
+	}
+
+	// --- Call For Help / Report ---
+	if strings.Contains(xml, "<CFH") {
+		msg := extractAttr(xml, "msg")
+		suspect := extractAttr(xml, "av")
+		s.handleCallForHelp(player, suspect, msg)
 		return
 	}
 
@@ -1634,13 +1696,7 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 	// --- Studio Doorbell Knock ---
 	if strings.Contains(xml, "<ST_KNOCK") {
 		roomID := extractAttr(xml, "roomID")
-		if roomID != "" {
-			room := s.GetOrCreateRoom(roomID)
-			knockXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><ST_KNOCK av=\"%s\"/></Room.Action>",
-				room.ID, player.ScreenName)
-			room.Broadcast(knockXML, player.ID)
-			log.Printf("[DOORBELL] %s knocked on room %s", player.ScreenName, roomID)
-		}
+		s.handleDoorbellKnock(player, roomID)
 		return
 	}
 
@@ -1648,48 +1704,73 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 	if strings.Contains(xml, "<ST_KNOCK_RES") {
 		target := extractAttr(xml, "target")
 		allow := extractAttr(xml, "allow")
-		roomID := player.RoomID
-		if target != "" && roomID != "" {
-			s.mu.RLock()
-			for _, p := range s.Players {
-				if strings.EqualFold(p.ScreenName, target) {
-					if allow == "1" || allow == "true" {
-						_ = p.Send(fmt.Sprintf("<Accepted roomID=\"%s\"/>", roomID))
-					} else {
-						_ = p.Send("<Alert msg=\"The studio owner declined your knock.\"/>")
-					}
-					break
-				}
-			}
-			s.mu.RUnlock()
-		}
+		s.handleDoorbellResponse(player, target, allow == "1" || allow == "true")
 		return
 	}
 
 	// --- Studio Moderation Kick ---
-	if strings.Contains(xml, "<ST_KICK") {
+	if strings.Contains(xml, "<ST_KICK") || strings.Contains(xml, "<AV_K") {
 		target := extractAttr(xml, "target")
-		roomID := player.RoomID
-		if target != "" && roomID != "" && roomID != "$LOBBY$" {
-			room := s.GetOrCreateRoom(roomID)
-			var kickedPlayer *Player
-			room.mu.Lock()
-			for pid, p := range room.Players {
-				if strings.EqualFold(p.ScreenName, target) {
-					kickedPlayer = p
-					delete(room.Players, pid)
-					break
-				}
-			}
-			room.mu.Unlock()
+		if target == "" {
+			target = extractAttr(xml, "av")
+		}
+		s.handleStudioKick(player, target)
+		return
+	}
 
-			if kickedPlayer != nil {
-				kickedPlayer.RoomID = "$LOBBY$"
-				_ = kickedPlayer.Send(fmt.Sprintf("<KICKED roomID=\"%s\" by=\"%s\"/>", roomID, player.ScreenName))
-				rmXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV_RM av=\"%s\"/></Room.Action>", roomID, target)
-				room.Broadcast(rmXML, "")
-				log.Printf("[MODERATION] %s kicked %s from %s", player.ScreenName, target, roomID)
+	// --- Trading System (TD_ST, TD_AD, TD_AG, TD_DAG, TD_CNCL, TD_CN) ---
+	if strings.Contains(xml, "<TD_ST") {
+		target := extractAttr(xml, "tde")
+		if target == "" {
+			target = extractAttr(xml, "t")
+		}
+		if target == "" {
+			target = extractAttr(xml, "tdr")
+		}
+		if s.tradeManager != nil && target != "" {
+			_, err := s.tradeManager.StartTrade(player.RoomID, player.ScreenName, target)
+			if err != nil {
+				log.Printf("[TRADE] StartTrade failed: %v", err)
 			}
+		}
+		return
+	}
+
+	if strings.Contains(xml, "<TD_AD") {
+		idStr := extractAttr(xml, "id")
+		posID, _ := strconv.Atoi(idStr)
+		if s.tradeManager != nil && posID > 0 {
+			err := s.tradeManager.AddItem(player.ScreenName, posID)
+			if err != nil {
+				log.Printf("[TRADE] AddItem failed: %v", err)
+			}
+		}
+		return
+	}
+
+	if strings.Contains(xml, "<TD_AG") {
+		if s.tradeManager != nil {
+			_, err := s.tradeManager.AgreeTrade(player.ScreenName)
+			if err != nil {
+				log.Printf("[TRADE] AgreeTrade failed: %v", err)
+			}
+		}
+		return
+	}
+
+	if strings.Contains(xml, "<TD_DAG") {
+		if s.tradeManager != nil {
+			err := s.tradeManager.DisagreeTrade(player.ScreenName)
+			if err != nil {
+				log.Printf("[TRADE] DisagreeTrade failed: %v", err)
+			}
+		}
+		return
+	}
+
+	if strings.Contains(xml, "<TD_CN") || strings.Contains(xml, "<TD_CNCL") {
+		if s.tradeManager != nil {
+			_ = s.tradeManager.CancelTrade(player.ScreenName)
 		}
 		return
 	}

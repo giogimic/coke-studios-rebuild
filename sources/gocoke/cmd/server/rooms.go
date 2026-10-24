@@ -289,6 +289,9 @@ func (s *Server) GetOrCreateRoom(roomID string) *Room {
 }
 
 func (s *Server) removePlayerFromRoom(player *Player, roomID string) {
+	if s.tradeManager != nil && player.ScreenName != "" {
+		s.tradeManager.AbortTradeForPlayer(player.ScreenName)
+	}
 	if roomID == "" || roomID == "$LOBBY$" {
 		return
 	}

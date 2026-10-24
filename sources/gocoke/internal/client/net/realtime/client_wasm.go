@@ -702,6 +702,13 @@ func (c *Client) Connect(ctx context.Context, host string, port string) error {
 				sc.HandleCDRequestAccepted()
 			}
 		}
+		// If this is a trade cancellation (TD_CN or TD_CNCL)
+		if containsSubstr(b, []byte("<TD_CN")) || containsSubstr(b, []byte("<TD_CNCL")) {
+			if sc := studioscene.GetActiveScene(); sc != nil {
+				sc.CancelTradeFromNetwork()
+			}
+		}
+
 		// If this is a trade completion (TD_CPLT)
 		if containsSubstr(b, []byte("<Room.Action")) && containsSubstr(b, []byte("<TD_CPLT")) {
 			// Parse: <TD_CPLT><P id="349" cid="45">[:]</P>...</TD_CPLT>

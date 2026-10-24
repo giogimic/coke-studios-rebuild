@@ -279,6 +279,16 @@ func (s *Store) migrate() error {
 				PRIMARY KEY (denizen_id, drink_date)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
 
+			`CREATE TABLE IF NOT EXISTS call_for_help (
+				id INT AUTO_INCREMENT PRIMARY KEY,
+				reporter_name VARCHAR(64) NOT NULL,
+				suspect_name VARCHAR(64),
+				room_id VARCHAR(64),
+				message TEXT NOT NULL,
+				status VARCHAR(32) DEFAULT 'open',
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
 			`CREATE TABLE IF NOT EXISTS top40_votes (
 				id INT AUTO_INCREMENT PRIMARY KEY,
 				creator_name VARCHAR(64) NOT NULL,
@@ -401,6 +411,16 @@ func (s *Store) migrate() error {
 				drink_date TEXT NOT NULL,
 				count INTEGER NOT NULL DEFAULT 1,
 				PRIMARY KEY (denizen_id, drink_date)
+			);`,
+
+			`CREATE TABLE IF NOT EXISTS call_for_help (
+				id INTEGER PRIMARY KEY AUTOINCREMENT,
+				reporter_name TEXT NOT NULL,
+				suspect_name TEXT,
+				room_id TEXT,
+				message TEXT NOT NULL,
+				status TEXT DEFAULT 'open',
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 			);`,
 
 			`CREATE TABLE IF NOT EXISTS top40_votes (
@@ -873,6 +893,144 @@ func (s *Store) GetBackpack(screenName string) ([]BackpackItemRecord, error) {
 	return items, nil
 }
 
+func (s *Store) GetBackpackItem(screenName string, posID int) (*BackpackItemRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var denizenID string
+	err := s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&denizenID)
+	if err != nil {
+		return nil, fmt.Errorf("user not found: %w", err)
+	}
+
+	var catID int
+	var pJson string
+	err = s.db.QueryRow("SELECT catalog_item_id, properties_json FROM backpack_items WHERE id = ? AND denizen_id = ?", posID, denizenID).Scan(&catID, &pJson)
+	if err != nil {
+		return nil, err
+	}
+
+	props := make(map[string]any)
+	if pJson != "" {
+		_ = json.Unmarshal([]byte(pJson), &props)
+	}
+	return &BackpackItemRecord{
+		ID:            posID,
+		DenizenID:     denizenID,
+		CatalogItemID: catID,
+		Properties:    props,
+	}, nil
+}
+
+func (s *Store) SwapBackpackItemsAtomic(traderName string, traderItemIDs []int, tradeeName string, tradeeItemIDs []int) ([]BackpackItemRecord, []BackpackItemRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var traderID, tradeeID string
+	err := s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(traderName)).Scan(&traderID)
+	if err != nil {
+		return nil, nil, fmt.Errorf("trader %q not found: %w", traderName, err)
+	}
+	err = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(tradeeName)).Scan(&tradeeID)
+	if err != nil {
+		return nil, nil, fmt.Errorf("tradee %q not found: %w", tradeeName, err)
+	}
+	if traderID == tradeeID {
+		return nil, nil, fmt.Errorf("cannot trade with oneself")
+	}
+
+	// Verify no duplicate IDs in offers
+	seenTrader := make(map[int]bool)
+	for _, id := range traderItemIDs {
+		if seenTrader[id] {
+			return nil, nil, fmt.Errorf("duplicate item %d in trader offer", id)
+		}
+		seenTrader[id] = true
+	}
+	seenTradee := make(map[int]bool)
+	for _, id := range tradeeItemIDs {
+		if seenTradee[id] {
+			return nil, nil, fmt.Errorf("duplicate item %d in tradee offer", id)
+		}
+		seenTradee[id] = true
+	}
+
+	tx, err := s.db.Begin()
+	if err != nil {
+		return nil, nil, err
+	}
+	defer tx.Rollback()
+
+	var traderReceived []BackpackItemRecord
+	var tradeeReceived []BackpackItemRecord
+
+	// 1. Move trader items to tradee
+	for _, id := range traderItemIDs {
+		var catID int
+		var pJson string
+		err := tx.QueryRow("SELECT catalog_item_id, properties_json FROM backpack_items WHERE id = ? AND denizen_id = ?", id, traderID).Scan(&catID, &pJson)
+		if err != nil {
+			return nil, nil, fmt.Errorf("item %d is not owned by %s or not in backpack: %w", id, traderName, err)
+		}
+
+		props := make(map[string]any)
+		if pJson != "" {
+			_ = json.Unmarshal([]byte(pJson), &props)
+		}
+		// Update owner to tradee, strictly PRESERVING original song author/artist
+		props["ownerName"] = tradeeName
+
+		updatedJSON, _ := json.Marshal(props)
+		_, err = tx.Exec("UPDATE backpack_items SET denizen_id = ?, properties_json = ? WHERE id = ?", tradeeID, string(updatedJSON), id)
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to transfer item %d to %s: %w", id, tradeeName, err)
+		}
+
+		tradeeReceived = append(tradeeReceived, BackpackItemRecord{
+			ID:            id,
+			DenizenID:     tradeeID,
+			CatalogItemID: catID,
+			Properties:    props,
+		})
+	}
+
+	// 2. Move tradee items to trader
+	for _, id := range tradeeItemIDs {
+		var catID int
+		var pJson string
+		err := tx.QueryRow("SELECT catalog_item_id, properties_json FROM backpack_items WHERE id = ? AND denizen_id = ?", id, tradeeID).Scan(&catID, &pJson)
+		if err != nil {
+			return nil, nil, fmt.Errorf("item %d is not owned by %s or not in backpack: %w", id, tradeeName, err)
+		}
+
+		props := make(map[string]any)
+		if pJson != "" {
+			_ = json.Unmarshal([]byte(pJson), &props)
+		}
+		// Update owner to trader, strictly PRESERVING original song author/artist
+		props["ownerName"] = traderName
+
+		updatedJSON, _ := json.Marshal(props)
+		_, err = tx.Exec("UPDATE backpack_items SET denizen_id = ?, properties_json = ? WHERE id = ?", traderID, string(updatedJSON), id)
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to transfer item %d to %s: %w", id, traderName, err)
+		}
+
+		traderReceived = append(traderReceived, BackpackItemRecord{
+			ID:            id,
+			DenizenID:     traderID,
+			CatalogItemID: catID,
+			Properties:    props,
+		})
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, nil, err
+	}
+
+	return traderReceived, tradeeReceived, nil
+}
+
 func (s *Store) AddBackpackItem(screenName string, catalogItemID int, properties map[string]any) (int, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -1236,7 +1394,7 @@ func (s *Store) GetFriends(screenName string) ([]FriendRecord, error) {
 	query := `SELECT d.screen_name, d.gender, d.mission, d.avatar_def, d.last_seen_in, mf.status
 		FROM messenger_friends mf
 		JOIN denizens d ON d.id = mf.friend_id
-		WHERE mf.denizen_id = ?
+		WHERE mf.denizen_id = ? AND mf.status = 'accepted'
 		ORDER BY d.screen_name ASC`
 	rows, err := s.db.Query(query, denizenID)
 	if err != nil {
@@ -1290,6 +1448,112 @@ func (s *Store) RemoveFriend(user1, user2 string) error {
 	_, _ = s.db.Exec("DELETE FROM messenger_friends WHERE (denizen_id = ? AND friend_id = ?) OR (denizen_id = ? AND friend_id = ?)",
 		id1, id2, id2, id1)
 	return nil
+}
+
+func (s *Store) AddFriendRequest(fromUser, toUser string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var id1, id2 string
+	_ = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(fromUser)).Scan(&id1)
+	_ = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(toUser)).Scan(&id2)
+	if id1 == "" || id2 == "" || id1 == id2 {
+		return fmt.Errorf("invalid friend users")
+	}
+
+	// Check if already friends
+	var status string
+	err := s.db.QueryRow("SELECT status FROM messenger_friends WHERE denizen_id = ? AND friend_id = ?", id1, id2).Scan(&status)
+	if err == nil && status == "accepted" {
+		return nil
+	}
+
+	q := "INSERT OR REPLACE INTO messenger_friends (denizen_id, friend_id, status) VALUES (?, ?, 'pending')"
+	if s.driver == "mysql" {
+		q = "INSERT INTO messenger_friends (denizen_id, friend_id, status) VALUES (?, ?, 'pending') ON DUPLICATE KEY UPDATE status = 'pending'"
+	}
+	_, err = s.db.Exec(q, id1, id2)
+	return err
+}
+
+func (s *Store) AcceptFriendRequest(user1, user2 string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var id1, id2 string
+	_ = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(user1)).Scan(&id1)
+	_ = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(user2)).Scan(&id2)
+	if id1 == "" || id2 == "" || id1 == id2 {
+		return fmt.Errorf("invalid friend users")
+	}
+
+	q1 := "INSERT OR REPLACE INTO messenger_friends (denizen_id, friend_id, status) VALUES (?, ?, 'accepted')"
+	q2 := "INSERT OR REPLACE INTO messenger_friends (denizen_id, friend_id, status) VALUES (?, ?, 'accepted')"
+	if s.driver == "mysql" {
+		q1 = "INSERT INTO messenger_friends (denizen_id, friend_id, status) VALUES (?, ?, 'accepted') ON DUPLICATE KEY UPDATE status = 'accepted'"
+		q2 = "INSERT INTO messenger_friends (denizen_id, friend_id, status) VALUES (?, ?, 'accepted') ON DUPLICATE KEY UPDATE status = 'accepted'"
+	}
+	_, _ = s.db.Exec(q1, id1, id2)
+	_, _ = s.db.Exec(q2, id2, id1)
+	return nil
+}
+
+func (s *Store) RejectFriendRequest(fromUser, toUser string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var id1, id2 string
+	_ = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(fromUser)).Scan(&id1)
+	_ = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(toUser)).Scan(&id2)
+	if id1 == "" || id2 == "" {
+		return nil
+	}
+
+	_, err := s.db.Exec("DELETE FROM messenger_friends WHERE (denizen_id = ? AND friend_id = ? AND status = 'pending') OR (denizen_id = ? AND friend_id = ? AND status = 'pending')",
+		id1, id2, id2, id1)
+	return err
+}
+
+func (s *Store) GetPendingFriendRequests(screenName string) ([]string, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var denizenID string
+	err := s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&denizenID)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := s.db.Query(`SELECT d.screen_name FROM messenger_friends mf
+		JOIN denizens d ON d.id = mf.denizen_id
+		WHERE mf.friend_id = ? AND mf.status = 'pending'
+		ORDER BY d.screen_name ASC`, denizenID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var requesters []string
+	for rows.Next() {
+		var name string
+		if err := rows.Scan(&name); err == nil {
+			requesters = append(requesters, name)
+		}
+	}
+	return requesters, nil
+}
+
+func (s *Store) RecordCallForHelp(reporter, suspect, roomID, message string) (int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	res, err := s.db.Exec("INSERT INTO call_for_help (reporter_name, suspect_name, room_id, message) VALUES (?, ?, ?, ?)",
+		strings.TrimSpace(reporter), strings.TrimSpace(suspect), strings.TrimSpace(roomID), strings.TrimSpace(message))
+	if err != nil {
+		return 0, err
+	}
+	lid, _ := res.LastInsertId()
+	return int(lid), nil
 }
 
 func (s *Store) SendMessage(sender, recipient, message string) (int, error) {

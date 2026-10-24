@@ -441,6 +441,14 @@ func (s *Scene) CompleteTradeFromNetwork(receivedItems []map[string]string) {
 	s.tradeManager.CompleteTradeFromNetwork(receivedItems)
 }
 
+// CancelTradeFromNetwork handles incoming TD_CN or TD_CNCL packets from the network
+func (s *Scene) CancelTradeFromNetwork() {
+	if s == nil || s.tradeManager == nil {
+		return
+	}
+	s.tradeManager.CancelIfPending()
+}
+
 // ShowPerformanceResults displays an alert with performance voting results and decibels awarded.
 func (s *Scene) ShowPerformanceResults(thumbsUp, thumbsDown, decibels int) {
 	if s == nil || s.hudManager == nil {

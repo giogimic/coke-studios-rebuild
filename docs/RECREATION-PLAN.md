@@ -147,11 +147,11 @@ Each condition is assigned to a task and must have a named regression scenario t
 **Modify:** server messenger/friend/moderation handlers and storage; `internal/client/scene/studio/trade.go`, player/studio context UI; existing messenger assets/loaders.
 **Create:** Focused Go social/trade tests and `tests/browser/social-trade.spec.ts`.
 
-- [ ] Add tests for friend request/accept/refuse, messaging identity and delivery, host permissions, doorbell/locks, reports and appropriate error/notification states.
-- [ ] Add `TestTradeRequiresBothConfirmations`, `TestTradeCannotDuplicatePossession`, `TestTradeDisconnectDoesNotLoseItems`, and `TestTradePreservesSongAuthor`.
-- [ ] Implement each flow inside the historical player UI with session-based permission checks, persistent relationships and atomic possession transfer.
-- [ ] Exercise two-player trades concurrently with pickup/sale and reconnect; verify restart state and both perspectives.
-- [ ] Compare dialog sequences, confirmation states, host actions and messenger feedback to the matching original version.
+- [x] Add tests for friend request/accept/refuse, messaging identity and delivery, host permissions, doorbell/locks, reports and appropriate error/notification states.
+- [x] Add `TestTradeRequiresBothConfirmations`, `TestTradeCannotDuplicatePossession`, `TestTradeDisconnectDoesNotLoseItems`, and `TestTradePreservesSongAuthor`.
+- [x] Implement each flow inside the historical player UI with session-based permission checks, persistent relationships and atomic possession transfer.
+- [x] Exercise two-player trades concurrently with pickup/sale and reconnect; verify restart state and both perspectives.
+- [x] Compare dialog sequences, confirmation states, host actions and messenger feedback to the matching original version.
 
 **Exit:** Social and collectible activity works through the actual world rather than disconnected portal forms.
 
