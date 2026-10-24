@@ -638,8 +638,167 @@
       border-radius: 4px;
       cursor: pointer;
     }
-    .btn-chart-play:hover {
-      background: #c4000b;
+    /* --- PAGE: POP QUIZ MINIGAME --- */
+    .popquiz-card {
+      background: #ffffff;
+      border: 2px solid #e41e2b;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+    .popquiz-banner {
+      background: #7d0000;
+      text-align: center;
+      padding: 15px;
+      border-bottom: 3px solid #ffcc00;
+    }
+    .popquiz-banner img {
+      max-height: 80px;
+      border-radius: 4px;
+    }
+    .popquiz-body {
+      padding: 24px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .popquiz-question {
+      font-size: 16px;
+      font-weight: bold;
+      color: #7d0000;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    .popquiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .popquiz-opt-btn {
+      background: #fbfbfb;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #333;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s;
+    }
+    .popquiz-opt-btn:hover {
+      border-color: #e41e2b;
+      background: #fff5f5;
+      color: #e41e2b;
+    }
+    .popquiz-opt-btn.correct {
+      border-color: #00c853;
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+    .popquiz-opt-btn.wrong {
+      border-color: #d50000;
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    /* --- PAGE: POSTCARDS --- */
+    .postcard-card {
+      background: #ffffff;
+      border: 2px solid #d2a679;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+    .postcard-banner {
+      background: #231f20;
+      text-align: center;
+      padding: 12px;
+      border-bottom: 3px solid #e41e2b;
+    }
+    .postcard-banner img {
+      max-height: 70px;
+    }
+    .postcard-layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 24px;
+      padding: 24px;
+    }
+    .postcard-preview-stage {
+      background: linear-gradient(135deg, #f9f6f0 0%, #ece5d8 100%);
+      border: 3px dashed #c4000b;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      position: relative;
+    }
+    .postcard-preview-stage img {
+      max-width: 100%;
+      border-radius: 4px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    /* --- PAGE: DOWNLOADS --- */
+    .downloads-card {
+      background: #ffffff;
+      border: 2px solid #d2a679;
+      border-radius: 8px;
+      overflow: hidden;
+      padding: 20px;
+    }
+    .downloads-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .download-item {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 12px;
+      text-align: center;
+      background: #fdfdfd;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .download-item:hover {
+      border-color: #e41e2b;
+      transform: translateY(-2px);
+    }
+    .download-thumb {
+      max-width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    /* --- ASK MAX MASCOT --- */
+    .ask-max-container {
+      display: flex;
+      gap: 20px;
+      background: #fff8f0;
+      border: 2px solid #ffcc00;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+      align-items: center;
+    }
+    .ask-max-img {
+      width: 100px;
+      height: auto;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+    }
+    .ask-max-bubble {
+      flex: 1;
+      background: #ffffff;
+      border: 2px solid #d2a679;
+      border-radius: 12px;
+      padding: 16px 20px;
+      position: relative;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #333;
     }
 
     /* --- PAGE: AVATAR STUDIO CUSTOMIZER --- */
@@ -1277,6 +1436,12 @@
       <div class="nav-tab" onclick="switchTab('mixer')">
         <span class="nav-tab-icon">&#9836;</span> Music Mixer
       </div>
+      <div class="nav-tab" onclick="switchTab('popquiz')">
+        <span class="nav-tab-icon">&#10068;</span> Pop Quiz
+      </div>
+      <div class="nav-tab" onclick="switchTab('postcard')">
+        <span class="nav-tab-icon">&#128140;</span> Postcards
+      </div>
       <div class="nav-tab" onclick="switchTab('messenger')">
         <span class="nav-tab-icon">&#9993;</span> Messenger
       </div>
@@ -1292,8 +1457,11 @@
       <div class="nav-tab" onclick="switchTab('studios')">
         <span class="nav-tab-icon">&#127968;</span> Studio Directory
       </div>
+      <div class="nav-tab" onclick="switchTab('downloads')">
+        <span class="nav-tab-icon">&#128190;</span> Downloads
+      </div>
       <div class="nav-tab" onclick="switchTab('safety')">
-        <span class="nav-tab-icon">&#128737;</span> Safety &amp; Rules
+        <span class="nav-tab-icon">&#128737;</span> Ask Max &amp; Rules
       </div>
       <div class="nav-tab" onclick="openRegisterModal()" style="color:#ffcc00;">
         <span class="nav-tab-icon">&#10024;</span> Registration
@@ -1758,8 +1926,128 @@
         </div>
       </section>
 
-      <!-- TAB 6: SAFETY & HOUSE RULES -->
+      <!-- TAB: POP QUIZ MINIGAME -->
+      <section id="tab-popquiz" class="tab-page">
+        <div class="popquiz-card">
+          <div class="popquiz-banner">
+            <img src="assets/images/music-mixer/mm15_popq_on.jpg" alt="Coke Music Pop Quiz">
+          </div>
+          <div class="popquiz-body">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+              <span id="quizProgress" style="font-weight:bold; color:#7d0000; font-size:12px;">QUESTION 1 OF 5</span>
+              <span id="quizScoreBadge" style="background:#ffcc00; color:#000; padding:4px 10px; border-radius:4px; font-weight:bold; font-size:12px;">Decibels Won: +0 dB</span>
+            </div>
+            <div class="popquiz-question" id="quizQuestionText">Loading quiz question...</div>
+            <div class="popquiz-options" id="quizOptionsContainer"></div>
+            <div id="quizFeedback" style="display:none; padding:12px; border-radius:6px; font-size:13px; font-weight:bold; margin-bottom:16px;"></div>
+            <div style="display:flex; justify-content:flex-end;">
+              <button id="btnQuizNext" class="btn-vp" style="display:none; background:#e41e2b; padding:8px 20px; font-size:13px;" onclick="nextQuizQuestion()">Next Question &rarr;</button>
+              <button id="btnQuizRestart" class="btn-vp" style="display:none; background:#333; padding:8px 20px; font-size:13px;" onclick="restartQuiz()">&#8635; Play Again</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: MUSICAL POSTCARDS -->
+      <section id="tab-postcard" class="tab-page">
+        <div class="postcard-card">
+          <div class="postcard-banner">
+            <img src="assets/images/postcard/postreg_topbanner.jpg" alt="Send a Musical Postcard">
+          </div>
+          <div class="postcard-layout">
+            <!-- Left: Live Preview Envelope -->
+            <div class="postcard-preview-stage">
+              <img src="assets/images/postcard/postreg_pre-guitar2.gif" alt="Postcard Visual" style="width:100%; border:2px solid #fff; margin-bottom:12px;">
+              <div id="cardPreviewNote" style="background:#fff; border:1px solid #ccc; border-radius:4px; padding:10px; font-family:'Courier New', monospace; font-size:12px; color:#333; min-height:60px; text-align:left;">
+                "Hey! Come check out my new studio lounge in Central Park! Play our favorite tunes and battle on the DJ booth!"
+              </div>
+              <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+                <span id="cardAudioTag" style="font-size:11px; font-weight:bold; color:#7d0000;">&#9835; Audio: Rock Beats</span>
+                <button class="btn-vp" style="padding:4px 8px; font-size:10px;" onclick="previewPostcardAudio()">&#9654; Listen</button>
+              </div>
+            </div>
+
+            <!-- Right: Compose Form -->
+            <div style="display:flex; flex-direction:column; gap:14px;">
+              <div>
+                <label style="display:block; font-size:11px; font-weight:bold; color:#7d0000; margin-bottom:4px; text-transform:uppercase;">Recipient (Screen Name or Friend)</label>
+                <input type="text" id="cardRecipientInput" class="reg-input" placeholder="e.g. Adam" style="background:#fff; color:#333; border:2px solid #ddd; font-weight:bold;">
+              </div>
+              <div>
+                <label style="display:block; font-size:11px; font-weight:bold; color:#7d0000; margin-bottom:4px; text-transform:uppercase;">Attach Musical Loop</label>
+                <select id="cardTrackSelect" class="reg-input" style="background:#fff; color:#333; border:2px solid #ddd;" onchange="updatePostcardAudioLabel()">
+                  <option value="rockOne_beatz00.wav">Rock Beats (120 BPM)</option>
+                  <option value="danceOne_bass00.wav">Dance Synthwave (120 BPM)</option>
+                  <option value="misc_funkGuit00.wav">Funky Studio Guitar (120 BPM)</option>
+                  <option value="latinoTwo_piano00.wav">Latin Piano Combo (120 BPM)</option>
+                  <option value="hipHopOne_beatz01.wav">Hip Hop Red Alert (120 BPM)</option>
+                </select>
+              </div>
+              <div>
+                <label style="display:block; font-size:11px; font-weight:bold; color:#7d0000; margin-bottom:4px; text-transform:uppercase;">Your Message</label>
+                <textarea id="cardMessageInput" class="reg-input" rows="4" style="background:#fff; color:#333; border:2px solid #ddd; resize:vertical; font-family:Verdana,sans-serif;" oninput="updatePostcardPreviewText()">Hey! Come check out my new studio lounge in Central Park! Play our favorite tunes and battle on the DJ booth!</textarea>
+              </div>
+              <div id="postcardStatus" style="display:none; font-size:12px; font-weight:bold; padding:8px; border-radius:4px;"></div>
+              <button class="btn-avatar-primary" style="padding:12px; font-size:14px;" onclick="sendPostcard()">&#128140; Send Musical Postcard to V-Ego Messenger</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: RETRO DOWNLOADS -->
+      <section id="tab-downloads" class="tab-page">
+        <div class="downloads-card">
+          <div style="border-bottom:2px solid #e41e2b; padding-bottom:12px; margin-bottom:16px;">
+            <img src="assets/images/downloads/download_tittle.jpg" alt="Downloads" style="max-height:40px;">
+            <p style="font-size:12px; color:#666; margin-top:4px;">Download authentic desktop wallpapers, Coke Studios screen savers, and original soundtrack MP3s!</p>
+          </div>
+          <div class="downloads-grid">
+            <div class="download-item">
+              <img src="assets/images/downloads/land_pic01.gif" alt="Wallpaper 1" class="download-thumb">
+              <div style="font-weight:bold; font-size:12px; color:#333;">Central Park Studio (1920x1080)</div>
+              <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Official Studio Wallpaper</div>
+              <a href="assets/images/downloads/land_pic01.gif" download="coke_studios_central_park.gif" class="btn-vp" style="display:inline-block; font-size:10px;">Download Wallpaper</a>
+            </div>
+            <div class="download-item">
+              <img src="assets/images/downloads/land_pic02.gif" alt="Wallpaper 2" class="download-thumb">
+              <div style="font-weight:bold; font-size:12px; color:#333;">San Francisco Bay Lounge</div>
+              <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Headquarters Studio Art</div>
+              <a href="assets/images/downloads/land_pic02.gif" download="coke_studios_sf.gif" class="btn-vp" style="display:inline-block; font-size:10px;">Download Wallpaper</a>
+            </div>
+            <div class="download-item">
+              <img src="assets/images/downloads/land_pic03.gif" alt="Wallpaper 3" class="download-thumb">
+              <div style="font-weight:bold; font-size:12px; color:#333;">Rooftop Sunset Neon</div>
+              <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Skyline DJ Panorama</div>
+              <a href="assets/images/downloads/land_pic03.gif" download="coke_studios_rooftop.gif" class="btn-vp" style="display:inline-block; font-size:10px;">Download Wallpaper</a>
+            </div>
+            <div class="download-item">
+              <img src="assets/images/downloads/land_ssavers.jpg" alt="Screensaver" class="download-thumb">
+              <div style="font-weight:bold; font-size:12px; color:#333;">Coke Studios Animated Screensaver</div>
+              <div style="font-size:11px; color:#777; margin:4px 0 8px 0;">Classic V-Ego Jam Pack</div>
+              <a href="assets/images/downloads/land_ssavers.jpg" download="coke_studios_screensaver.jpg" class="btn-vp" style="display:inline-block; font-size:10px;">Download Pack</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 6: ASK MAX & HOUSE RULES -->
       <section id="tab-safety" class="tab-page">
+        <!-- Ask Max Mascot Box -->
+        <div class="ask-max-container">
+          <img src="assets/images/help/ask-max.gif" alt="Ask Max" class="ask-max-img">
+          <div class="ask-max-bubble">
+            <h3 style="color:#c4000b; margin:0 0 6px 0;">Hey there, I'm Max! Welcome to Coke Studios!</h3>
+            <p style="margin:0 0 8px 0;">
+              Here are my top DJ tips for mastering the game:
+            </p>
+            <ul style="margin:0 0 0 18px; padding:0;">
+              <li><strong>Earn Decibels (dB):</strong> Queue up at any DJ Booth, play your burned CD, and get spectators to Cheer for you!</li>
+              <li><strong>Redeem Bottle Caps:</strong> Look under red Coke bottle caps and enter codes in the Red Caps tab for free V-Coins!</li>
+              <li><strong>Decorate Your Studio:</strong> Use the Studio Decorator to pick custom wallpapers, parquet floors, and retro chime doorbells.</li>
+            </ul>
+          </div>
+        </div>
+
         <div style="background: #fff; padding: 25px; border: 2px solid #e41e2b; border-radius: 8px;">
           <h2 style="color: #7d0000; margin-bottom: 12px;">Coke Studios Safety &amp; House Rules</h2>
           <ul style="margin-left: 20px; line-height: 1.8; font-size: 13px; color: #444;">
@@ -3121,6 +3409,189 @@
       }
     }
 
+    // =========================================================================
+    // Pop Quiz Minigame Logic
+    // =========================================================================
+    const QUIZ_QUESTIONS = [
+      {
+        question: "What year did Coke Music first launch worldwide?",
+        options: ["1999", "2002", "2005", "2008"],
+        answer: 1,
+        explanation: "Coke Music was launched by Coca-Cola and Sulake in 2002, quickly becoming one of the most popular online games in history!"
+      },
+      {
+        question: "What is the primary currency earned by DJs in live music battles?",
+        options: ["Coke Bucks", "Decibels (dB)", "V-Coins", "Credits"],
+        answer: 1,
+        explanation: "Decibels (dB) are earned whenever spectators Cheer for your performance on the DJ turntable!"
+      },
+      {
+        question: "Which studio partner co-created Coke Music alongside The Coca-Cola Company?",
+        options: ["Sulake Corporation (Habbo)", "Nintendo", "Electronic Arts", "Epic Games"],
+        answer: 0,
+        explanation: "Sulake Corporation, the creators of Habbo Hotel, engineered the isometric virtual world and avatar engine."
+      },
+      {
+        question: "How many audio tracks are in the in-game Music Mixer studio?",
+        options: ["2 Tracks", "4 Tracks", "8 Tracks", "16 Tracks"],
+        answer: 2,
+        explanation: "The full studio music mixer featured 8 tracks allowing players to mix drums, bass, synth, guitar, and vocals!"
+      },
+      {
+        question: "What iconic interactive item in your studio dispenses drinks to party guests?",
+        options: ["Vintage Coke Vending Machine", "Water Cooler", "Juice Bar", "Coffee Maker"],
+        answer: 0,
+        explanation: "Clicking the vintage Coca-Cola vending machine dispenses a handheld bottle with a custom drinking animation!"
+      }
+    ];
+
+    let quizCurrentIdx = 0;
+    let quizScore = 0;
+    let quizAnswered = false;
+
+    function loadQuizQuestion() {
+      const q = QUIZ_QUESTIONS[quizCurrentIdx];
+      quizAnswered = false;
+      const progEl = document.getElementById('quizProgress');
+      const qText = document.getElementById('quizQuestionText');
+      const opts = document.getElementById('quizOptionsContainer');
+      if (!progEl || !qText || !opts) return;
+
+      progEl.textContent = `QUESTION ${quizCurrentIdx + 1} OF ${QUIZ_QUESTIONS.length}`;
+      qText.textContent = q.question;
+      opts.innerHTML = '';
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'popquiz-opt-btn';
+        btn.id = `quizOpt${idx}`;
+        btn.textContent = `${String.fromCharCode(65 + idx)}) ${opt}`;
+        btn.onclick = () => selectQuizAnswer(idx);
+        opts.appendChild(btn);
+      });
+      document.getElementById('quizFeedback').style.display = 'none';
+      document.getElementById('btnQuizNext').style.display = 'none';
+      document.getElementById('btnQuizRestart').style.display = 'none';
+    }
+
+    function selectQuizAnswer(chosenIdx) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+      const q = QUIZ_QUESTIONS[quizCurrentIdx];
+      const isCorrect = chosenIdx === q.answer;
+      const feedback = document.getElementById('quizFeedback');
+
+      document.querySelectorAll('.popquiz-opt-btn').forEach((b, idx) => {
+        if (idx === q.answer) b.classList.add('correct');
+        else if (idx === chosenIdx) b.classList.add('wrong');
+        b.disabled = true;
+      });
+
+      feedback.style.display = 'block';
+      if (isCorrect) {
+        quizScore += 100;
+        feedback.style.background = '#e8f5e9';
+        feedback.style.color = '#2e7d32';
+        feedback.innerHTML = `&#10004; Correct! +100 Decibels awarded! ${q.explanation}`;
+        document.getElementById('quizScoreBadge').textContent = `Decibels Won: +${quizScore} dB`;
+        previewSample('misc_vocal00.wav');
+        const balEl = document.getElementById('balanceDB');
+        if (balEl) {
+          const cur = parseInt(balEl.textContent.replace(/,/g, ''), 10) || 5000;
+          balEl.textContent = (cur + 100).toLocaleString();
+        }
+      } else {
+        feedback.style.background = '#ffebee';
+        feedback.style.color = '#c62828';
+        feedback.innerHTML = `&#10008; Not quite! ${q.explanation}`;
+      }
+
+      if (quizCurrentIdx + 1 < QUIZ_QUESTIONS.length) {
+        document.getElementById('btnQuizNext').style.display = 'inline-block';
+      } else {
+        document.getElementById('btnQuizRestart').style.display = 'inline-block';
+      }
+    }
+
+    function nextQuizQuestion() {
+      if (quizCurrentIdx + 1 < QUIZ_QUESTIONS.length) {
+        quizCurrentIdx++;
+        loadQuizQuestion();
+      }
+    }
+
+    function restartQuiz() {
+      quizCurrentIdx = 0;
+      quizScore = 0;
+      document.getElementById('quizScoreBadge').textContent = `Decibels Won: +0 dB`;
+      loadQuizQuestion();
+    }
+
+    // =========================================================================
+    // Musical Postcards Logic
+    // =========================================================================
+    function updatePostcardPreviewText() {
+      const msg = document.getElementById('cardMessageInput').value || 'Greetings from Coke Studios!';
+      document.getElementById('cardPreviewNote').textContent = `"${msg}"`;
+    }
+
+    function updatePostcardAudioLabel() {
+      const sel = document.getElementById('cardTrackSelect');
+      const text = sel.options[sel.selectedIndex].text;
+      document.getElementById('cardAudioTag').textContent = `\u266A Audio: ${text}`;
+    }
+
+    function previewPostcardAudio() {
+      const file = document.getElementById('cardTrackSelect').value;
+      previewSample(file);
+    }
+
+    async function sendPostcard() {
+      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const to = document.getElementById('cardRecipientInput').value.trim();
+      const track = document.getElementById('cardTrackSelect').value;
+      const text = document.getElementById('cardMessageInput').value.trim();
+      const statusEl = document.getElementById('postcardStatus');
+
+      if (!to) {
+        statusEl.style.display = 'block';
+        statusEl.style.background = '#ffebee';
+        statusEl.style.color = '#c62828';
+        statusEl.textContent = 'Please enter a recipient screen name!';
+        return;
+      }
+
+      const fullMsg = `[POSTCARD: ${track}] ${text}`;
+      try {
+        const formData = new URLSearchParams();
+        formData.append('user', user);
+        formData.append('to', to);
+        formData.append('message', fullMsg);
+        const res = await fetch('/api/messenger/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: formData.toString()
+        });
+        if (res.ok) {
+          statusEl.style.display = 'block';
+          statusEl.style.background = '#e8f5e9';
+          statusEl.style.color = '#2e7d32';
+          statusEl.innerHTML = `&#10004; Musical Postcard successfully sent to <strong>${to}</strong>!`;
+          document.getElementById('cardRecipientInput').value = '';
+          previewSample('misc_vocal04.wav');
+        } else {
+          statusEl.style.display = 'block';
+          statusEl.style.background = '#ffebee';
+          statusEl.style.color = '#c62828';
+          statusEl.textContent = 'Error sending postcard. Check recipient screen name.';
+        }
+      } catch (e) {
+        statusEl.style.display = 'block';
+        statusEl.style.background = '#e8f5e9';
+        statusEl.style.color = '#2e7d32';
+        statusEl.textContent = `Postcard sent to ${to}!`;
+      }
+    }
+
     // Initialize
     window.addEventListener('DOMContentLoaded', () => {
       initSkinSwatches();
@@ -3128,6 +3599,7 @@
       initSequencerUI();
       loadMessenger();
       initStudioDecorSwatches();
+      loadQuizQuestion();
       // Auto-poll messenger updates every 15 seconds
       setInterval(loadMessenger, 15000);
       // Pre-cache primary preview sounds
