@@ -2873,8 +2873,9 @@
     // Tab Switching
     function switchTab(tabId) {
       if (tabId === 'postcard' || tabId === 'sumo') {
+        const sub = (tabId === 'postcard' ? 'postcards' : 'sumo');
         tabId = 'popquiz';
-        switchArcadeSubTab(tabId === 'postcard' ? 'postcards' : 'sumo');
+        switchArcadeSubTab(sub);
       }
       var parentMap = {
         'decor': 'play',

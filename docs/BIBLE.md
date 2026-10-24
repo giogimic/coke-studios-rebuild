@@ -58,6 +58,16 @@ The main player experience must contain:
 - Friends, messenger, host controls, reporting/moderation, errors, and reconnect states.
 - Version-appropriate public rooms, minigames, promotional areas, prizes, and website content.
 
+### Website and entry layout specifications
+
+- **Two-Column Geometry:**
+  - **Left V-Ego Status Badge (176px - 180px):** Features an authentic `badge-header-strip`, live isometric avatar canvas on a glowing gold podium base, online status indicator, DJ handle, mission statement, Decibels & V-Coins meters, and quick action controls (Wardrobe editor, Pop-out 760×520 launcher, Auth trigger).
+  - **Top Sliced Navigation (584px width, 26px height):** Built from historical raster slices (`home` 50px, `cokestudios` 92px, `games` 65px, `music-mixer` 87px, `music` 53px, `dc` 107px, `downloads` 83px, `help` 47px). The combined width ($176\text{px} + 584\text{px} = 760\text{px}$) matches the exact logical baseline of Director MX 2004 Coke Music.
+  - **Game Viewport (760×520):** Director MX 2004 baseline resolution powered by Go/Ebitengine compiled to WebAssembly at `/game/`, playable either embedded or via an authentic 760×520 popout window (`window.open(..., 'CokeStudios', 'width=760,height=520')`).
+- **Unified Authentication:**
+  - **Sign In:** Direct login verifying against `/sf/ssldocs/loginDenizen.jsp` with PBKDF2 hashed credentials, issuing secure `coke_session` cookies, and updating the status badge and balances in real time.
+  - **Registration Wizard:** 5-step flow (Identity, Look, Hair, Clothes/Face, Studio & Promo) minting authoritative records in MariaDB/SQLite without fake client-side state.
+
 Engine selection, technology labels, source collections, and prototype launchers are not player features. Existing host/community branding may remain in an outer hosting context if required; do not pass it off as historical interface artwork.
 
 ## Technical direction
