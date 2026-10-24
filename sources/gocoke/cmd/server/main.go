@@ -83,14 +83,17 @@ type PerformanceSession struct {
 
 
 type Server struct {
-	mu        sync.RWMutex
-	Rooms     map[string]*Room
-	Players   map[string]*Player
-	webRoot   string
-	host      string
-	port      string
-	store     *Store
-	nextPosID int
+	mu          sync.RWMutex
+	Rooms       map[string]*Room
+	Players     map[string]*Player
+	webRoot     string
+	host        string
+	port        string
+	store       *Store
+	nextPosID   int
+	catalogMu   sync.RWMutex
+	catalog     map[int]*CatalogItem
+	catalogList []*CatalogItem
 }
 
 func NewServer(webRoot, host, port string, store *Store) *Server {
@@ -124,6 +127,9 @@ func NewServer(webRoot, host, port string, store *Store) *Server {
 		r.LoadPathMap(s.webRoot)
 		s.Rooms[st.ID] = r
 	}
+
+	// Initialize authoritative catalogue and evidenced prices
+	s.InitCatalog()
 
 	return s
 }
@@ -750,7 +756,10 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 			responseValue = float64(decibels)
 		}
 
-	case strings.Contains(target, "getBackpack"):
+	case strings.Contains(target, "getProductList"):
+		responseValue = s.GetProductListAMF()
+
+	case strings.Contains(target, "getBackpack") || strings.Contains(target, "getPossessionsInBackpack"):
 		d := s.resolveAMFDenizen(r, bodyVal)
 		if d == nil {
 			responseValue = map[string]any{"possessionlist": []any{}}
@@ -762,6 +771,7 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 					list = append(list, map[string]any{
 						"id":          float64(it.ID),
 						"catalogItem": float64(it.CatalogItemID),
+						"prodId":      float64(it.CatalogItemID),
 						"properties":  it.Properties,
 					})
 				}
@@ -769,50 +779,94 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 			responseValue = map[string]any{"possessionlist": list}
 		}
 
+	case strings.Contains(target, "getPossessionList"):
+		d := s.resolveAMFDenizen(r, bodyVal)
+		if d == nil {
+			responseValue = []any{}
+		} else {
+			items, err := s.store.GetBackpack(d.ScreenName)
+			var list []any
+			if err == nil && len(items) > 0 {
+				for _, it := range items {
+					list = append(list, map[string]any{
+						"id":          float64(it.ID),
+						"catalogItem": float64(it.CatalogItemID),
+						"prodId":      float64(it.CatalogItemID),
+						"properties":  it.Properties,
+					})
+				}
+			}
+			responseValue = list
+		}
+
 	case strings.Contains(target, "prePurchaseItem"):
 		d := s.resolveAMFDenizen(r, bodyVal)
+		if d == nil {
+			responseValue = map[string]any{"__amf_error_type": "SecurityException", "__amf_error_message": "Unauthorized"}
+			break
+		}
 		catID := 1
-		if arr, ok := bodyVal.([]any); ok && len(arr) > 2 {
-			if f, ok := arr[2].(float64); ok {
-				catID = int(f)
-			} else if i, ok := arr[2].(int); ok {
-				catID = i
+		attrs := "[:]"
+		if arr, ok := bodyVal.([]any); ok {
+			if len(arr) > 2 {
+				switch v := arr[2].(type) {
+				case float64:
+					catID = int(v)
+				case int:
+					catID = v
+				case string:
+					catID, _ = strconv.Atoi(v)
+				}
+			}
+			if len(arr) > 3 {
+				if s, ok := arr[3].(string); ok {
+					attrs = s
+				}
 			}
 		}
-		bal := 0
-		if d != nil {
-			bal, _, _ = s.store.GetBalance(d.ScreenName)
-		}
-		responseValue = map[string]any{
-			"balance":       float64(bal),
-			"price":         float64(25),
-			"catalogItemId": float64(catID),
-			"properties":    "[:]",
+		res, err := s.PrePurchase(d.ScreenName, catID, attrs)
+		if err != nil {
+			responseValue = map[string]any{"__amf_error_type": "CatalogException", "__amf_error_message": err.Error()}
+		} else {
+			responseValue = res
 		}
 
 	case strings.Contains(target, "purchaseItem"):
 		d := s.resolveAMFDenizen(r, bodyVal)
 		if d == nil {
 			responseValue = map[string]any{"__amf_error_type": "SecurityException", "__amf_error_message": "Unauthorized"}
-		} else {
-			catID := 45
-			if arr, ok := bodyVal.([]any); ok && len(arr) > 2 {
-				if f, ok := arr[2].(float64); ok {
-					catID = int(f)
-				} else if i, ok := arr[2].(int); ok {
-					catID = i
+			break
+		}
+		catID := 0
+		var attrs map[string]any
+		idempotencyKey := ""
+		if arr, ok := bodyVal.([]any); ok {
+			if len(arr) > 2 {
+				switch v := arr[2].(type) {
+				case float64:
+					catID = int(v)
+				case int:
+					catID = v
+				case string:
+					catID, _ = strconv.Atoi(v)
 				}
 			}
-			// Deduct 25 dB and insert into persistent backpack for authenticated user
-			_, _ = s.store.AdjustBalance(d.ScreenName, -25, 0)
-			newID, _ := s.store.AddBackpackItem(d.ScreenName, catID, map[string]any{})
-			responseValue = []any{
-				map[string]any{
-					"id":          float64(newID),
-					"catalogItem": float64(catID),
-					"properties":  map[string]any{},
-				},
+			if len(arr) > 3 {
+				if m, ok := arr[3].(map[string]any); ok {
+					attrs = m
+					if k, ok := m["requestId"].(string); ok {
+						idempotencyKey = k
+					} else if k, ok := m["idempotencyKey"].(string); ok {
+						idempotencyKey = k
+					}
+				}
 			}
+		}
+		res, err := s.Purchase(d.ScreenName, catID, attrs, idempotencyKey)
+		if err != nil {
+			responseValue = map[string]any{"__amf_error_type": "PurchaseException", "__amf_error_message": err.Error()}
+		} else {
+			responseValue = res
 		}
 
 	case strings.Contains(target, "burnCD"):
@@ -1403,14 +1457,11 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		return
 	}
 
-	// --- Furniture Placement, Rotation, and Pickup (Persistent in SQLite) ---
+	// --- Furniture Placement, Rotation, and Pickup (Persistent in SQLite/MariaDB) ---
 	if strings.Contains(xml, "<POS_STD") {
 		posID := extractAttr(xml, "id")
 		cidStr := extractAttr(xml, "cid")
 		cid, _ := strconv.Atoi(cidStr)
-		if cid == 0 {
-			cid = 45 // fallback to sofa
-		}
 		stStr := extractAttr(xml, "st")
 		st, _ := strconv.Atoi(stStr)
 		dStr := extractAttr(xml, "d")
@@ -1428,7 +1479,11 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		if roomID != "" {
 			rm, err := s.GetRoom(roomID)
 			if err == nil && rm != nil {
-				_ = s.store.PlaceFurniture(rm.ID, posID, cid, x, y, z, ho, d, st, false, nil)
+				// Authoritatively place or move/rotate furniture from backpack
+				if err := s.store.PlaceBackpackItem(rm.ID, player.ScreenName, posID, cid, x, y, z, ho, d, st, false, nil); err != nil {
+					log.Printf("[WS] Player %s unauthorized or failed to place %s in %s: %v", player.ScreenName, posID, rm.ID, err)
+					return
+				}
 				rm.SetFurnitureSolid(posID, x, z, true)
 
 				posXML := fmt.Sprintf("<POS id=\"%s\" cid=\"%d\" x=\"%d\" y=\"%d\" z=\"%d\" ho=\"%d\" d=\"%d\" st=\"%d\" iaot=\"false\"/>",
@@ -1447,7 +1502,10 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		if roomID != "" && posID != "" {
 			rm, err := s.GetRoom(roomID)
 			if err == nil && rm != nil {
-				_ = s.store.RemoveFurniture(rm.ID, posID)
+				if err := s.store.PickupFurnitureToBackpack(rm.ID, player.ScreenName, posID); err != nil {
+					log.Printf("[WS] Player %s failed to pickup %s from %s: %v", player.ScreenName, posID, roomID, err)
+					return
+				}
 				rm.RemoveFurnitureSolid(posID)
 
 				rmXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><POS_RM id=\"%s\"/></Room.Action>", rm.ID, posID)

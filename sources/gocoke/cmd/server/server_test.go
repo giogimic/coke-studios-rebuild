@@ -122,21 +122,25 @@ func TestMessageHandling(t *testing.T) {
 	chatXML := `<Room.Action roomID="VIS$0"><CH sm="speak" m="` + hexMsg + `"/></Room.Action>`
 	srv.handlePlayerMessage(p, chatXML)
 
-	// Test Furniture placement
-	posXML := `<Room.Action roomID="VIS$0"><POS_STD st="0" d="2" ho="0" z="4" y="0" x="5" id="11427" cid="45"/></Room.Action>`
+	// Test Furniture placement in owned studio (studio_1 owned by Adam)
+	d, _ := srv.store.GetOrCreateDenizen("Adam", "1", "avatar", "mission")
+	_, _ = srv.store.db.Exec("INSERT OR REPLACE INTO backpack_items (id, denizen_id, catalog_item_id, properties_json) VALUES (11427, ?, 45, '{}')", d.ID)
+	p.RoomID = "studio_1"
+	posXML := `<Room.Action roomID="studio_1"><POS_STD st="0" d="2" ho="0" z="4" y="0" x="5" id="11427" cid="45"/></Room.Action>`
 	srv.handlePlayerMessage(p, posXML)
-	furni, err := srv.store.GetRoomFurniture("VIS$0")
+	furni, err := srv.store.GetRoomFurniture("studio_1")
 	if err != nil || len(furni) != 1 {
 		t.Fatalf("expected 1 furniture item placed in DB, got %d (err: %v)", len(furni), err)
 	}
 
-	// Test Furniture pickup
-	pickupXML := `<Room.Action roomID="VIS$0"><POS_BKPK id="11427"/></Room.Action>`
+	// Test Furniture pickup back to backpack
+	pickupXML := `<Room.Action roomID="studio_1"><POS_BKPK id="11427"/></Room.Action>`
 	srv.handlePlayerMessage(p, pickupXML)
-	furniAfter, _ := srv.store.GetRoomFurniture("VIS$0")
+	furniAfter, _ := srv.store.GetRoomFurniture("studio_1")
 	if len(furniAfter) != 0 {
 		t.Errorf("expected 0 furniture items after pickup, got %d", len(furniAfter))
 	}
+	p.RoomID = "VIS$0"
 
 	// Test DJ Performance and Voting Loop
 	cdpXML := `<Room.Action roomID="VIS$0"><CD_P s="^50,rockOne_guitar00{2,0{4,4{^" title="Rock Beats"/></Room.Action>`

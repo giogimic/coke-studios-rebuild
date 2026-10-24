@@ -116,12 +116,12 @@ Each condition is assigned to a task and must have a named regression scenario t
 
 **Interfaces:** Purchase requests resolve the real requested catalogue item and price for the baseline. One committed operation changes wallet and possession ownership. Placement transfers an owned instance between backpack and room; it does not mint an arbitrary catalog ID.
 
-- [ ] Add `TestPurchaseUsesRequestedItemAndPrice`, `TestPurchaseInsufficientFunds`, `TestPurchaseRetryDoesNotDoubleCharge`, `TestPlacementRequiresOwnership`, and `TestPossessionsSurviveRestart`.
-- [ ] Replace fixed 25 dB/item 45 purchases, seeded empty backpacks, fabricated ownership and fallback sofas with validated catalogue and instance data.
-- [ ] Implement owned studio creation/access/decor and the evidenced furniture interactions, including rotate, pickup, stacking, seating, dispensers and teleporters where applicable.
-- [ ] Commit balances and inventory/placement changes atomically; test failed writes and concurrent actions using isolated SQLite and MariaDB stores.
-- [ ] Complete buy -> place -> rotate -> leave -> reconnect -> pick up in the Go UI. A second player sees the same room changes.
-- [ ] Compare catalogue/backpack/decorator screens and object states to versioned references.
+- [x] Add `TestPurchaseUsesRequestedItemAndPrice`, `TestPurchaseInsufficientFunds`, `TestPurchaseRetryDoesNotDoubleCharge`, `TestPlacementRequiresOwnership`, and `TestPossessionsSurviveRestart`.
+- [x] Replace fixed 25 dB/item 45 purchases, seeded empty backpacks, fabricated ownership and fallback sofas with validated catalogue and instance data.
+- [x] Implement owned studio creation/access/decor and the evidenced furniture interactions, including rotate, pickup, stacking, seating, dispensers and teleporters where applicable.
+- [x] Commit balances and inventory/placement changes atomically; test failed writes and concurrent actions using isolated SQLite and MariaDB stores.
+- [x] Complete buy -> place -> rotate -> leave -> reconnect -> pick up in the Go UI. A second player sees the same room changes.
+- [x] Compare catalogue/backpack/decorator screens and object states to versioned references.
 
 **Exit:** Purchases and studio building work as a persistent multiplayer activity with historically evidenced rules.
 

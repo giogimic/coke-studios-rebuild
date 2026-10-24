@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -301,6 +302,13 @@ func (s *Store) migrate() error {
 				expires_at TIMESTAMP NOT NULL,
 				INDEX idx_sessions_screen (screen_name)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+			`CREATE TABLE IF NOT EXISTS purchase_tokens (
+				token VARCHAR(128) PRIMARY KEY,
+				denizen_id VARCHAR(64) NOT NULL,
+				possession_id INT NOT NULL,
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
 		}
 	} else {
 		queries = []string{
@@ -418,6 +426,13 @@ func (s *Store) migrate() error {
 				expires_at TIMESTAMP NOT NULL
 			);`,
 			`CREATE INDEX IF NOT EXISTS idx_sessions_screen ON sessions(screen_name);`,
+
+			`CREATE TABLE IF NOT EXISTS purchase_tokens (
+				token TEXT PRIMARY KEY,
+				denizen_id TEXT NOT NULL,
+				possession_id INTEGER NOT NULL,
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			);`,
 		}
 	}
 
@@ -883,6 +898,225 @@ func (s *Store) RemoveBackpackItem(itemID int) error {
 	defer s.mu.Unlock()
 	_, err := s.db.Exec("DELETE FROM backpack_items WHERE id = ?", itemID)
 	return err
+}
+
+func (s *Store) PurchaseItemAtomic(screenName string, catalogItemID, price int, properties map[string]any, idempotencyKey string) (int, int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var denizenID string
+	var currentDB int
+	err := s.db.QueryRow("SELECT id, decibels FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&denizenID, &currentDB)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	// Idempotency check: if token was already processed for this denizen, return existing possession without charging again!
+	if idempotencyKey != "" {
+		var existingPosID int
+		err := s.db.QueryRow("SELECT possession_id FROM purchase_tokens WHERE token = ? AND denizen_id = ?", idempotencyKey, denizenID).Scan(&existingPosID)
+		if err == nil && existingPosID > 0 {
+			return existingPosID, currentDB, nil
+		}
+	}
+
+	if currentDB < price {
+		return 0, currentDB, ErrInsufficientFunds
+	}
+
+	tx, err := s.db.Begin()
+	if err != nil {
+		return 0, 0, err
+	}
+	defer tx.Rollback()
+
+	// Atomic deduction with conditional check
+	res, err := tx.Exec("UPDATE denizens SET decibels = decibels - ? WHERE id = ? AND decibels >= ?", price, denizenID, price)
+	if err != nil {
+		return 0, 0, err
+	}
+	ra, _ := res.RowsAffected()
+	if ra == 0 {
+		return 0, currentDB, ErrInsufficientFunds
+	}
+
+	if properties == nil {
+		properties = make(map[string]any)
+	}
+	pJson, _ := json.Marshal(properties)
+
+	res, err = tx.Exec("INSERT INTO backpack_items (denizen_id, catalog_item_id, properties_json) VALUES (?, ?, ?)",
+		denizenID, catalogItemID, string(pJson))
+	if err != nil {
+		return 0, 0, err
+	}
+	lid, _ := res.LastInsertId()
+	posID := int(lid)
+
+	if idempotencyKey != "" {
+		_, _ = tx.Exec("INSERT INTO purchase_tokens (token, denizen_id, possession_id) VALUES (?, ?, ?)",
+			idempotencyKey, denizenID, posID)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return 0, 0, err
+	}
+
+	newBalance := currentDB - price
+	return posID, newBalance, nil
+}
+
+func (s *Store) PlaceBackpackItem(studioID, ownerName, posID string, catalogItemID, x, y, z, ho, dir, state int, iaot bool, properties map[string]any) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	// 1. Verify studio exists and player is the owner
+	var studioOwner string
+	var isPublic bool
+	err := s.db.QueryRow("SELECT owner_name, is_public FROM studios WHERE id = ?", studioID).Scan(&studioOwner, &isPublic)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return ErrStudioNotFound
+		}
+		return err
+	}
+	if isPublic {
+		return ErrNotStudioOwner
+	}
+	if !strings.EqualFold(strings.TrimSpace(studioOwner), strings.TrimSpace(ownerName)) {
+		return ErrNotStudioOwner
+	}
+
+	// 2. Check if item is already placed in this studio (reposition / rotate)
+	var existingPlacedID int
+	err = s.db.QueryRow("SELECT id FROM placed_furniture WHERE studio_id = ? AND pos_id = ?", studioID, posID).Scan(&existingPlacedID)
+	if err == nil && existingPlacedID > 0 {
+		pJson, _ := json.Marshal(properties)
+		_, err = s.db.Exec(`UPDATE placed_furniture 
+			SET x = ?, y = ?, z = ?, ho = ?, dir = ?, state = ?, iaot = ?, properties_json = ? 
+			WHERE studio_id = ? AND pos_id = ?`,
+			x, y, z, ho, dir, state, iaot, string(pJson), studioID, posID)
+		return err
+	}
+
+	// 3. New placement from backpack
+	var denizenID string
+	err = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(ownerName)).Scan(&denizenID)
+	if err != nil {
+		return err
+	}
+
+	intPosID, _ := strconv.Atoi(posID)
+	var bpCatalogItemID int
+	var bpPropsJson string
+	if intPosID > 0 {
+		err = s.db.QueryRow("SELECT catalog_item_id, properties_json FROM backpack_items WHERE id = ? AND denizen_id = ?",
+			intPosID, denizenID).Scan(&bpCatalogItemID, &bpPropsJson)
+	} else {
+		err = sql.ErrNoRows
+	}
+	if err != nil {
+		return ErrItemNotOwned
+	}
+
+	tx, err := s.db.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	// Delete from backpack
+	_, err = tx.Exec("DELETE FROM backpack_items WHERE id = ? AND denizen_id = ?", intPosID, denizenID)
+	if err != nil {
+		return err
+	}
+
+	pJson := bpPropsJson
+	if properties != nil && len(properties) > 0 {
+		m, _ := json.Marshal(properties)
+		pJson = string(m)
+	}
+	if catalogItemID == 0 {
+		catalogItemID = bpCatalogItemID
+	}
+
+	_, err = tx.Exec(`INSERT INTO placed_furniture 
+		(studio_id, catalog_item_id, pos_id, x, y, z, ho, dir, state, iaot, properties_json)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		studioID, catalogItemID, posID, x, y, z, ho, dir, state, iaot, pJson)
+	if err != nil {
+		return err
+	}
+
+	return tx.Commit()
+}
+
+func (s *Store) PickupFurnitureToBackpack(studioID, ownerName, posID string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	// 1. Verify studio exists and player is the owner
+	var studioOwner string
+	var isPublic bool
+	err := s.db.QueryRow("SELECT owner_name, is_public FROM studios WHERE id = ?", studioID).Scan(&studioOwner, &isPublic)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return ErrStudioNotFound
+		}
+		return err
+	}
+	if isPublic {
+		return ErrNotStudioOwner
+	}
+	if !strings.EqualFold(strings.TrimSpace(studioOwner), strings.TrimSpace(ownerName)) {
+		return ErrNotStudioOwner
+	}
+
+	// 2. Locate placed furniture
+	var catalogItemID int
+	var propertiesJson string
+	err = s.db.QueryRow("SELECT catalog_item_id, properties_json FROM placed_furniture WHERE studio_id = ? AND pos_id = ?",
+		studioID, posID).Scan(&catalogItemID, &propertiesJson)
+	if err != nil {
+		return fmt.Errorf("furniture not found in studio")
+	}
+
+	var denizenID string
+	err = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(ownerName)).Scan(&denizenID)
+	if err != nil {
+		return err
+	}
+
+	tx, err := s.db.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	// Delete from placed_furniture
+	_, err = tx.Exec("DELETE FROM placed_furniture WHERE studio_id = ? AND pos_id = ?", studioID, posID)
+	if err != nil {
+		return err
+	}
+
+	// Reinsert into backpack preserving original ID if numeric
+	intPosID, _ := strconv.Atoi(posID)
+	if intPosID > 0 {
+		_, err = tx.Exec("INSERT INTO backpack_items (id, denizen_id, catalog_item_id, properties_json) VALUES (?, ?, ?, ?)",
+			intPosID, denizenID, catalogItemID, propertiesJson)
+	} else {
+		_, err = tx.Exec("INSERT INTO backpack_items (denizen_id, catalog_item_id, properties_json) VALUES (?, ?, ?)",
+			denizenID, catalogItemID, propertiesJson)
+	}
+	if err != nil {
+		_, err = tx.Exec("INSERT INTO backpack_items (denizen_id, catalog_item_id, properties_json) VALUES (?, ?, ?)",
+			denizenID, catalogItemID, propertiesJson)
+		if err != nil {
+			return err
+		}
+	}
+
+	return tx.Commit()
 }
 
 func (s *Store) GetRoomFurniture(studioID string) ([]PlacedFurniRecord, error) {
