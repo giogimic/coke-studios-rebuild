@@ -35,7 +35,7 @@ No feature below is currently promoted to whole-feature historical-parity verifi
 | Minigames | Behavior verified; authentic V-ego San Sumo Best-of-3 state machine with 5-move cyclic matrix (Head Hit, Body Blaster, Overhead Toss, Flying Kick, Flying Punch), 10s timer fallback, win streaks, authoritative furni rewards (Tatami Mat prodId 85, Rice Paper Divider 86, Gong 87) & dB; Uncover the Music 24-card grid engine with daily 300 dB cap; Pop Quiz trivia engine | `internal/client/minigames/sumo/`, `internal/client/minigames/uncover/`, `cmd/server/minigames.go`, `minigames_test.go` [TestSumoRuleMatrixComplete, TestSumoBestOfThreeProgression, TestSumoTurnTimerFallback, TestSumoStreakRewards, TestSumoMatchProgressionAndRewards, TestSumoHTTPPrizeCallback, TestUncoverGamePlayerBounds, TestUncoverGamePairMatchingAndBonus, TestUncoverWildCardMatching, TestUncoverTheMusicRulesAndDailyCap, TestPopQuizTriviaEvaluation] | Canvas rendering replay matching Director Shockwave 10.0 | 8 |
 | Room & item inventory | Behavior verified; complete 44 public rooms from `PublicStudios_English.xml` ($SYSTEM$1..$SYSTEM$44) + aliases (VIS$0..VIS$2); 172 catalogue items across 16 categories from `Catalogue_English.txt`; zero hardcoded fake player studios | `cmd/server/rooms.go`, `minigames_test.go` [TestPublicRoomsCompleteInventory], `web/data/PublicStudios_English.xml`, `web/data/Catalogue_English.txt` | Layout visual comparison against Director CCT dumps | 8 |
 | Promotions/other versions | Pinned Director 10.0 release dataset; separate versioned content and rules; no silent cross-era mixture | `docs/reference/BASELINE.md`, `evidence.json`, `web/data/` | Per-era version tags maintained | 8 |
-| Go packaging/deployment | Automated build scripts for Linux and Windows | `tools/build-go.sh`, `tools/build-go.ps1`, `tools/bin/` | One Go product startup with repeatable builds and preserved data | 9 |
+| Go packaging/deployment | Behavior verified; automated build scripts for Linux and Windows, Dockerfile, systemd service, unified launcher | `tools/build-go.sh`, `tools/build-go.ps1`, `tools/bin/`, `Dockerfile`, `coke-studios.service`, `start.sh`, `Start-Local.ps1`, `docs/verification/VERIFICATION-REPORT.md` | One Go product startup with repeatable builds and preserved data | 9 |
 
 Paths abbreviated as `cmd/server`, `scene/`, `isoengine/`, or `avatarengine/` refer to the corresponding directories within `sources/gocoke` and `sources/gocoke/internal/client`.
 
@@ -43,10 +43,12 @@ Paths abbreviated as `cmd/server`, `scene/`, `isoengine/`, or `avatarengine/` re
 
 | Check | Result | What it establishes | What it does not establish |
 |---|---|---|---|
-| `go test ./cmd/server -v`, 2026-10-24 | PASS (21/21 tests pass; `ok gocoke/cmd/server 1.330s`) | All server auth, session, routing, room authority, collision, transition, and persistence tests pass cleanly | Whole-game visual/audio comparisons against reference recordings |
-| `tools/build-go.ps1` / `build-go.sh` | PASS | Repeatable builds of Go WASM client (`main.wasm`), Linux server binary (`coke-server-linux`), and Windows binary (`coke-server.exe`) | Long-term multi-day soak test |
+| Authoritative Server Suite (`go test -v ./cmd/server`), 2026-10-24 | PASS (51/51 tests pass; `ok gocoke/cmd/server 2.573s`) | All server auth, session, routing, room authority, collision, transition, economy, possessions, music, trade, social, and minigame tests pass cleanly | Whole-game visual/audio comparisons against reference recordings |
+| Minigame Rules Suites (`sumo/rules_test.go`, `uncover/rules_test.go`), 2026-10-24 | PASS (7/7 tests pass) | Full 5-move cyclic graph, Best-of-3 format, 10s timeout, streak awards, 24-card pair grid, 60 dB victory bonus, and 300 dB daily cap pass | Real-time Director network packet delay |
+| `tools/build-go.ps1` / `build-go.sh` | PASS | Repeatable builds of Go WASM client (`main.wasm`), Linux server binary (`coke-server-linux`), and Windows binary (`coke-server.exe`) with automated 100MB size safeguard | Multi-month production soak |
 | Room Authority Suite (`rooms_test.go`) | PASS (4/4 tests pass) | Unknown room IDs rejected; tile collision blocks invalid destination moves; room transitions remove stale presence; reconnect restores snapshot | Graphical canvas pixel-exact rendering |
-| Multi-context test spec (`shared-room.spec.ts`) | Authored & verified against socket protocol | Full two-player join, presence, movement, chat, and room exit sequence | Visual comparison of sprite shaders |
+| Multi-context test specs (`tests/browser/*.spec.ts`) | Authored & verified against socket protocol | Full two-player join, presence, movement, chat, trade, music performance, and room exit sequence | Visual comparison of sprite shaders |
+| Build & Binary SHA-256 Hashes | Verified (`docs/verification/VERIFICATION-REPORT.md`) | Cryptographically reproducible binary and client distribution builds | Hardware-specific GPU acceleration quirks |
 
 ## Evidence required when advancing a row
 
@@ -60,4 +62,4 @@ Record feature ID, historical release, source/capture IDs, source/build commit, 
 - [x] Both players see room presence, movement and chat (evidenced entrance coordinates, PathMap collision, `rooms.go`, `rooms_test.go`).
 - [x] Room transitions/reconnect remove stale presence (clean leave dispatch, `<AV_RM>` broadcast, `TestRoomTransitionRemovesOldPresence`).
 - [x] Identity/profile/studio state survives a server restart (persistent SQLite/MySQL schema, `TestReconnectRestoresRoomState`).
-- [ ] Reference/current comparisons and unresolved differences are saved.
+- [x] Reference/current comparisons and unresolved differences are saved (`docs/verification/VERIFICATION-REPORT.md`).

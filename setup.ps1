@@ -200,8 +200,8 @@ if ($Ready) {
     Write-Host "  SUCCESS: COKE STUDIOS IS LIVE AND HEALTHY!" -ForegroundColor Green
     Write-Host "====================================================================" -ForegroundColor Green
     Write-Host "  Official MyCoke Game Portal: http://127.0.0.1:$Port/" -ForegroundColor White
-    Write-Host "  Direct Game Client:         http://127.0.0.1:$Port/game/?user=Adam" -ForegroundColor White
-    Write-Host "  Music Mixer Studio:         http://127.0.0.1:$Port/mixer/" -ForegroundColor White
+    Write-Host "  Direct Game Client:         http://127.0.0.1:$Port/game/" -ForegroundColor White
+    Write-Host "  Health Status:              http://127.0.0.1:$Port/health" -ForegroundColor White
     Write-Host "====================================================================" -ForegroundColor Green
     Write-Host "  To update at any time with zero data loss, run:" -ForegroundColor Cyan
     Write-Host "  .\setup.ps1 -Update" -ForegroundColor Yellow

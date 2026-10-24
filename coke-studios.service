@@ -1,17 +1,16 @@
 [Unit]
-Description=Coke Music / Coke Studios Recovery Services
+Description=Coke Music / Coke Studios Authoritative Go Server (Debian 12 First)
 After=network.target
 
 [Service]
 Type=simple
 User=root
 WorkingDirectory=/opt/coke-studios
-ExecStart=/usr/bin/node /opt/coke-studios/tools/serve-local.cjs
+ExecStart=/opt/coke-studios/tools/bin/coke-server-linux -addr 0.0.0.0:24902 -root /opt/coke-studios/sources/gocoke/web
 Restart=always
 RestartSec=5
 StandardOutput=journal
 StandardError=journal
-Environment=NODE_ENV=production
 Environment=PORT=24902
 
 [Install]

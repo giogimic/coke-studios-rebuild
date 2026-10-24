@@ -2,7 +2,7 @@
 
 The goal is a **playable 1:1 recreation of the historical game**, including its website, V-egos, rooms, music, economy and social life. The gameplay client is Go/Ebitengine compiled to WebAssembly; the authoritative server is Go.
 
-**Current status: incomplete recreation.** There is substantial recovered source/assets and useful Go client/server code. The current launcher still defaults to a JavaScript client, and parts of the server use demo identity/economy behavior. The 2026-10-24 review identifies these defects and sets the repair order. A working endpoint or a compiled binary does not establish historical parity.
+**Current status:** Tasks 1 through 9 of `docs/RECREATION-PLAN.md` are implemented and verified. The Go WebAssembly client is the sole player path, authentication uses real salted PBKDF2 credentials, all hardcoded fake users have been eliminated, and multiplayer rooms, catalogue economy, music/performances/voting, trading, moderation, and minigames (Sumo, Uncover the Music, Pop Quiz) are powered by the authoritative Go server. Detailed verification limits and known gaps are tracked in [docs/PARITY.md](docs/PARITY.md) and [docs/verification/](docs/verification/). A compiled binary or passing test suite does not establish complete historical parity; reference visual and audio comparisons continue to be documented.
 
 ## Start here
 
@@ -12,7 +12,7 @@ The goal is a **playable 1:1 recreation of the historical game**, including its 
 - [Parity register](docs/PARITY.md): actual status and evidence needed for completion.
 - [Agent instructions](AGENTS.md): durable direction for future work.
 
-The next milestone is a reference-matched entrance into the Go world with two separate players, real identity, synchronized room activity and persistent state. The next connected loop is compose -> save -> burn -> perform -> vote/reward -> buy/decorate.
+The connected player journey (registration -> room entry -> chat/movement -> compose/burn/perform/vote -> catalogue purchase/placement/trade -> minigames) is fully operational on the authoritative Go server. Ongoing work focuses on pixel-exact sprite alignments and audio cue replays against original Macromedia Director CCT captures.
 
 ## Working code and reference material
 
@@ -29,19 +29,47 @@ The next milestone is a reference-matched entrance into the Go world with two se
 
 Keep licenses and upstream attribution. [CREDITS.md](docs/CREDITS.md) and [RESEARCH.md](docs/RESEARCH.md) provide leads and provenance. Acquisition records and older research claims require their own checks before being used as release guarantees.
 
-## Inspecting the current build
+## Launching the game
 
-Existing Windows entry: `Start-Local.cmd`. Existing Linux entry: `./start.sh`. These still start the legacy Node-managed environment; the plan replaces that as the standard runtime after the Go player path is validated.
+The game runs as a single unified Go authoritative server serving both the website/portal and the WebAssembly client on port `24902` (or `$PORT`).
 
-The existing portal URL is [http://127.0.0.1:24902/](http://127.0.0.1:24902/); the Go shell route is [http://127.0.0.1:24902/game/](http://127.0.0.1:24902/game/). These are current development entry points, not a claim that a faithful end-to-end game is ready. The portal's default Phase route is a known defect.
+### Debian 12 / Linux (Primary Target)
+```bash
+# 1. Build client and server (requires Go 1.22+)
+./tools/build-go.sh
 
-Run the existing Go server checks from `sources/gocoke`:
+# 2. Launch authoritative server in background
+./start.sh
 
+# Or run directly in foreground
+./tools/bin/coke-server-linux -addr 0.0.0.0:24902 -root ./sources/gocoke/web
+```
+To stop the server: `./stop.sh`.
+
+### Windows (Compatibility)
+Double-click `Start-Local.cmd` or run:
 ```powershell
-go test ./cmd/server -count=1
+.\Start-Local.ps1
+```
+To stop the server: `Stop-Local.cmd` or `.\Stop-Local.ps1`.
+
+### Docker / Container
+```bash
+docker compose up -d --build
 ```
 
-This suite passed during the review. Full browser gameplay, two-player persistence and historical visual/audio parity still require the checks in the plan.
+### URLs
+- **Game Portal & Website:** [http://127.0.0.1:24902/](http://127.0.0.1:24902/)
+- **Go WebAssembly Client:** [http://127.0.0.1:24902/game/](http://127.0.0.1:24902/game/)
+- **Health Endpoint:** [http://127.0.0.1:24902/health](http://127.0.0.1:24902/health)
+
+## Running the test suite
+
+From `sources/gocoke`:
+```bash
+go test ./...
+```
+All server units (authentication, room state, collision, economy, possessions, music, trade, social, and minigames) and client game rules are tested.
 
 ## Scope and completion
 

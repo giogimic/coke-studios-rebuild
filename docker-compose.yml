@@ -29,19 +29,14 @@ services:
       mariadb:
         condition: service_healthy
     ports:
-      - "${PORT:-24902}:${PORT:-24902}"                      # Official MyCoke Game Portal & Gateway
-      - "${BACKEND_PORT:-8080}:${BACKEND_PORT:-8080}"        # Standalone Authoritative Backend (WebSocket & AMF)
-      - "${COKEPHASE_PORT:-8081}:${COKEPHASE_PORT:-8081}"    # CokePhase HTML5 Engine
-      - "${MUSICMIXER_PORT:-8082}:${MUSICMIXER_PORT:-8082}"  # CSMusicMixer Standalone
+      - "${PORT:-24902}:${PORT:-24902}"                      # Official MyCoke Game Portal & Authoritative Server
+      - "${BACKEND_PORT:-8080}:${BACKEND_PORT:-8080}"        # Standalone Direct Port (optional)
     volumes:
       - .:/app
     environment:
-      - NODE_ENV=production
       - HOST=0.0.0.0
       - PORT=${PORT:-24902}
       - BACKEND_PORT=${BACKEND_PORT:-8080}
-      - COKEPHASE_PORT=${COKEPHASE_PORT:-8081}
-      - MUSICMIXER_PORT=${MUSICMIXER_PORT:-8082}
       - DB_DRIVER=mysql
       - DATABASE_URL=coke:coke_secret@tcp(mariadb:3306)/coke_studios?parseTime=true
 

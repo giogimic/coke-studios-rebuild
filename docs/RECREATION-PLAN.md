@@ -173,12 +173,12 @@ Each condition is assigned to a task and must have a named regression scenario t
 **Modify:** `Start-Local.ps1/.cmd`, `Stop-Local.ps1/.cmd`, `start.sh`, `stop.sh`, `setup.ps1`, `setup.sh`, `Dockerfile`, `docker-compose.yml`, `coke-studios.service`; product README and release evidence.
 **Create:** `docs/verification/` with replay results, comparisons, source/build hashes and known gaps.
 
-- [ ] Make standard launch scripts and service/container entry points start the Go product. Keep Node reference tools optional and outside normal startup.
-- [ ] Build Go server/WASM from the declared source/toolchain. Package only the runtime assets needed for the selected version; keep source archives separate.
-- [ ] Run the appropriate Go package suite; run `go test -race ./cmd/server` on a supported configured environment; run actual browser journey tests against the built artifacts.
-- [ ] Verify fresh install, existing-data migration, restart, failure/recovery, both configured storage backends, and supported browser scaling/audio behavior.
-- [ ] Run the complete fresh-player journey and visual/audio comparisons. Report every remaining difference and unavailable reference.
-- [ ] Update PARITY and release instructions from those results. Remove unsupported "official", "production-ready", "100%" and "zero-downtime" claims unless evidence specifically supports them.
+- [x] Make standard launch scripts and service/container entry points start the Go product. Keep Node reference tools optional and outside normal startup.
+- [x] Build Go server/WASM from the declared source/toolchain. Package only the runtime assets needed for the selected version; keep source archives separate.
+- [x] Run the appropriate Go package suite; run `go test -race ./cmd/server` on a supported configured environment; run actual browser journey tests against the built artifacts.
+- [x] Verify fresh install, existing-data migration, restart, failure/recovery, both configured storage backends, and supported browser scaling/audio behavior.
+- [x] Run the complete fresh-player journey and visual/audio comparisons. Report every remaining difference and unavailable reference.
+- [x] Update PARITY and release instructions from those results. Remove unsupported "official", "production-ready", "100%" and "zero-downtime" claims unless evidence specifically supports them.
 
 **Exit:** A player installs/opens one Go recreation, completes the original game's connected activities, and retains progress. A release's fidelity claim names its historical target and remaining differences.
 

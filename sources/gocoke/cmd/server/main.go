@@ -162,7 +162,12 @@ func main() {
 	_ = mime.AddExtensionType(".txt", "text/plain; charset=utf-8")
 	_ = mime.AddExtensionType(".htm", "text/html; charset=utf-8")
 
-	addr := flag.String("addr", "0.0.0.0:8080", "listen address (default 0.0.0.0:8080)")
+	defaultPort := os.Getenv("PORT")
+	if defaultPort == "" {
+		defaultPort = "8080"
+	}
+	defaultAddr := "0.0.0.0:" + defaultPort
+	addr := flag.String("addr", defaultAddr, "listen address (default 0.0.0.0:8080 or $PORT)")
 	root := flag.String("root", "./web", "web directory to serve")
 	defaultDB := os.Getenv("DATABASE_URL")
 	if defaultDB == "" {

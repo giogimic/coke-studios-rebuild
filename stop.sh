@@ -30,10 +30,10 @@ if [ -f "$PID_FILE" ]; then
     rm -f "$PID_FILE"
 fi
 
-# Also check for any rogue node processes serving tools/serve-local.cjs
-ROGUE_PIDS="$(pgrep -f "tools/serve-local.cjs" 2>/dev/null || true)"
+# Also check for any rogue server processes
+ROGUE_PIDS="$(pgrep -f "coke-server-linux" 2>/dev/null || true)"
 if [ -n "$ROGUE_PIDS" ]; then
-    echo "[*] Cleaning up remaining serve-local processes ($ROGUE_PIDS)..."
+    echo "[*] Cleaning up remaining coke-server processes ($ROGUE_PIDS)..."
     kill $ROGUE_PIDS 2>/dev/null || true
     STOPPED=1
 fi

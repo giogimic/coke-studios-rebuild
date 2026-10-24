@@ -237,7 +237,7 @@ if [ ${READY} -eq 1 ]; then
     echo "  SUCCESS: COKE STUDIOS IS LIVE AND HEALTHY!"
     echo "===================================================================="
     echo "  Official MyCoke Game Portal: http://127.0.0.1:${PORT}/"
-    echo "  Direct Game Client:         http://127.0.0.1:${PORT}/game/?user=Adam"
+    echo "  Direct Game Client:         http://127.0.0.1:${PORT}/game/"
     echo "  Music Mixer Studio:         http://127.0.0.1:${PORT}/mixer/"
     echo "  Health Status:              ${HEALTH_DATA}"
     echo "===================================================================="
