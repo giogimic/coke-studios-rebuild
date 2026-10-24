@@ -74,8 +74,13 @@ var PlayerStudio = Room.extend({
 
 			//Set the actual object that stores all the data
 			//from assets/rooms/rooms.js
-			if(ROOMS[this._type] !== undefined) {
+			if (ROOMS[this._type] !== undefined) {
 				this.object = ROOMS[this._type];
+			} else if (ROOMS['studio_model_b'] !== undefined) {
+				this.object = ROOMS['studio_model_b'];
+				this._type = 'studio_model_b';
+			}
+			if (this.object) {
 				this._width = this.object['width'];
 				this._height = this.object['height'];
 			}

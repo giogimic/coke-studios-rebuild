@@ -111,6 +111,113 @@ var Character = IgeEntity.extend({
 		return this;
 	},
 
+	applyFigureDef: function(def) {
+		if (!def) return this;
+		var parts = {};
+		var pairs = def.split('&');
+		for (var i = 0; i < pairs.length; i++) {
+			var kv = pairs[i].split('=');
+			if (kv.length === 2) {
+				parts[kv[0]] = kv[1].split('/')[0];
+			}
+		}
+
+		function pad3(val, fallback) {
+			if (!val) return fallback || '001';
+			val = String(val);
+			while (val.length < 3) val = '0' + val;
+			return val;
+		}
+
+		var hr = pad3(parts.hr, '001');
+		if (hr === '002') hr = '001';
+		this.setHairStyle(hr);
+
+		var hd = pad3(parts.hd, '001');
+		var hdNum = parseInt(hd, 10);
+		if (isNaN(hdNum) || hdNum < 1 || hdNum > 4) hd = '001';
+		this.setHeadStyle(hd);
+
+		var ch = pad3(parts.ch, '001');
+		var chNum = parseInt(ch, 10);
+		if (isNaN(chNum) || chNum < 1 || chNum > 21) ch = '001';
+		this.setShirtStyle(ch);
+
+		var sleve = chNum <= 6 ? ch : '001';
+		if (parts.ls) sleve = pad3(parts.ls, sleve);
+		this.setLeftSleveStyle(sleve);
+		this.setRightSleveStyle(sleve);
+
+		var lg = pad3(parts.lg, '001');
+		this.setPantStyle(lg);
+
+		var sh = pad3(parts.sh, '001');
+		var shNum = parseInt(sh, 10);
+		if (isNaN(shNum) || shNum < 1 || shNum > 8) sh = '001';
+		this.setShoeStyle(sh);
+
+		var fa = pad3(parts.fa || parts.fc, '001');
+		var faNum = parseInt(fa, 10);
+		if (isNaN(faNum) || faNum < 1 || faNum > 4) fa = '001';
+		this.setMouthStyle(fa);
+
+		var ey = pad3(parts.ey, '001');
+		var eyNum = parseInt(ey, 10);
+		if (isNaN(eyNum) || eyNum < 1 || eyNum > 8) ey = '001';
+		this.setEyeStyle(ey);
+
+		var curDir = this._currentDirection || 'SE';
+
+		if (this.head) {
+			this.head._style = hd;
+			if (typeof this.head.setTexture === 'function') {
+				try { this.head.setTexture(curDir); } catch (_) {}
+			}
+			if (this.head.hair && typeof this.head.hair.setTexture === 'function') {
+				try { this.head.hair.setTexture(curDir); } catch (_) {}
+			}
+			if (this.head.eyes && typeof this.head.eyes.setTexture === 'function') {
+				try { this.head.eyes.setTexture(curDir); } catch (_) {}
+			}
+			if (this.head.mouth && typeof this.head.mouth.setTexture === 'function') {
+				try { this.head.mouth.setTexture(curDir); } catch (_) {}
+			}
+		}
+
+		if (this.shirt) {
+			this.shirt._style = ch;
+			if (typeof this.shirt.setTexture === 'function') {
+				try { this.shirt.setTexture(curDir); } catch (_) {}
+			}
+		}
+		if (this.leftSleve) {
+			this.leftSleve._style = sleve;
+			if (typeof this.leftSleve.setTexture === 'function') {
+				try { this.leftSleve.setTexture(curDir); } catch (_) {}
+			}
+		}
+		if (this.rightSleve) {
+			this.rightSleve._style = sleve;
+			if (typeof this.rightSleve.setTexture === 'function') {
+				try { this.rightSleve.setTexture(curDir); } catch (_) {}
+			}
+		}
+		if (this.pants) {
+			this.pants._style = lg;
+			if (typeof this.pants.setTexture === 'function') {
+				try { this.pants.setTexture(curDir); } catch (_) {}
+			}
+		}
+		if (this.shoes) {
+			this.shoes._style = sh;
+			if (typeof this.shoes.setTexture === 'function') {
+				try { this.shoes.setTexture(curDir); } catch (_) {}
+			}
+		}
+
+		return this;
+	},
+
 	addAnimation(id, frames) {
 		fps = 5.5;
 		this.animation.define(id, frames, fps, -1);

@@ -488,6 +488,7 @@ func (s *Server) handleRegisterDenizen(w http.ResponseWriter, r *http.Request) {
 		"decibels":   d.Decibels,
 		"vcoins":     d.VCoins,
 		"studioId":   studioID,
+		"studioType": req.StudioType,
 		"sw1":        sw1,
 		"sw2":        sw2,
 		"gameUrl":    fmt.Sprintf("/game/?user=%s&sw1=%s&sw2=%s", url.QueryEscape(cleanName), url.QueryEscape(sw1), url.QueryEscape(sw2)),
@@ -649,6 +650,7 @@ func (s *Server) handleDenizenProfile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if d != nil {
+		studioID := fmt.Sprintf("studio_%s", strings.ToLower(d.ScreenName))
 		json.NewEncoder(w).Encode(map[string]any{
 			"success":      true,
 			"screen_name":  d.ScreenName,
@@ -658,6 +660,7 @@ func (s *Server) handleDenizenProfile(w http.ResponseWriter, r *http.Request) {
 			"decibels":     d.Decibels,
 			"vcoins":       d.VCoins,
 			"last_seen_in": d.LastSeenIn,
+			"studio_id":    studioID,
 		})
 	} else {
 		w.WriteHeader(http.StatusNotFound)
@@ -1227,12 +1230,16 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 	if strings.Contains(xml, "<Login") {
 		msgID := extractAttr(xml, "msgID")
 		sn := extractAttr(xml, "username")
+		def := extractAttr(xml, "def")
 		if sn != "" {
 			player.ScreenName = sn
 			if d, err := s.store.GetDenizenByName(sn); err == nil && d != nil {
 				player.Gender = d.Gender
 				player.Mission = d.Mission
 				player.Definition = d.AvatarDef
+			}
+			if def != "" {
+				player.Definition = def
 			}
 		}
 		log.Printf("[WS] Player Login: %s (msgID: %s)", player.ScreenName, msgID)
@@ -1304,6 +1311,9 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		roomID := player.RoomID
 		if roomID == "" || roomID == "$LOBBY$" {
 			return
+		}
+		if def := extractAttr(xml, "def"); def != "" {
+			player.Definition = def
 		}
 		room := s.GetOrCreateRoom(roomID)
 		avXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV av=\"%s\" x=\"%d\" z=\"%d\" d=\"%d\" g=\"%d\" m=\"%s\" def=\"%s\" act=\"%s\"/></Room.Action>",

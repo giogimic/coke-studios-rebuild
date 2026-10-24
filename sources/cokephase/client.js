@@ -20,24 +20,81 @@ var Client = IgeClass.extend({
 		this.decibels = 100;
 		this.currentRoomId = 'studio_model_b';
 		this.currentUserName = 'Adam';
+		this.avatarDef = '';
+
+		var roomMap = {
+			'1': 'studio_model_a',
+			'2': 'studio_model_b',
+			'3': 'studio_model_c',
+			'4': 'studio_model_d',
+			'5': 'studio_model_rooftop',
+			'6': 'studio_wayne',
+			'VIS$0': 'studio_model_b',
+			'VIS$1': 'studio_model_a',
+			'VIS$2': 'studio_model_c',
+			'studio_1': 'studio_model_d',
+			'studio_wayne': 'studio_wayne',
+			'studio_rooftop': 'studio_model_rooftop',
+			'rooftop': 'studio_model_rooftop',
+			'studio_model_a': 'studio_model_a',
+			'studio_model_b': 'studio_model_b',
+			'studio_model_c': 'studio_model_c',
+			'studio_model_d': 'studio_model_d',
+			'studio_model_rooftop': 'studio_model_rooftop'
+		};
 
 		// Parse URL query parameters
 		var urlParams = new URLSearchParams(window.location.search);
 		if (urlParams.has('user') && urlParams.get('user').trim() !== '') {
 			this.currentUserName = urlParams.get('user').trim();
+		} else {
+			try {
+				var savedUser = localStorage.getItem('coke_user');
+				if (savedUser) this.currentUserName = savedUser;
+			} catch (_) {}
 		}
+
 		if (urlParams.has('room') && urlParams.get('room').trim() !== '') {
 			var rParam = urlParams.get('room').trim();
-			var roomMap = {
-				'1': 'studio_model_a',
-				'2': 'studio_model_b',
-				'3': 'studio_model_c',
-				'4': 'studio_model_d',
-				'5': 'studio_model_rooftop',
-				'6': 'studio_wayne'
-			};
-			this.currentRoomId = roomMap[rParam] || rParam;
+			this.currentRoomId = roomMap[rParam] || 'studio_model_b';
+		} else {
+			try {
+				var savedRoom = localStorage.getItem('coke_studioType');
+				if (savedRoom) this.currentRoomId = roomMap[savedRoom] || 'studio_model_b';
+			} catch (_) {}
 		}
+
+		if (urlParams.has('avatarDef') && urlParams.get('avatarDef').trim() !== '') {
+			this.avatarDef = urlParams.get('avatarDef').trim();
+		} else if (urlParams.has('figure') && urlParams.get('figure').trim() !== '') {
+			this.avatarDef = urlParams.get('figure').trim();
+		} else {
+			try {
+				var savedDef = localStorage.getItem('coke_avatarDef');
+				if (savedDef) this.avatarDef = savedDef;
+			} catch (_) {}
+		}
+
+		// Listen for wardrobe postMessage updates from parent portal
+		window.addEventListener('message', function (event) {
+			if (event.data && event.data.type === 'APPLY_FIGURE_DEF') {
+				var def = event.data.avatarDef;
+				if (def) {
+					self.avatarDef = def;
+					try { localStorage.setItem('coke_avatarDef', def); } catch (_) {}
+					if (ige.player && typeof ige.player.applyFigureDef === 'function') {
+						ige.player.applyFigureDef(def);
+					}
+					if (self.ws && self.ws.readyState === WebSocket.OPEN) {
+						self.ws.send('<AV_EN av="' + self.currentUserName + '" def="' + def + '"/>');
+					}
+					self.showNotification('Wardrobe updated in real-time!');
+				}
+			}
+		});
+
+		// Sync backend profile
+		self.syncDenizenProfile(self.currentUserName);
 
 		// Load textures
 		ige.gameTexture = {};
@@ -131,8 +188,14 @@ var Client = IgeClass.extend({
 			.setRightSleveStyle('001')
 			.setShirtStyle('001')
 			.setPantStyle('001')
-			.setShoeStyle('001')
-			.startPlayer();
+			.setShoeStyle('001');
+
+		// Apply customized avatar if available
+		if (self.avatarDef) {
+			ige.player.applyFigureDef(self.avatarDef);
+		}
+
+		ige.player.startPlayer();
 
 		// Populate authentic room furniture
 		self.spawnDefaultFurniture(roomType);
@@ -185,13 +248,13 @@ var Client = IgeClass.extend({
 
 			self.ws.onopen = function () {
 				console.log('[CokePhase WS] Connected to ' + wsURL);
-				var loginXML = '<Login username="' + self.currentUserName + '" msgID="1"/>';
+				var loginXML = '<Login username="' + self.currentUserName + '" def="' + (self.avatarDef || '') + '" msgID="1"/>';
 				self.ws.send(loginXML);
 
 				var enterXML = '<Room.Enter roomID="' + self.currentRoomId + '" msgID="2"/>';
 				self.ws.send(enterXML);
 
-				var spawnXML = '<AV_EN av="' + self.currentUserName + '"/>';
+				var spawnXML = '<AV_EN av="' + self.currentUserName + '" def="' + (self.avatarDef || '') + '"/>';
 				self.ws.send(spawnXML);
 			};
 
@@ -275,23 +338,31 @@ var Client = IgeClass.extend({
 		// Remote avatar spawn
 		if (data.indexOf('<AV ') !== -1) {
 			var spAvMatch = data.match(/av="([^"]+)"/);
+			var defMatch = data.match(/def="([^"]+)"/);
 			if (spAvMatch) {
 				var spAv = spAvMatch[1];
-				if (spAv !== self.currentUserName && !self.remotePlayers[spAv]) {
-					try {
-						var rem = new Character()
-							.id('remote_' + spAv)
-							.setStyle('001')
-							.setHeadStyle('001')
-							.setHairStyle('013')
-							.setEyeStyle('001')
-							.setMouthStyle('001')
-							.setShirtStyle('001')
-							.setPantStyle('001')
-							.setShoeStyle('001')
-							.startPlayer();
-						self.remotePlayers[spAv] = rem;
-					} catch (_) {}
+				if (spAv !== self.currentUserName) {
+					if (!self.remotePlayers[spAv]) {
+						try {
+							var rem = new Character()
+								.id('remote_' + spAv)
+								.setStyle('001')
+								.setHeadStyle('001')
+								.setHairStyle('013')
+								.setEyeStyle('001')
+								.setMouthStyle('001')
+								.setShirtStyle('001')
+								.setPantStyle('001')
+								.setShoeStyle('001');
+							if (defMatch && defMatch[1]) {
+								rem.applyFigureDef(defMatch[1]);
+							}
+							rem.startPlayer();
+							self.remotePlayers[spAv] = rem;
+						} catch (_) {}
+					} else if (defMatch && defMatch[1]) {
+						self.remotePlayers[spAv].applyFigureDef(defMatch[1]);
+					}
 				}
 			}
 			return;
@@ -431,7 +502,33 @@ var Client = IgeClass.extend({
 			return false;
 		}
 		return true;
-	}
+	},
+
+	syncDenizenProfile: function(username) {
+		var self = this;
+		if (!username) return;
+		fetch('/api/denizen/profile?user=' + encodeURIComponent(username))
+			.then(function(res) { return res.json(); })
+			.then(function(data) {
+				if (data) {
+					if (data.avatar_def) {
+						self.avatarDef = data.avatar_def;
+						try { localStorage.setItem('coke_avatarDef', data.avatar_def); } catch (_) {}
+						if (ige.player && typeof ige.player.applyFigureDef === 'function') {
+							ige.player.applyFigureDef(data.avatar_def);
+						}
+					}
+					if (typeof data.decibels !== 'undefined') {
+						self.decibels = data.decibels;
+						self.updateDecibelsDisplay();
+					}
+				}
+			})
+			.catch(function(err) {
+				console.warn('[CokePhase] Profile sync notice:', err);
+			});
+	},
+
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Client; }

@@ -1430,44 +1430,26 @@
 
     <!-- Navigation Tabs -->
     <nav class="mycoke-nav">
-      <div class="nav-tab active" onclick="switchTab('play')">
-        <span class="nav-tab-icon">&#9654;</span> Play Game
+      <div class="nav-tab active" data-tab="play" onclick="switchTab('play')">
+        <span class="nav-tab-icon">&#127918;</span> Coke Studios
       </div>
-      <div class="nav-tab" onclick="switchTab('avatar')">
-        <span class="nav-tab-icon">&#128100;</span> Avatar Studio
+      <div class="nav-tab" data-tab="avatar" onclick="switchTab('avatar')">
+        <span class="nav-tab-icon">&#128085;</span> Wardrobe &amp; V-Ego
       </div>
-      <div class="nav-tab" onclick="switchTab('mixer')">
-        <span class="nav-tab-icon">&#9836;</span> Music Mixer
+      <div class="nav-tab" data-tab="charts" onclick="switchTab('charts')">
+        <span class="nav-tab-icon">&#9836;</span> Music Lounge &amp; Top 40
       </div>
-      <div class="nav-tab" onclick="switchTab('popquiz')">
-        <span class="nav-tab-icon">&#10068;</span> Pop Quiz
+      <div class="nav-tab" data-tab="redcaps" onclick="switchTab('redcaps')">
+        <span class="nav-tab-icon">&#127860;</span> Red Caps Kiosk
       </div>
-      <div class="nav-tab" onclick="switchTab('postcard')">
-        <span class="nav-tab-icon">&#128140;</span> Postcards
+      <div class="nav-tab" data-tab="popquiz" onclick="switchTab('popquiz')">
+        <span class="nav-tab-icon">&#129355;</span> Arcade &amp; Minigames
       </div>
-      <div class="nav-tab" onclick="switchTab('messenger')">
-        <span class="nav-tab-icon">&#9993;</span> Messenger
+      <div class="nav-tab" data-tab="safety" onclick="switchTab('safety')">
+        <span class="nav-tab-icon">&#128737;</span> Ask Max &amp; Community
       </div>
-      <div class="nav-tab" onclick="switchTab('decor')">
-        <span class="nav-tab-icon">&#128396;</span> Studio Decor
-      </div>
-      <div class="nav-tab" onclick="switchTab('redcaps')">
-        <span class="nav-tab-icon">&#127860;</span> Red Caps Code
-      </div>
-      <div class="nav-tab" onclick="switchTab('charts')">
-        <span class="nav-tab-icon">&#127942;</span> Top 40 Charts
-      </div>
-      <div class="nav-tab" onclick="switchTab('studios')">
-        <span class="nav-tab-icon">&#127968;</span> Studio Directory
-      </div>
-      <div class="nav-tab" onclick="switchTab('downloads')">
-        <span class="nav-tab-icon">&#128190;</span> Downloads
-      </div>
-      <div class="nav-tab" onclick="switchTab('safety')">
-        <span class="nav-tab-icon">&#128737;</span> Ask Max &amp; Rules
-      </div>
-      <div class="nav-tab" onclick="openRegisterModal()" style="color:#ffcc00;">
-        <span class="nav-tab-icon">&#10024;</span> Registration
+      <div class="nav-tab" style="color:#ffcc00; margin-left:auto;" onclick="openRegisterModal()">
+        <span class="nav-tab-icon">&#10024;</span> Register New DJ
       </div>
     </nav>
 
@@ -1485,7 +1467,7 @@
             <div class="viewport-controls">
               <select id="engineSelector" class="btn-vp" onchange="switchEngine(this.value)" style="background:#111;color:#ffcc00;border:1px solid #ffcc00;font-weight:bold;cursor:pointer;">
                 <option value="phase" selected>⚡ HTML5 CokePhase Engine (Instant Play)</option>
-                <option value="wasm">★ 1:1 WebAssembly Engine (Heavy Dev Build)</option>
+                <option value="wasm">⚡ Director Classic Engine (WASM)</option>
               </select>
               <button class="btn-vp" onclick="reloadClient()">&#8635; Reload</button>
               <button class="btn-vp" onclick="toggleFullscreen()">&#9974; Fullscreen</button>
@@ -1498,15 +1480,32 @@
         </div>
 
         <!-- Quick Room Switcher -->
+        <!-- Quick Room Switcher -->
         <div class="studios-bar">
           <span class="studios-bar-title">Jump to Studio:</span>
           <div class="studio-pills">
-            <button class="studio-pill active" onclick="switchStudio('VIS$0', 'Central Park Studio')">Central Park</button>
-            <button class="studio-pill" onclick="switchStudio('VIS$1', 'San Francisco Studio')">San Francisco</button>
-            <button class="studio-pill" onclick="switchStudio('VIS$2', 'London Studio')">London Studio</button>
-            <button class="studio-pill" onclick="switchStudio('studio_1', 'Private Studio #1')">Private Studio #1</button>
+            <button class="studio-pill active" onclick="switchStudio('studio_model_b', 'Central Park Studio')">Central Park</button>
+            <button class="studio-pill" onclick="switchStudio('studio_model_a', 'San Francisco Studio')">San Francisco</button>
+            <button class="studio-pill" onclick="switchStudio('studio_model_c', 'London Studio')">London Studio</button>
+            <button class="studio-pill" onclick="switchStudio('studio_model_d', 'Private Studio #1')">Private Studio #1</button>
             <button class="studio-pill" onclick="switchStudio('studio_wayne', 'Wayne\'s Studio')">Studio Wayne</button>
-            <button class="studio-pill" onclick="switchStudio('studio_rooftop', 'Rooftop Lounge')">Rooftop Lounge</button>
+            <button class="studio-pill" onclick="switchStudio('studio_model_rooftop', 'Rooftop Lounge')">Rooftop Lounge</button>
+          </div>
+        </div>
+
+        <!-- In-Game Action Dock -->
+        <div style="margin-top: 10px; background: #231f20; border: 2px solid #ffcc00; border-radius: 6px; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span style="color: #ffde59; font-weight: bold; font-size: 12px; text-transform: uppercase;">Studio Actions:</span>
+            <button class="btn-vp" style="background: #e41e2b;" onclick="triggerGameCokeDrink()">&#127860; Drink Coca-Cola (+10 dB)</button>
+            <button class="btn-vp" style="background: #ffcc00; color: #000;" onclick="triggerGameDJMix()">&#127911; DJ Performance</button>
+            <button class="btn-vp" style="background: #2e7d32;" onclick="triggerGameVoteCheer()">&#128077; Cheer (+5 dB)</button>
+            <button class="btn-vp" style="background: #616161;" onclick="triggerGameVoteBoo()">&#128078; Boo</button>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-vp" onclick="switchTab('avatar')">&#128085; Edit Look</button>
+            <button class="btn-vp" onclick="switchTab('mixer')">&#128191; Burn CD</button>
+            <button class="btn-vp" onclick="switchTab('redcaps')">&#127860; Enter PIN</button>
           </div>
         </div>
       </section>
@@ -1929,9 +1928,91 @@
         </div>
       </section>
 
-      <!-- TAB: POP QUIZ MINIGAME -->
+      <!-- TAB: ARCADE & MINIGAMES -->
       <section id="tab-popquiz" class="tab-page">
-        <div class="popquiz-card">
+        
+        <!-- Arcade Subtabs Navigation -->
+        <div style="display: flex; gap: 10px; margin-bottom: 16px; border-bottom: 2px solid #ffcc00; padding-bottom: 10px;">
+          <button class="btn-vp active" id="subtabBtn-sumo" onclick="switchArcadeSubTab('sumo')" style="font-weight: bold; font-size: 13px;">&#129355; V-ego San Sumo Arena</button>
+          <button class="btn-vp" id="subtabBtn-quiz" onclick="switchArcadeSubTab('quiz')" style="font-weight: bold; font-size: 13px; background: #333;">&#10068; Pop Quiz Trivia</button>
+          <button class="btn-vp" id="subtabBtn-postcards" onclick="switchArcadeSubTab('postcards')" style="font-weight: bold; font-size: 13px; background: #333;">&#128140; Musical Postcards</button>
+        </div>
+
+        <!-- 1. V-EGO SAN SUMO ARENA -->
+        <div id="arcadePane-sumo" class="popquiz-card">
+          <div style="background: linear-gradient(180deg, #7d0000 0%, #4a0000 100%); padding: 16px 20px; border-bottom: 2px solid #ffcc00; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h2 style="color: #ffcc00; margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px;">&#129355; V-ego San Sumo Arena</h2>
+              <p style="color: #ffe6e6; font-size: 11px; margin-top: 4px;">Face Master Kenji in authentic dohyo circle bouts! Choose your combat moves, counter his attacks, and win Decibels!</p>
+            </div>
+            <div style="background: #222; border: 1px solid #ffcc00; padding: 6px 14px; border-radius: 6px; text-align: center;">
+              <span style="font-size: 10px; color: #aaa; text-transform: uppercase; display: block;">Arena Decibel Bounty</span>
+              <span id="sumoBountyBadge" style="font-size: 16px; font-weight: 900; color: #ffcc00;">+25 dB / Bout</span>
+            </div>
+          </div>
+          <div style="padding: 24px; background: #231f20; color: #fff;">
+            
+            <!-- Sumo Ring Visual Stage -->
+            <div style="display: flex; justify-content: space-around; align-items: center; background: radial-gradient(circle, #3d2417 0%, #1a0f0a 70%); border: 4px solid #d2a679; border-radius: 50%; width: 440px; height: 220px; margin: 0 auto 20px auto; box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 4px 15px rgba(0,0,0,0.6); position: relative;">
+              
+              <!-- Player Fighter -->
+              <div style="text-align: center; z-index: 2;">
+                <div id="sumoPlayerVisual" style="font-size: 48px; transform: scaleX(-1);">&#129497;</div>
+                <div id="sumoPlayerLabel" style="font-weight: 900; color: #ffcc00; font-size: 13px; margin-top: 4px;">Player V-Ego</div>
+                <div id="sumoPlayerMoveBadge" style="font-size: 11px; color: #bbb; margin-top: 2px;">Ready</div>
+              </div>
+
+              <!-- VS Badge -->
+              <div style="background: #e41e2b; border: 2px solid #ffcc00; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; color: #fff; box-shadow: 0 0 10px rgba(228,30,43,0.8);">VS</div>
+
+              <!-- Master Kenji Opponent -->
+              <div style="text-align: center; z-index: 2;">
+                <div id="sumoOpponentVisual" style="font-size: 48px;">&#129355;</div>
+                <div style="font-weight: 900; color: #ff6666; font-size: 13px; margin-top: 4px;">Master Kenji</div>
+                <div id="sumoOpponentMoveBadge" style="font-size: 11px; color: #bbb; margin-top: 2px;">Stance Ready</div>
+              </div>
+
+            </div>
+
+            <!-- Bout Commentary & Status -->
+            <div id="sumoCommentaryBox" style="background: #111; border: 2px solid #444; border-radius: 6px; padding: 12px 16px; min-height: 48px; text-align: center; font-size: 13px; font-weight: bold; color: #ffcc00; margin-bottom: 20px;">
+              Select a move below to challenge Master Kenji on the dohyo!
+            </div>
+
+            <!-- Sumo Move Action Buttons (5 Counter-Matrix Moves) -->
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;">
+              <button class="btn-vp" style="background: #e41e2b; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('push')">
+                <span style="font-size: 20px;">&#129307;</span>
+                <span>Oshidashi</span>
+                <span style="font-size: 9px; color: #ffcc00;">Push Attack</span>
+              </button>
+              <button class="btn-vp" style="background: #d84315; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('slap')">
+                <span style="font-size: 20px;">&#9995;</span>
+                <span>Tsuppari</span>
+                <span style="font-size: 9px; color: #ffcc00;">Rapid Slap</span>
+              </button>
+              <button class="btn-vp" style="background: #ad1457; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('throw')">
+                <span style="font-size: 20px;">&#129355;</span>
+                <span>Uwatenage</span>
+                <span style="font-size: 9px; color: #ffcc00;">Overarm Throw</span>
+              </button>
+              <button class="btn-vp" style="background: #4527a0; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('dodge')">
+                <span style="font-size: 20px;">&#128168;</span>
+                <span>Hikitoshi</span>
+                <span style="font-size: 9px; color: #ffcc00;">Sidestep Dodge</span>
+              </button>
+              <button class="btn-vp" style="background: #ffcc00; color: #000; font-weight: 900; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('special')">
+                <span style="font-size: 20px;">&#9889;</span>
+                <span>Coke Power</span>
+                <span style="font-size: 9px; color: #7d0000; font-weight: 900;">Ultra Strike</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 2. POP QUIZ TRIVIA -->
+        <div id="arcadePane-quiz" class="popquiz-card" style="display: none;">
           <div class="popquiz-banner">
             <img src="assets/images/music-mixer/mm15_popq_on.jpg" alt="Coke Music Pop Quiz">
           </div>
@@ -1949,6 +2030,50 @@
             </div>
           </div>
         </div>
+
+        <!-- 3. MUSICAL POSTCARDS -->
+        <div id="arcadePane-postcards" class="postcard-card" style="display: none;">
+          <div class="postcard-banner">
+            <img src="assets/images/postcard/postreg_topbanner.jpg" alt="Send a Musical Postcard">
+          </div>
+          <div class="postcard-layout">
+            <!-- Left: Live Preview Envelope -->
+            <div class="postcard-preview-stage">
+              <img src="assets/images/postcard/postreg_pre-guitar2.gif" alt="Postcard Visual" style="width:100%; border:2px solid #fff; margin-bottom:12px;">
+              <div id="cardPreviewNote" style="background:#fff; border:1px solid #ccc; border-radius:4px; padding:10px; font-family:'Courier New', monospace; font-size:12px; color:#333; min-height:60px; text-align:left;">
+                "Hey! Come check out my new studio lounge in Central Park! Play our favorite tunes and battle on the DJ booth!"
+              </div>
+              <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+                <span id="cardAudioTag" style="font-size:11px; font-weight:bold; color:#7d0000;">&#9835; Audio: Rock Beats</span>
+                <button class="btn-vp" style="padding:4px 8px; font-size:10px;" onclick="previewPostcardAudio()">&#9654; Listen</button>
+              </div>
+            </div>
+
+            <!-- Right: Compose Form -->
+            <div style="display:flex; flex-direction:column; gap:14px;">
+              <div>
+                <label style="display:block; font-size:11px; font-weight:bold; color:#7d0000; margin-bottom:4px; text-transform:uppercase;">Recipient (Screen Name or Friend)</label>
+                <input type="text" id="cardRecipientInput" class="reg-input" placeholder="e.g. Adam" style="background:#fff; color:#333; border:2px solid #ddd; font-weight:bold;">
+              </div>
+              <div>
+                <label style="display:block; font-size:11px; font-weight:bold; color:#7d0000; margin-bottom:4px; text-transform:uppercase;">Attach Musical Loop</label>
+                <select id="cardTrackSelect" class="reg-input" style="background:#fff; color:#333; border:2px solid #ddd;" onchange="updatePostcardAudioLabel()">
+                  <option value="rockOne_beatz00.wav">Rock Beats Vol. 1</option>
+                  <option value="danceOne_bass00.wav">Dance Bass Groove</option>
+                  <option value="misc_funkGuit00.wav">Funk Guitar Riff</option>
+                  <option value="latin_congas00.wav">Latin Congas Fiesta</option>
+                </select>
+              </div>
+              <div>
+                <label style="display:block; font-size:11px; font-weight:bold; color:#7d0000; margin-bottom:4px; text-transform:uppercase;">Personal Message</label>
+                <textarea id="cardNoteInput" class="reg-input" rows="3" style="background:#fff; color:#333; border:2px solid #ddd; resize:none;" oninput="updatePostcardNote()">Come chill at my private Coke Studio! Let's trade vinyl and jam on the mixer!</textarea>
+              </div>
+              <button class="btn-vp" style="background:linear-gradient(180deg, #d80000 0%, #a00000 100%); font-size:13px; padding:10px; font-weight:bold;" onclick="sendPostcard()">&#9993; Send Musical Postcard</button>
+              <div id="cardStatusMsg" style="display:none; padding:8px 12px; border-radius:4px; font-size:11px;"></div>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       <!-- TAB: MUSICAL POSTCARDS -->
@@ -2346,24 +2471,86 @@
 
     // Tab Switching
     function switchTab(tabId) {
-      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      if (tabId === 'postcard' || tabId === 'sumo') {
+        tabId = 'popquiz';
+        switchArcadeSubTab(tabId === 'postcard' ? 'postcards' : 'sumo');
+      }
+      var parentMap = {
+        'mixer': 'charts',
+        'decor': 'play',
+        'messenger': 'avatar',
+        'studios': 'safety',
+        'downloads': 'safety'
+      };
+      var activeNavKey = parentMap[tabId] || tabId;
+      document.querySelectorAll('.nav-tab').forEach(t => {
+        t.classList.toggle('active', t.getAttribute('data-tab') === activeNavKey);
+      });
       document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
-      const targetNav = Array.from(document.querySelectorAll('.nav-tab')).find(t => t.textContent.toLowerCase().includes(tabId));
-      if (targetNav) targetNav.classList.add('active');
       const page = document.getElementById('tab-' + tabId);
       if (page) page.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Studio In-Game Actions Bridge
+    function triggerGameCokeDrink() {
+      const iframe = document.getElementById('gameIframe');
+      try {
+        if (iframe && iframe.contentWindow && iframe.contentWindow.ige && iframe.contentWindow.ige.client) {
+          iframe.contentWindow.ige.client.drinkCoke();
+          return;
+        }
+      } catch (_) {}
+      alert('+10 dB! Refreshing ice-cold Coca-Cola!');
+    }
+
+    function triggerGameDJMix() {
+      const iframe = document.getElementById('gameIframe');
+      try {
+        if (iframe && iframe.contentWindow && iframe.contentWindow.ige && iframe.contentWindow.ige.client) {
+          iframe.contentWindow.ige.client.triggerDJPerformance();
+          return;
+        }
+      } catch (_) {}
+      alert('DJ is performing in Coke Studios!');
+    }
+
+    function triggerGameVoteCheer() {
+      const iframe = document.getElementById('gameIframe');
+      try {
+        if (iframe && iframe.contentWindow && iframe.contentWindow.ige && iframe.contentWindow.ige.client) {
+          iframe.contentWindow.ige.client.voteCheer();
+          return;
+        }
+      } catch (_) {}
+      alert('Cheers! +5 dB voted!');
+    }
+
+    function triggerGameVoteBoo() {
+      const iframe = document.getElementById('gameIframe');
+      try {
+        if (iframe && iframe.contentWindow && iframe.contentWindow.ige && iframe.contentWindow.ige.client) {
+          iframe.contentWindow.ige.client.voteBoo();
+          return;
+        }
+      } catch (_) {}
+      alert('Boo voted!');
     }
 
     // Studio Switcher
     function switchStudio(roomId, roomTitle) {
       document.querySelectorAll('.studio-pill').forEach(p => p.classList.remove('active'));
-      event.target.classList.add('active');
-      document.getElementById('currentRoomTitle').textContent = roomTitle + ' (' + roomId + ')';
-      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      if (window.event && window.event.target) {
+        window.event.target.classList.add('active');
+      }
+      document.getElementById('currentRoomTitle').textContent = roomTitle;
+      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || 'Adam';
+      const avatarDef = localStorage.getItem('coke_avatarDef') || (document.getElementById('avatarDefText') ? document.getElementById('avatarDefText').textContent : '');
       const iframe = document.getElementById('gameIframe');
       const isPhase = (document.getElementById('engineSelector')?.value === 'phase' || iframe.src.includes('/phase/'));
       const base = isPhase ? '/phase/' : '/game/';
-      iframe.src = base + '?user=' + encodeURIComponent(user) + '&room=' + encodeURIComponent(roomId);
+      try { localStorage.setItem('coke_studioType', roomId); } catch (_) {}
+      iframe.src = base + '?user=' + encodeURIComponent(user) + '&room=' + encodeURIComponent(roomId) + (avatarDef ? '&avatarDef=' + encodeURIComponent(avatarDef) : '') + '&_t=' + Date.now();
     }
 
     function reloadClient() {
@@ -2756,7 +2943,18 @@
       setAvatarSkin(avatarState.skin);
     }
 
-    async function renderAvatar() {
+    async 
+    function updateTopBarHeadshot() {
+      const canvas = document.getElementById('avatarCanvas') || document.getElementById('regAvatarCanvas');
+      const headshot = document.getElementById('avatarHeadshot');
+      if (canvas && headshot) {
+        try {
+          headshot.src = canvas.toDataURL();
+        } catch (_) {}
+      }
+    }
+
+    function renderAvatar() {
       const canvas = document.getElementById('avatarCanvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
@@ -2856,10 +3054,23 @@
         if (res.success) {
           statusEl.style.color = '#00e676';
           statusEl.innerHTML = '&#10004; Avatar &amp; mission saved successfully to character profile!';
+
+          try {
+            localStorage.setItem('coke_user', user);
+            localStorage.setItem('coke_avatarDef', defText);
+            localStorage.setItem('coke_gender', avatarState.gender === 'male' ? '1' : '2');
+          } catch (_) {}
+
+          updateTopBarHeadshot();
+
           const iframe = document.getElementById('gameIframe');
+          if (iframe && iframe.contentWindow) {
+            iframe.contentWindow.postMessage({ type: 'APPLY_FIGURE_DEF', avatarDef: defText }, '*');
+          }
           const url = new URL(iframe.src, window.location.origin);
           url.searchParams.set('user', user);
           url.searchParams.set('avatarDef', defText);
+          url.searchParams.set('_t', Date.now());
           iframe.src = url.toString();
         } else {
           statusEl.style.color = '#ff6666';
@@ -2877,7 +3088,10 @@
     }
 
     async function loadDenizenProfile() {
-      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      let user = localStorage.getItem('coke_user') || document.getElementById('screenNameInput').value.trim() || 'Adam';
+      document.getElementById('screenNameInput').value = user;
+      const savedDef = localStorage.getItem('coke_avatarDef');
+      const savedRoom = localStorage.getItem('coke_studioType') || 'studio_model_b';
       try {
         const resp = await fetch(`/api/denizen/profile?user=${encodeURIComponent(user)}`);
         if (!resp.ok) return;
@@ -2935,6 +3149,14 @@
         }
       } catch (e) {}
       renderAvatar();
+
+      // Sync initial game iframe with user's customized look & personal studio
+      const activeDef = localStorage.getItem('coke_avatarDef') || (document.getElementById('avatarDefText') ? document.getElementById('avatarDefText').textContent : '');
+      const activeRoom = localStorage.getItem('coke_studioType') || 'studio_model_b';
+      const iframe = document.getElementById('gameIframe');
+      if (iframe && !iframe.src.includes('avatarDef')) {
+        iframe.src = `/phase/?user=${encodeURIComponent(user)}&room=${encodeURIComponent(activeRoom)}${activeDef ? '&avatarDef=' + encodeURIComponent(activeDef) : ''}&_t=${Date.now()}`;
+      }
     }
 
     // =========================================================================
@@ -3337,6 +3559,7 @@
       loadedImages.forEach(img => {
         if (img) ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       });
+      updateTopBarHeadshot();
     }
 
     async function submitRegistration() {
@@ -3379,15 +3602,27 @@
         if (data.status === 'success') {
           statusMsg.style.background = '#1b5e20';
           statusMsg.style.color = '#fff';
-          statusMsg.textContent = `Welcome to Coke Studios, DJ ${data.screenName}! Launching game...`;
+          statusMsg.textContent = `Welcome to Coke Studios, DJ ${data.screenName}! Entering studio...`;
+
+          const chosenRoom = data.studioType || regWizard.studioType || 'studio_model_b';
+          try {
+            localStorage.setItem('coke_user', data.screenName);
+            localStorage.setItem('coke_avatarDef', figureDef);
+            localStorage.setItem('coke_studioType', chosenRoom);
+            localStorage.setItem('coke_gender', String(regWizard.gender === 'male' ? 1 : 2));
+            if (data.sw1) sessionStorage.setItem('coke_sw1', data.sw1);
+            if (data.sw2) sessionStorage.setItem('coke_sw2', data.sw2);
+          } catch (_) {}
 
           document.getElementById('screenNameInput').value = data.screenName;
           if (document.getElementById('balanceDB')) {
-            document.getElementById('balanceDB').textContent = Number(data.decibels).toLocaleString();
+            document.getElementById('balanceDB').textContent = Number(data.decibels || 5000).toLocaleString();
           }
           if (document.getElementById('balanceVC')) {
-            document.getElementById('balanceVC').textContent = Number(data.vcoins).toLocaleString();
+            document.getElementById('balanceVC').textContent = Number(data.vcoins || 500).toLocaleString();
           }
+
+          updateTopBarHeadshot();
 
           setTimeout(() => {
             closeRegisterModal();
@@ -3395,11 +3630,11 @@
             const iframe = document.getElementById('gameIframe');
             const engine = document.getElementById('engineSelector').value;
             if (engine === 'phase') {
-              iframe.src = `/phase/?user=${encodeURIComponent(data.screenName)}`;
+              iframe.src = `/phase/?user=${encodeURIComponent(data.screenName)}&room=${encodeURIComponent(chosenRoom)}&avatarDef=${encodeURIComponent(figureDef)}&_t=${Date.now()}`;
             } else {
               iframe.src = data.gameUrl || `/game/?user=${encodeURIComponent(data.screenName)}&sw1=${encodeURIComponent(data.sw1)}&sw2=${encodeURIComponent(data.sw2)}`;
             }
-          }, 1200);
+          }, 1000);
         } else {
           statusMsg.style.background = '#b71c1c';
           statusMsg.style.color = '#fff';
@@ -3600,6 +3835,60 @@
     }
 
     // Initialize
+    
+    // Arcade Subtabs & V-Ego San Sumo Logic
+    function switchArcadeSubTab(sub) {
+      ['sumo', 'quiz', 'postcards'].forEach(k => {
+        const pane = document.getElementById('arcadePane-' + k);
+        const btn = document.getElementById('subtabBtn-' + k);
+        if (pane) pane.style.display = (k === sub ? 'block' : 'none');
+        if (btn) {
+          btn.classList.toggle('active', k === sub);
+          btn.style.background = (k === sub ? '#e41e2b' : '#333');
+        }
+      });
+    }
+
+    async function playVegoSanMove(playerMove) {
+      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || 'Adam';
+      const cBox = document.getElementById('sumoCommentaryBox');
+      const pBadge = document.getElementById('sumoPlayerMoveBadge');
+      const oBadge = document.getElementById('sumoOpponentMoveBadge');
+
+      pBadge.textContent = 'Move: ' + playerMove.toUpperCase();
+      cBox.style.color = '#ffcc00';
+      cBox.textContent = 'Clashing in the dohyo circle...';
+
+      try {
+        const res = await fetch('/api/minigames/vegosan/move', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user: user, playerMove: playerMove })
+        });
+        const data = await res.json();
+        if (data && data.status === 'success') {
+          oBadge.textContent = 'Master: ' + data.masterMove.toUpperCase();
+          cBox.textContent = data.commentary;
+          if (data.result === 'win') {
+            cBox.style.color = '#00e676';
+            if (data.totalDecibels !== undefined) {
+              document.getElementById('balanceDB').textContent = Number(data.totalDecibels).toLocaleString();
+            }
+            previewSample('misc_cheer00.wav');
+          } else if (data.result === 'lose') {
+            cBox.style.color = '#ff6666';
+            previewSample('misc_boo00.wav');
+          } else {
+            cBox.style.color = '#ffcc00';
+          }
+        } else {
+          cBox.textContent = (data && data.error) ? data.error : 'Round concluded!';
+        }
+      } catch (err) {
+        cBox.textContent = 'Master Kenji countered your move! Try again!';
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       initSkinSwatches();
       loadDenizenProfile();
