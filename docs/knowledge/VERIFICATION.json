@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-24T21:03:24.682Z",
+  "checkedAt": "2026-10-24T22:03:28.707Z",
   "status": "passed",
   "inventoryFilesHashed": 18793,
   "windowSourceLinesChecked": 2856,
@@ -10,7 +10,7 @@
   "galleryImages": 446,
   "localDocumentationLinks": 45,
   "queuedCaptures": 38,
-  "captureAttempts": 1,
+  "captureAttempts": 4,
   "downloadedCaptures": 0,
   "failures": [],
   "limits": [
