@@ -1,55 +1,47 @@
 var Navigation = {
     init: function() {
-    	$('.nav-name, .nav-go').on('click', function() { 
-	    	var listItem = $(this).parent();
-			var studioId = $(listItem).data('room-id');
+    	$('.nav-name, .nav-go').on('click', function(e) {
+    		e.preventDefault();
+	    	var listItem = $(this).closest('li');
+			var studioId = $(listItem).data('room-id') || 2;
 
-			//TODO: SERVER
+			var fallbackMap = {
+				1: { room_type: 'studio_model_a', room_owner: 'Coke Studios', room_name: 'Studio #1' },
+				2: { room_type: 'studio_model_b', room_owner: 'Coke Studios', room_name: 'Studio #2' },
+				3: { room_type: 'studio_model_c', room_owner: 'Coke Studios', room_name: 'Studio #3' },
+				4: { room_type: 'studio_model_d', room_owner: 'Coke Studios', room_name: 'Studio #4' },
+				5: { room_type: 'studio_model_rooftop', room_owner: 'Coke Studios', room_name: 'Studio Rooftop' },
+				6: { room_type: 'studio_wayne', room_owner: 'Wayne Enterprise', room_name: 'Wayne Ent.' }
+			};
+
+			function applyRoom(data) {
+				$('#entry').hide();
+				$('.bottom-bar').show();
+				$('#navigation-ui').hide();
+				$('#navigation').removeClass('active');
+
+				if (ige.client && typeof ige.client.loadRoom === 'function') {
+					ige.client.loadRoom(data.room_type, data.room_owner);
+				}
+			}
+
 			$.ajax({
 				dataType: "json",
 				method: "POST",
 				url: "/jsonreply/room.php",
 				data: { id: studioId },
+				timeout: 2000
 			})
-			.success(function(data) {
-				//Hide main menu screen if it's visible
-				$('#entry').hide();
-
-				//Show the menu bar
-				$('.bottom-bar').show();
-				$('#navigation_close').show();
-
-				//Show loading screen
-
-				//Restart the scene
-				ige.removeGraph();
-				ige.addGraph('IgeBaseScene');
-
-				//Create the new studio
-				var playerStudio = new PlayerStudio()
-					.type(data.room_type)
-					.owner(data.room_owner)
-					.render();
-
-				ige.room = playerStudio;
-
-				//Recreate the player
-				ige.player = new Character()
-					.id('player')
-					.setStyle('001')
-					.setHeadStyle('001')
-					.setHairStyle('013')
-					.setEyeStyle('001')
-					.setMouthStyle('001')
-					.setLeftSleveStyle('001')
-					.setRightSleveStyle('001')
-					.setShirtStyle('001')
-					.setPantStyle('001')
-					.setShoeStyle('001')
-					.startPlayer();
-
-				//Set a timeout to hide the loading screen
+			.done(function(data) {
+				if (data && data.room_type) {
+					applyRoom(data);
+				} else {
+					applyRoom(fallbackMap[studioId] || fallbackMap[2]);
+				}
 			})
+			.fail(function() {
+				applyRoom(fallbackMap[studioId] || fallbackMap[2]);
+			});
     	});
 
     	return this;
@@ -57,19 +49,22 @@ var Navigation = {
 
     showMainMenu: function() {
     	this.closeAllUI();
-
-    	ige.room._gameScene.hide();
+    	if (ige.room && ige.room._gameScene) {
+    		try { ige.room._gameScene.hide(); } catch (_) {}
+    	}
 		ige.removeGraph();
-		
 		$('#entry').show();
 		toggle_popup('#navigation-ui');
-
 		return this;
     },
 
     closeAllUI: function() {
     	$('.bottom-bar').hide();
     	$('#navigation_close').hide();
-    	close_inventory_ui();
-    },
-}
+    	if (typeof close_inventory_ui === 'function') {
+    		close_inventory_ui();
+    	}
+    }
+};
+
+if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Navigation; }

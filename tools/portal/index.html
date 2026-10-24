@@ -1481,8 +1481,8 @@
             </div>
             <div class="viewport-controls">
               <select id="engineSelector" class="btn-vp" onchange="switchEngine(this.value)" style="background:#111;color:#ffcc00;border:1px solid #ffcc00;font-weight:bold;cursor:pointer;">
-                <option value="wasm">★ 1:1 WebAssembly Engine</option>
-                <option value="phase">⚡ HTML5 CokePhase Engine</option>
+                <option value="phase" selected>⚡ HTML5 CokePhase Engine (Instant Play)</option>
+                <option value="wasm">★ 1:1 WebAssembly Engine (Heavy Dev Build)</option>
               </select>
               <button class="btn-vp" onclick="reloadClient()">&#8635; Reload</button>
               <button class="btn-vp" onclick="toggleFullscreen()">&#9974; Fullscreen</button>
@@ -1490,7 +1490,7 @@
             </div>
           </div>
           <div class="game-iframe-wrapper" id="gameFrameWrapper">
-            <iframe id="gameIframe" src="/game/?user=Adam" allow="autoplay"></iframe>
+            <iframe id="gameIframe" src="/phase/?user=Adam&room=studio_model_b" allow="autoplay"></iframe>
           </div>
         </div>
 
@@ -2358,7 +2358,9 @@
       document.getElementById('currentRoomTitle').textContent = roomTitle + ' (' + roomId + ')';
       const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
       const iframe = document.getElementById('gameIframe');
-      iframe.src = '/game/?user=' + encodeURIComponent(user) + '&room=' + encodeURIComponent(roomId);
+      const isPhase = (document.getElementById('engineSelector')?.value === 'phase' || iframe.src.includes('/phase/'));
+      const base = isPhase ? '/phase/' : '/game/';
+      iframe.src = base + '?user=' + encodeURIComponent(user) + '&room=' + encodeURIComponent(roomId);
     }
 
     function reloadClient() {

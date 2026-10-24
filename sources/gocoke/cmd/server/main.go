@@ -17,6 +17,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -80,12 +81,14 @@ type Room struct {
 	Wallpaper   int
 	Floor       int
 	Doorbell    int
+	IsRedRoom   bool
 	mu          sync.RWMutex
 	Players     map[string]*Player
 	Performance *PerformanceSession
 }
 
 func NewRoom(id, name string, layout int) *Room {
+	isRed := strings.Contains(strings.ToLower(id), "red") || strings.Contains(strings.ToLower(name), "red")
 	return &Room{
 		ID:        id,
 		Name:      name,
@@ -93,6 +96,7 @@ func NewRoom(id, name string, layout int) *Room {
 		Wallpaper: 1,
 		Floor:     1,
 		Doorbell:  1,
+		IsRedRoom: isRed,
 		Players:   make(map[string]*Player),
 	}
 }
@@ -249,13 +253,100 @@ func main() {
 	mux.HandleFunc("/sounds/", srv.handleSoundLibrary)
 	mux.HandleFunc("/soundlibrary/", srv.handleSoundLibrary)
 
-	// 5. Static files
-	fs := http.FileServer(http.Dir(*root))
+	repoRoot := findRepoRoot()
+	cokephaseDir := filepath.Join(repoRoot, "sources", "cokephase")
+	portalDir := filepath.Join(repoRoot, "tools", "portal")
+	mixerDir := filepath.Join(repoRoot, "sources", "music-mixer", "dist")
+	avatarDir := filepath.Join(repoRoot, "sources", "avatar-assets", "assets")
+	gocokeWebDir := filepath.Join(repoRoot, "sources", "gocoke", "web")
+	if fi, err := os.Stat(*root); err == nil && fi.IsDir() {
+		absRoot, _ := filepath.Abs(*root)
+		gocokeWebDir = absRoot
+	}
+
+	// 11. Top 40 Charts API
+	mux.HandleFunc("/api/music/top40", srv.handleTop40)
+
+	// 12. V-ego San Mini-game API
+	mux.HandleFunc("/api/minigames/vegosan/move", srv.handleVegoSanMove)
+
+	// 13. CokePhase legacy and JSON endpoints
+	mux.HandleFunc("/jsonreply/room.php", srv.handleJsonRoom)
+	mux.HandleFunc("/jsonreply/catalog.php", srv.handleJsonCatalog(cokephaseDir))
+	if fi, err := os.Stat(filepath.Join(cokephaseDir, "jsonreply")); err == nil && fi.IsDir() {
+		mux.Handle("/jsonreply/", http.StripPrefix("/jsonreply/", http.FileServer(http.Dir(filepath.Join(cokephaseDir, "jsonreply")))))
+	}
+
+	// 14. CokePhase Engine & Client Assets
+	if fi, err := os.Stat(cokephaseDir); err == nil && fi.IsDir() {
+		mux.Handle("/phase/", http.StripPrefix("/phase/", http.FileServer(http.Dir(cokephaseDir))))
+		mux.Handle("/engine/", http.StripPrefix("/engine/", http.FileServer(http.Dir(filepath.Join(cokephaseDir, "engine")))))
+		mux.Handle("/gameClasses/", http.StripPrefix("/gameClasses/", http.FileServer(http.Dir(filepath.Join(cokephaseDir, "gameClasses")))))
+		mux.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir(filepath.Join(cokephaseDir, "css")))))
+		mux.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir(filepath.Join(cokephaseDir, "js")))))
+		mux.HandleFunc("/ClientConfig.js", func(w http.ResponseWriter, r *http.Request) {
+			http.ServeFile(w, r, filepath.Join(cokephaseDir, "ClientConfig.js"))
+		})
+		mux.HandleFunc("/client.js", func(w http.ResponseWriter, r *http.Request) {
+			http.ServeFile(w, r, filepath.Join(cokephaseDir, "client.js"))
+		})
+		mux.HandleFunc("/index.js", func(w http.ResponseWriter, r *http.Request) {
+			http.ServeFile(w, r, filepath.Join(cokephaseDir, "index.js"))
+		})
+	}
+
+	// 15. GoCoke WASM Client
+	if fi, err := os.Stat(gocokeWebDir); err == nil && fi.IsDir() {
+		mux.Handle("/game/", http.StripPrefix("/game/", http.FileServer(http.Dir(gocokeWebDir))))
+	}
+
+	// 16. Music Mixer App
+	if fi, err := os.Stat(mixerDir); err == nil && fi.IsDir() {
+		mux.Handle("/mixer/", http.StripPrefix("/mixer/", http.FileServer(http.Dir(mixerDir))))
+	}
+
+	// 17. Avatar Assets
+	if fi, err := os.Stat(avatarDir); err == nil && fi.IsDir() {
+		mux.Handle("/avatar-assets/", http.StripPrefix("/avatar-assets/", http.FileServer(http.Dir(avatarDir))))
+	}
+
+	// 18. Portal & Assets Cascade
+	if fi, err := os.Stat(portalDir); err == nil && fi.IsDir() {
+		mux.Handle("/portal/", http.StripPrefix("/portal/", http.FileServer(http.Dir(portalDir))))
+	}
+
+	mux.HandleFunc("/assets/", func(w http.ResponseWriter, r *http.Request) {
+		sub := strings.TrimPrefix(r.URL.Path, "/assets/")
+		candidates := []string{
+			filepath.Join(portalDir, "assets", sub),
+			filepath.Join(cokephaseDir, "assets", sub),
+			filepath.Join(gocokeWebDir, "assets", sub),
+		}
+		for _, cand := range candidates {
+			if fi, err := os.Stat(cand); err == nil && !fi.IsDir() {
+				http.ServeFile(w, r, cand)
+				return
+			}
+		}
+		http.NotFound(w, r)
+	})
+
+	// 19. Root fallback: serve tools/portal/index.html or gocoke index.html
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/" || r.URL.Path == "/index.html" {
 			w.Header().Set("Cache-Control", "no-cache")
+			portalIndex := filepath.Join(portalDir, "index.html")
+			if fi, err := os.Stat(portalIndex); err == nil && !fi.IsDir() {
+				http.ServeFile(w, r, portalIndex)
+				return
+			}
+			gocokeIndex := filepath.Join(gocokeWebDir, "index.html")
+			if fi, err := os.Stat(gocokeIndex); err == nil && !fi.IsDir() {
+				http.ServeFile(w, r, gocokeIndex)
+				return
+			}
 		}
-		fs.ServeHTTP(w, r)
+		http.FileServer(http.Dir(gocokeWebDir)).ServeHTTP(w, r)
 	})
 
 	log.Printf("==========================================================")
@@ -1257,17 +1348,47 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 			sm = "1"
 		} else if sm == "shout" {
 			sm = "2"
+		} else if sm == "sing" {
+			sm = "3"
 		}
 		mHex := extractAttr(xml, "m")
 		roomID := player.RoomID
 		if roomID != "" && mHex != "" {
 			room := s.GetOrCreateRoom(roomID)
-			chatXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CH av=\"%s\" sm=\"%s\" m=\"%s\"/></Room.Action>",
-				room.ID, player.ScreenName, sm, mHex)
-			room.Broadcast(chatXML, "")
-
 			decoded, _ := hex.DecodeString(mHex)
-			log.Printf("[CHAT] [%s] %s: %s", roomID, player.ScreenName, string(decoded))
+			plainMsg := cleanProfanity(string(decoded))
+
+			if sm == "2" || sm == "3" {
+				cleanHex := hex.EncodeToString([]byte(plainMsg))
+				chatXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CH av=\"%s\" sm=\"%s\" m=\"%s\"/></Room.Action>",
+					room.ID, player.ScreenName, sm, cleanHex)
+				room.Broadcast(chatXML, "")
+			} else {
+				room.mu.RLock()
+				for _, other := range room.Players {
+					dx := player.X - other.X
+					if dx < 0 { dx = -dx }
+					dz := player.Z - other.Z
+					if dz < 0 { dz = -dz }
+					dist := dx
+					if dz > dist { dist = dz }
+
+					var msgForOther string
+					if dist <= 4 {
+						msgForOther = plainMsg
+					} else if dist <= 7 {
+						msgForOther = obscureVowels(plainMsg)
+					} else {
+						msgForOther = "..."
+					}
+					otherHex := hex.EncodeToString([]byte(msgForOther))
+					otherXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CH av=\"%s\" sm=\"%s\" m=\"%s\"/></Room.Action>",
+						room.ID, player.ScreenName, sm, otherHex)
+					_ = other.Send(otherXML)
+				}
+				room.mu.RUnlock()
+			}
+			log.Printf("[CHAT] [%s] %s: %s (mode: %s)", roomID, player.ScreenName, plainMsg, sm)
 		}
 		return
 	}
@@ -1317,10 +1438,15 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		roomID := player.RoomID
 		if roomID != "" {
 			room := s.GetOrCreateRoom(roomID)
+			count, awarded, _ := s.store.RecordDailyCokeDrink(player.ScreenName)
 			drinkXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV_DC av=\"%s\" act=\"drk\" item=\"coke_can\"/></Room.Action>",
 				room.ID, player.ScreenName)
 			room.Broadcast(drinkXML, "")
-			log.Printf("[WS] Player %s received a Coke drink from dispenser in %s", player.ScreenName, roomID)
+			if awarded {
+				log.Printf("[WS] Player %s received a Coke drink #%d today in %s (+10 dB)", player.ScreenName, count, roomID)
+			} else {
+				log.Printf("[WS] Player %s received a Coke drink #%d today in %s (daily cap reached)", player.ScreenName, count, roomID)
+			}
 		}
 		return
 	}
@@ -1934,6 +2060,12 @@ func (s *Server) recordVote(room *Room, voter string, delta int) {
 	if delta > 0 {
 		room.Performance.Cheers++
 		tuXML = fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_TU av=\"%s\"/></Room.Action>", room.ID, voter)
+		awardDB := 5
+		if room.IsRedRoom {
+			awardDB = 10
+		}
+		_, _ = s.store.AdjustBalance(room.Performance.DJ, awardDB, 0)
+		_ = s.store.RecordChartVote(room.Performance.DJ, room.Performance.SongTitle, voter)
 	} else {
 		room.Performance.Boos++
 		tdXML = fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_TD av=\"%s\"/></Room.Action>", room.ID, voter)
@@ -2096,4 +2228,125 @@ func acceptRFC6455(w http.ResponseWriter, r *http.Request) (*upgradedConn, error
 		return nil, err
 	}
 	return &upgradedConn{netConn: conn, rw: rw}, nil
+}
+
+func findRepoRoot() string {
+	candidates := []string{".", "..", "../..", "../../.."}
+	for _, c := range candidates {
+		if fi, err := os.Stat(filepath.Join(c, "sources", "cokephase")); err == nil && fi.IsDir() {
+			abs, _ := filepath.Abs(c)
+			return abs
+		}
+	}
+	return "."
+}
+
+func (s *Server) handleTop40(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	period := r.URL.Query().Get("period")
+	if period == "" {
+		period = "daily"
+	}
+	list, err := s.store.GetTop40(period)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	_ = json.NewEncoder(w).Encode(list)
+}
+
+func (s *Server) handleVegoSanMove(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	user := r.URL.Query().Get("user")
+	if user == "" {
+		user = "Adam"
+	}
+	move := r.URL.Query().Get("move")
+	if move == "" && r.Method == http.MethodPost {
+		_ = r.ParseForm()
+		move = r.FormValue("move")
+		if u := r.FormValue("user"); u != "" {
+			user = u
+		}
+	}
+	res, err := s.store.ProcessVegoSanMove(user, move)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	_ = json.NewEncoder(w).Encode(res)
+}
+
+func (s *Server) handleJsonRoom(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	_ = r.ParseForm()
+	idStr := r.FormValue("id")
+	if idStr == "" {
+		idStr = r.URL.Query().Get("id")
+	}
+	roomNames := []string{"Studio 1", "Studio 2", "Studio 3", "Studio 4", "Studio Rooftop", "Wayne Enterprise", "Pokemon"}
+	roomTypes := []string{"studio_model_a", "studio_model_b", "studio_model_c", "studio_model_d", "studio_model_rooftop", "studio_wayne", "pokemon"}
+	id, _ := strconv.Atoi(idStr)
+	if id < 1 || id > len(roomNames) {
+		id = 2
+	}
+	resp := map[string]string{
+		"room_id":    strconv.Itoa(id),
+		"room_name":  roomNames[id-1],
+		"room_owner": "Coke Studios",
+		"room_type":  roomTypes[id-1],
+	}
+	_ = json.NewEncoder(w).Encode(resp)
+}
+
+func (s *Server) handleJsonCatalog(cokephaseDir string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		_ = r.ParseForm()
+		if r.FormValue("page-number") != "" || r.URL.Query().Get("page-number") != "" {
+			w.Write([]byte(`{"pages":15}`))
+			return
+		}
+		page := r.FormValue("page")
+		if page == "" {
+			page = r.URL.Query().Get("page")
+		}
+		if page == "" {
+			page = "1"
+		}
+		catFile := filepath.Join(cokephaseDir, "jsonreply", "catalog", fmt.Sprintf("page-%s.json", page))
+		content, err := os.ReadFile(catFile)
+		if err != nil {
+			w.Write([]byte(`{}`))
+			return
+		}
+		w.Write(content)
+	}
+}
+
+func cleanProfanity(text string) string {
+	badWords := []string{"fuck", "shit", "bitch", "cunt", "asshole", "dick"}
+	res := text
+	for _, bad := range badWords {
+		re := regexp.MustCompile("(?i)\\b" + regexp.QuoteMeta(bad) + "\\b")
+		res = re.ReplaceAllString(res, "blah")
+	}
+	return res
+}
+
+func obscureVowels(text string) string {
+	var b strings.Builder
+	for _, r := range text {
+		switch r {
+		case 'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U':
+			b.WriteRune('.')
+		default:
+			b.WriteRune(r)
+		}
+	}
+	return b.String()
 }

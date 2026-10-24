@@ -41,33 +41,27 @@ var IgeBaseScene = IgeSceneGraph.extend({
 	 * active graph.
 	 */
 	removeGraph: function () {
-		//console.log(ige.player.player._mouseDownEvent);
-		// console.log(ige.input.eventList());
-		ige.input.clearEvent('mouseDown');
-		ige.input.clearEvent('mouseUp');
-		ige.input.clearEvent('keyUp');
-		ige.$('tileMap1')._inventoryListener.off();
-		
-		//ige.input.off('mouseDown', ige.player.player._mouseDownEvent);
+		try { ige.input.clearEvent('mouseDown'); } catch (_) {}
+		try { ige.input.clearEvent('mouseUp'); } catch (_) {}
+		try { ige.input.clearEvent('keyUp'); } catch (_) {}
+		var tm = ige.$('tileMap1');
+		if (tm && tm._inventoryListener && typeof tm._inventoryListener.off === 'function') {
+			try { tm._inventoryListener.off(); } catch (_) {}
+		}
 
-		ige.player.removeComponent('player');
-		ige.player.removeComponent('animation');
-		ige.player.removeComponent('path');
+		if (ige.player) {
+			try { ige.player.removeComponent('player'); } catch (_) {}
+			try { ige.player.removeComponent('animation'); } catch (_) {}
+			try { ige.player.removeComponent('path'); } catch (_) {}
+		}
 
-		ige.$('background').destroy();
-		ige.$('textureMap').destroy();
-		ige.$('tileMap1').destroy();
-		ige.$('objectScene').destroy();
-		ige.$('gameScene').destroy();
-
-		//Destroy the scene
-		ige.$('scene1').destroy();
-		
-		// Destroy the viewport
-		ige.$('vp1').destroy();
-
-		// Destroy the baseScene
-		ige.$('baseScene').destroy();
+		var ids = ['background', 'textureMap', 'tileMap1', 'objectScene', 'gameScene', 'scene1', 'vp1', 'baseScene'];
+		for (var i = 0; i < ids.length; i++) {
+			var ent = ige.$(ids[i]);
+			if (ent && typeof ent.destroy === 'function') {
+				try { ent.destroy(); } catch (_) {}
+			}
+		}
 	}
 });
 

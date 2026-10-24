@@ -614,3 +614,1419 @@ Beyond the isometric rooms, the portal integrates authentic mini-experiences tha
 ---
 
 *Authored and verified for the Coke Music / Coke Studios Preservation Archive.*
+# Coke Music / Coke Studios — Complete Reconstruction Research Guide
+
+Historical research and game-design reference • Original era: 2002–2007 • Includes Coke Music, Coke Studios, MyCoke and major promotional versions
+
+[cokemusic.com pics](https://images.openai.com/static-rsc-4/Eg4q--0Vj3sIPISrE2D32mU9Dk4ZZBRNH3RrROCOILfGth1tLtfPLLr6wjnzWjcX5hoPQ1n_Tr993d8M-8K3F6qeY7kdNTYyNuZPX62Vddz9a3L-ifdhgo0ChaqLbGLebgAd9RFjW8WGphi3hXBnEYWm8U0NAQXa9P_I4aTP_mg?purpose=inline)
+
+[Blottner: Portfolio](https://images.openai.com/static-rsc-4/owZ715Y7aolvfEB6bZVXN-nXZfIqWeIxnLDP99luVZIU836KpDj26TYFgym9mIHimYR6nJKHaMmz_-zjYqVRxLeNckLDE20b2ZzTmd3MkyY-uqLPxFFaptO4vQDRbXP5XVCJfuCJFLYTt8m59akL1CfLuLx6LfDT5c3scKQvPM8?purpose=inline)
+
+[The Rise and Fall of 'Coke Music' | Gamers](https://images.openai.com/static-rsc-4/mxNKey9W_IQDXyGQqu4tm6q9yvsQMgSAF97yQsrdh35MG9THFeo0hjlFY36WGjKnShK7uuwEAJ6VWjcNUdkLDC9MvCf5tj6ZZ-aknHNRXSyow7jrSZIxhknjIh1JjkwWiLLaGlk-c_TDeWAWloGgFRvFFGFGu8PcwN7IS5lPP-M?purpose=inline)
+
+12
+
+## 1. What we're actually reconstructing
+
+Coke Music wasn't just a browser chatroom with furniture. It was a connected virtual music community, where the website, avatar, creative tools, public spaces and player-owned studios all supported one another.
+
+Its central gameplay loop was:
+
+Create your V-ego
+
+Choose your identity and appearance
+
+Create a music mix
+
+Use the Music Mixer and store your song
+
+Perform for other players
+
+Play your CD and receive audience votes
+
+Earn decibels
+
+Music, virtual Coke, games and promotions
+
+Build your studio
+
+Buy furniture, decorate, trade and host visitors
+
+Keep socializing, creating, competing and collecting
+
+The original developers explicitly describe animated avatars, custom music, persistent possessions, an economy, chat, games, and moderated social spaces. This is the foundation of the reconstruction.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://markblottner.com\&sz=32)
+
+markblottner.com
+
++2
+
+
+
+### The historical versions must be kept separate
+
+| Era                                  | Reconstruction significance                                                                                    |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| Coke Music / V1 (2002)               | Original environment, foundational music and room systems, original furniture and visual presentation          |
+| Coke Studios Beta (2003–2004)        | Transitional features and redesigned client elements                                                           |
+| Shark Tale (2004)                    | Special themed world, avatars, furniture, public room and minigame                                             |
+| MyCoke / Coke Studios V2 (2004–2007) | Expanded public rooms, promotions, clothing, furniture and website activities                                  |
+| CC Metro (2007 onward)               | A different virtual-world platform; belongs in a separate historical appendix, not the original reconstruction |
+
+The original isometric Coke Studios experience ended in December 2007. Later MyCoke activity and CC Metro shouldn't be mistaken for original Coke Studios gameplay.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++2
+
+
+
+I’m treating the original client and its associated website as one product. Where an element is established by surviving footage, developer testimony or archived materials, I'll say so. Where its exact appearance or operation is missing, I'll identify what still needs historical verification rather than inventing a feature.
+
+## 2. The complete product structure
+
+The biggest mistake in recreating Coke Music would be building only the isometric room client. Players actually moved between two connected experiences: a conventional promotional website and the Coke Studios virtual world.
+
+The website handled identity, game discovery, music creation, rankings, promotions, and account-related activities. The virtual world provided the spaces where those systems became social gameplay. Some windows, like the catalogue and messenger, were also accessible inside the game.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++2
+
+
+
+### Website and in-game screen inventory
+
+This is a reconstruction-oriented screen map. An entry marked documented has direct historical evidence of the feature; reconstruct means the underlying function is documented, but the exact original screen layout or complete interaction sequence is not fully preserved.
+
+| Screen / page                 | What it did                                                                                       | Evidence                             |
+| ----------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| Home / promotional landing    | Presented the Coke Music or MyCoke brand, activities, campaigns and entrance to the virtual world | Documented                           |
+| Sign-in and registration      | Created or authenticated a player account                                                         | Documented                           |
+| V-ego creator                 | Chose the avatar's body and clothing appearance                                                   | Documented                           |
+| V-ego appearance editor       | Changed an existing avatar's look                                                                 | Documented                           |
+| V-ego motto / mission         | Edited a short personal message displayed in the game                                             | Documented                           |
+| Coke Studios launch / loading | Opened the game, showed warnings and connected the player                                         | Documented                           |
+| World entrance / Portal       | Allowed players to select public and private studios                                              | Documented                           |
+| Games hub                     | Offered V-ego San, Coaster, Pop Quiz and later games                                              | Documented                           |
+| Music Mixer                   | Created and saved songs from sample loops                                                         | Documented                           |
+| Music Mixer help              | Explained composition and CD creation                                                             | Documented                           |
+| Top 40 charts                 | Displayed daily, weekly, monthly and promotional music rankings                                   | Documented                           |
+| Website messenger             | Friends, contacts and private communication outside the room interface                            | Documented                           |
+| Under the Cap                 | Accepted promotional codes and distributed rewards                                                | Documented                           |
+| My Coke Rewards               | Linked physical-product promotions to digital and real-world prizes                               | Documented, later era                |
+| Contest and sweepstakes pages | Presented Coca-Cola competitions and promotional participation                                    | Documented                           |
+| Digital downloads             | Postcards, wallpapers, screensavers and other downloadable content                                | Documented                           |
+| Promotional microsites        | Shark Tale, American Idol, Batman and other campaigns                                             | Documented; layouts varied           |
+| Account settings / recovery   | Credential and account administration                                                             | Reconstruct exact historical screens |
+| Help / FAQ / safety           | Instructions, troubleshooting, scam prevention and conduct guidance                               | Documented                           |
+| Support and reporting         | Technical issue and harassment reporting                                                          | Documented                           |
+| Closure / maintenance notices | Explained unavailability, shutdown, bans or connection problems                                   | Documented                           |
+
+An authenticated player might never visit some of these pages during a normal session. But they were part of the original experience, not optional extras invented for a modern remake.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++3
+
+
+
+### First-time visitor journey
+
+1. Arrive at CokeMusic.com. See music-centered branding, promotional content and a prominent path into Coke Studios.
+2. Register an account. Original registration collected details such as date of birth, ZIP code and gender; today's recreation shouldn't automatically copy that historical data collection.
+3. Create a V-ego. Preview the character, change visible appearance choices and assign its identity.
+4. Enter Coke Studios. Pass through loading and safety notices into the room-selection interface.
+5. Choose a public venue or personal studio. The navigator shows rooms and their occupancy before joining.
+6. Explore and socialize. Walk by clicking open floor tiles; chat, sit, dance, interact with objects and meet players.
+7. Create a song. Visit the Music Mixer through the website or personal studio.
+8. Burn a CD and perform. Play that song to an audience, gather ratings and earn decibels.
+9. Purchase furniture and customize a studio. Spend earnings, host people, trade, and repeat.
+
+The registration requirements come from contemporary reporting, while the entrance, movement and social processes are corroborated by a developer's own surviving documentation.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://www.internetnews.com\&sz=32)
+
+Internet News
+
++1
+
+
+
+## 3. The game screen: layout and every major control
+
+[Remembering Coke Studios: What Was Coke Studios/Coke Music?](https://images.openai.com/static-rsc-4/7wBtPUPqxCL9UpCO13p1tnqQyJTLUX69G5lQ2a82WYnsXSoaV5Kkh9LyLil8977MJTZTnD_22l6q4L_M70jCcUsUqszmbNIcvLqbcWZWIIcYmDBoY8DuWfy2Vb7_Wk0aOLOCMsC2oC-2caaZsl8F65NpYWIpMMi3i1JzniUzsVk?purpose=inline)
+
+[rememberingcokestudios.blogspot.com](https://rememberingcokestudios.blogspot.com/2011/11/what-was-coke-studioscoke-music.html?utm_source=chatgpt.com)
+
+### Persistent screen layout
+
+The virtual-world screen had three visual zones:
+
+- Main playfield: Most of the screen, showing an isometric room with walls, floor, players, decorative scenery, seating, DJ equipment and clickable furnishings.
+- Bottom control bar: Chat entry, chat mode, room navigation, currency, inventory, shopping, audio, assistance and messaging.
+- Floating contextual windows: Popups for room navigation, player details, furniture actions, CD selection, messages, shopping, trades and alerts.
+
+At the bottom-right was a contextual information area referred to in preserved material as the infostand. It changed depending on whether the player selected a V-ego, furniture item or current performance.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### Control-by-control reconstruction specification
+
+| Control           | Original behavior                                                     |
+| ----------------- | --------------------------------------------------------------------- |
+| Speak / Shout     | Switch outgoing chat between nearby conversation and room-wide speech |
+| Chat input        | Enter a text message and send it as an avatar speech bubble           |
+| Navigator         | Browse and search rooms and V-egos, then travel or manage studios     |
+| Decibels / wallet | Display current currency balance                                      |
+| Backpack          | Open the player's inventory of furniture and CDs                      |
+| Catalogue         | Browse and purchase furniture and supplies                            |
+| Sound             | Toggle game sounds on or off, without a volume slider                 |
+| Help              | Open safety, instructions and assistance                              |
+| Messenger         | View friends, messages and friendship requests                        |
+| Infinite Jukebox  | Later addition associated with the music service                      |
+| Infostand         | Show selected avatar, item, song, performance or voting options       |
+
+Not all buttons existed simultaneously in every historical version. The messenger and Infinite Jukebox controls were later additions; early loading screens also displayed a reduced set of toolbar controls.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### Chat: unusually specific original behavior
+
+One of the most distinctive mechanics was that conversation had physical range.
+
+Speaking normally only allowed nearby players — roughly three to five floor tiles away — to read a complete message. Farther away, parts of the sentence became obscured. Outside the effective hearing area, the conversation couldn't be understood. Shouting made it readable across the room.
+
+Speech bubbles also displayed the sender's name and used coloring related to the avatar's clothing. During a performance, the performer's chat input changed to Sing, with messages broadcast to the entire room.
+
+The profanity filter replaced certain blocked words with blah. The world also supported player-controlled dancing and other avatar expressions through animation.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++2
+
+
+
+### Context-sensitive clicking
+
+| Player clicks                    | Expected reaction                                                       |
+| -------------------------------- | ----------------------------------------------------------------------- |
+| Empty walkable floor tile        | V-ego walks to that position, turning according to the travel direction |
+| Other V-ego                      | Select character and show identity/motto plus applicable social actions |
+| Seat                             | Walk toward and sit where interaction is allowed                        |
+| Coke dispenser                   | Obtain a virtual Coke if eligible                                       |
+| Music stage / player             | Access the music queue or CD playback interaction                       |
+| Mixer in own studio              | Open the CC-3001 Deluxe Music Mixer                                     |
+| Mixer in someone else's studio   | Owner-only restriction                                                  |
+| Teleporter                       | Activate the paired furniture travel interaction                        |
+| Interactive decorative furniture | Play its item-specific animation or action                              |
+| Own furniture                    | Show management actions such as movement, rotation or removal           |
+| Studio navigator entry           | Attempt to enter; show an alert if the room is full or unavailable      |
+
+The original developer documented avatar head-turning toward speakers, body orientation and tile navigation, not merely static sprites snapping between positions. That subtle responsiveness belongs in a faithful recreation.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://markblottner.com\&sz=32)
+
+markblottner.com
+
++2
+
+
+
+### Navigator window layout
+
+A faithful navigator requires:
+
+1. A header and tabs separating public venues from user-created studios and player searches.
+2. A scrollable list of room names, plus an occupancy indication.
+3. Destination-specific imagery, icons or promotional markers.
+4. A way to enter a room from its listing.
+5. A room search and V-ego search.
+6. Personal-studio controls for creating, renaming and deleting owned studios.
+7. Alerts for a full, closed, nonexistent or occupied room that cannot be deleted.
+
+The preservation archive includes screenshots of the actual navigator in its Public View, User Studios and V-ego search states, as well as multi-stage room deletion confirmations. See the [archived interface gallery](https://mycoke.fandom.com/wiki/Interface?utm_source=chatgpt.com) for those distinct screens.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
+
+
+## 4. Every original public room — Coke Music V1
+
+The original public-world map consisted of 12 named venues. These weren't connected as a walkable geographic landscape; players traveled between them through the room navigator.
+
+Each had its own visual composition, walking surface, seating, refreshment objects, performance position and music queue. Public rooms generally held up to 25 V-egos, and heavily used destinations could have duplicate instances, such as London I and London II.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+[Blottner: Portfolio](https://images.openai.com/static-rsc-4/NUzluBelelgJc4ZHZopc1dl72TRmOlgR7eGmUFrJApuVpLYc1DpnL_q5mLq97RyNqr3w0Z0LseL2WswQv0g6-IVFL1MioFd1O13q3PXGfkjy5HqYP-88lq47stx_c6Omt2umbIq1999_S-IDXF4CcDyxv_eSAKjeK9Ljlp2zNi8?purpose=inline)
+
+[\[COKESTUDIOS\] \[MyCoke\] Complete Files - Download | Page 2 | RaGEZONE - MMO Development Forums](https://images.openai.com/static-rsc-4/G3zNJimUB_uTG5IB8sCY4HLmvti2YsCT7Jn_4l6OgBh4RN-7r5YpWC-2s_RRwsqdvYfe7Lfhhk4Yf4CpGztueX4QtTFblhJGI7ZSQHC_PEm_1DTs_L1l5Xb16X1wBS1Wxxmt6N8WwM6lCMNBLXMKBqxm3hjir-Ailweg0RZ3eN8?purpose=inline)
+
+[Blottner: Portfolio](https://images.openai.com/static-rsc-4/3rW-aVEB3nbaDPQL2yUMlEw0XhIj1wnwHaNk2VGxlXbnWpnDCsQaUWaNE2bcl631YTrYXeXhenvYbPCzVXDC53QECS4ptCpRMTbz7VPPM79dx38BrL8WrCFuWmqlvrXgj6j8JNDuFXck4WYif8Rb__H7a3U7tavf09GjBM1YYFA?purpose=inline)
+
+10
+
+| Venue              | Visual environment and layout                                                                              | Important details                                                                                                                                |
+| ------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Alaska             | Snow-covered outdoor hot-springs retreat, pale walkways, icy landscape and party equipment                 | 12 queue positions, 12 seats, two Coke dispensers, DJ props, early bartender Dashiell; originally identified as Reykjavik in surviving materials |
+| Coca-Cola Red Room | Dedicated branded entertainment lounge with stage, red seating and a camera/monitor presentation           | American Idol-related performances, special audience voting and multiple historical room designs                                                 |
+| Goa                | Indian-inspired ornate dance venue with tables, chairs, a large stage and colored-glass stairwell entrance | 32 seating positions, 11-person performance queue, two Coke dispensers, early bartenders Chandu and Pratimares                                   |
+| London             | Compact indoor music club with DJ booth, stage, sound equipment and clustered seating                      | 15 seats, 11 queue positions, two dispensers; among the busiest destinations                                                                     |
+| Miami              | Waterfront marina party with palm trees, yachts, white deck furniture and tropical scenery                 | 20 seats, only four queue positions, three dispensers                                                                                            |
+| Mombasa            | Outdoor East African landscape with warm sunset scenery, foliage and nature-reserve atmosphere             | 11 seats, seven queue positions; unusually used a bicycle-style Coke cart                                                                        |
+| Moscow             | Balcony venue overlooking an urban Russian cityscape, with colored glass around the stage                  | 16 seats, 12 queue positions, two dispensers; Stanislav was an early bartender                                                                   |
+| New York           | Underground subway setting, urban concrete structures, train tracks and animated passing transit           | 24 seats, nine queue positions, vending machine                                                                                                  |
+| Rio de Janeiro     | Bright beach environment with ocean, animated water, umbrellas and plastic patio furniture                 | Eight seats, ten queue positions, three Coke cases                                                                                               |
+| Seattle            | Rooftop entertainment venue with skyline, large Coca-Cola sign, DJ equipment and speakers                  | 13 seats, 15 queue positions, five dispensers, promotional billboard                                                                             |
+| Sydney             | Comfortable residence overlooking the bay, blending domestic furniture with a performance area             | 19 seats, 12 queue positions, three dispensers; kitchen/living-room furnishings                                                                  |
+| Tokyo              | Colorful neon nightclub with glowing bear decorations, disco signage and a central dance environment       | Eight seats, ten queue positions, illuminated performance effects and early bartender positions                                                  |
+
+These queue and seating numbers describe the preserved room layouts, not separate server-capacity limits. The original-room archive contains named screenshots, item illustrations and room-specific walking-tile imagery for these destinations.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### How a public venue should function
+
+Entering a public venue placed the V-ego near its entrance on accessible floor tiles. The player then clicked through the room, avoiding occupied tiles and solid objects.
+
+For a typical venue, a reconstruction needs the following interaction states:
+
+- Arrival: Player enters, sees other V-egos and the room's stage, and can immediately move or chat.
+- Audience mode: Player sits or stands, listens to the current CD, converses, dances and gives votes when a performance is active.
+- Queue mode: Player approaches or joins the venue's designated lineup and waits for a chance to perform.
+- Performance mode: The current performer becomes the focus, with its song playing, associated furniture animating and voting available.
+- Refreshment mode: Player obtains virtual Coke from a bartender, crate, cart or vending machine, depending on the room and era.
+- Exit: Player opens the navigator and selects another destination.
+
+Important preservation detail: Rooms used different paths, furniture arrangements, stage positions and visual walkable tiles. Recreating all 12 from one generic square room with a different background image would lose much of what made them distinctive.
+
+### Special focus: the Coca-Cola Red Room
+
+[ANDY WALMSLEY - PRODUCTION DESIGNER](https://images.openai.com/static-rsc-4/4leSHC5GUY7gHq3hOVqP8bo_D1v6iTTDstZv6hc_XqUfe0RJu7uaKpcRAogA0NWYoSsqN_8fd3ZnYXyQkJaD4rPAWvduo8gotDenlo6_r8sWdvNTuxiujeXEtwL7p9hI8Xv4S60IGIBiXeEOdCrSIYYd2JAJghhM2DsjXyNFXd0?purpose=inline)
+
+[andywalmsley.com](https://www.andywalmsley.com/shows_genre.php?genre=15\&utm_source=chatgpt.com)
+
+The Red Room deserves its own room specification because of the performance focus and its changing promotional identity.
+
+Its original design featured Coca-Cola branding, grouped couches, a focal performance area, and a simulated live video monitor. The monitor could zoom or pan over V-egos, providing an extra presentation layer rather than simply displaying another fixed background.
+
+The later version was redesigned around American Idol, including a stronger stage/audience visual theme. It became particularly valuable to performers because a positive vote could award 10 decibels, compared with the ordinary five.
+
+For faithful reconstruction, the original and later Red Rooms should be separate historical room definitions. Don't merge their artwork and decorative elements.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++2
+
+
+
+## 5. Every additional Beta / V2 / promotional public room
+
+Coke Studios didn't stop at its original 12 destinations. Later releases added public locations that were either permanent-feeling extensions of the world or time-limited marketing venues.
+
+[Remembering Coke Studios: What Was Coke Studios/Coke Music?](https://images.openai.com/static-rsc-4/7wBtPUPqxCL9UpCO13p1tnqQyJTLUX69G5lQ2a82WYnsXSoaV5Kkh9LyLil8977MJTZTnD_22l6q4L_M70jCcUsUqszmbNIcvLqbcWZWIIcYmDBoY8DuWfy2Vb7_Wk0aOLOCMsC2oC-2caaZsl8F65NpYWIpMMi3i1JzniUzsVk?purpose=inline)
+
+[cokemusic.com pics](https://images.openai.com/static-rsc-4/Eg4q--0Vj3sIPISrE2D32mU9Dk4ZZBRNH3RrROCOILfGth1tLtfPLLr6wjnzWjcX5hoPQ1n_Tr993d8M-8K3F6qeY7kdNTYyNuZPX62Vddz9a3L-ifdhgo0ChaqLbGLebgAd9RFjW8WGphi3hXBnEYWm8U0NAQXa9P_I4aTP_mg?purpose=inline)
+
+[\[COKESTUDIOS\] \[MyCoke\] Complete Files - Download | Page 2 | RaGEZONE - MMO Development Forums](https://images.openai.com/static-rsc-4/G3zNJimUB_uTG5IB8sCY4HLmvti2YsCT7Jn_4l6OgBh4RN-7r5YpWC-2s_RRwsqdvYfe7Lfhhk4Yf4CpGztueX4QtTFblhJGI7ZSQHC_PEm_1DTs_L1l5Xb16X1wBS1Wxxmt6N8WwM6lCMNBLXMKBqxm3hjir-Ailweg0RZ3eN8?purpose=inline)
+
+9
+
+| Venue                      | Appearance and gameplay identity                                                                                                                                                    |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Central Park               | Outdoor city park with greenery, picnic baskets, benches, drink stand and a squirrel animation. Purple DJ turntable, eight seats.                                                   |
+| San Francisco              | Interior nightclub/theater setting, disco ball and repurposed furniture from other venues. Twenty-seven seats, two dispensers, special lighting effect.                             |
+| Mexico                     | Warm patio retreat with animated fountain, plants, fire features, indigenous-inspired decorative artwork and 16 seats.                                                              |
+| New Orleans                | Mardi Gras-inspired street intersection with streetcar, balconies, beads, confetti and music setup. Only two fixed seating positions.                                               |
+| Neptune                    | Underwater world inside a domed structure, with ocean scenery, themed benches and a leaky-dome atmosphere. Eleven seats.                                                            |
+| Atlantis                   | A variation of Neptune associated with a special My Coke Rewards submarine entrance and different entry/presentation details.                                                       |
+| Club Cherry                | Pink Coca-Cola Cherry Zero club with themed couches, lights and waterfall elements. Eighteen seats and an unusually styled navigator icon.                                          |
+| Ray's Rooftop Party        | Rooftop scene associated with the 2007 Coke Side of Life commercial, featuring a pink car, helicopter, rats, Coke cart and fire-escape features.                                    |
+| mycoke arena               | NCAA-themed basketball venue introduced in March 2007, with court graphics, seating, DJ stand, a 35-second shot clock and Sports Challenge-related messaging.                       |
+| American Idol Casting Call | Competition venue with a judges' area, performance stage, promotional boards and camera monitor. Blue, Red and Gold versions were used as successive competition tiers.             |
+| Coming Soon Theatre        | Movie-promotional cinema/lobby area featuring film advertising and special dispensers, including a Batman Begins poster giveaway.                                                   |
+| Wal-Mart                   | Promotional public room associated with Wal-Mart Music Downloads, containing Coca-Cola product boxes and retailer-specific presentation. Its surviving design record is incomplete. |
+| Whale Wash public room     | Special Shark Tale underwater world where players appeared in themed aquatic forms and could enter the Whale Wash activity.                                                         |
+
+The original promotional rooms should be reproduced as distinct environments, including unique entry mechanisms where documented. The archive also acknowledges that some promotional room variants remain lost media.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++2
+
+
+
+### How the themed spaces actually changed the experience
+
+They weren't all just cosmetic:
+
+- Red Room: Music voting had an enhanced decibel reward.
+- American Idol: Special competition charts, judges' stage and prize-related rooms created a recognizable event hierarchy.
+- Shark Tale: Avatar appearances and the private-studio aesthetic could transform across a special promotional experience.
+- Theatre: Clicking a promotional stand could deliver limited giveaway furniture.
+- Atlantis: A particular reward-linked transportation object provided an alternate path into the environment.
+- mycoke arena: The setting and signage tied into the website's sports activity.
+- Ray's Rooftop: The venue recreated moments and imagery from a contemporary Coca-Cola advertisement.
+
+For ordinary public rooms, the performance, conversation and refreshment loop remained recognizable. Promotional activities layered special access, collectibles or prizes onto that foundation.
+
+## 6. Player-owned studios — the housing system
+
+[Blottner: Portfolio](https://images.openai.com/static-rsc-4/thT8vkN7tPxQcMLJW-MYXgwBSGiuWlBYqlqbZlbahLOLZA9ufPf34YH_iqk41AdJNZUZZDdUTIxud7Gh6pbpSHWnrBNY7xnrpiNVrbRmPoZXTa21Qjf3U8oKq0aUqAG8lXy2Bg64pFCx71mnhE-Sjqd6JT9pTqivd4WFF7-nCpQ?purpose=inline)
+
+[markblottner.com](https://markblottner.com/cokestudios.html?utm_source=chatgpt.com)
+
+Private studios were the real long-term home for players. The original map of a user's holdings was not one endless customizable island: it was a collection of individual rooms, each with a fixed floor plan and player-defined contents.
+
+### Every standard studio template
+
+| Template | Walkable floor tiles | Room role                |
+| -------- | -------------------- | ------------------------ |
+| Studio 1 | 36                   | Small, compact studio    |
+| Studio 2 | 72                   | Larger studio            |
+| Studio 3 | 60                   | Mid-sized studio         |
+| Studio 4 | 84                   | Large template variation |
+| Studio 5 | 84                   | Large template variation |
+| Studio 6 | 84                   | Large template variation |
+| Studio 7 | 84                   | Large template variation |
+
+The four underlying floor-size models were 36, 60, 72 and 84 tiles; the seven layouts should not be treated as seven different total capacities. The archive preserves imagery for the seven studio designs and their underlying models.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
+
+
+### Create-a-studio flow
+
+A player opened the navigator's private-studio section and used its creation interface. The room received a player-defined name and one of the available floor-plan layouts, with decorative location/background choices where applicable.
+
+The newly created studio included a permanent CC-3001 Deluxe Mixer, usable by the room owner. Players could have up to six studios in V1, increased to ten in V2.
+
+Creating rooms, editing their information and deleting them were all handled through navigator-based popup flows. A studio containing visitors could not simply be deleted; confirmation screens warned the owner before irreversible removal.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++2
+
+
+
+### Studio window scenery
+
+The location choice changed the outside view through the room's window, rather than placing the studio at a gameplay-significant coordinate.
+
+The documented choices were Miami, Mombasa, New York, London, Seattle, Sydney, Tokyo and Rio. The views were scenic decorations, not doors to those cities.
+
+Players could also cover windows using posters, curtains or alternate-view furniture.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
+
+
+### Wallpaper and floor customization
+
+The catalogue sold alternate wall and floor appearances. These were applied to the individual studio and were not normal movable inventory furniture.
+
+If a player deleted the studio, the flooring and wallpaper were lost along with that room. Movable furniture was returned to the backpack. The later catalogue documents 500 decibels for wallpaper or flooring, although that historical price is flagged as needing further corroboration by the archive.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### Furniture placement and room editing
+
+The owner's in-room furniture interaction loop was:
+
+1. Open the backpack and select a furniture object.
+2. Choose an appropriate location on the room floor or wall.
+3. Place the object if the position is allowed.
+4. Select the placed item to reposition, rotate, retrieve or delete it.
+5. Interact with the object according to its type.
+6. Repeat to create the desired room arrangement.
+
+Objects could generally rotate into several supported directions. Certain items stacked, acted as seats, displayed lights, occupied wall positions, dispensed refreshments or linked to external information. An ordinary studio supported 100 placed furniture items plus its fixed Mixer. V2 improved placement control and the layering of wall decorations and rugs.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++2
+
+
+
+### Special private rooms
+
+| Special room                      | How it differed                                                                                              |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Wayne Enterprises / Batman studio | Promotional room appearance, Coke machine and interactive toolbox; awarded through qualifying campaign codes |
+| American Idol Personal Suite      | Special studio awarded during Idol-related competition activity                                              |
+| American Idol Star Suite          | Distinct high-rise/penthouse-style room with stage-like visual enhancements                                  |
+| Featured studios                  | Selected personal studios highlighted in the navigator, with special title/star treatments                   |
+
+These were rewards and exceptions, not ordinary eighth, ninth and tenth floor templates.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
+
+
+### How players actually used studios
+
+A reconstruction must preserve the fact that room decoration supported player-created gameplay. The game didn't need an official activity script for every room.
+
+Players organized furniture into Free Greens performance circles, rare-item showrooms, stores, storage rooms, pretend restaurants, wedding venues, chat clubs and homegrown minigames such as mazes, Falling Furni and Red Light, Green Light.
+
+Ownership therefore involved more than purchasing furniture. Hosts could invite or attract visitors, control presentation, manage access by removing disruptive people, decide who performed next and establish their own social rules.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
+
+
+## 7. The Music Mixer — the heart of the game
+
+[The Rise and Fall of 'Coke Music' | Gamers](https://images.openai.com/static-rsc-4/mxNKey9W_IQDXyGQqu4tm6q9yvsQMgSAF97yQsrdh35MG9THFeo0hjlFY36WGjKnShK7uuwEAJ6VWjcNUdkLDC9MvCf5tj6ZZ-aknHNRXSyow7jrSZIxhknjIh1JjkwWiLLaGlk-c_TDeWAWloGgFRvFFGFGu8PcwN7IS5lPP-M?purpose=inline)
+
+[vocal.media](https://vocal.media/gamers/the-rise-and-fall-of-coke-music?utm_source=chatgpt.com)
+
+This was the defining feature that made Coke Music meaningfully different from a conventional avatar chat world.
+
+### The CC-3001 Deluxe
+
+The Music Mixer was a browser-accessible composition tool, also launched from the special Mixer furniture already installed inside each owned studio. Its purpose was not full-scale audio production: it let anyone assemble a recognizable musical arrangement without knowing music theory.
+
+It used 114 documented sound samples, mostly two- or four-second loops, arranged into a musical timeline. One known sample lasted eight seconds. The sound library was organized around Country, Dance, Hip-Hop, Latin, Miscellaneous, Pop and Rock.
+
+Loops were designed to snap into rhythmic positions and play together in synchronization. Sounds included guitar, bass, drums, percussion, horns, strings, keyboards, scratching and vocal phrases.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
+
+
+### Mixer screens and controls to recreate
+
+| Component                        | Purpose                                               |
+| -------------------------------- | ----------------------------------------------------- |
+| Mixer entry / instruction screen | Introduce music creation and the available controls   |
+| Main composition workspace       | Display arranged loops as part of a track             |
+| Genre selection                  | Switch between sound banks                            |
+| Sample browser                   | Offer named sound clips for selection                 |
+| Arrangement area                 | Place musical segments in sequence                    |
+| Playback                         | Listen to the current arrangement                     |
+| Edit / remove action             | Change unwanted material                              |
+| Save song                        | Store the completed musical arrangement under a title |
+| Saved-song selection             | Browse previously made compositions                   |
+| CD-burning action                | Create a playable copy of the song in inventory       |
+| Completion / return prompt       | Resume the website or the game after finishing        |
+
+The broad functions are documented; exact historical spacing, every mixer button label and every editing gesture still need screenshot-by-screenshot transcription. The [Mixer archive](https://mycoke.fandom.com/wiki/Music_Mixer?utm_source=chatgpt.com) includes V1 and later interface images, instructions, the CD-burning animation and the sample library.
+
+### Step-by-step music creation
+
+1. Open the Mixer, either from the website or by clicking the built-in studio Mixer as its owner.
+2. Choose a musical style and browse short audio loops.
+3. Place loops into rhythmic positions in the arrangement.
+4. Build the song by combining beats, melody, bass, instrumental phrases and effects.
+5. Play back the arrangement and revise it until satisfied.
+6. Save the song under a player-defined title.
+7. Burn the track to a blank CD, creating a physical-style inventory item associated with the song's author and title.
+8. Return to Coke Studios and use that CD at a compatible music player or stage.
+
+The CD was not just decoration: it was the transferable object that connected music creation to performances and trading.
+
+### Blank CDs and saved music
+
+New accounts received 10 blank CDs. Additional packs of 10 were sold in the catalogue, with archived pricing showing 125 dB in V1 and 50 dB in V2.
+
+Multiple physical CD copies of a composition were possible. Songs made by someone else could be traded and subsequently performed. The original creator still received credit for votes toward the Top 40 ranking.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
+
+
+### Version-specific animations
+
+V1 V-egos wore headphones while using the Mixer, and the machine visually activated. Performers also held microphones during performances. These accessories were removed in the subsequent version, even though the song creation and stage activity continued.
+
+A remake trying to capture the original nostalgia should preserve these small audiovisual cues in its V1 mode.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+## 8. Performing music, voting and the Top 40
+
+[Blottner: Portfolio](https://images.openai.com/static-rsc-4/3rW-aVEB3nbaDPQL2yUMlEw0XhIj1wnwHaNk2VGxlXbnWpnDCsQaUWaNE2bcl631YTrYXeXhenvYbPCzVXDC53QECS4ptCpRMTbz7VPPM79dx38BrL8WrCFuWmqlvrXgj6j8JNDuFXck4WYif8Rb__H7a3U7tavf09GjBM1YYFA?purpose=inline)
+
+[markblottner.com](https://markblottner.com/cokestudios.html?utm_source=chatgpt.com)
+
+### Performance interaction flow
+
+| Stage             | Performer sees                                           | Audience sees                                          |
+| ----------------- | -------------------------------------------------------- | ------------------------------------------------------ |
+| Before performing | A queue or compatible music player                       | Existing song or idle performance area                 |
+| Turn begins       | CD/song selection and performer status                   | Current performer and song information                 |
+| Song starts       | Character enters performance state; chat changes to Sing | Music playback, performer focus and voting opportunity |
+| Voting period     | Performance proceeds while ratings arrive                | Thumbs-up and thumbs-down options                      |
+| End of song       | Performance results and earned decibels                  | Crowd reaction and end-of-song response                |
+| Next turn         | Return to audience or queue state                        | Next available performer/song                          |
+
+The audience could indicate approval using a green thumbs-up or disapproval using a red thumbs-down. Normal positive votes earned the performer five decibels each; some promotional venues awarded more.
+
+Performance-ending sounds also changed according to the overall audience reaction. Archived sound groups include different levels of applause and negative reactions, rather than one universal result sound.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
+
+
+### A subtle but essential rule: performer versus creator
+
+A player could perform a CD created by somebody else.
+
+That produced two separate results:
+
+- Performer: Received decibels from positive reactions to the performance.
+- Song creator: Received the corresponding chart credit for the composition.
+
+Without that distinction, CD trading would lose one of its original economic and social motivations.
+
+### The Top 40 pages
+
+The website included separate chart views for:
+
+| Page                        | Purpose                                                        |
+| --------------------------- | -------------------------------------------------------------- |
+| Daily Top 40                | Short-term competition and discovery                           |
+| Weekly Top 40               | Weekly rankings and prestigious Gold Record award              |
+| Monthly Top 40              | Longer-term ranking and Platinum Record award                  |
+| American Idol special chart | Promotional competition associated with Idol-themed activities |
+
+The chart furniture available for personal studios also served as a link into the relevant rankings. In early versions, the wall chart could represent a specific week. The promotional chart was a variation of the same underlying concept.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
+
+
+### Gold and Platinum Records
+
+These weren't ordinary shop items. They were award furniture given for chart performance.
+
+The records displayed meaningful player and song information, making them recognizable trophies that people could put on walls, show visitors and potentially trade.
+
+That made the music rankings part of the furniture economy: successful creation translated into a rare, visible collectible.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+## 9. Decibels — earning, spending and rewards
+
+The currency was called decibels, frequently abbreviated dB.
+
+| Earning source           | Original interaction                                      |
+| ------------------------ | --------------------------------------------------------- |
+| Music performances       | Receive positive votes while playing a CD                 |
+| Virtual Coke             | Obtain a drink and receive a small decibel reward         |
+| V-ego San                | Win multiplayer matches and pursue consecutive-win prizes |
+| Coaster                  | Compete in the team-based memory game                     |
+| Pop Quiz                 | Participate in trivia/creative competitions               |
+| Uncover the Music        | Match sound tiles and win decibels                        |
+| Recycler / Whale Wash    | Compete on scores and prize leaderboards                  |
+| Under-the-cap promotions | Redeem eligible real-world product codes                  |
+| Surveys and campaigns    | Complete sponsored participation opportunities            |
+
+Spending was centered around the in-game furniture catalogue. Decibels were not a direct tradeable currency between players, an important distinction from modern online marketplaces.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://en.wikipedia.org\&sz=32)
+
+en.wikipedia.org
+
++2
+
+
+
+### Virtual Coke interaction
+
+Coke could be obtained from a bartender in earlier venues, or through clicking appropriate vending machines, crates, carts and furniture.
+
+The player's avatar visibly consumed the drink, and the action rewarded currency up to a daily limit. In V2, the documented reward was 10 dB per Coke with a maximum of 10 rewarded drinks per day.
+
+A room's Coke source could be part of its theme, which explains why Mombasa had a distinctive bicycle cart and other rooms had different cases and vending designs.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### Economy design rules worth preserving
+
+The original progression wasn't a quest-based RPG with character levels. Its major incentives were social status, studio ownership, rare furniture, music reputation and collections.
+
+Players needed activities that generated currency, objects worth saving for, and occasions to show those objects to others. Prices differed substantially between V1 and V2; a reconstruction should identify its target version before establishing shop prices.
+
+## 10. The entire furniture catalogue, page by page
+
+[Blottner: Portfolio](https://images.openai.com/static-rsc-4/owZ715Y7aolvfEB6bZVXN-nXZfIqWeIxnLDP99luVZIU836KpDj26TYFgym9mIHimYR6nJKHaMmz_-zjYqVRxLeNckLDE20b2ZzTmd3MkyY-uqLPxFFaptO4vQDRbXP5XVCJfuCJFLYTt8m59akL1CfLuLx6LfDT5c3scKQvPM8?purpose=inline)
+
+[markblottner.com](https://markblottner.com/cokestudios.html?utm_source=chatgpt.com)
+
+The catalogue was itself a recognizable interface: a themed popup styled like an illustrated product brochure, with page navigation, furniture thumbnails, descriptions, prices and purchase actions.
+
+In V1, selected objects had an item-preview presentation and category headings in uppercase. V2 removed the preview, generally reduced prices, changed naming conventions and expanded the catalogue. The archive documents 15 pages in its later form, including a cover page.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
+
+
+### Full catalogue page index
+
+| Page | Section                      | What appeared there                                                                                        |
+| ---- | ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| 1    | Catalogue cover              | Introduction, illustrated furniture showcase, page navigation                                              |
+| 2    | Walls and Floors             | Wallpaper variations and floor coverings                                                                   |
+| 3    | Premiere                     | Modern chairs, stools, sofa, tables, stereo, fridge and lamp                                               |
+| 4    | 5001 Collection              | Coordinated upholstered chairs, couch, tables, sound system, fridge and cube light                         |
+| 5    | Studio Essentials            | Sound equipment, sampler, speakers, microphone, cables, television and blank CDs                           |
+| 6    | Necessities                  | Acoustic materials, partitions, plant, flowers, rugs and corner pieces                                     |
+| 7    | Separators                   | Different-colored dividers used to design and organize room spaces                                         |
+| 8    | Coke Collection              | Branded vending machine, leather chair, cooler, polar bear, CD player, lamp, neon sign and red couch       |
+| 9    | For Walls                    | Guitar, bass, trumpet, acoustic panels, keyboard, decorative posters and Top 40 chart                      |
+| 10   | Necessities expansion        | Aquarium, dance floor, futuristic seating, patterned couches, table and Batman poster                      |
+| 11   | Necessities expansion        | Paired teleporters, storage box, Coke machine, jukebox, diner furniture, disco lighting and holiday poster |
+| 12   | Dorm furnishings             | Used-style refrigerator, boombox, bookshelf, light, small furniture, couch and surfboard                   |
+| 13   | Domestic/decorative          | Television, lawn chair, traffic lights, spiderweb, city/beach views and curtains                           |
+| 14   | Household                    | Refrigerator, oven, sink, kitchen cabinet, bookshelf, fireplace, entertainment unit and winter view        |
+| 15   | Games and interactive pieces | Heart poster, Infinite Jukebox and Randomatic number/letter generators and display pieces                  |
+
+This is the preserved later-era catalogue order. It should not be treated as the exact 2002 launch catalogue: pages and items were added over time, and some final-page price details were not recoverable from surviving screenshots.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
+
+
+### Price references that are historically useful
+
+| Item or purchase    | Archived later-era price |
+| ------------------- | ------------------------ |
+| Ten blank CDs       | 50 dB                    |
+| Tulips              | 75 dB                    |
+| Colored separator   | 225 dB                   |
+| Potted plant        | 300 dB                   |
+| Premiere sofa       | 625 dB                   |
+| Aquarium            | 1,000 dB                 |
+| Paired teleporters  | 1,500 dB                 |
+| Coca-Cola Neon Sign | 2,000 dB                 |
+| Coca-Cola Red Couch | 2,500 dB                 |
+| Maximum Disco Fever | 2,500 dB                 |
+
+Notably, early furniture prices were sometimes substantially higher. The red Coke Couch appears in V1 materials at 5,000 dB. Treat each era as a separate price list, not as a single timeless catalogue.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### Object behavior inventory
+
+A furniture catalogue reconstruction needs to preserve object behavior, not just the graphic:
+
+| Object class                         | Interaction                                                        |
+| ------------------------------------ | ------------------------------------------------------------------ |
+| Seats and sofas                      | Sit in the selected position                                       |
+| Tables, dividers and decorations     | Position, rotate, arrange, sometimes stack                         |
+| Rugs and floor objects               | Place on the floor, with ordering relative to furniture            |
+| Wall items                           | Attach to walls and adjust their positions                         |
+| Lighting and disco objects           | Visual changes or animated states                                  |
+| Coca-Cola refrigerators and machines | Where supported, dispense virtual Coke                             |
+| Music-playing objects                | Select a CD and play a composition                                 |
+| Mixer                                | Open music creation for the studio owner                           |
+| Teleporters                          | Transport the player through paired objects                        |
+| Top 40 poster                        | Open the music rankings                                            |
+| Randomatic items                     | Generate letters/numbers for player-made games                     |
+| Promotional furniture                | Celebrate special events, sometimes with unique interaction states |
+| Trophy and rare items                | Display collectible status, competition history or exclusivity     |
+
+The catalogue archive and individual furniture pages are important because many objects had several rotation states, animations or context actions. Some objects looked interactive without actually dispensing Coke; for instance, certain public-room branded machines were purely decorative.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++2
+
+
+
+## 11. Backpack and trading
+
+### The Backpack window
+
+The inventory used a distinctive backpack-shaped popup. It could be opened from the toolbar and expanded to reveal a grid of items.
+
+It stored unplaced furniture, blank CDs and burned music CDs. Hovering over a CD revealed the associated creator and song title.
+
+In V1 the inventory presentation effectively showed a single group of up to 25 items. V2 added multiple pages and sorted objects by acquisition date, so newly purchased or traded items appeared first. This was a significant usability change, not merely different artwork.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### Trading interaction
+
+Players could exchange furniture and CDs. Trading was initiated through an interaction with another V-ego, with the trade interface displaying the items being offered by both players.
+
+A historically accurate trade flow should cover:
+
+1. Select a player and request a trade.
+2. The other player accepts or rejects the request.
+3. Both sides view their available tradeable items.
+4. Players place their offers in the trade area.
+5. Both parties review the exchange.
+6. Both agree to finalize, or either party cancels.
+7. Exchanged items move to the recipients' backpacks.
+
+Secondary historical accounts describe a six-item-per-side trade limit, which contributed to scams when people attempted larger exchanges through multiple separate trades. That maximum is worth preserving as a historical setting, but the exact original confirmation timing and interface wording need additional visual verification.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://coca-cola.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### Things players couldn't do
+
+- Transfer decibels directly through the trade system.
+- Trade the flooring or wallpaper purchased for a room.
+- Recover a refund simply by deleting unwanted furniture.
+- Retrieve another player's belongings as the room owner.
+
+The ordinary item economy depended on furniture and CDs being tangible possessions rather than entries in a universal currency exchange.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+## 12. Every associated minigame
+
+This is another major area where modern recollections sometimes simplify Coke Music too much. The website games were not tiny side activities. They provided alternate ways to play, socialize, earn decibels and obtain collectible furniture.
+
+### V-ego San — sumo-style competitive fighting
+
+[cokemusic.com pics](https://images.openai.com/static-rsc-4/Eg4q--0Vj3sIPISrE2D32mU9Dk4ZZBRNH3RrROCOILfGth1tLtfPLLr6wjnzWjcX5hoPQ1n_Tr993d8M-8K3F6qeY7kdNTYyNuZPX62Vddz9a3L-ifdhgo0ChaqLbGLebgAd9RFjW8WGphi3hXBnEYWm8U0NAQXa9P_I4aTP_mg?purpose=inline)
+
+[darkc2003.tripod.com](https://darkc2003.tripod.com/id5.html?utm_source=chatgpt.com)
+
+Structure: An illustrated sumo arena featuring player V-egos as wrestlers, a multiplayer matchmaking/queue system, an opponent display, move selection and a round result.
+
+Its gameplay was built around simultaneous choices and countering an opponent, in the spirit of rock-paper-scissors.
+
+The documented five moves were Head Hit, Body Blaster, Overhead Toss, Flying Kick and Flying Punch.
+
+A player selected a move within a limited countdown, the match resolved the moves, and the winner remained to face another challenger.
+
+The reward structure extended beyond ordinary decibels:
+
+| Consecutive wins | Prize              |
+| ---------------- | ------------------ |
+| 3                | Tatami Mat         |
+| 5                | Rice Paper Divider |
+| 7                | Gong               |
+
+This created some of the game's most recognizable competitive furniture prizes. Later players valued those items for their rarity and trading potential.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### Coaster — cooperative competitive memory game
+
+[\[COKESTUDIOS\] \[MyCoke\] Complete Files - Download | Page 2 | RaGEZONE - MMO Development Forums](https://images.openai.com/static-rsc-4/wGCKae1730hUS2_PfY_o8eUUTD6x6nWaZqux9Rc9gXdf-eNvJW44HLRgonvVX6zKXclCrY2AIrd5S19vYCWCr0K6R09U3GQ_tKUzjd9kX09ApoHPJP8Wl76FdxEX0RFdRMY5zjYhm3QTwZIg0nA7fSd_8CsueTg81qKx-HYj-GI?purpose=inline)
+
+[forum.ragezone.com](https://forum.ragezone.com/threads/cokestudios-mycoke-complete-files-download.1067295/page-2?utm_source=chatgpt.com)
+
+Structure: Two teams competing to move their roller coaster up a track faster than the other team.
+
+Players were assigned to opposing colored teams, with up to three participants per side in documented versions.
+
+The system displayed a color/lever sequence. Players needed to memorize it and reproduce it by choosing the matching controls in order.
+
+Each successful sequence advanced the team's coaster. Incorrect inputs slowed progress. The first team to reach the objective won and could receive decibels.
+
+Important screen states include the game lobby, team assignment, instruction display, colored lever panel, round countdown, moving coaster, failure feedback and winning sequence.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### Pop Quiz — trivia, creativity and voting
+
+This game changed meaningfully across the game's history.
+
+Original Pop Quiz, released in October 2002, supported five-player matches. It combined pop-culture trivia with subjective and creative competitions. Players could answer questions, participate in music recognition or visual-reveal challenges, and compete in activities where other players chose their favorite submission.
+
+One especially distinctive activity was a rap-completion competition: participants finished a rhyme and other players voted on the strongest response.
+
+MyCoke Sports Challenge, its later replacement, focused on sports questions. Three to five players competed over five increasingly valuable rounds. Correct answers earned points, wrong answers lost points, and the player with the best total won.
+
+Those should be treated as separate historical game modes with different visual interfaces.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### Uncover the Music — musical memory matching
+
+[\[Coke Studios\] Rebuilding Coke Studios / Coke Music (CSProject) | RaGEZONE - MMO Development Forums](https://images.openai.com/static-rsc-4/81tAPkdBz0eF4hGsnrkBPW2_MKrABHQ6Kjr0fKm0teSAbW3aOGFQir3Zb3FRQB5Ph_EtixPEaX04NUPyH23kjvKN5hP9BT_1dgbMeAADvqDFwaeHU49vpYqqNSsST9clHZyFzN0Fr91bKvdcYw3Xncc_2H4l290xN8K_wwxFmck?purpose=inline)
+
+[forum.ragezone.com](https://forum.ragezone.com/threads/coke-studios-rebuilding-coke-studios-coke-music-csproject.1075519/?utm_source=chatgpt.com)
+
+Structure: A temple/jungle-style competitive tile-matching game.
+
+A group of three to five players viewed a covered board of 24 tiles, commonly arranged in four rows of six.
+
+Players took turns revealing two tiles. Matching was based on hearing the same musical sound, not just remembering an image.
+
+The board included 11 ordinary pairs and two special tiles, such as a wild/matching tile and a turn-ending tile.
+
+Matching sounds awarded points or decibels and allowed progress through the board. The player with the strongest result received a larger reward; ties could split winnings.
+
+A reconstruction needs an instruction screen, multiplayer lobby, randomized covered board, turn indicator, current score, tile-flip animations, sound previews and end-of-game results.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### Whale Wash Builder and Whale Wash — Shark Tale promotion
+
+The Shark Tale tie-in introduced two related activities:
+
+- Whale Wash Builder, an earlier promotional game.
+- Whale Wash, a score-focused activity associated with the special underwater world.
+
+Whale Wash connected in-game participation to daily prize distribution. An archived official FAQ says the top 25 daily scores received furniture rewards, calculated at 9 p.m. Eastern time, with reward tiers rotating across promotional periods.
+
+Prizes included the Diving Suit, Shark Portal, Lighthouse Aquarium, Treasure Chest and Sea Sponge Barrier.
+
+This system depended on daily scores, leaderboard position and campaign-specific rewards, rather than only giving immediate currency for each match.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### Recycler / Furni Factory — timed obstacle game
+
+Recycler reused the broad style of the Whale Wash gameplay in a factory setting.
+
+The player carried furniture or similar objects through a course of moving obstacles. Colliding with obstacles caused the player to lose what they were carrying, forcing another attempt.
+
+The goal was to deliver objects successfully, accumulate a higher score before time expired and compete on leaderboards.
+
+The factory theme supported special prizes such as industrial or mechanical furniture.
+
+Key screens: game instructions, start countdown, obstacle course, carried object, loss state, delivery/score area, timer, final score and prize leaderboard.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://en.wikipedia.org\&sz=32)
+
+en.wikipedia.org
+
++1
+
+
+
+### Minigame screen inventory
+
+| Screen                   | V-ego San          | Coaster           | Pop Quiz          | Uncover    | Whale Wash / Recycler |
+| ------------------------ | ------------------ | ----------------- | ----------------- | ---------- | --------------------- |
+| Promotional entry/tile   | Yes                | Yes               | Yes               | Yes        | Yes                   |
+| How-to-play instructions | Yes                | Yes               | Yes               | Yes        | Yes                   |
+| Player lobby             | Yes                | Yes               | Yes               | Yes        | May differ            |
+| Match or start countdown | Yes                | Yes               | Yes               | Yes        | Yes                   |
+| Gameplay interface       | Move selection     | Team memory input | Questions/answers | Tile board | Timed obstacle course |
+| Score/results            | Win streak         | Team result       | Points            | Matches    | Total score           |
+| Reward feedback          | DB and rare prizes | DB                | DB                | DB         | Leaderboard/furni     |
+| Return/replay            | Yes                | Yes               | Yes               | Yes        | Yes                   |
+
+The details of historic game menus can be cross-checked against [CokeHistory's preserved website and minigame screenshots](https://mycoke.fandom.com/wiki/CokeHistory?utm_source=chatgpt.com) and [the ThyElite archive](https://mycoke.fandom.com/wiki/ThyElite?utm_source=chatgpt.com).
+
+## 13. V-egos — the avatar creation and identity system
+
+The player's character was called a V-ego, short for virtual ego.
+
+The avatar was a compact, stylized human character designed to be readable at small isometric sizes.
+
+### Character creation
+
+The website supported choosing or modifying visible characteristics including:
+
+- Skin color and facial appearance.
+- Hair style and hair color.
+- Shirts or tops and their colors.
+- Other clothing components and appearance variations.
+- A short mission/motto displayed with the V-ego's information.
+
+The character was represented in the actual world with directional body poses and contextual animations rather than a single standing image.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
+
+
+### Character movement and states
+
+| State                       | Presentation                                         |
+| --------------------------- | ---------------------------------------------------- |
+| Idle                        | Standing, facing a supported direction               |
+| Walking                     | Animated movement between tiles                      |
+| Talking                     | Chat bubble and possible head-facing response        |
+| Shouting                    | Room-wide bubble with different emphasis             |
+| Sitting                     | Seated on compatible furniture                       |
+| Dancing                     | A visible dance animation                            |
+| Drinking                    | Holds and consumes virtual Coke                      |
+| Mixing music                | V1 headphones and Mixer animation                    |
+| Performing                  | Song-playing state, microphone in V1, Sing chat mode |
+| Using interactive furniture | Object-specific interaction                          |
+| Inactivity                  | Idle/sleep presentation where supported              |
+
+The developer's surviving diagrams are particularly valuable here: they establish that character head orientation could change in response to nearby speaking, while the body rotated in response to movement and selected positions.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://markblottner.com\&sz=32)
+
+markblottner.com
+
++1
+
+
+
+### Important distinction: unreleased expressions
+
+Recovered assets include face-expression references such as smile, anger, sadness and surprise. However, the fan archive identifies these as not implemented in the final original game.
+
+These should be catalogued as unreleased material rather than presented as an original player-accessible expression menu.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
+
+
+## 14. Friends, communication, social controls and moderation
+
+### Messenger
+
+The in-game messenger allowed a player to communicate with contacts without relying exclusively on public speech bubbles.
+
+The core states were:
+
+| Screen/state           | Function                                                |
+| ---------------------- | ------------------------------------------------------- |
+| Main messenger         | Access conversations and contacts                       |
+| Friends list           | Display established friends                             |
+| Search player          | Find another V-ego                                      |
+| Send friend request    | Ask another player to become friends                    |
+| Receive friend request | Accept or decline                                       |
+| Incoming message       | Show notification and conversation                      |
+| Website messenger      | Access related messaging functions outside Coke Studios |
+
+The in-game messenger icon could flash red to signal new activity. Because messages were distinct from nearby spatial chat, relationships could persist when users weren't standing together in the same room.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### Host controls
+
+Owners of private studios could use room controls to maintain their own space, including kicking unwanted visitors.
+
+This mattered because a room was not just a decoration save file — it was a social venue that someone hosted.
+
+### Player safety and moderation
+
+The help menu contained four major avenues: instructions, reporting technical problems, scam-prevention information and reporting harassment.
+
+The loading screen also displayed warnings about personal information, inappropriate conversations, meeting strangers offline and requesting moderator assistance.
+
+Developer testimony confirms the game used professional human moderation, and a product manager documented a team of 15 chat-monitoring staff.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++1
+
+
+
+### Alerts and error screens
+
+To reproduce the user-facing experience faithfully, include the normal non-gameplay screens as well:
+
+- Room full / unable to enter.
+- Connection dropped.
+- Coke Studios closed or outside operating hours.
+- Player banned or restricted.
+- Insufficient currency.
+- Furniture placement not permitted.
+- Inventory or room item limit reached.
+- Cannot delete occupied studio.
+- Confirmation before deleting a studio.
+- Owner-only Mixer access.
+- Friend request and message received.
+- Help report successfully submitted.
+
+Coke Studios historically operated within scheduled opening periods, and some associated website games remained usable while the world was unavailable. A remake could optionally preserve the archival schedule as a historical mode, but it needn't enforce it on modern users.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://habbo.fandom.com\&sz=32)
+
+Fandom
+
++2
+
+
+
+## 15. Promotional campaigns, rewards and limited-time content
+
+One reason Coke Music became so collectible was that its world changed with promotions.
+
+| Campaign                 | Features or collectibles to preserve                                                                              |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| Under the Cap            | Product code entry, dB rewards, prizes and limited furniture                                                      |
+| Vanilla Coke, 2004       | Gumball machine, bean bag, vending machine, wall shelf, themed furnishings                                        |
+| Shark Tale, 2004         | Separate underwater experience, aquatic avatars, special studio appearance, public room, Whale Wash and furniture |
+| Batman Begins, 2005      | Movie posters, special Wayne Enterprises studio, themed room objects and promotional codes                        |
+| American Idol, 2005–2007 | Red Room and casting-call events, chart competitions, themed furniture and prize suites                           |
+| FIFA, 2006               | Football/soccer-associated branded content and promotional rewards                                                |
+| Coca-Cola Cherry Zero    | Club Cherry venue and themed art                                                                                  |
+| Coke Side of Life, 2007  | Ray's Rooftop venue, campaign-themed visuals and collectible items                                                |
+| NCAA, 2007               | Basketball arena, themed objects, reward furniture and sports activities                                          |
+| My Coke Rewards          | Separate rewards service unlocking selected furniture and entries                                                 |
+
+The code-redemption programs had several channels. Some prizes came from under-cap bottle codes, others from special theatre cups, events, sports partnerships or reward-point systems.
+
+For example, the archived Vanilla Coke schedule rotated furniture prizes by month, rather than having those objects permanently available to every player in the regular catalogue.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++3
+
+
+
+### Shark Tale deserves special handling
+
+The Shark Tale promotion was unusually extensive. It operated through a separately accessible themed experience where V-egos could acquire aquatic physical features such as fins or tentacle-like legs.
+
+The room visuals, navigator appearance, furniture catalogue and personal studios also received a themed presentation. Afterward, qualifying possessions could carry over to the regular Coke Studios experience.
+
+This is better understood as a temporary version of the whole virtual world, not merely a Shark Tale poster pack.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
+
+
+## 16. The visual identity
+
+The art direction mattered almost as much as the individual features.
+
+[Blottner: Portfolio](https://images.openai.com/static-rsc-4/owZ715Y7aolvfEB6bZVXN-nXZfIqWeIxnLDP99luVZIU836KpDj26TYFgym9mIHimYR6nJKHaMmz_-zjYqVRxLeNckLDE20b2ZzTmd3MkyY-uqLPxFFaptO4vQDRbXP5XVCJfuCJFLYTt8m59akL1CfLuLx6LfDT5c3scKQvPM8?purpose=inline)
+
+[Coke Studios | Jeff Skop - UX Manager](https://images.openai.com/static-rsc-4/GVom_QT6V3m-xE2lc5n4U9TcDbbvrfktJ8xwXckvNH819tTUmdhSmq9Ilw3I97QOYrY2k98RVE2fSwHcG0jJ1vuE5P7oKVl8BwyF6gltQrNr2IJZjVj0m_Tc3H6HEa9dagCSrNgk50ISs92h-zknIsKB1xoIBYvNThN_j841fZM?purpose=inline)
+
+[\[COKESTUDIOS\] \[MyCoke\] Complete Files - Download | Page 2 | RaGEZONE - MMO Development Forums](https://images.openai.com/static-rsc-4/G3zNJimUB_uTG5IB8sCY4HLmvti2YsCT7Jn_4l6OgBh4RN-7r5YpWC-2s_RRwsqdvYfe7Lfhhk4Yf4CpGztueX4QtTFblhJGI7ZSQHC_PEm_1DTs_L1l5Xb16X1wBS1Wxxmt6N8WwM6lCMNBLXMKBqxm3hjir-Ailweg0RZ3eN8?purpose=inline)
+
+12
+
+### World art
+
+- Isometric, specifically dimetric-style pixel artwork.
+- Fixed scene compositions rather than a freely rotating camera.
+- Highly detailed themed backgrounds.
+- Floor tiles defining accessible walking positions.
+- Foreground scenery to establish depth, such as railings, walls, stage equipment and plants.
+- Small animated props to bring venues to life.
+- Furniture with multiple directional appearances and occasional illuminated states.
+- Compact readable avatars with distinctive clothing.
+
+### Interface art
+
+The original Coke Music era used a grungy, punk-influenced visual language. Popups looked like distressed cardboard or product packaging, with rough decorative borders, red highlights and small heavily pixelated text.
+
+In later MyCoke versions, some interfaces shifted toward cleaner gray surfaces with red branding, although the world remained recognizably descended from the original.
+
+For faithful preservation, don't simply replace all of this with modern minimalist glass panels. The older textured windows were part of Coke Music's visual identity.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://mycoke.fandom.com\&sz=32)
+
+Fandom
+
++2
+
+
+
+## 17. Interaction coverage: what a reconstruction must test
+
+This is a consolidated set of user journeys, organized by how a player actually experiences them.
+
+| Scenario                         | Required result                                                 |
+| -------------------------------- | --------------------------------------------------------------- |
+| New user registers               | Account created and V-ego appearance retained                   |
+| User changes clothing            | New appearance visible in studio and information views          |
+| User changes motto               | Other players can see the updated message on selection          |
+| User enters public room          | Appropriate entrance position, occupancy and scenery            |
+| User walks across room           | Continuous movement and correct directional appearance          |
+| User speaks nearby               | Near players receive readable speech                            |
+| User speaks from far away        | Message partially obscured or beyond readable range             |
+| User shouts                      | Everybody in the room can understand                            |
+| User clicks another V-ego        | Context information and social actions become available         |
+| User gets Coke                   | Drink animation and eligible reward                             |
+| User creates a room              | Appropriate template and permanent Mixer appear                 |
+| Owner places furniture           | Correct room placement, visual direction and ownership          |
+| Owner rotates furniture          | Item changes to the supported directional appearance            |
+| Owner retrieves furniture        | Item returns to backpack                                        |
+| User deletes an item             | Item lost; no decibel refund                                    |
+| Owner changes wallpaper          | Room appearance changes; purchase is room-bound                 |
+| Owner deletes room               | Movable furniture returns; room decoration is lost              |
+| Owner opens Mixer                | Music composition interface appears                             |
+| Guest opens someone else's Mixer | Owner-only notice appears                                       |
+| User creates a song              | Song remains available under its title                          |
+| User burns CD                    | CD added to backpack and linked to the composition              |
+| User plays CD                    | Song becomes current room performance                           |
+| Audience votes                   | Feedback updates and eligible rewards are recorded              |
+| User trades a CD                 | CD changes ownership without losing original author attribution |
+| Song earns a chart award         | Correct trophy/reward becomes available                         |
+| Player joins a minigame          | Enters the appropriate lobby/gameplay sequence                  |
+| Player wins a rare prize         | Item appears in inventory                                       |
+| Player receives friend request   | Messenger notification and action                               |
+| Player enters a full room        | Appropriate warning and safe return                             |
+| Player reports harassment        | Moderation report confirmation                                  |
+| Player enters event venue        | Themed art and any special rules or promotions                  |
+| Player uses special teleporter   | Transport to designated destination                             |
+
+This is the critical difference between a visually similar reconstruction and a functional Coke Music recreation: every screen must be connected to its original purpose.
+
+## 18. What is still missing from the historical record
+
+There is enough surviving material to reconstruct the majority of the recognizable experience, but I cannot substantiate every pixel or rule of every page from 2002 to 2007.
+
+These are the largest remaining evidence gaps:
+
+| Area                     | What remains uncertain                                                        |
+| ------------------------ | ----------------------------------------------------------------------------- |
+| Website navigation       | Every exact menu label, alignment and redesign in each year                   |
+| Original registration    | All field labels, validation messages and page transitions                    |
+| Mixer                    | Every original button and detailed arrangement-editing behavior               |
+| Trading                  | Every confirmation state, timing rule and V1/V2 difference                    |
+| Public rooms             | Some room variants, temporary decorations and exact promotional layouts       |
+| Catalogue                | Some item release dates, V1 prices and final-page screenshots                 |
+| Minigames                | Certain minor reward values, individual animations and version-specific rules |
+| Avatar editor            | Complete chronological wardrobe lists and every combination                   |
+| Promotional rewards      | Full historical distribution schedule across all campaigns                    |
+| Errors and notifications | Exact historical text for every failure state                                 |
+
+These should remain marked unverified, rather than filled with mechanics borrowed from Habbo or a later fan revival.
+
+### The strongest research archives
+
+[Blottner: Portfolio](https://images.openai.com/static-rsc-4/uFHH5CJzCBHOpckEurpr8lrlYI74u4aDCblX5WQFQzzgIrrbvDOxJZBUyxJU1L4HNke46Z_ZPOvuajTu7gN8hfLpn2zZRVpAnwaPDd3qOdmEYuGx5XEN9h3DXltGU1e7vQqimbhR564Hx5feOWcxFu98x_yiCBFPlCyT_W8xbMo?purpose=inline)
+
+[Mark Blottner — Coke Studios developer portfolio](https://markblottner.com/cokestudios.html?utm_source=chatgpt.com)
+
+Original developer explanation and screenshots of public rooms, avatar behavior, voting, catalogue interfaces, backpack, messaging and moderation.
+
+Primary developer evidence
+
+[Coke Studios - www.maissito.com](https://images.openai.com/static-rsc-4/pE2M58MRwsllU2mSTYUTzgw6Jtk5-SwlS-_K11WdYuIkciH9twvAvi2OZT9kf9o45lJkFNnQkiXi0kch7NWNykdluFi8D54e6lmooDt0tSGZkZ6PheN3FflpwLfMO_ZRSEwPRxQ52UocONjYBTbTPgUoPXJ89j9ctQk_mez9wDE?purpose=inline)
+
+[MyCoke Wiki — historical feature archive](https://mycoke.fandom.com/wiki/MyCoke_Wiki?utm_source=chatgpt.com)
+
+Extensive catalogues of rooms, furniture, interface images, sound samples, games, studio layouts and historic version changes.
+
+Community preservation archive • 100+ articles and thousands of files
+
+[CokeHistory screenshot archive](https://mycoke.fandom.com/wiki/CokeHistory?utm_source=chatgpt.com)
+
+Particularly valuable for original website screenshots, games pages, competitions, promotional announcements and rare studio images.
+
+[ThyElite original fansite screenshots](https://mycoke.fandom.com/wiki/ThyElite?utm_source=chatgpt.com)
+
+An extensive archive of original player culture, rooms, inventories and historic user-generated spaces.
+
+[Jeff Skop — original product management account](https://jeffskop.com/project/coke-studios/?utm_source=chatgpt.com)
+
+Confirms major product functions, account management, redemption activities and professional moderation.
+
+[Decibel — modern Coke Studios preservation/revival](https://decibel.fun/play.php?utm_source=chatgpt.com)
+
+Useful for exploring restored interpretations of the old games. Its current systems should be compared with historical screenshots before treating them as original behavior.
+
+[Archived original Coke Music help page, October 2002](https://web.archive.org/web/20021015010521/http://www.cokemusic.com/help/index.htm?utm_source=chatgpt.com)
+
+An original-era reference useful for website wording, safety instructions and related support pages.
+
+One important archival trap: a surviving 2007–2008 Studiocom Music Center wireframe document describes the subsequent CC Metro experience, with places such as the KO Lounge and Coca-Cola Cantina. It is valuable historical material, but it should not be used as the page specification for the 2002–2007 isometric Coke Studios client.
+
+Likewise, the later 2022 Coke Studio music brand and the similarly named UK download store aren't the Coke Music virtual world we're reconstructing.&#x20;
+
+[image](https://www.google.com/s2/favicons?domain=https://static.wikia.nocookie.net\&sz=32)
+
+static.wikia.nocookie.net
+
++2
+
+
+
+## 19. Reconstruction order — preserving the actual game
+
+For a faithful remake, I'd divide the design work into six functional collections:
+
+Collection A — Website and account experience
+
+Landing pages, registration, V-ego creation, games hub, Mixer entry, Top 40, promotional pages, help and user settings.
+
+Collection B — Virtual world and all rooms
+
+Launcher, navigator, every public venue variant, seven standard studios, promotional suites, movement, chatting and furniture actions.
+
+Collection C — Music and reputation
+
+Full Mixer, composition library, saved songs, CDs, stages, performance queues, voting, music rankings and trophies.
+
+Collection D — Economy and inventory
+
+Decibels, every catalogue release, all furniture classes, interactive items, trading, rare items and reward distribution.
+
+Collection E — Games and historical promotions
+
+All website minigames, scoreboards, time-limited events, promotional venues, prizes and alternate presentations.
+
+Collection F — Social systems and safety
+
+Messenger, friends, roleplay spaces, player reporting, moderation, notifications, host permissions and world availability.
+
+Each collection should use the same historical tagging: V1, Beta, Shark Tale, V2, promotion-specific, and unreleased. That prevents later artwork and mechanics from silently overwriting their earlier counterparts.
+
+## Final design principle
+
+The most distinctive thing about Coke Music wasn't simply the Coca-Cola furniture, the city-themed rooms or even the music sequencer.
+
+It was how those systems reinforced one another.
+
+Someone could make a song, play it in front of strangers, become recognized by other V-egos, earn enough money to buy furniture, create a personal club, run that club with their own rules, attract more visitors and build a reputation. A competitive player could instead become known for rare prizes. A collector could build a showroom. Someone who never cared about the music rankings could still spend hours talking to friends in London or a player-owned studio.
+
+The game gave players simple tools and let social interaction turn them into activities.
+
+That's the experience a genuine Coke Music remake needs to restore — with the historical rooms, page layouts, object behavior, interactions, economy and seasonal versions treated as parts of one coherent virtual world.
+
+One practical note for a public release: Coca-Cola branding, movie tie-ins, commercial music samples and original artwork carry intellectual-property considerations. Historical research and private recreation are different from having permission to distribute those assets publicly.

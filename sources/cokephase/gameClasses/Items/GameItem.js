@@ -107,6 +107,17 @@ var GameItem = IgeEntity.extend({
 				ige.room.tileMap().strokeTile(this.data('tileX'), this.data('tileY'));
 
 			ige.selected = self;
+
+			var gItem = this.data('gameItem');
+			if (gItem === 'mini_coke_fridge' || gItem === 'fridge') {
+				if (ige.client && typeof ige.client.drinkCoke === 'function') {
+					ige.client.drinkCoke();
+				}
+			} else if (gItem === 'pinball' || gItem === 'n_stereo' || gItem === 'northern_stereo') {
+				if (ige.client && typeof ige.client.triggerDJPerformance === 'function') {
+					ige.client.triggerDJPerformance();
+				}
+			}
 		};
 	},
 

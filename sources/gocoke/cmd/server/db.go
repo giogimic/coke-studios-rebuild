@@ -83,6 +83,26 @@ type MessageRecord struct {
 	IsRead        bool      `json:"is_read"`
 }
 
+type Top40Entry struct {
+	Rank        int    `json:"rank"`
+	SongTitle   string `json:"title"`
+	CreatorName string `json:"creator"`
+	Votes       int    `json:"votes"`
+	Award       string `json:"award,omitempty"`
+}
+
+type VegoSanResult struct {
+	Win          bool   `json:"win"`
+	Draw         bool   `json:"draw"`
+	PlayerMove   string `json:"player_move"`
+	OpponentMove string `json:"opponent_move"`
+	Message      string `json:"message"`
+	Streak       int    `json:"streak"`
+	AwardedDB    int    `json:"awarded_db"`
+	PrizeItem    string `json:"prize_item,omitempty"`
+	PrizeItemID  int    `json:"prize_item_id,omitempty"`
+}
+
 type Store struct {
 	db     *sql.DB
 	driver string // "sqlite" or "mysql"
@@ -239,6 +259,28 @@ func (s *Store) migrate() error {
 				sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 				is_read TINYINT(1) DEFAULT 0
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+			`CREATE TABLE IF NOT EXISTS daily_coke_drinks (
+				denizen_id VARCHAR(64) NOT NULL,
+				drink_date VARCHAR(16) NOT NULL,
+				count INT NOT NULL DEFAULT 1,
+				PRIMARY KEY (denizen_id, drink_date)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+			`CREATE TABLE IF NOT EXISTS top40_votes (
+				id INT AUTO_INCREMENT PRIMARY KEY,
+				creator_name VARCHAR(64) NOT NULL,
+				song_title VARCHAR(128) NOT NULL,
+				voter_name VARCHAR(64) NOT NULL,
+				voted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+			`CREATE TABLE IF NOT EXISTS vegosan_streaks (
+				denizen_id VARCHAR(64) PRIMARY KEY,
+				streak INT NOT NULL DEFAULT 0,
+				total_wins INT NOT NULL DEFAULT 0,
+				updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
 		}
 	} else {
 		queries = []string{
@@ -324,6 +366,28 @@ func (s *Store) migrate() error {
 				sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 				is_read BOOLEAN DEFAULT 0
 			);`,
+
+			`CREATE TABLE IF NOT EXISTS daily_coke_drinks (
+				denizen_id TEXT NOT NULL,
+				drink_date TEXT NOT NULL,
+				count INTEGER NOT NULL DEFAULT 1,
+				PRIMARY KEY (denizen_id, drink_date)
+			);`,
+
+			`CREATE TABLE IF NOT EXISTS top40_votes (
+				id INTEGER PRIMARY KEY AUTOINCREMENT,
+				creator_name TEXT NOT NULL,
+				song_title TEXT NOT NULL,
+				voter_name TEXT NOT NULL,
+				voted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			);`,
+
+			`CREATE TABLE IF NOT EXISTS vegosan_streaks (
+				denizen_id TEXT PRIMARY KEY,
+				streak INTEGER NOT NULL DEFAULT 0,
+				total_wins INTEGER NOT NULL DEFAULT 0,
+				updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			);`,
 		}
 	}
 
@@ -352,7 +416,7 @@ func (s *Store) migrate() error {
 	}
 
 	// Seed starter red caps promotion codes if empty
-	sampleCaps := []string{"COKE-STUDIOS-2026", "RED-CAP-BEATS-01", "MYCOKE-RETRO-VIP", "SUMMER-CHILL-99"}
+	sampleCaps := []string{"COKE-STUDIOS-2026", "SAINTS-GAMING", "RED-CAP-BEATS-01", "MYCOKE-RETRO-VIP", "SUMMER-CHILL-99"}
 	for _, capCode := range sampleCaps {
 		query := `INSERT OR IGNORE INTO red_caps (pin_code, reward_vcoins, reward_item_id) VALUES (?, 100, 52)`
 		if s.driver == "mysql" {
@@ -869,3 +933,220 @@ func (s *Store) CreateStudio(studioID, ownerID, ownerName, studioName, roomType 
 	}, nil
 }
 
+
+func (s *Store) RecordDailyCokeDrink(screenName string) (int, bool, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var denizenID string
+	err := s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&denizenID)
+	if err != nil {
+		return 0, false, err
+	}
+
+	today := time.Now().UTC().Format("2006-01-02")
+	var count int
+	err = s.db.QueryRow("SELECT count FROM daily_coke_drinks WHERE denizen_id = ? AND drink_date = ?", denizenID, today).Scan(&count)
+	if err != nil && err != sql.ErrNoRows {
+		return 0, false, err
+	}
+
+	if err == sql.ErrNoRows {
+		count = 0
+	}
+
+	if count >= 10 {
+		return count, false, nil
+	}
+
+	count++
+	if s.driver == "mysql" {
+		_, err = s.db.Exec(`INSERT INTO daily_coke_drinks (denizen_id, drink_date, count) VALUES (?, ?, ?)
+			ON DUPLICATE KEY UPDATE count = ?`, denizenID, today, count, count)
+	} else {
+		_, err = s.db.Exec(`INSERT INTO daily_coke_drinks (denizen_id, drink_date, count) VALUES (?, ?, ?)
+			ON CONFLICT(denizen_id, drink_date) DO UPDATE SET count = excluded.count`, denizenID, today, count)
+	}
+	if err != nil {
+		return 0, false, err
+	}
+
+	// Award 10 dB per drink
+	_, _ = s.db.Exec("UPDATE denizens SET decibels = decibels + 10 WHERE id = ?", denizenID)
+	return count, true, nil
+}
+
+func (s *Store) RecordChartVote(creatorName, songTitle, voterName string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	_, err := s.db.Exec("INSERT INTO top40_votes (creator_name, song_title, voter_name) VALUES (?, ?, ?)",
+		strings.TrimSpace(creatorName), strings.TrimSpace(songTitle), strings.TrimSpace(voterName))
+	return err
+}
+
+func (s *Store) GetTop40(period string) ([]Top40Entry, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	timeFilter := "datetime(voted_at) >= datetime('now', '-1 day')"
+	if s.driver == "mysql" {
+		timeFilter = "voted_at >= NOW() - INTERVAL 1 DAY"
+		if strings.ToLower(period) == "weekly" {
+			timeFilter = "voted_at >= NOW() - INTERVAL 7 DAY"
+		} else if strings.ToLower(period) == "monthly" {
+			timeFilter = "voted_at >= NOW() - INTERVAL 30 DAY"
+		}
+	} else {
+		if strings.ToLower(period) == "weekly" {
+			timeFilter = "datetime(voted_at) >= datetime('now', '-7 days')"
+		} else if strings.ToLower(period) == "monthly" {
+			timeFilter = "datetime(voted_at) >= datetime('now', '-30 days')"
+		}
+	}
+
+	query := fmt.Sprintf(`SELECT creator_name, song_title, COUNT(*) as vote_count 
+		FROM top40_votes 
+		WHERE %s 
+		GROUP BY creator_name, song_title 
+		ORDER BY vote_count DESC LIMIT 40`, timeFilter)
+
+	rows, err := s.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var list []Top40Entry
+	rank := 1
+	for rows.Next() {
+		var e Top40Entry
+		if err := rows.Scan(&e.CreatorName, &e.SongTitle, &e.Votes); err == nil {
+			e.Rank = rank
+			if rank == 1 && strings.ToLower(period) == "weekly" {
+				e.Award = "Gold Record"
+			} else if rank == 1 && strings.ToLower(period) == "monthly" {
+				e.Award = "Platinum Record"
+			}
+			list = append(list, e)
+			rank++
+		}
+	}
+
+	// If empty, return sample authentic charts
+	if len(list) == 0 {
+		list = []Top40Entry{
+			{Rank: 1, SongTitle: "Cherry Coke Grooves", CreatorName: "DJ-Cherry", Votes: 42, Award: "Gold Record"},
+			{Rank: 2, SongTitle: "Neon Nights (Saints Remix)", CreatorName: "Adam", Votes: 38},
+			{Rank: 3, SongTitle: "Red Room Anthem", CreatorName: "CokeMaster", Votes: 29},
+			{Rank: 4, SongTitle: "Rooftop Sunset Beat", CreatorName: "SummerVibe", Votes: 21},
+		}
+	}
+
+	return list, nil
+}
+
+func (s *Store) ProcessVegoSanMove(screenName, playerMove string) (*VegoSanResult, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var denizenID string
+	_ = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&denizenID)
+
+	pMove := strings.ToLower(strings.TrimSpace(playerMove))
+	validMoves := []string{"slap", "grab", "thrust", "sweep", "block"}
+	valid := false
+	for _, m := range validMoves {
+		if m == pMove {
+			valid = true
+			break
+		}
+	}
+	if !valid {
+		pMove = "slap"
+	}
+
+	// 5-move circular counter rules:
+	// slap beats sweep & block
+	// grab beats slap & thrust
+	// thrust beats slap & sweep
+	// sweep beats grab & block
+	// block beats grab & thrust
+	aiMove := validMoves[time.Now().UnixNano()%int64(len(validMoves))]
+
+	res := &VegoSanResult{
+		PlayerMove:   pMove,
+		OpponentMove: aiMove,
+	}
+
+	if pMove == aiMove {
+		res.Draw = true
+		res.Message = fmt.Sprintf("Both chose %s! It's a standoff!", pMove)
+	} else {
+		win := false
+		switch pMove {
+		case "slap":
+			win = (aiMove == "sweep" || aiMove == "block")
+		case "grab":
+			win = (aiMove == "slap" || aiMove == "thrust")
+		case "thrust":
+			win = (aiMove == "slap" || aiMove == "sweep")
+		case "sweep":
+			win = (aiMove == "grab" || aiMove == "block")
+		case "block":
+			win = (aiMove == "grab" || aiMove == "thrust")
+		}
+
+		res.Win = win
+		if win {
+			res.Message = fmt.Sprintf("Victory! Your %s counters V-ego San's %s!", pMove, aiMove)
+		} else {
+			res.Message = fmt.Sprintf("Defeat! V-ego San's %s overpowered your %s!", aiMove, pMove)
+		}
+	}
+
+	if denizenID != "" {
+		var streak, totalWins int
+		_ = s.db.QueryRow("SELECT streak, total_wins FROM vegosan_streaks WHERE denizen_id = ?", denizenID).Scan(&streak, &totalWins)
+		if res.Win {
+			streak++
+			totalWins++
+			rewardDB := streak * 10
+			res.AwardedDB = rewardDB
+			res.Streak = streak
+			_, _ = s.db.Exec("UPDATE denizens SET decibels = decibels + ? WHERE id = ?", rewardDB, denizenID)
+
+			// Streak milestone furniture prizes
+			if streak == 3 {
+				res.PrizeItem = "Tatami Mat"
+				res.PrizeItemID = 93
+				_, _ = s.db.Exec("INSERT INTO backpack_items (denizen_id, catalog_item_id, properties_json) VALUES (?, 93, '{}')", denizenID)
+			} else if streak == 5 {
+				res.PrizeItem = "Rice Paper Divider"
+				res.PrizeItemID = 94
+				_, _ = s.db.Exec("INSERT INTO backpack_items (denizen_id, catalog_item_id, properties_json) VALUES (?, 94, '{}')", denizenID)
+			} else if streak == 10 {
+				res.PrizeItem = "Ceremonial Gong"
+				res.PrizeItemID = 95
+				_, _ = s.db.Exec("INSERT INTO backpack_items (denizen_id, catalog_item_id, properties_json) VALUES (?, 95, '{}')", denizenID)
+			}
+		} else if !res.Draw {
+			streak = 0
+			res.Streak = 0
+		}
+
+		if s.driver == "mysql" {
+			_, _ = s.db.Exec(`INSERT INTO vegosan_streaks (denizen_id, streak, total_wins, updated_at) 
+				VALUES (?, ?, ?, CURRENT_TIMESTAMP) 
+				ON DUPLICATE KEY UPDATE streak = VALUES(streak), total_wins = VALUES(total_wins), updated_at = CURRENT_TIMESTAMP`,
+				denizenID, streak, totalWins)
+		} else {
+			_, _ = s.db.Exec(`INSERT INTO vegosan_streaks (denizen_id, streak, total_wins, updated_at) 
+				VALUES (?, ?, ?, CURRENT_TIMESTAMP) 
+				ON CONFLICT(denizen_id) DO UPDATE SET streak = excluded.streak, total_wins = excluded.total_wins, updated_at = CURRENT_TIMESTAMP`,
+				denizenID, streak, totalWins)
+		}
+	}
+
+	return res, nil
+}

@@ -419,3 +419,84 @@ func TestSoundLibraryResolver(t *testing.T) {
 	}
 }
 
+
+func TestDailyCokeDrinksAndCap(t *testing.T) {
+	srv := NewServer("./web", "127.0.0.1", "8080", nil)
+
+	// Ensure denizen exists
+	_, _ = srv.store.GetOrCreateDenizen("CokeSipper", "M", "def=1", "I love Coke")
+
+	// Drink 10 times: each should award 10 dB
+	for i := 1; i <= 10; i++ {
+		count, awarded, err := srv.store.RecordDailyCokeDrink("CokeSipper")
+		if err != nil {
+			t.Fatalf("drink #%d failed: %v", i, err)
+		}
+		if count != i || !awarded {
+			t.Errorf("expected count %d awarded=true, got count %d awarded=%v", i, count, awarded)
+		}
+	}
+
+	// 11th drink: capped!
+	count, awarded, err := srv.store.RecordDailyCokeDrink("CokeSipper")
+	if err != nil {
+		t.Fatalf("11th drink failed: %v", err)
+	}
+	if count != 10 || awarded {
+		t.Errorf("expected count 10 awarded=false (cap reached), got count %d awarded=%v", count, awarded)
+	}
+}
+
+func TestTop40AndVegoSan(t *testing.T) {
+	srv := NewServer("./web", "127.0.0.1", "8080", nil)
+
+	// Record chart votes
+	_ = srv.store.RecordChartVote("DJ-Apex", "Summer Sunset Beat", "Fan1")
+	_ = srv.store.RecordChartVote("DJ-Apex", "Summer Sunset Beat", "Fan2")
+
+	// Query Top 40 via HTTP
+	req := httptest.NewRequest("GET", "/api/music/top40?period=daily", nil)
+	w := httptest.NewRecorder()
+	srv.handleTop40(w, req)
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200 for top40, got %d", w.Code)
+	}
+	var entries []Top40Entry
+	if err := json.Unmarshal(w.Body.Bytes(), &entries); err != nil {
+		t.Fatalf("failed to decode top40: %v", err)
+	}
+	if len(entries) == 0 {
+		t.Errorf("expected at least 1 top40 entry")
+	}
+
+	// Test V-ego San Move
+	_, _ = srv.store.GetOrCreateDenizen("SumoPlayer", "M", "def=1", "Sumo Master")
+	reqVS := httptest.NewRequest("GET", "/api/minigames/vegosan/move?user=SumoPlayer&move=slap", nil)
+	wVS := httptest.NewRecorder()
+	srv.handleVegoSanMove(wVS, reqVS)
+	if wVS.Code != http.StatusOK {
+		t.Fatalf("expected 200 for vegosan move, got %d", wVS.Code)
+	}
+	var vsRes VegoSanResult
+	if err := json.Unmarshal(wVS.Body.Bytes(), &vsRes); err != nil {
+		t.Fatalf("failed to decode vegosan response: %v", err)
+	}
+	if vsRes.PlayerMove != "slap" {
+		t.Errorf("expected player_move slap, got %s", vsRes.PlayerMove)
+	}
+}
+
+func TestJsonRoomAndCatalog(t *testing.T) {
+	srv := NewServer("./web", "127.0.0.1", "8080", nil)
+
+	// Room JSON test
+	reqRoom := httptest.NewRequest("POST", "/jsonreply/room.php?id=2", nil)
+	wRoom := httptest.NewRecorder()
+	srv.handleJsonRoom(wRoom, reqRoom)
+	if wRoom.Code != http.StatusOK {
+		t.Fatalf("expected 200 for room json, got %d", wRoom.Code)
+	}
+	if !strings.Contains(wRoom.Body.String(), "studio_model_b") {
+		t.Errorf("expected studio_model_b in room json, got: %s", wRoom.Body.String())
+	}
+}
