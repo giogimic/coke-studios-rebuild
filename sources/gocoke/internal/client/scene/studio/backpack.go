@@ -149,7 +149,7 @@ func (bm *BackpackManager) Update() error {
 			if req, ok := w.TempVars["requestBackpackPopdown"].(bool); ok && req && bm.animPhase != "popdown" {
 				w.TempVars["requestBackpackPopdown"] = false
 				height := w.Rect[3] - w.Rect[1]
-				bm.targetRect = [4]int{w.Rect[0], 540, w.Rect[2], 540 + height}
+				bm.targetRect = [4]int{w.Rect[0], 520, w.Rect[2], 520 + height}
 				bm.animPhase = "popdown"
 				bm.animating = true
 			}
@@ -166,7 +166,7 @@ func (bm *BackpackManager) Update() error {
 					w.TempVars["requestBackpackPopdown"] = false
 					bm.animPhase = "popdown"
 					height := w.Rect[3] - w.Rect[1]
-					bm.targetRect = [4]int{w.Rect[0], 540, w.Rect[2], 540 + height}
+					bm.targetRect = [4]int{w.Rect[0], 520, w.Rect[2], 520 + height}
 				}
 			}
 			// While animating popup, show closed front by applying an upward offset
@@ -393,7 +393,7 @@ func (bm *BackpackManager) ToggleWindow() {
 	if w := bm.windowManager.GetWindow("cc_backpack"); w != nil {
 		if !bm.animating {
 			// Animate down to bottom of stage then close
-			bm.targetRect = [4]int{w.Rect[0], 540, w.Rect[2], 540 + (w.Rect[3] - w.Rect[1])}
+			bm.targetRect = [4]int{w.Rect[0], 520, w.Rect[2], 520 + (w.Rect[3] - w.Rect[1])}
 			bm.animating = true
 			bm.animPhase = "popdown"
 		}

@@ -91,9 +91,9 @@ func main() {
 	}
 
 	// Minimal Ebiten game loop stub
-	ebiten.SetWindowTitle("GoCoke (dev)")
+	ebiten.SetWindowTitle("GoCoke")
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
-	ebiten.SetWindowSize(1920, 1080)
+	ebiten.SetWindowSize(760, 520)
 	ebiten.SetTPS(120)
 
 	sm := &scene.Manager{}

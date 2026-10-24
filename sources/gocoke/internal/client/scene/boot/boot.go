@@ -657,4 +657,4 @@ func (s *Scene) Draw(screen *ebiten.Image) {
 	}
 }
 
-func (s *Scene) Layout(ow, oh int) (int, int) { return 960, 540 }
+func (s *Scene) Layout(ow, oh int) (int, int) { return 760, 520 }

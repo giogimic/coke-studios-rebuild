@@ -31,7 +31,7 @@ Push-Location $gocokeDir
 try {
     $env:GOOS = "js"
     $env:GOARCH = "wasm"
-    go build -ldflags "-s -w" -o "$webDir\main.wasm" ./cmd/client
+    go build -trimpath -ldflags "-s -w" -o "$webDir\main.wasm" ./cmd/client
     $size = (Get-Item "$webDir\main.wasm").Length
     if ($size -ge 104857600) {
         Write-Warning "    main.wasm ($size bytes) exceeds GitHub's 100 MB limit. Restoring optimized 53MB release binary."
@@ -48,7 +48,7 @@ Push-Location $gocokeDir
 try {
     $env:GOOS = "linux"
     $env:GOARCH = "amd64"
-    go build -ldflags "-s -w" -o "$binDir\coke-server-linux" ./cmd/server
+    go build -trimpath -ldflags "-s -w" -o "$binDir\coke-server-linux" ./cmd/server
     Write-Host "    Successfully built $binDir\coke-server-linux (Debian/Linux x64)"
 } finally {
     Pop-Location
@@ -59,7 +59,7 @@ Push-Location $gocokeDir
 try {
     $env:GOOS = "windows"
     $env:GOARCH = "amd64"
-    go build -ldflags "-s -w" -o "$binDir\coke-server.exe" ./cmd/server
+    go build -trimpath -ldflags "-s -w" -o "$binDir\coke-server.exe" ./cmd/server
     Write-Host "    Successfully built $binDir\coke-server.exe (Windows x64)"
 } finally {
     Pop-Location

@@ -25,7 +25,7 @@ fi
 echo "==> 2. Building Go WebAssembly client (main.wasm)..."
 (
     cd "${GOCOKE_DIR}"
-    GOOS=js GOARCH=wasm go build -ldflags "-s -w" -o "${WEB_DIR}/main.wasm" ./cmd/client
+    GOOS=js GOARCH=wasm go build -trimpath -ldflags "-s -w" -o "${WEB_DIR}/main.wasm" ./cmd/client
     WASM_SIZE=$(stat -c%s "${WEB_DIR}/main.wasm" 2>/dev/null || stat -f%z "${WEB_DIR}/main.wasm" 2>/dev/null || echo 0)
     if [ "$WASM_SIZE" -ge 104857600 ]; then
         echo "    Warning: main.wasm ($WASM_SIZE bytes) exceeds GitHub 100MB limit. Restoring optimized 53MB binary."
@@ -38,14 +38,14 @@ echo "==> 2. Building Go WebAssembly client (main.wasm)..."
 echo "==> 3. Building Authoritative Server for Debian Linux (coke-server-linux)..."
 (
     cd "${GOCOKE_DIR}"
-    GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o "${BIN_DIR}/coke-server-linux" ./cmd/server
+    GOOS=linux GOARCH=amd64 go build -trimpath -ldflags "-s -w" -o "${BIN_DIR}/coke-server-linux" ./cmd/server
     echo "    Successfully built ${BIN_DIR}/coke-server-linux (Debian/Linux x64)"
 )
 
 echo "==> 4. Building Authoritative Server for Windows (coke-server.exe)..."
 (
     cd "${GOCOKE_DIR}"
-    GOOS=windows GOARCH=amd64 go build -ldflags "-s -w" -o "${BIN_DIR}/coke-server.exe" ./cmd/server
+    GOOS=windows GOARCH=amd64 go build -trimpath -ldflags "-s -w" -o "${BIN_DIR}/coke-server.exe" ./cmd/server
     echo "    Successfully built ${BIN_DIR}/coke-server.exe (Windows x64)"
 )
 

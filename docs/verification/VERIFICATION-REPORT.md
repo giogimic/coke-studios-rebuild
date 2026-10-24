@@ -13,9 +13,9 @@ All binaries are compiled directly from `sources/gocoke` without external closed
 
 | Artifact | Target OS / Arch | Size (bytes) | SHA-256 Checksum |
 |---|---|---|---|
-| `tools/bin/coke-server-linux` | Linux / amd64 (Debian 12) | 11,747,490 | `5CF203C8C8DDE5096FCBAD2F0595A64A1A99C695DB5CFE5689E42DD1B29DF720` |
-| `tools/bin/coke-server.exe` | Windows / amd64 | 11,840,512 | `0AC7974883432EB8A287AEF0FA7BE8C8B0977967584FD6E0F319FCCC86F8CC1D` |
-| `sources/gocoke/web/main.wasm` | WebAssembly / JS | 53,003,187 | `565C93B6C0690C1A5378B3762E747A94B5608461CBF541EF9EB8ECAA2C3825D1` |
+| `tools/bin/coke-server-linux` | Linux / amd64 (Debian 12) | 11,722,914 | `43C7FA04FAF2FE3978CFAF9CC39C5C00281B92AA0BCF7B660869099F19E26C7A` |
+| `tools/bin/coke-server.exe` | Windows / amd64 | 11,819,520 | `41618F9E799AF0C932932F8323F54B558A6F2E06625B66CA6A71CCFE38CAA60C` |
+| `sources/gocoke/web/main.wasm` | WebAssembly / JS | 53,941,955 | `23475E6CDDFFE0101F85DC11ED15DD68705178DDA604D718484EE5C911AD3AD5` |
 
 > [!NOTE]
 > `main.wasm` is optimized to 53 MB (well below the GitHub 100 MB / 104,857,600 byte push limit). `tools/build-go.ps1` and `tools/build-go.sh` enforce this size boundary automatically on every build.

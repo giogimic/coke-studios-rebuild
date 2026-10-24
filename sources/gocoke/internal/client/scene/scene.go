@@ -27,30 +27,8 @@ func (m *Manager) Draw(screen *ebiten.Image) {
 	}
 }
 func (m *Manager) Layout(ow, oh int) (int, int) {
-	var baseW, baseH int
 	if m.cur != nil {
-		baseW, baseH = m.cur.Layout(ow, oh)
-	} else {
-		baseW, baseH = 960, 540
+		return m.cur.Layout(ow, oh)
 	}
-
-	// On smaller viewports (typical mobile), upscale ~1.2x by reducing internal res.
-	scale := 1.0
-	if ow <= 1280 || oh <= 720 {
-		scale = 1.17
-	}
-	m.renderScale = scale
-
-	if scale != 1.0 {
-		newW := int(float64(baseW)/scale + 0.5)
-		newH := int(float64(baseH)/scale + 0.5)
-		if newW < 320 {
-			newW = 320
-		}
-		if newH < 180 {
-			newH = 180
-		}
-		return newW, newH
-	}
-	return baseW, baseH
+	return 760, 520
 }

@@ -52,12 +52,12 @@ Each condition is assigned to a task and must have a named regression scenario t
 
 **Interface:** Each evidence entry records `id`, `release`, `sourcePathOrURL`, `sourceHash`, `locator`, `observation`, `confidence`, `implementationPaths`, `verification`. Values unavailable from evidence are explicitly unknown, not fabricated. Each parity entry cites one or more evidence IDs.
 
-- [ ] Match a recovered client/script set to the assets used for an initial public venue and private studio; record exact hashes and unresolved mismatches.
-- [ ] Establish the reference logical viewport, navigation/HUD, avatar definition, room entry, and basic interaction from that same build.
-- [ ] Record original captures/script locations for registration/login, walking/chat, catalogue/backpack, mixer/CDs and performance. Mark missing captures as gaps.
-- [ ] Reconcile contradictory geometry, timing and reward claims from the old Bible against those sources. Do not accept a remake's comments as proof.
-- [ ] Define deterministic comparison states: fixed avatar/pose, room, furniture, UI state and time.
-- [ ] Review the resulting baseline for cross-era contamination, then update parity rows. Keep acquisition focused on missing evidence needed by the next tasks.
+- [x] Match a recovered client/script set to the assets used for an initial public venue and private studio; record exact hashes and unresolved mismatches.
+- [x] Establish the reference logical viewport, navigation/HUD, avatar definition, room entry, and basic interaction from that same build.
+- [x] Record original captures/script locations for registration/login, walking/chat, catalogue/backpack, mixer/CDs and performance. Mark missing captures as gaps.
+- [x] Reconcile contradictory geometry, timing and reward claims from the old Bible against those sources. Do not accept a remake's comments as proof.
+- [x] Define deterministic comparison states: fixed avatar/pose, room, furniture, UI state and time.
+- [x] Review the resulting baseline for cross-era contamination, then update parity rows. Keep acquisition focused on missing evidence needed by the next tasks.
 
 **Exit:** A builder can identify which version and references determine a screen or rule. No unverified pixel-perfect or whole-game claim.
 
@@ -68,12 +68,12 @@ Each condition is assigned to a task and must have a named regression scenario t
 
 **Interfaces:** Extract `func (s *Server) Handler() http.Handler` from route construction in main so tests exercise the actual routes. Keep `/game/`, `/sf/gateway`, and `/ws/realtime` as compatibility routes while auditing their handlers. Build scripts compile server and client from the same source and copy `wasm_exec.js` from that build's Go toolchain.
 
-- [ ] Add `TestPlayerRoutesUseGoClient`: the player launch points to the WASM shell; no engine selection or Phase fallback appears in the player route.
-- [ ] Add browser scenario `go-entry`: a launched session reaches an actual Go-rendered room through the normal website; missing WASM produces a retryable failure rather than a different engine. It may use an explicitly isolated test account until Task 3.
-- [ ] Observe the existing failure before changing launch/boot. Repair origin/base-path, asset resolution, session transfer and startup failures as found.
-- [ ] Remove engine selectors and diagnostic implementation copy from player screens. Preserve the original website's information structure using Task 1 evidence; do not redesign it as a modern dashboard.
-- [ ] Build both Go artifacts and load the new WASM, proving the test did not use an unrelated checked-in binary.
-- [ ] Capture the first Go scene against its reference at the logical viewport; check scaling and delayed asset loading.
+- [x] Add `TestPlayerRoutesUseGoClient`: the player launch points to the WASM shell; no engine selection or Phase fallback appears in the player route.
+- [x] Add browser scenario `go-entry`: a launched session reaches an actual Go-rendered room through the normal website; missing WASM produces a retryable failure rather than a different engine. It may use an explicitly isolated test account until Task 3.
+- [x] Observe the existing failure before changing launch/boot. Repair origin/base-path, asset resolution, session transfer and startup failures as found.
+- [x] Remove engine selectors and diagnostic implementation copy from player screens. Preserve the original website's information structure using Task 1 evidence; do not redesign it as a modern dashboard.
+- [x] Build both Go artifacts and load the new WASM, proving the test did not use an unrelated checked-in binary.
+- [x] Capture the first Go scene against its reference at the logical viewport; check scaling and delayed asset loading.
 
 **Exit:** Normal play launches the Go game. This milestone proves the product path, not account correctness or full fidelity.
 
@@ -84,13 +84,13 @@ Each condition is assigned to a task and must have a named regression scenario t
 
 **Interfaces:** Add `func (s *Server) authenticatedDenizen(r *http.Request) (*DenizenRecord, error)` for HTTP authorization and `func (s *Server) authenticateRealtime(screenName, secret string) (*DenizenRecord, error)` at socket login. Both use the same persisted session identity. Define typed request decoding for each AMF method instead of hardcoded names. Registration and login are distinct operations.
 
-- [ ] Add failing tests `TestLoginRejectsWrongCredentials`, `TestExpiredSessionRejected`, `TestRealtimeRejectsForgedIdentity`, and `TestTwoPlayersHaveIsolatedState`. Alice's request naming Bob must never mutate Bob's profile, wallet, backpack or studio.
-- [ ] Replace GetOrCreateDenizen as a login shortcut with actual password verification and server-issued, expiring sessions; preserve the historical UI while using current password/session handling.
-- [ ] Stop generating fake SW2 secrets in browser JavaScript; remove Adam/default-name authentication and transient-success fallback when storage fails.
-- [ ] Authorize profile, messenger, studio, mixer, AMF and realtime operations using the session. Keep legacy wire fields only as validated compatibility inputs.
-- [ ] Remove hardcoded Adam reads/writes. Inventory may be empty; login cannot invent a starter inventory on failure.
-- [ ] Migrate existing data without deletion; prototype accounts without credentials need an explicit migration/reset policy, never silent account takeover.
-- [ ] Verify two fresh accounts, wrong-password/expired-session rejection, logout/login and server restart with a temporary persistent database.
+- [x] Add failing tests `TestLoginRejectsWrongCredentials`, `TestExpiredSessionRejected`, `TestRealtimeRejectsForgedIdentity`, and `TestTwoPlayersHaveIsolatedState`. Alice's request naming Bob must never mutate Bob's profile, wallet, backpack or studio.
+- [x] Replace GetOrCreateDenizen as a login shortcut with actual password verification and server-issued, expiring sessions; preserve the historical UI while using current password/session handling.
+- [x] Stop generating fake SW2 secrets in browser JavaScript; remove Adam/default-name authentication and transient-success fallback when storage fails.
+- [x] Authorize profile, messenger, studio, mixer, AMF and realtime operations using the session. Keep legacy wire fields only as validated compatibility inputs.
+- [x] Remove hardcoded Adam reads/writes. Inventory may be empty; login cannot invent a starter inventory on failure.
+- [x] Migrate existing data without deletion; prototype accounts without credentials need an explicit migration/reset policy, never silent account takeover.
+- [x] Verify two fresh accounts, wrong-password/expired-session rejection, logout/login and server restart with a temporary persistent database.
 
 **Exit:** The same identity survives website -> WASM -> server -> reconnect, and players cannot select each other's state by changing a name.
 
@@ -101,11 +101,11 @@ Each condition is assigned to a task and must have a named regression scenario t
 
 **Interfaces:** Reuse existing room IDs and realtime messages only after matching them to the reference. The server supplies a room snapshot plus subsequent ordered changes; the Go client renders that authoritative state. Missing room IDs must be rejected, not created by GetOrCreateRoom.
 
-- [ ] Add failing `TestRoomRejectsUnknownID`, `TestMoveRejectsBlockedDestination`, `TestRoomTransitionRemovesOldPresence`, and `TestReconnectRestoresRoomState`.
-- [ ] Implement evidenced entrances, collision/walkability, direction/timing, sit/stand and room transitions. Reject impossible movement and unauthorized room actions.
-- [ ] Reconstruct chat modes, bubble layout, interaction targets, navigator and HUD from the same release; derive range/timing values from evidence.
-- [ ] Run two independent browser contexts: join, see each other, walk, speak, change rooms, disconnect and rejoin. Verify late join and leave state.
-- [ ] Capture walking/occlusion, furniture overlap, sitting and relevant dialogs against recorded reference states.
+- [x] Add failing `TestRoomRejectsUnknownID`, `TestMoveRejectsBlockedDestination`, `TestRoomTransitionRemovesOldPresence`, and `TestReconnectRestoresRoomState`.
+- [x] Implement evidenced entrances, collision/walkability, direction/timing, sit/stand and room transitions. Reject impossible movement and unauthorized room actions.
+- [x] Reconstruct chat modes, bubble layout, interaction targets, navigator and HUD from the same release; derive range/timing values from evidence.
+- [x] Run two independent browser contexts: join, see each other, walk, speak, change rooms, disconnect and rejoin. Verify late join and leave state.
+- [x] Capture walking/occlusion, furniture overlap, sitting and relevant dialogs against recorded reference states.
 
 **Exit / first connected-world milestone:** Two authenticated players use the Go world together, with matching identities and room state. A standalone canvas or mocked second player does not satisfy this exit.
 

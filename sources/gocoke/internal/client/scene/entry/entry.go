@@ -1674,7 +1674,7 @@ func (s *Scene) Layout(outsideWidth, outsideHeight int) (int, int) {
 		s.lastRolloverState = currentRolloverState
 	}
 
-	return 960, 540
+	return 760, 520
 }
 
 // handleTabTransition handles tab clicks in navigator windows (matches Lingo generictab.ls behavior)

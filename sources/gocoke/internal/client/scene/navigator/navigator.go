@@ -144,5 +144,5 @@ func (s *Scene) GetSelectedStudio() string {
 
 // Layout implements the Scene interface
 func (s *Scene) Layout(outsideWidth, outsideHeight int) (int, int) {
-	return 960, 540 // Standard game resolution
+	return 760, 520 // Standard Director stage resolution
 }

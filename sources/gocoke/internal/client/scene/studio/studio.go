@@ -1073,13 +1073,13 @@ func New(dataDir string, studio *studios.Studio) (*Scene, error) {
 	}
 
 	// Precreate dim overlay (scene fixed size 960x540)
-	dim := ebiten.NewImage(1920, 1080)
+	dim := ebiten.NewImage(760, 520)
 	dim.Fill(color.Black)
 	scene.dimOverlay = dim
 
 	// Initialize on-screen lighting toggle button (top-right corner)
 	// Button size ~90x24 with 10px margin
-	scene.lightBtnRect = [4]int{960 - 90 - 10 - 200, 10, 90, 24}
+	scene.lightBtnRect = [4]int{760 - 90 - 10, 10, 90, 24}
 	scene.lightBtnBg = ebiten.NewImage(scene.lightBtnRect[2], scene.lightBtnRect[3])
 	// Fill with black; we'll apply alpha during draw
 	scene.lightBtnBg.Fill(color.Black)
@@ -3875,7 +3875,7 @@ func (s *Scene) drawDebugInfo(screen *ebiten.Image) {
 
 // Layout implements the Scene interface
 func (s *Scene) Layout(outsideWidth, outsideHeight int) (int, int) {
-	return 960, 540 // Standard game resolution
+	return 760, 520 // Standard Director stage resolution
 }
 
 // GetStudio returns the studio this scene represents

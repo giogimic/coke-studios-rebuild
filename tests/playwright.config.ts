@@ -10,7 +10,7 @@ export default defineConfig({
   workers: 1,
   reporter: 'list',
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:8080',
+    baseURL: process.env.BASE_URL || 'http://localhost:24902',
     trace: 'on-first-retry',
     viewport: { width: 1024, height: 768 },
   },
