@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"sync"
@@ -242,6 +243,11 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintf(w, `{"status":"ok","mode":"standalone-server","project":"gocoke","storage":"%s"}`, srv.store.driver)
 	})
+
+	// 10. Sound library resolver (maps un-prefixed WAV names to Director prefixed files)
+	mux.HandleFunc("/Lingo/soundlibrary/", srv.handleSoundLibrary)
+	mux.HandleFunc("/sounds/", srv.handleSoundLibrary)
+	mux.HandleFunc("/soundlibrary/", srv.handleSoundLibrary)
 
 	// 5. Static files
 	fs := http.FileServer(http.Dir(*root))
@@ -635,6 +641,41 @@ func (s *Server) handleUpdateDenizen(w http.ResponseWriter, r *http.Request) {
 		"decibels":    updated.Decibels,
 		"vcoins":      updated.VCoins,
 	})
+}
+
+func (s *Server) handleSoundLibrary(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS")
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	name := filepath.Base(r.URL.Path)
+	soundDir := filepath.Join(s.webRoot, "Lingo", "soundlibrary")
+	targetPath := filepath.Join(soundDir, name)
+
+	if _, err := os.Stat(targetPath); err != nil {
+		entries, err := os.ReadDir(soundDir)
+		if err == nil {
+			lowerName := strings.ToLower(name)
+			for _, entry := range entries {
+				fn := entry.Name()
+				if strings.EqualFold(fn, name) {
+					targetPath = filepath.Join(soundDir, fn)
+					break
+				}
+				idx := strings.Index(fn, "_")
+				if idx != -1 && strings.EqualFold(fn[idx+1:], lowerName) {
+					targetPath = filepath.Join(soundDir, fn)
+					break
+				}
+			}
+		}
+	}
+
+	w.Header().Set("Content-Type", "audio/wav")
+	http.ServeFile(w, r, targetPath)
 }
 
 func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {

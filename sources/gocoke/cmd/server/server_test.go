@@ -399,3 +399,23 @@ func TestRegisterDenizen(t *testing.T) {
 	}
 }
 
+func TestSoundLibraryResolver(t *testing.T) {
+	srv := NewServer("../../web", "127.0.0.1", "8080", nil)
+
+	// Test prefixed resolution
+	reqPrefixed := httptest.NewRequest("GET", "/Lingo/soundlibrary/62_rockOne_beatz00.wav", nil)
+	wPrefixed := httptest.NewRecorder()
+	srv.handleSoundLibrary(wPrefixed, reqPrefixed)
+	if wPrefixed.Code != http.StatusOK {
+		t.Fatalf("expected 200 for prefixed sound, got %d", wPrefixed.Code)
+	}
+
+	// Test un-prefixed resolution
+	reqUnprefixed := httptest.NewRequest("GET", "/sounds/rockOne_beatz00.wav", nil)
+	wUnprefixed := httptest.NewRecorder()
+	srv.handleSoundLibrary(wUnprefixed, reqUnprefixed)
+	if wUnprefixed.Code != http.StatusOK {
+		t.Fatalf("expected 200 for un-prefixed sound, got %d", wUnprefixed.Code)
+	}
+}
+

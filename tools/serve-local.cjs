@@ -164,6 +164,16 @@ function makeServer(project) {
       // Assets Cascade: Portal images -> CokePhase game textures -> GoCoke web assets
       if (project === 'portal' && pathname.startsWith('/assets/')) {
         const sub = pathname.slice(8);
+        if (sub.startsWith('soundlibrary/') || sub.startsWith('sounds/')) {
+          const sName = path.basename(sub);
+          const audioFile = getSoundFile(sName);
+          try {
+            const ext = path.extname(audioFile).toLowerCase();
+            const contentType = mime[ext] || 'audio/wav';
+            const body = await fs.readFile(audioFile);
+            return send(res, 200, body, contentType);
+          } catch (_) {}
+        }
         const candidates = [
           path.resolve(root, 'tools', 'portal', 'assets', sub),
           path.resolve(root, 'sources', 'cokephase', 'assets', sub),
@@ -179,12 +189,34 @@ function makeServer(project) {
         }
       }
 
+      // Direct sound aliases: /sounds/ and /soundlibrary/
+      if (project === 'portal' && (pathname.startsWith('/sounds/') || pathname.startsWith('/soundlibrary/'))) {
+        const sName = path.basename(pathname);
+        const audioFile = getSoundFile(sName);
+        try {
+          const ext = path.extname(audioFile).toLowerCase();
+          const contentType = mime[ext] || 'audio/wav';
+          const body = await fs.readFile(audioFile);
+          return send(res, 200, body, contentType);
+        } catch (_) {}
+      }
+
       // GoCoke Core Assets: Lingo scripts, data, and fonts
       if (project === 'portal' && (
         pathname.startsWith('/Lingo/') ||
         pathname.startsWith('/data/') ||
         pathname.startsWith('/fonts/')
       )) {
+        if (pathname.startsWith('/Lingo/soundlibrary/')) {
+          const sName = path.basename(pathname);
+          const audioFile = getSoundFile(sName);
+          try {
+            const ext = path.extname(audioFile).toLowerCase();
+            const contentType = mime[ext] || 'audio/wav';
+            const body = await fs.readFile(audioFile);
+            return send(res, 200, body, contentType);
+          } catch (_) {}
+        }
         const file = path.resolve(root, 'sources', 'gocoke', 'web', pathname.slice(1));
         if (file.startsWith(path.join(root, 'sources', 'gocoke', 'web'))) {
           try {
@@ -262,15 +294,6 @@ function makeServer(project) {
         }
       }
 
-      if (project === 'portal' && pathname.startsWith('/sounds/')) {
-        const audioFile = getSoundFile(pathname.slice(8));
-        try {
-          const ext = path.extname(audioFile).toLowerCase();
-          const contentType = mime[ext] || 'audio/wav';
-          const body = await fs.readFile(audioFile);
-          return send(res, 200, body, contentType);
-        } catch (_) {}
-      }
 
       if ((project === 'cokephase' || project === 'portal') && pathname === '/jsonreply/room.php') {
         const params = await fields(req, url);
