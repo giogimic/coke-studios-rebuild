@@ -146,3 +146,37 @@ func TestMessageHandling(t *testing.T) {
 	}
 	srv.stopPerformance(rm)
 }
+
+func TestDenizenProfileAPI(t *testing.T) {
+	srv := NewServer("./web", "127.0.0.1", "8080", nil)
+
+	// 1. Get initial profile
+	req := httptest.NewRequest("GET", "/api/denizen/profile?user=Tester", nil)
+	w := httptest.NewRecorder()
+	srv.handleDenizenProfile(w, req)
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", w.Code)
+	}
+
+	// 2. Update profile
+	reqUp := httptest.NewRequest("POST", "/api/denizen/update?user=Tester&gender=2&avatarDef=hr=003/1&hd=002/1&ch=005/1&mission=Rockstar", nil)
+	wUp := httptest.NewRecorder()
+	srv.handleUpdateDenizen(wUp, reqUp)
+	if wUp.Code != http.StatusOK {
+		t.Fatalf("expected 200 from update, got %d", wUp.Code)
+	}
+	body := wUp.Body.String()
+	if !strings.Contains(body, `"gender":2`) || !strings.Contains(body, "Rockstar") {
+		t.Errorf("unexpected update response: %s", body)
+	}
+
+	// 3. Verify persistence
+	d, err := srv.store.GetDenizenByName("Tester")
+	if err != nil || d == nil {
+		t.Fatalf("failed to retrieve updated denizen: %v", err)
+	}
+	if d.Gender != 2 || d.Mission != "Rockstar" {
+		t.Errorf("expected updated fields, got: %+v", d)
+	}
+}
+

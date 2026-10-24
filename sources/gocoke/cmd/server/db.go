@@ -8,11 +8,14 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	_ "modernc.org/sqlite"
 )
+
+var denizenSeq int64
 
 type DenizenRecord struct {
 	ID         string
@@ -333,8 +336,9 @@ func (s *Store) GetOrCreateDenizen(screenName, gender, avatarDef, mission string
 		return nil, err
 	}
 
-	newID := fmt.Sprintf("usr_%d", time.Now().UnixNano())
-	newSecret := "coke_secret_" + fmt.Sprintf("%x", time.Now().UnixNano())
+	newSeq := atomic.AddInt64(&denizenSeq, 1)
+	newID := fmt.Sprintf("usr_%d_%d", time.Now().UnixNano(), newSeq)
+	newSecret := fmt.Sprintf("coke_secret_%x_%d", time.Now().UnixNano(), newSeq)
 	g := 1
 	if strings.ToUpper(gender) == "F" || gender == "2" {
 		g = 2
@@ -396,6 +400,31 @@ func (s *Store) GetDenizenByName(screenName string) (*DenizenRecord, error) {
 		return nil, err
 	}
 	return &d, nil
+}
+
+func (s *Store) UpdateDenizenProfile(screenName string, gender int, avatarDef, mission string) (*DenizenRecord, error) {
+	cleanName := strings.TrimSpace(screenName)
+	if cleanName == "" {
+		cleanName = "Adam"
+	}
+
+	d, err := s.GetOrCreateDenizen(cleanName, fmt.Sprintf("%d", gender), avatarDef, mission)
+	if err != nil {
+		return nil, err
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	query := `UPDATE denizens SET gender = ?, avatar_def = ?, mission = ? WHERE id = ?`
+	if _, err := s.db.Exec(query, gender, avatarDef, mission, d.ID); err != nil {
+		return nil, err
+	}
+
+	d.Gender = gender
+	d.AvatarDef = avatarDef
+	d.Mission = mission
+	return d, nil
 }
 
 func (s *Store) GetBalance(screenName string) (int, int, error) {

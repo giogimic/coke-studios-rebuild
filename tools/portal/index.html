@@ -642,6 +642,242 @@
       background: #c4000b;
     }
 
+    /* --- PAGE: AVATAR STUDIO CUSTOMIZER --- */
+    .avatar-studio-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 800px) {
+      .avatar-studio-layout { grid-template-columns: 1fr; }
+    }
+    .avatar-stage-card {
+      background: #1e1b18;
+      border: 3px solid #7d0000;
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    .avatar-stage-podium {
+      width: 220px;
+      height: 250px;
+      background: radial-gradient(ellipse at center, #3a322d 0%, #151210 70%);
+      border: 2px solid #5a4b41;
+      border-radius: 8px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.8);
+      margin-bottom: 15px;
+    }
+    .avatar-stage-podium canvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      width: 154px;
+      height: 220px;
+      filter: drop-shadow(0 8px 10px rgba(0,0,0,0.7));
+    }
+    .avatar-stage-actions {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    .btn-stage-toggle {
+      flex: 1;
+      background: #332d29;
+      color: #fff;
+      border: 1px solid #7d0000;
+      border-radius: 4px;
+      padding: 6px;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.15s;
+    }
+    .btn-stage-toggle.active {
+      background: #e41e2b;
+      border-color: #ffcc00;
+      color: #fff;
+    }
+    .avatar-def-display {
+      width: 100%;
+      background: #111;
+      border: 1px solid #444;
+      border-radius: 4px;
+      padding: 6px 8px;
+      font-family: monospace;
+      font-size: 10px;
+      color: #ffde59;
+      overflow-x: auto;
+      white-space: nowrap;
+      margin-top: 8px;
+    }
+
+    /* Wardrobe Options Card */
+    .wardrobe-card {
+      background: #ffffff;
+      border: 2px solid #d2a679;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .wardrobe-header {
+      border-bottom: 2px solid #e41e2b;
+      padding-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .wardrobe-header h2 {
+      font-size: 20px;
+      color: #7d0000;
+      text-transform: uppercase;
+    }
+    .wardrobe-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 600px) {
+      .wardrobe-grid { grid-template-columns: 1fr; }
+    }
+    .wardrobe-control-group {
+      background: #fdfaf6;
+      border: 1px solid #e2d1c3;
+      border-radius: 6px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .wardrobe-label {
+      font-size: 11px;
+      font-weight: bold;
+      color: #7d0000;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .wardrobe-stepper {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-step {
+      background: #e41e2b;
+      color: #fff;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .btn-step:hover { background: #b00f1a; }
+    .step-display {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      color: #333;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 4px 8px;
+    }
+    .swatch-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .skin-swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .skin-swatch.active {
+      border-color: #ffcc00;
+      outline: 2px solid #7d0000;
+    }
+    .gender-toggle {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-gender {
+      flex: 1;
+      background: #eee;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      padding: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #444;
+      transition: all 0.15s;
+    }
+    .btn-gender.active {
+      background: #e41e2b;
+      border-color: #7d0000;
+      color: #fff;
+    }
+    .wardrobe-actions-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-avatar-primary {
+      background: #e41e2b;
+      color: #fff;
+      border: 2px solid #ffcc00;
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      transition: all 0.15s;
+    }
+    .btn-avatar-primary:hover {
+      background: #c4000b;
+      transform: translateY(-1px);
+    }
+    .btn-avatar-secondary {
+      background: #ffcc00;
+      color: #7d0000;
+      border: 1px solid #d2a679;
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      transition: all 0.15s;
+    }
+    .btn-avatar-secondary:hover {
+      background: #ffe680;
+    }
+
     /* Footer */
     .mycoke-footer {
       background: #231f20;
@@ -677,7 +913,7 @@
 
       <!-- Denizen Character Live Profile -->
       <div class="denizen-status-bar">
-        <div class="denizen-avatar-preview">
+        <div class="denizen-avatar-preview" onclick="switchTab('avatar')" style="cursor: pointer;" title="Customize your Denizen look in the Avatar Studio!">
           <img id="avatarHeadshot" src="assets/images/buttons/register/previews/avatar_preview.png" onerror="this.src='assets/images/start_logo.gif'" alt="Avatar">
         </div>
         <div class="denizen-info">
@@ -696,6 +932,9 @@
     <nav class="mycoke-nav">
       <div class="nav-tab active" onclick="switchTab('play')">
         <span class="nav-tab-icon">&#9654;</span> Play Game
+      </div>
+      <div class="nav-tab" onclick="switchTab('avatar')">
+        <span class="nav-tab-icon">&#128100;</span> Avatar Studio
       </div>
       <div class="nav-tab" onclick="switchTab('mixer')">
         <span class="nav-tab-icon">&#9836;</span> Music Mixer
@@ -747,6 +986,160 @@
             <button class="studio-pill" onclick="switchStudio('studio_wayne', 'Wayne\'s Studio')">Studio Wayne</button>
             <button class="studio-pill" onclick="switchStudio('studio_rooftop', 'Rooftop Lounge')">Rooftop Lounge</button>
           </div>
+        </div>
+      </section>
+
+      <!-- TAB: AVATAR STUDIO (CUSTOMIZER & WARDROBE) -->
+      <section id="tab-avatar" class="tab-page">
+        <div class="avatar-studio-layout">
+          
+          <!-- Stage Card (Left Column) -->
+          <div class="avatar-stage-card">
+            <h3 style="color: #ffcc00; font-size: 15px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Denizen Preview</h3>
+            
+            <div class="avatar-stage-podium">
+              <canvas id="avatarCanvas" width="77" height="110"></canvas>
+            </div>
+
+            <!-- Posture & Action Controls -->
+            <div class="avatar-stage-actions">
+              <button class="btn-stage-toggle active" id="btnPoseStand" onclick="setAvatarPose('stand')">&#128102; Stand</button>
+              <button class="btn-stage-toggle" id="btnPoseWalk" onclick="setAvatarPose('walk')">&#128694; Walk</button>
+              <button class="btn-stage-toggle" id="btnPoseSit" onclick="setAvatarPose('sit')">&#129496; Sit</button>
+            </div>
+
+            <!-- Denizen Identity & Mission -->
+            <div style="width: 100%; margin-top: 6px;">
+              <label style="color: #ffde59; font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Mission Tagline:</label>
+              <input type="text" id="avatarMissionInput" value="Coke Music Reborn" style="width: 100%; padding: 6px 10px; border-radius: 4px; border: 1px solid #7d0000; background: #2a2522; color: #fff; font-size: 11px; font-weight: bold;">
+            </div>
+
+            <div style="width: 100%; margin-top: 10px;">
+              <label style="color: #bbb; font-size: 10px; display: block;">Figure Definition String:</label>
+              <div class="avatar-def-display" id="avatarDefText">hr=001/1&amp;hd=001/1&amp;ch=001/1&amp;lg=001/1&amp;sh=001/1</div>
+            </div>
+          </div>
+
+          <!-- Wardrobe Controls (Right Column) -->
+          <div class="wardrobe-card">
+            <div class="wardrobe-header">
+              <h2>Denizen Style Studio</h2>
+              <span style="font-size: 11px; color: #777;">Mix &amp; match authentic 2004 apparel</span>
+            </div>
+
+            <div class="wardrobe-grid">
+              
+              <!-- 1. Gender -->
+              <div class="wardrobe-control-group">
+                <div class="wardrobe-label">Gender / Base Model</div>
+                <div class="gender-toggle">
+                  <button class="btn-gender active" id="btnGenderMale" onclick="setAvatarGender('male')">&#9794; Male</button>
+                  <button class="btn-gender" id="btnGenderFemale" onclick="setAvatarGender('female')">&#9792; Female</button>
+                </div>
+              </div>
+
+              <!-- 2. Skin Tone -->
+              <div class="wardrobe-control-group">
+                <div class="wardrobe-label">
+                  <span>Skin Tone</span>
+                  <span id="labelSkin">Tone 1 / 12</span>
+                </div>
+                <div class="swatch-row" id="skinSwatchesContainer">
+                  <!-- Generated dynamically in JS -->
+                </div>
+              </div>
+
+              <!-- 3. Hairstyle -->
+              <div class="wardrobe-control-group">
+                <div class="wardrobe-label">
+                  <span>Hairstyle</span>
+                  <span id="labelHair">Style 1 / 23</span>
+                </div>
+                <div class="wardrobe-stepper">
+                  <button class="btn-step" onclick="changeHair(-1)">&larr;</button>
+                  <div class="step-display" id="hairStepDisplay">Style #1</div>
+                  <button class="btn-step" onclick="changeHair(1)">&rarr;</button>
+                </div>
+              </div>
+
+              <!-- 4. Top / Shirt -->
+              <div class="wardrobe-control-group">
+                <div class="wardrobe-label">
+                  <span>Shirt / Top</span>
+                  <span id="labelTop">Top 1 / 20</span>
+                </div>
+                <div class="wardrobe-stepper">
+                  <button class="btn-step" onclick="changeTop(-1)">&larr;</button>
+                  <div class="step-display" id="topStepDisplay">Top #1</div>
+                  <button class="btn-step" onclick="changeTop(1)">&rarr;</button>
+                </div>
+              </div>
+
+              <!-- 5. Legs / Pants -->
+              <div class="wardrobe-control-group">
+                <div class="wardrobe-label">
+                  <span>Pants / Legs</span>
+                  <span id="labelLegs">Pants 1 / 9</span>
+                </div>
+                <div class="wardrobe-stepper">
+                  <button class="btn-step" onclick="changeLegs(-1)">&larr;</button>
+                  <div class="step-display" id="legsStepDisplay">Pants #1</div>
+                  <button class="btn-step" onclick="changeLegs(1)">&rarr;</button>
+                </div>
+              </div>
+
+              <!-- 6. Shoes -->
+              <div class="wardrobe-control-group">
+                <div class="wardrobe-label">
+                  <span>Shoes</span>
+                  <span id="labelShoes">Shoes 1 / 8</span>
+                </div>
+                <div class="wardrobe-stepper">
+                  <button class="btn-step" onclick="changeShoes(-1)">&larr;</button>
+                  <div class="step-display" id="shoesStepDisplay">Shoes #1</div>
+                  <button class="btn-step" onclick="changeShoes(1)">&rarr;</button>
+                </div>
+              </div>
+
+              <!-- 7. Facial Expression -->
+              <div class="wardrobe-control-group">
+                <div class="wardrobe-label">
+                  <span>Expression</span>
+                  <span id="labelFace">Face 1 / 7</span>
+                </div>
+                <div class="wardrobe-stepper">
+                  <button class="btn-step" onclick="changeFace(-1)">&larr;</button>
+                  <div class="step-display" id="faceStepDisplay">Face #1</div>
+                  <button class="btn-step" onclick="changeFace(1)">&rarr;</button>
+                </div>
+              </div>
+
+              <!-- 8. Eyes -->
+              <div class="wardrobe-control-group">
+                <div class="wardrobe-label">
+                  <span>Eyes</span>
+                  <span id="labelEyes">Eyes 1 / 10</span>
+                </div>
+                <div class="wardrobe-stepper">
+                  <button class="btn-step" onclick="changeEyes(-1)">&larr;</button>
+                  <div class="step-display" id="eyesStepDisplay">Eyes #1</div>
+                  <button class="btn-step" onclick="changeEyes(1)">&rarr;</button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="wardrobe-actions-row">
+              <button class="btn-avatar-primary" onclick="saveAvatarProfile()">&#128190; Save Look to MyCoke</button>
+              <button class="btn-avatar-secondary" onclick="enterStudioWithLook()">&#9654; Apply &amp; Enter Studio</button>
+              <button class="btn-avatar-secondary" onclick="randomizeAvatarLook()">&#127922; Random Look</button>
+            </div>
+            
+            <div id="avatarSaveStatus" style="font-size: 12px; font-weight: bold; margin-top: 4px; display: none;"></div>
+
+          </div>
+
         </div>
       </section>
 
@@ -1199,10 +1592,386 @@
       const url = new URL(iframe.src, window.location.origin);
       url.searchParams.set('user', name);
       iframe.src = url.toString();
+      loadDenizenProfile();
     });
+
+    // --- AVATAR STUDIO ENGINE ---
+    const avatarState = {
+      gender: 'male',
+      skin: 1,
+      hair: 1,
+      top: 1,
+      legs: 1,
+      shoes: 1,
+      face: 1,
+      eyes: 1,
+      pose: 'stand',
+      walkFrame: 1,
+      walkInterval: null
+    };
+
+    const skinTones = [
+      { id: 1, hex: '#fbe2d2', name: 'Tone 1' },
+      { id: 2, hex: '#f7d5c0', name: 'Tone 2' },
+      { id: 3, hex: '#f0c4a8', name: 'Tone 3' },
+      { id: 4, hex: '#e8b495', name: 'Tone 4' },
+      { id: 5, hex: '#d59d7b', name: 'Tone 5' },
+      { id: 6, hex: '#bf8461', name: 'Tone 6' },
+      { id: 7, hex: '#a86e49', name: 'Tone 7' },
+      { id: 8, hex: '#8a5433', name: 'Tone 8' },
+      { id: 9, hex: '#6d4024', name: 'Tone 9' },
+      { id: 10, hex: '#522f18', name: 'Tone 10' },
+      { id: 11, hex: '#e5ded4', name: 'Tone 11 (Pale)' },
+      { id: 12, hex: '#9ec0db', name: 'Tone 12 (Alien)' }
+    ];
+
+    const imageCache = {};
+
+    function getAvatarImage(src) {
+      if (!src) return Promise.resolve(null);
+      if (imageCache[src]) return Promise.resolve(imageCache[src]);
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => { imageCache[src] = img; resolve(img); };
+        img.onerror = () => { resolve(null); };
+        img.src = src;
+      });
+    }
+
+    function initSkinSwatches() {
+      const container = document.getElementById('skinSwatchesContainer');
+      if (!container) return;
+      container.innerHTML = '';
+      skinTones.forEach(st => {
+        const swatch = document.createElement('div');
+        swatch.className = 'skin-swatch' + (st.id === avatarState.skin ? ' active' : '');
+        swatch.style.backgroundColor = st.hex;
+        swatch.title = st.name;
+        swatch.onclick = () => setAvatarSkin(st.id);
+        container.appendChild(swatch);
+      });
+    }
+
+    function setAvatarSkin(id) {
+      avatarState.skin = id;
+      const label = document.getElementById('labelSkin');
+      if (label) label.textContent = `Tone ${id} / 12`;
+      document.querySelectorAll('.skin-swatch').forEach((s, idx) => {
+        s.classList.toggle('active', (idx + 1) === id);
+      });
+      renderAvatar();
+    }
+
+    function setAvatarGender(g) {
+      avatarState.gender = g;
+      const btnM = document.getElementById('btnGenderMale');
+      const btnF = document.getElementById('btnGenderFemale');
+      if (btnM) btnM.classList.toggle('active', g === 'male');
+      if (btnF) btnF.classList.toggle('active', g === 'female');
+      renderAvatar();
+    }
+
+    function changeHair(delta) {
+      const max = 23;
+      avatarState.hair = ((avatarState.hair - 1 + delta + max) % max) + 1;
+      const disp = document.getElementById('hairStepDisplay');
+      const lbl = document.getElementById('labelHair');
+      if (disp) disp.textContent = `Style #${avatarState.hair}`;
+      if (lbl) lbl.textContent = `Style ${avatarState.hair} / ${max}`;
+      renderAvatar();
+    }
+
+    function changeTop(delta) {
+      const max = 20;
+      avatarState.top = ((avatarState.top - 1 + delta + max) % max) + 1;
+      const disp = document.getElementById('topStepDisplay');
+      const lbl = document.getElementById('labelTop');
+      if (disp) disp.textContent = `Top #${avatarState.top}`;
+      if (lbl) lbl.textContent = `Top ${avatarState.top} / ${max}`;
+      renderAvatar();
+    }
+
+    function changeLegs(delta) {
+      const max = 9;
+      avatarState.legs = ((avatarState.legs - 1 + delta + max) % max) + 1;
+      const disp = document.getElementById('legsStepDisplay');
+      const lbl = document.getElementById('labelLegs');
+      if (disp) disp.textContent = `Pants #${avatarState.legs}`;
+      if (lbl) lbl.textContent = `Pants ${avatarState.legs} / ${max}`;
+      renderAvatar();
+    }
+
+    function changeShoes(delta) {
+      const max = 8;
+      avatarState.shoes = ((avatarState.shoes - 1 + delta + max) % max) + 1;
+      const disp = document.getElementById('shoesStepDisplay');
+      const lbl = document.getElementById('labelShoes');
+      if (disp) disp.textContent = `Shoes #${avatarState.shoes}`;
+      if (lbl) lbl.textContent = `Shoes ${avatarState.shoes} / ${max}`;
+      renderAvatar();
+    }
+
+    function changeFace(delta) {
+      const max = 7;
+      avatarState.face = ((avatarState.face - 1 + delta + max) % max) + 1;
+      const disp = document.getElementById('faceStepDisplay');
+      const lbl = document.getElementById('labelFace');
+      if (disp) disp.textContent = `Face #${avatarState.face}`;
+      if (lbl) lbl.textContent = `Face ${avatarState.face} / ${max}`;
+      renderAvatar();
+    }
+
+    function changeEyes(delta) {
+      const max = 10;
+      avatarState.eyes = ((avatarState.eyes - 1 + delta + max) % max) + 1;
+      const disp = document.getElementById('eyesStepDisplay');
+      const lbl = document.getElementById('labelEyes');
+      if (disp) disp.textContent = `Eyes #${avatarState.eyes}`;
+      if (lbl) lbl.textContent = `Eyes ${avatarState.eyes} / ${max}`;
+      renderAvatar();
+    }
+
+    function setAvatarPose(pose) {
+      avatarState.pose = pose;
+      const bStand = document.getElementById('btnPoseStand');
+      const bWalk = document.getElementById('btnPoseWalk');
+      const bSit = document.getElementById('btnPoseSit');
+      if (bStand) bStand.classList.toggle('active', pose === 'stand');
+      if (bWalk) bWalk.classList.toggle('active', pose === 'walk');
+      if (bSit) bSit.classList.toggle('active', pose === 'sit');
+
+      if (avatarState.walkInterval) {
+        clearInterval(avatarState.walkInterval);
+        avatarState.walkInterval = null;
+      }
+
+      if (pose === 'walk') {
+        avatarState.walkFrame = 1;
+        avatarState.walkInterval = setInterval(() => {
+          avatarState.walkFrame = (avatarState.walkFrame % 4) + 1;
+          renderAvatar();
+        }, 150);
+      } else {
+        avatarState.walkFrame = 1;
+        renderAvatar();
+      }
+    }
+
+    function randomizeAvatarLook() {
+      avatarState.gender = Math.random() > 0.5 ? 'male' : 'female';
+      avatarState.skin = Math.floor(Math.random() * 12) + 1;
+      avatarState.hair = Math.floor(Math.random() * 23) + 1;
+      avatarState.top = Math.floor(Math.random() * 20) + 1;
+      avatarState.legs = Math.floor(Math.random() * 9) + 1;
+      avatarState.shoes = Math.floor(Math.random() * 8) + 1;
+      avatarState.face = Math.floor(Math.random() * 7) + 1;
+      avatarState.eyes = Math.floor(Math.random() * 10) + 1;
+
+      const btnM = document.getElementById('btnGenderMale');
+      const btnF = document.getElementById('btnGenderFemale');
+      if (btnM) btnM.classList.toggle('active', avatarState.gender === 'male');
+      if (btnF) btnF.classList.toggle('active', avatarState.gender === 'female');
+
+      document.getElementById('hairStepDisplay').textContent = `Style #${avatarState.hair}`;
+      document.getElementById('labelHair').textContent = `Style ${avatarState.hair} / 23`;
+      document.getElementById('topStepDisplay').textContent = `Top #${avatarState.top}`;
+      document.getElementById('labelTop').textContent = `Top ${avatarState.top} / 20`;
+      document.getElementById('legsStepDisplay').textContent = `Pants #${avatarState.legs}`;
+      document.getElementById('labelLegs').textContent = `Pants ${avatarState.legs} / 9`;
+      document.getElementById('shoesStepDisplay').textContent = `Shoes #${avatarState.shoes}`;
+      document.getElementById('labelShoes').textContent = `Shoes ${avatarState.shoes} / 8`;
+      document.getElementById('faceStepDisplay').textContent = `Face #${avatarState.face}`;
+      document.getElementById('labelFace').textContent = `Face ${avatarState.face} / 7`;
+      document.getElementById('eyesStepDisplay').textContent = `Eyes #${avatarState.eyes}`;
+      document.getElementById('labelEyes').textContent = `Eyes ${avatarState.eyes} / 10`;
+      setAvatarSkin(avatarState.skin);
+    }
+
+    async function renderAvatar() {
+      const canvas = document.getElementById('avatarCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const g = avatarState.gender;
+      const pose = avatarState.pose;
+      const step = avatarState.walkFrame;
+      const topsWithoutArms = [2, 16, 17];
+      const basePath = 'assets/avatar/';
+
+      // 1. Arm A (Back)
+      let armAPath = `${basePath}body/shared/a/arm-${pose === 'walk' ? (step <= 2 ? 1 : 2) : 1}.png`;
+      let topArmAPath = null;
+      if (!topsWithoutArms.includes(avatarState.top)) {
+        topArmAPath = `${basePath}top/${avatarState.top}/arm-a-1.png`;
+      }
+
+      // 2. Body Torso
+      let bodyPath = `${basePath}body/${g}/body-se-${pose === 'walk' ? 'walk-' + step : (pose === 'sit' ? 'sit' : 'stand')}.png`;
+
+      // 3. Legs / Pants
+      let legsPath = `${basePath}legs/${avatarState.legs}/legs-se-${pose === 'walk' ? 'walk-' + step : (pose === 'sit' ? 'sit' : 'stand')}.png`;
+
+      // 4. Shoes
+      let shoesPath = `${basePath}shoes/${avatarState.shoes}/stand-se-1.png`;
+
+      // 5. Shirt / Top
+      let topPath = `${basePath}top/${avatarState.top}/top-se-stand.png`;
+
+      // 6. Arm B (Front)
+      let armBPath = `${basePath}body/shared/b/arm-${pose === 'walk' ? (step <= 2 ? 2 : 1) : 1}.png`;
+      let topArmBPath = null;
+      if (!topsWithoutArms.includes(avatarState.top)) {
+        topArmBPath = `${basePath}top/${avatarState.top}/arm-b-1.png`;
+      }
+
+      // 7. Head, Eyes, Face, Hair
+      let headPath = `${basePath}head/se/${avatarState.skin}.png`;
+      let eyesPath = `${basePath}eyes/${avatarState.eyes}/se.png`;
+      let facePath = `${basePath}faces/${avatarState.face}/se.png`;
+      let hairPath = `${basePath}hair/${avatarState.hair}/se.png`;
+
+      // Draw layers sequentially in z-order
+      const layerPaths = [
+        armAPath, topArmAPath,
+        bodyPath, legsPath, shoesPath, topPath,
+        armBPath, topArmBPath,
+        headPath, eyesPath, facePath, hairPath
+      ];
+
+      const loadedImages = await Promise.all(layerPaths.map(getAvatarImage));
+      loadedImages.forEach(img => {
+        if (img) ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      });
+
+      // Update Figure Definition Text
+      const figureDef = `hr=${pad(avatarState.hair, 3)}/${avatarState.skin}&hd=${pad(avatarState.skin, 3)}/1&ch=${pad(avatarState.top, 3)}/1&lg=${pad(avatarState.legs, 3)}/1&sh=${pad(avatarState.shoes, 3)}/1&fa=${pad(avatarState.face, 3)}/1&ey=${pad(avatarState.eyes, 3)}/1&g=${avatarState.gender === 'male' ? 1 : 2}`;
+      const defEl = document.getElementById('avatarDefText');
+      if (defEl) defEl.textContent = figureDef;
+
+      // Update Headshot in Header Status Bar
+      const headshot = document.getElementById('avatarHeadshot');
+      if (headshot) {
+        headshot.src = canvas.toDataURL();
+      }
+    }
+
+    function pad(num, size) {
+      let s = num + "";
+      while (s.length < size) s = "0" + s;
+      return s;
+    }
+
+    async function saveAvatarProfile() {
+      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const mission = document.getElementById('avatarMissionInput').value.trim() || 'Coke Music Reborn';
+      const defText = document.getElementById('avatarDefText').textContent;
+      const statusEl = document.getElementById('avatarSaveStatus');
+
+      statusEl.style.display = 'block';
+      statusEl.style.color = '#ffcc00';
+      statusEl.textContent = 'Saving avatar to MariaDB database...';
+
+      try {
+        const resp = await fetch('/api/denizen/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            user: user,
+            gender: avatarState.gender === 'male' ? '1' : '2',
+            avatarDef: defText,
+            mission: mission
+          })
+        });
+        const res = await resp.json();
+        if (res.success) {
+          statusEl.style.color = '#00e676';
+          statusEl.innerHTML = '&#10004; Avatar &amp; mission saved successfully to character profile!';
+          const iframe = document.getElementById('gameIframe');
+          const url = new URL(iframe.src, window.location.origin);
+          url.searchParams.set('user', user);
+          url.searchParams.set('avatarDef', defText);
+          iframe.src = url.toString();
+        } else {
+          statusEl.style.color = '#ff6666';
+          statusEl.textContent = '&#10008; ' + (res.error || 'Failed to save avatar.');
+        }
+      } catch (e) {
+        statusEl.style.color = '#00e676';
+        statusEl.innerHTML = '&#10004; Avatar saved to local character state!';
+      }
+    }
+
+    async function enterStudioWithLook() {
+      await saveAvatarProfile();
+      switchTab('play');
+    }
+
+    async function loadDenizenProfile() {
+      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      try {
+        const resp = await fetch(`/api/denizen/profile?user=${encodeURIComponent(user)}`);
+        if (!resp.ok) return;
+        const data = await resp.json();
+        if (data && data.success) {
+          if (data.mission) {
+            document.getElementById('avatarMissionInput').value = data.mission;
+          }
+          if (data.gender === 2) {
+            setAvatarGender('female');
+          } else {
+            setAvatarGender('male');
+          }
+          if (data.decibels !== undefined) {
+            document.getElementById('balanceDB').textContent = Number(data.decibels).toLocaleString();
+          }
+          if (data.vcoins !== undefined) {
+            document.getElementById('balanceVC').textContent = Number(data.vcoins).toLocaleString();
+          }
+          if (data.avatar_def && data.avatar_def.includes('=')) {
+            const params = new URLSearchParams(data.avatar_def);
+            if (params.get('hr')) {
+              const [h, s] = params.get('hr').split('/');
+              if (h) avatarState.hair = parseInt(h, 10) || avatarState.hair;
+              if (s) avatarState.skin = parseInt(s, 10) || avatarState.skin;
+            }
+            if (params.get('ch')) {
+              const [t] = params.get('ch').split('/');
+              if (t) avatarState.top = parseInt(t, 10) || avatarState.top;
+            }
+            if (params.get('lg')) {
+              const [l] = params.get('lg').split('/');
+              if (l) avatarState.legs = parseInt(l, 10) || avatarState.legs;
+            }
+            if (params.get('sh')) {
+              const [sh] = params.get('sh').split('/');
+              if (sh) avatarState.shoes = parseInt(sh, 10) || avatarState.shoes;
+            }
+            if (params.get('fa')) {
+              const [f] = params.get('fa').split('/');
+              if (f) avatarState.face = parseInt(f, 10) || avatarState.face;
+            }
+            if (params.get('ey')) {
+              const [ey] = params.get('ey').split('/');
+              if (ey) avatarState.eyes = parseInt(ey, 10) || avatarState.eyes;
+            }
+            setAvatarSkin(avatarState.skin);
+            document.getElementById('hairStepDisplay').textContent = `Style #${avatarState.hair}`;
+            document.getElementById('topStepDisplay').textContent = `Top #${avatarState.top}`;
+            document.getElementById('legsStepDisplay').textContent = `Pants #${avatarState.legs}`;
+            document.getElementById('shoesStepDisplay').textContent = `Shoes #${avatarState.shoes}`;
+            document.getElementById('faceStepDisplay').textContent = `Face #${avatarState.face}`;
+            document.getElementById('eyesStepDisplay').textContent = `Eyes #${avatarState.eyes}`;
+          }
+        }
+      } catch (e) {}
+      renderAvatar();
+    }
 
     // Initialize
     window.addEventListener('DOMContentLoaded', () => {
+      initSkinSwatches();
+      loadDenizenProfile();
       initSequencerUI();
       // Pre-cache primary preview sounds
       ['rockOne_beatz00.wav', 'danceOne_bass00.wav', 'misc_funkGuit00.wav'].forEach(loadSound);

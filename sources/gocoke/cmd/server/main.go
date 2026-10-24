@@ -5,6 +5,7 @@ import (
 	"crypto/sha1"
 	"encoding/base64"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -197,7 +198,12 @@ func main() {
 	// 4. Red Cap PIN code redemption HTTP API
 	mux.HandleFunc("/sf/ssldocs/redeemCap.jsp", srv.handleRedeemCap)
 
-	// 5. Health endpoint
+	// 5. Denizen Profile & Customizer APIs
+	mux.HandleFunc("/api/denizen/profile", srv.handleDenizenProfile)
+	mux.HandleFunc("/api/denizen/update", srv.handleUpdateDenizen)
+	mux.HandleFunc("/sf/ssldocs/updateDenizen.jsp", srv.handleUpdateDenizen)
+
+	// 6. Health endpoint
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintf(w, `{"status":"ok","mode":"standalone-server","project":"gocoke","storage":"%s"}`, srv.store.driver)
@@ -338,6 +344,115 @@ func (s *Server) handleRedeemCap(w http.ResponseWriter, r *http.Request) {
 	_, newVC, _ := s.store.GetBalance(user)
 	fmt.Fprintf(w, `{"success":true,"reward_vcoins":%d,"reward_item":%d,"new_vcoins":%d,"user":%q}`,
 		rewardVC, rewardItem, newVC, user)
+}
+
+func (s *Server) handleDenizenProfile(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	q := r.URL.Query()
+	user := q.Get("user")
+	if user == "" {
+		user = q.Get("screenName")
+	}
+	if user == "" {
+		user = "Adam"
+	}
+
+	d, err := s.store.GetDenizenByName(user)
+	if err != nil || d == nil {
+		d, err = s.store.GetOrCreateDenizen(user, "M", "hr=001/1&hd=001/1&ch=001/1&lg=001/1&sh=001/1&fa=001/1&ey=001/1&g=1", "Coke Music Reborn")
+	}
+
+	if d != nil {
+		json.NewEncoder(w).Encode(map[string]any{
+			"success":      true,
+			"screen_name":  d.ScreenName,
+			"gender":       d.Gender,
+			"mission":      d.Mission,
+			"avatar_def":   d.AvatarDef,
+			"decibels":     d.Decibels,
+			"vcoins":       d.VCoins,
+			"last_seen_in": d.LastSeenIn,
+		})
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "denizen not found"})
+	}
+}
+
+func (s *Server) handleUpdateDenizen(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	user := r.URL.Query().Get("user")
+	genderStr := r.URL.Query().Get("gender")
+	avatarDef := r.URL.Query().Get("avatarDef")
+	mission := r.URL.Query().Get("mission")
+
+	if r.Method == http.MethodPost {
+		_ = r.ParseForm()
+		if u := r.FormValue("user"); u != "" {
+			user = u
+		}
+		if g := r.FormValue("gender"); g != "" {
+			genderStr = g
+		}
+		if ad := r.FormValue("avatarDef"); ad != "" {
+			avatarDef = ad
+		}
+		if m := r.FormValue("mission"); m != "" {
+			mission = m
+		}
+	}
+
+	if user == "" {
+		user = "Adam"
+	}
+	gender := 1
+	if genderStr == "F" || genderStr == "2" || strings.ToLower(genderStr) == "female" {
+		gender = 2
+	}
+	if avatarDef == "" {
+		avatarDef = "hr=001/1&hd=001/1&ch=001/1&lg=001/1&sh=001/1&fa=001/1&ey=001/1&g=1"
+	}
+	if mission == "" {
+		mission = "Coke Music Reborn"
+	}
+
+	updated, err := s.store.UpdateDenizenProfile(user, gender, avatarDef, mission)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+
+	// Update active Player session in memory and broadcast AV update to room occupants
+	s.mu.RLock()
+	for _, room := range s.Rooms {
+		room.mu.Lock()
+		for _, p := range room.Players {
+			if strings.EqualFold(p.ScreenName, user) {
+				p.Gender = updated.Gender
+				p.Definition = updated.AvatarDef
+				p.Mission = updated.Mission
+				avXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV av=\"%s\" x=\"%d\" z=\"%d\" d=\"%d\" g=\"%d\" m=\"%s\" def=\"%s\" act=\"%s\"/></Room.Action>",
+					room.ID, p.ScreenName, p.X, p.Z, p.Dir, p.Gender, p.Mission, p.Definition, p.Action)
+				go room.Broadcast(avXML, "")
+			}
+		}
+		room.mu.Unlock()
+	}
+	s.mu.RUnlock()
+
+	log.Printf("[HTTP] Updated profile for %s: gender=%d def=%s", updated.ScreenName, updated.Gender, updated.AvatarDef)
+
+	json.NewEncoder(w).Encode(map[string]any{
+		"success":     true,
+		"screen_name": updated.ScreenName,
+		"gender":      updated.Gender,
+		"mission":     updated.Mission,
+		"avatar_def":  updated.AvatarDef,
+		"decibels":    updated.Decibels,
+		"vcoins":      updated.VCoins,
+	})
 }
 
 func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
@@ -851,9 +966,9 @@ func (s *Server) startPerformance(room *Room, dj, title, edl string) {
 	room.Performance = session
 	room.mu.Unlock()
 
-	// Broadcast song start and DJ animation to all room occupants
-	cdpXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_P av=\"%s\" s=\"%s\" title=\"%s\"/></Room.Action>",
-		room.ID, dj, edl, title)
+	// Broadcast song start and DJ animation to all room occupants (with 1:1 client attributes: av, a, sn, s)
+	cdpXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_P av=\"%s\" a=\"%s\" sn=\"%s\" title=\"%s\" s=\"%s\" catId=\"89\"/></Room.Action>",
+		room.ID, dj, dj, title, title, edl)
 	room.Broadcast(cdpXML, "")
 	log.Printf("[MUSIC] DJ %s started track %q in %s", dj, title, room.ID)
 
@@ -882,14 +997,19 @@ func (s *Server) startPerformance(room *Room, dj, title, edl string) {
 		}
 		rewardDB += 10 // Participation bonus
 
-		// Credit Decibels to DJ in persistent SQLite database
+		// Credit Decibels to DJ in persistent database
 		newBalance, _ := s.store.AdjustBalance(dj, rewardDB, 0)
 		log.Printf("[MUSIC] Performance ended for %s in %s. Cheers: %d, Boos: %d, Awarded: +%d dB (New Balance: %d)",
 			dj, room.ID, cheers, boos, rewardDB, newBalance)
 
-		// Broadcast official performance results dialog packet (CD_PRS)
-		prsXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_PRS av=\"%s\" tu=\"%d\" td=\"%d\" db=\"%d\"/></Room.Action>",
-			room.ID, dj, cheers, boos, rewardDB)
+		// 1. Broadcast CD_VR with tur, tdr, pa for official performance results dialog
+		vrXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_VR tur=\"%d\" tdr=\"%d\" pa=\"%d\"/></Room.Action>",
+			room.ID, cheers, boos, rewardDB)
+		room.Broadcast(vrXML, "")
+
+		// 2. Broadcast CD_PRS with reaction summary for crowd cheers/boos audio
+		prsXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_PRS av=\"%s\" tur=\"%d\" tdr=\"%d\" tu=\"%d\" td=\"%d\" db=\"%d\"/></Room.Action>",
+			room.ID, dj, cheers, boos, cheers, boos, rewardDB)
 		room.Broadcast(prsXML, "")
 	}()
 }
@@ -909,37 +1029,42 @@ func (s *Server) stopPerformance(room *Room) {
 
 func (s *Server) recordVote(room *Room, voter string, delta int) {
 	room.mu.Lock()
-	defer room.mu.Unlock()
-
 	if room.Performance == nil || room.Performance.Done {
+		room.mu.Unlock()
 		return
 	}
 	if room.Performance.Voters[voter] {
 		// Already voted in this performance round
+		room.mu.Unlock()
 		return
 	}
 	room.Performance.Voters[voter] = true
 
-	act := "cheer"
+	var tuXML, tdXML string
 	if delta > 0 {
 		room.Performance.Cheers++
+		tuXML = fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_TU av=\"%s\"/></Room.Action>", room.ID, voter)
 	} else {
 		room.Performance.Boos++
-		act = "boo"
+		tdXML = fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_TD av=\"%s\"/></Room.Action>", room.ID, voter)
 	}
 
-	// 1. Broadcast real-time Decibel meter update (CD_VR)
+	cheers := room.Performance.Cheers
+	boos := room.Performance.Boos
 	vrXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_VR tu=\"%d\" td=\"%d\"/></Room.Action>",
-		room.ID, room.Performance.Cheers, room.Performance.Boos)
+		room.ID, cheers, boos)
+	room.mu.Unlock()
+
+	// Broadcast events after releasing lock
+	if tuXML != "" {
+		room.Broadcast(tuXML, "")
+	} else if tdXML != "" {
+		room.Broadcast(tdXML, "")
+	}
 	room.Broadcast(vrXML, "")
 
-	// 2. Broadcast voter avatar animation (cheer or boo)
-	avXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV_DC av=\"%s\" act=\"%s\"/></Room.Action>",
-		room.ID, voter, act)
-	room.Broadcast(avXML, "")
-
-	log.Printf("[VOTE] [%s] %s voted %s (Cheers: %d, Boos: %d)",
-		room.ID, voter, act, room.Performance.Cheers, room.Performance.Boos)
+	log.Printf("[VOTE] [%s] %s voted (delta: %d, Cheers: %d, Boos: %d)",
+		room.ID, voter, delta, cheers, boos)
 }
 
 func parsePPoints(xml string) [][2]int {

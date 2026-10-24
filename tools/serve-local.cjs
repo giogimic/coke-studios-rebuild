@@ -79,7 +79,7 @@ function makeServer(project) {
         }), 'application/json');
       }
 
-      if (project === 'portal' && url.pathname.startsWith('/sf/')) {
+      if (project === 'portal' && (url.pathname.startsWith('/sf/') || url.pathname.startsWith('/api/'))) {
         const proxyReq = http.request({
           hostname: '127.0.0.1',
           port: 8080,

@@ -436,7 +436,29 @@ chmod +x setup.sh
 ./setup.sh --update
 ```
 
+### D. Avatar Studio Customizer & Sprite Compositing Standard
+The avatar system uses 12 layered dimetric sprite sheets (77x110 px) aligned to a common origin rendered on HTML5 Canvas:
+1. `body/shared/a/arm-{step}.png` (Back arm)
+2. `top/{top_id}/arm-a-1.png` (Back sleeve, omitted for sleeveless tops `[2, 16, 17]`)
+3. `body/{gender}/body-se-{state}.png` (Torso: stand, sit, walk-1..4)
+4. `legs/{legs_id}/legs-se-{state}.png` (Pants: stand, sit, walk-1..4)
+5. `shoes/{shoes_id}/stand-se-1.png` (Shoes)
+6. `top/{top_id}/top-se-stand.png` (Shirt / hoodie / jacket)
+7. `body/shared/b/arm-{step}.png` (Front arm)
+8. `top/{top_id}/arm-b-1.png` (Front sleeve)
+9. `head/se/{skin_tone}.png` (Head with 12 distinct skin tones)
+10. `eyes/{eyes_id}/se.png` (Eyes style 1..10)
+11. `faces/{face_id}/se.png` (Expression style 1..7)
+12. `hair/{hair_id}/se.png` (Hairstyle 1..23)
+
+Figure strings are serialized in authentic Sulake / Coke Studios format:
+```
+hr={style}/{skin}&hd={skin}/1&ch={top}/1&lg={legs}/1&sh={shoes}/1&fa={face}/1&ey={eyes}/1&g={gender}
+```
+Persisted to MariaDB `denizens.avatar_def` and broadcast dynamically to room occupants via `<AV av="DJ" ... def="..."/>` when customized in real time.
+
 ---
 
 *Authored and verified for the Coke Music / Coke Studios Preservation Archive.*
+
 
