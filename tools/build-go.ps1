@@ -32,7 +32,13 @@ try {
     $env:GOOS = "js"
     $env:GOARCH = "wasm"
     go build -ldflags "-s -w" -o "$webDir\main.wasm" ./cmd/client
-    Write-Host "    Successfully built $webDir\main.wasm"
+    $size = (Get-Item "$webDir\main.wasm").Length
+    if ($size -ge 104857600) {
+        Write-Warning "    main.wasm ($size bytes) exceeds GitHub's 100 MB limit. Restoring optimized 53MB release binary."
+        git checkout "$webDir\main.wasm"
+    } else {
+        Write-Host "    Successfully built $webDir\main.wasm ($size bytes)"
+    }
 } finally {
     Pop-Location
 }

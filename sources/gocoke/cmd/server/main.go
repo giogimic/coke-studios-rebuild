@@ -23,6 +23,7 @@ import (
 	"sync"
 	"time"
 
+	"gocoke/internal/client/minigames/sumo"
 	"gocoke/internal/client/net/amf"
 )
 
@@ -95,6 +96,7 @@ type Server struct {
 	catalog      map[int]*CatalogItem
 	catalogList  []*CatalogItem
 	tradeManager *TradeManager
+	sumoManager  *SumoManager
 }
 
 func NewServer(webRoot, host, port string, store *Store) *Server {
@@ -115,6 +117,8 @@ func NewServer(webRoot, host, port string, store *Store) *Server {
 		store:     store,
 		nextPosID: 2000,
 	}
+
+	s.sumoManager = NewSumoManager(s)
 
 	s.tradeManager = NewTradeManager(s.store, func(roomID, xml string) {
 		if rm := s.GetOrCreateRoom(roomID); rm != nil {
@@ -1715,6 +1719,47 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 			target = extractAttr(xml, "av")
 		}
 		s.handleStudioKick(player, target)
+		return
+	}
+
+	// --- V-ego San Sumo Game Actions ---
+	if strings.Contains(xml, "<Sumo.MoveSelected") {
+		moveStr := extractAttr(xml, "move")
+		moveInt, _ := strconv.Atoi(moveStr)
+		if s.sumoManager != nil {
+			state, res, err := s.sumoManager.SubmitMove(player.ScreenName, sumo.Move(moveInt))
+			if err == nil && state != nil {
+				respXML := fmt.Sprintf("<Sumo.RoundResult round=\"%d\" p1=\"%s\" p2=\"%s\" p1_score=\"%d\" p2_score=\"%d\" res=\"%d\" over=\"%v\" winner=\"%s\"/>",
+					state.CurrentRound, state.Player1Name, state.Player2Name, state.Player1Score, state.Player2Score, int(res), state.GameOver, state.WinnerName)
+				_ = player.Send(respXML)
+			}
+		}
+		return
+	}
+
+	if strings.Contains(xml, "<Lobby.StartGame") || strings.Contains(xml, "<Sumo.JoinQueue") {
+		if s.sumoManager != nil {
+			sess := s.sumoManager.JoinQueue(player)
+			if sess != nil {
+				startXML := fmt.Sprintf("<Room.StartGameAccepted roomID=\"%s\" p1=\"%s\" p2=\"%s\"/>",
+					sess.ID, sess.Match.Player1Name, sess.Match.Player2Name)
+				if sess.P1 != nil {
+					_ = sess.P1.Send(startXML)
+				}
+				if sess.P2 != nil {
+					_ = sess.P2.Send(startXML)
+				}
+			} else {
+				_ = player.Send("<Sumo.QueueWaiting/>")
+			}
+		}
+		return
+	}
+
+	if strings.Contains(xml, "<Sumo.GetDecibels") {
+		if d, _ := s.store.GetDenizenByName(player.ScreenName); d != nil {
+			_ = player.Send(fmt.Sprintf("<Sumo.Decibels val=\"%d\"/>", d.Decibels))
+		}
 		return
 	}
 

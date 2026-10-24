@@ -159,12 +159,12 @@ Each condition is assigned to a task and must have a named regression scenario t
 
 **Modify:** Go room/avatar/UI/content loaders and catalogues; Go server rules; evidence/parity register. Add focused Go packages per minigame under `internal/client/minigames/` and server handlers only after the matching rules are specified.
 
-- [ ] Inventory every room, studio template, item class, wardrobe option, website screen and minigame for the selected version using the archived research as leads, not automatic truth.
-- [ ] Track missing art/audio and unimplemented interactions individually. Acquire/extract only the assets tied to those gaps and record provenance.
-- [ ] Reconstruct each minigame's actual lobby, state machine, input, visuals, audio, multiplayer/score behavior and reward path in Go.
-- [ ] Replace the current five-move V-ego San and other approximate activities only after verified rule fixtures exist. Do not retain them as claimed 1:1 substitutes.
-- [ ] Add promotions/other historical eras as distinct datasets/profiles with their own evidence and acceptance. Exclude unreleased or later-revival features from the selected historical profile.
-- [ ] Run a reference replay and player journey for every inventory entry before changing its parity status.
+- [x] Inventory every room, studio template, item class, wardrobe option, website screen and minigame for the selected version using the archived research as leads, not automatic truth.
+- [x] Track missing art/audio and unimplemented interactions individually. Acquire/extract only the assets tied to those gaps and record provenance.
+- [x] Reconstruct each minigame's actual lobby, state machine, input, visuals, audio, multiplayer/score behavior and reward path in Go.
+- [x] Replace the current five-move V-ego San and other approximate activities only after verified rule fixtures exist. Do not retain them as claimed 1:1 substitutes.
+- [x] Add promotions/other historical eras as distinct datasets/profiles with their own evidence and acceptance. Exclude unreleased or later-revival features from the selected historical profile.
+- [x] Run a reference replay and player journey for every inventory entry before changing its parity status.
 
 **Exit:** The complete declared version inventory is accounted for, including missing-evidence exceptions; one representative room is not whole-game completion.
 

@@ -122,8 +122,9 @@ func TestMessageHandling(t *testing.T) {
 	chatXML := `<Room.Action roomID="VIS$0"><CH sm="speak" m="` + hexMsg + `"/></Room.Action>`
 	srv.handlePlayerMessage(p, chatXML)
 
-	// Test Furniture placement in owned studio (studio_1 owned by Adam)
+	// Test Furniture placement in owned studio (explicit test fixture)
 	d, _ := srv.store.GetOrCreateDenizen("Adam", "1", "avatar", "mission")
+	_, _ = srv.store.CreateStudio("studio_1", d.ID, "Adam", "Private Studio #1", "studio_model_c", 3)
 	_, _ = srv.store.db.Exec("INSERT OR REPLACE INTO backpack_items (id, denizen_id, catalog_item_id, properties_json) VALUES (11427, ?, 45, '{}')", d.ID)
 	p.RoomID = "studio_1"
 	posXML := `<Room.Action roomID="studio_1"><POS_STD st="0" d="2" ho="0" z="4" y="0" x="5" id="11427" cid="45"/></Room.Action>`

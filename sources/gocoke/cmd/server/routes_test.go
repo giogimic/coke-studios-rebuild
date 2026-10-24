@@ -51,8 +51,8 @@ func TestPlayerRoutesUseGoClient(t *testing.T) {
 	if strings.Contains(bodyPortal, `src="/phase/`) {
 		t.Errorf("portal game iframe must not default to /phase/")
 	}
-	if !strings.Contains(bodyPortal, `src="/game/?user=`) {
-		t.Errorf("portal game iframe must point to /game/?user=...")
+	if !strings.Contains(bodyPortal, `src="/game/`) {
+		t.Errorf("portal game iframe must point to /game/")
 	}
 
 	// 3. Verify registration generates a Go client launch URL

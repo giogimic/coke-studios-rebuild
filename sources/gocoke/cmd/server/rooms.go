@@ -222,6 +222,64 @@ func (r *Room) LoadPathMap(webRoot string) {
 	r.mu.Unlock()
 }
 
+// HistoricalPublicStudios maps all 44 authentic Coke Studios public rooms and aliases
+// as defined in PublicStudios_English.xml (Director 10.0 baseline).
+var HistoricalPublicStudios = map[string]struct {
+	Name   string
+	Layout int
+}{
+	// System Rooms 1..44
+	"$SYSTEM$1":  {Name: "London I", Layout: 5},
+	"$SYSTEM$2":  {Name: "London II", Layout: 5},
+	"$SYSTEM$3":  {Name: "Miami I", Layout: 5},
+	"$SYSTEM$4":  {Name: "Miami II", Layout: 5},
+	"$SYSTEM$5":  {Name: "Mombasa I", Layout: 5},
+	"$SYSTEM$6":  {Name: "Mombasa II", Layout: 5},
+	"$SYSTEM$7":  {Name: "New York I", Layout: 5},
+	"$SYSTEM$8":  {Name: "New York II", Layout: 5},
+	"$SYSTEM$9":  {Name: "Rio de Janeiro I", Layout: 5},
+	"$SYSTEM$10": {Name: "Rio de Janeiro II", Layout: 5},
+	"$SYSTEM$11": {Name: "Seattle I", Layout: 5},
+	"$SYSTEM$12": {Name: "Seattle II", Layout: 5},
+	"$SYSTEM$13": {Name: "Sydney I", Layout: 5},
+	"$SYSTEM$14": {Name: "Sydney II", Layout: 5},
+	"$SYSTEM$15": {Name: "Tokyo I", Layout: 5},
+	"$SYSTEM$16": {Name: "Tokyo II", Layout: 5},
+	"$SYSTEM$17": {Name: "Goa I", Layout: 5},
+	"$SYSTEM$18": {Name: "Goa II", Layout: 5},
+	"$SYSTEM$19": {Name: "Alaska I", Layout: 5},
+	"$SYSTEM$20": {Name: "Alaska II", Layout: 5},
+	"$SYSTEM$21": {Name: "Moscow I", Layout: 5},
+	"$SYSTEM$22": {Name: "Moscow II", Layout: 5},
+	"$SYSTEM$23": {Name: "Coca-Cola Red Room I", Layout: 5},
+	"$SYSTEM$24": {Name: "Coca-Cola Red Room II", Layout: 5},
+	"$SYSTEM$25": {Name: "San Francisco I", Layout: 3},
+	"$SYSTEM$26": {Name: "San Francisco II", Layout: 3},
+	"$SYSTEM$27": {Name: "Central Park I", Layout: 5},
+	"$SYSTEM$28": {Name: "Central Park II", Layout: 5},
+	"$SYSTEM$29": {Name: "New Orleans I", Layout: 5},
+	"$SYSTEM$30": {Name: "New Orleans II", Layout: 5},
+	"$SYSTEM$31": {Name: "Mexico I", Layout: 5},
+	"$SYSTEM$32": {Name: "Mexico II", Layout: 5},
+	"$SYSTEM$33": {Name: "Neptune I", Layout: 5},
+	"$SYSTEM$34": {Name: "Neptune II", Layout: 5},
+	"$SYSTEM$35": {Name: "Casting Call Room I", Layout: 5},
+	"$SYSTEM$36": {Name: "Casting Call Room II", Layout: 5},
+	"$SYSTEM$37": {Name: "Casting Call Room III", Layout: 5},
+	"$SYSTEM$38": {Name: "Casting Call Room IV", Layout: 5},
+	"$SYSTEM$39": {Name: "Whale wash", Layout: 5},
+	"$SYSTEM$40": {Name: "Audition gold", Layout: 5},
+	"$SYSTEM$41": {Name: "mycoke Arena", Layout: 5},
+	"$SYSTEM$42": {Name: "Club Cherry", Layout: 5},
+	"$SYSTEM$43": {Name: "Ray's Rooftop Party", Layout: 5},
+	"$SYSTEM$44": {Name: "Audition red", Layout: 5},
+
+	// Web / Vis aliases
+	"VIS$0": {Name: "Central Park Studio", Layout: 5},
+	"VIS$1": {Name: "San Francisco Studio", Layout: 3},
+	"VIS$2": {Name: "London Studio", Layout: 5},
+}
+
 func (s *Server) GetRoom(roomID string) (*Room, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -235,24 +293,11 @@ func (s *Server) GetRoom(roomID string) (*Room, error) {
 		return rm, nil
 	}
 
-	switch roomID {
-	case "VIS$0":
-		rm := NewRoom("VIS$0", "Central Park Studio", 5)
+	if def, ok := HistoricalPublicStudios[roomID]; ok {
+		rm := NewRoom(roomID, def.Name, def.Layout)
 		rm.OwnerName = "Coke Studios"
 		rm.LoadPathMap(s.webRoot)
-		s.Rooms["VIS$0"] = rm
-		return rm, nil
-	case "VIS$1":
-		rm := NewRoom("VIS$1", "San Francisco Studio", 3)
-		rm.OwnerName = "Coke Studios"
-		rm.LoadPathMap(s.webRoot)
-		s.Rooms["VIS$1"] = rm
-		return rm, nil
-	case "VIS$2":
-		rm := NewRoom("VIS$2", "London Studio", 5)
-		rm.OwnerName = "Coke Studios"
-		rm.LoadPathMap(s.webRoot)
-		s.Rooms["VIS$2"] = rm
+		s.Rooms[roomID] = rm
 		return rm, nil
 	}
 

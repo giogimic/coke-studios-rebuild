@@ -319,6 +319,14 @@ func (s *Store) migrate() error {
 				possession_id INT NOT NULL,
 				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+			`CREATE TABLE IF NOT EXISTS daily_minigame_earnings (
+				denizen_id VARCHAR(64) NOT NULL,
+				game VARCHAR(64) NOT NULL,
+				earnings_date VARCHAR(16) NOT NULL,
+				total_earned INT NOT NULL DEFAULT 0,
+				PRIMARY KEY (denizen_id, game, earnings_date)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
 		}
 	} else {
 		queries = []string{
@@ -453,6 +461,14 @@ func (s *Store) migrate() error {
 				possession_id INTEGER NOT NULL,
 				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 			);`,
+
+			`CREATE TABLE IF NOT EXISTS daily_minigame_earnings (
+				denizen_id TEXT NOT NULL,
+				game TEXT NOT NULL,
+				earnings_date TEXT NOT NULL,
+				total_earned INTEGER NOT NULL DEFAULT 0,
+				PRIMARY KEY (denizen_id, game, earnings_date)
+			);`,
 		}
 	}
 
@@ -474,7 +490,6 @@ func (s *Store) migrate() error {
 		{ID: "VIS$0", OwnerID: "system", OwnerName: "Coke Studios", Name: "Central Park Studio", Layout: 3, RoomType: "studio_model_c", IsPublic: true},
 		{ID: "VIS$1", OwnerID: "system", OwnerName: "Coke Studios", Name: "San Francisco Studio", Layout: 3, RoomType: "studio_model_c", IsPublic: true},
 		{ID: "VIS$2", OwnerID: "system", OwnerName: "Coke Studios", Name: "London Studio", Layout: 3, RoomType: "studio_model_c", IsPublic: true},
-		{ID: "studio_1", OwnerID: "system", OwnerName: "Adam", Name: "Private Studio #1", Layout: 3, RoomType: "studio_model_c", IsPublic: false},
 	}
 
 	for _, st := range defaultStudios {
@@ -1922,4 +1937,77 @@ func (s *Store) ProcessVegoSanMove(screenName, playerMove string) (*VegoSanResul
 	}
 
 	return res, nil
+}
+
+func (s *Store) AddDenizenDecibels(denizenID string, amount int) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	_, err := s.db.Exec("UPDATE denizens SET decibels = decibels + ? WHERE id = ?", amount, denizenID)
+	return err
+}
+
+func (s *Store) ResetDenizenSumoStreak(denizenID string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	query := "UPDATE vegosan_streaks SET streak = 0, updated_at = CURRENT_TIMESTAMP WHERE denizen_id = ?"
+	_, err := s.db.Exec(query, denizenID)
+	return err
+}
+
+func (s *Store) IncrementDenizenSumoStreak(denizenID string) (int, int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var streak, totalWins int
+	_ = s.db.QueryRow("SELECT streak, total_wins FROM vegosan_streaks WHERE denizen_id = ?", denizenID).Scan(&streak, &totalWins)
+	streak++
+	totalWins++
+
+	if s.driver == "mysql" {
+		_, err := s.db.Exec(`INSERT INTO vegosan_streaks (denizen_id, streak, total_wins, updated_at) 
+			VALUES (?, ?, ?, CURRENT_TIMESTAMP) 
+			ON DUPLICATE KEY UPDATE streak = VALUES(streak), total_wins = VALUES(total_wins), updated_at = CURRENT_TIMESTAMP`,
+			denizenID, streak, totalWins)
+		return streak, totalWins, err
+	}
+
+	_, err := s.db.Exec(`INSERT INTO vegosan_streaks (denizen_id, streak, total_wins, updated_at) 
+		VALUES (?, ?, ?, CURRENT_TIMESTAMP) 
+		ON CONFLICT(denizen_id) DO UPDATE SET streak = excluded.streak, total_wins = excluded.total_wins, updated_at = CURRENT_TIMESTAMP`,
+		denizenID, streak, totalWins)
+	return streak, totalWins, err
+}
+
+func (s *Store) GetDailyMinigameEarnings(denizenID, game string) (int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	today := time.Now().UTC().Format("2006-01-02")
+	var earned int
+	err := s.db.QueryRow("SELECT total_earned FROM daily_minigame_earnings WHERE denizen_id = ? AND game = ? AND earnings_date = ?",
+		denizenID, game, today).Scan(&earned)
+	if err != nil {
+		return 0, nil
+	}
+	return earned, nil
+}
+
+func (s *Store) RecordDailyMinigameEarnings(denizenID, game string, amount int) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	today := time.Now().UTC().Format("2006-01-02")
+	if s.driver == "mysql" {
+		_, err := s.db.Exec(`INSERT INTO daily_minigame_earnings (denizen_id, game, earnings_date, total_earned)
+			VALUES (?, ?, ?, ?)
+			ON DUPLICATE KEY UPDATE total_earned = total_earned + VALUES(total_earned)`,
+			denizenID, game, today, amount)
+		return err
+	}
+
+	_, err := s.db.Exec(`INSERT INTO daily_minigame_earnings (denizen_id, game, earnings_date, total_earned)
+		VALUES (?, ?, ?, ?)
+		ON CONFLICT(denizen_id, game, earnings_date) DO UPDATE SET total_earned = total_earned + excluded.total_earned`,
+		denizenID, game, today, amount)
+	return err
 }

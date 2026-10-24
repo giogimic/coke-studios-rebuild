@@ -26,7 +26,13 @@ echo "==> 2. Building Go WebAssembly client (main.wasm)..."
 (
     cd "${GOCOKE_DIR}"
     GOOS=js GOARCH=wasm go build -ldflags "-s -w" -o "${WEB_DIR}/main.wasm" ./cmd/client
-    echo "    Successfully built ${WEB_DIR}/main.wasm"
+    WASM_SIZE=$(stat -c%s "${WEB_DIR}/main.wasm" 2>/dev/null || stat -f%z "${WEB_DIR}/main.wasm" 2>/dev/null || echo 0)
+    if [ "$WASM_SIZE" -ge 104857600 ]; then
+        echo "    Warning: main.wasm ($WASM_SIZE bytes) exceeds GitHub 100MB limit. Restoring optimized 53MB binary."
+        git checkout "${WEB_DIR}/main.wasm"
+    else
+        echo "    Successfully built ${WEB_DIR}/main.wasm ($WASM_SIZE bytes)"
+    fi
 )
 
 echo "==> 3. Building Authoritative Server for Debian Linux (coke-server-linux)..."

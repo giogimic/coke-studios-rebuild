@@ -73,8 +73,14 @@ func (s *Server) Handler() http.Handler {
 	// 11. Top 40 Charts API
 	mux.HandleFunc("/api/music/top40", s.handleTop40)
 
-	// 12. V-ego San Mini-game API
+	// 12. V-ego San Mini-game API & Director Shockwave endpoints
 	mux.HandleFunc("/api/minigames/vegosan/move", s.handleVegoSanMove)
+	mux.HandleFunc("/api/minigames/sumo/match", s.handleSumoMatch)
+	mux.HandleFunc("/gamesUser.do", s.handleGamesUserValidate)
+	mux.HandleFunc("/sumo.do", s.handleSumoPrizeHTTP)
+	mux.HandleFunc("/api/minigames/uncover/play", s.handleUncoverPlay)
+	mux.HandleFunc("/api/minigames/quiz/question", s.handlePopQuizQuestion)
+	mux.HandleFunc("/api/minigames/quiz/answer", s.handlePopQuizAnswer)
 
 	// 13. CokePhase legacy and JSON endpoints (reference)
 	mux.HandleFunc("/jsonreply/room.php", s.handleJsonRoom)
