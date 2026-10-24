@@ -130,6 +130,24 @@ func (s *Server) Handler() http.Handler {
 		mux.Handle("/portal/", http.StripPrefix("/portal/", http.FileServer(http.Dir(portalDir))))
 	}
 
+	csWebsiteDir := filepath.Join(repoRoot, "sources", "cs-website", "www")
+
+	mux.HandleFunc("/images/", func(w http.ResponseWriter, r *http.Request) {
+		sub := strings.TrimPrefix(r.URL.Path, "/images/")
+		candidates := []string{
+			filepath.Join(portalDir, "assets", "images", sub),
+			filepath.Join(csWebsiteDir, "images", sub),
+			filepath.Join(cokephaseDir, "assets", "images", sub),
+		}
+		for _, cand := range candidates {
+			if fi, err := os.Stat(cand); err == nil && !fi.IsDir() {
+				http.ServeFile(w, r, cand)
+				return
+			}
+		}
+		http.NotFound(w, r)
+	})
+
 	mux.HandleFunc("/assets/", func(w http.ResponseWriter, r *http.Request) {
 		sub := strings.TrimPrefix(r.URL.Path, "/assets/")
 		candidates := []string{
