@@ -16,6 +16,7 @@ COPY . /app
 RUN chmod +x /app/*.sh /app/tools/bin/* 2>/dev/null || true
 
 ENV PORT=24902
+ENV HOST=0.0.0.0
 
 # Expose ports
 # 24902: Master Recovery Portal & Gateway (Default Entry Point)

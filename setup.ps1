@@ -151,6 +151,7 @@ if (-not $Update) {
 # Save updated configuration to .env
 @"
 PORT=$Port
+HOST=0.0.0.0
 BACKEND_PORT=$BackendPort
 DB_PORT=$DbPort
 COKEPHASE_PORT=$CokePhasePort

@@ -37,6 +37,7 @@ services:
       - .:/app
     environment:
       - NODE_ENV=production
+      - HOST=0.0.0.0
       - PORT=${PORT:-24902}
       - BACKEND_PORT=${BACKEND_PORT:-8080}
       - COKEPHASE_PORT=${COKEPHASE_PORT:-8081}

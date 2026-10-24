@@ -170,6 +170,7 @@ fi
 echo "[*] Writing .env configuration..."
 cat > .env <<EOF
 PORT=${PORT}
+HOST=0.0.0.0
 BACKEND_PORT=${BACKEND_PORT}
 COKEPHASE_PORT=${COKEPHASE_PORT}
 MUSICMIXER_PORT=${MUSICMIXER_PORT}

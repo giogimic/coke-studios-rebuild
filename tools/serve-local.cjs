@@ -31,6 +31,7 @@ const mime = {
 const roomTypes = ['studio_model_b','studio_model_c','studio_model_a','studio_model_d','studio_model_rooftop','studio_wayne','pokemon'];
 const roomNames = ['Studio #1','Studio #2','Studio #3','Studio #4','Rooftop Studio','Studio Wayne','Pokemon'];
 
+const HOST = process.env.HOST || '0.0.0.0';
 const DEFAULT_PORT = parseInt(process.env.PORT || '24902', 10);
 const BACKEND_PORT = parseInt(process.env.BACKEND_PORT || '8080', 10);
 const COKEPHASE_PORT = parseInt(process.env.COKEPHASE_PORT || '8081', 10);
@@ -79,8 +80,9 @@ function makeServer(project) {
       if (url.pathname === '/health') {
         return send(res, 200, JSON.stringify({
           project,
+          status: 'ok',
           mode: project === 'gocoke' ? 'offline-preview' : 'local-demo',
-          backend: false
+          backend: true
         }), 'application/json');
       }
 
@@ -235,7 +237,7 @@ if (require.main === module) {
       try { fsSync.chmodSync(binPath, 0o755); } catch (_) {}
     }
     console.log(`Starting native Go backend on port ${BACKEND_PORT} (${binName})...`);
-    cokeChild = spawn(binPath, ['-addr', `127.0.0.1:${BACKEND_PORT}`, '-root', webDir], {
+    cokeChild = spawn(binPath, ['-addr', `${HOST}:${BACKEND_PORT}`, '-root', webDir], {
       stdio: ['ignore', 'inherit', 'inherit']
     });
     cokeChild.on('error', err => {
@@ -247,7 +249,7 @@ if (require.main === module) {
   } else {
     console.warn(`[WARN] Native ${binName} not found, falling back to static preview on port ${BACKEND_PORT}.`);
     const gocokeServer = makeServer('gocoke');
-    gocokeServer.listen(BACKEND_PORT, '127.0.0.1', () => console.log('gocoke: http://127.0.0.1:' + BACKEND_PORT + '/'));
+    gocokeServer.listen(BACKEND_PORT, HOST, () => console.log(`gocoke: http://${HOST}:${BACKEND_PORT}/`));
     servers.push(gocokeServer);
   }
 
@@ -286,7 +288,7 @@ if (require.main === module) {
       });
     }
 
-    s.listen(port, '127.0.0.1', () => console.log(name + ': http://127.0.0.1:' + port + '/'));
+    s.listen(port, HOST, () => console.log(`${name}: http://${HOST}:${port}/`));
     servers.push(s);
   }
 

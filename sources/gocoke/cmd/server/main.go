@@ -638,10 +638,16 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 		responseValue = resList
 
 	case strings.Contains(target, "getGameServerByStudioID"):
+		hostName := s.host
+		if h := r.Header.Get("X-Forwarded-Host"); h != "" {
+			hostName = strings.Split(h, ":")[0]
+		} else if r.Host != "" {
+			hostName = strings.Split(r.Host, ":")[0]
+		}
 		responseValue = map[string]any{
-			"server": s.host,
+			"server": hostName,
 			"port":   s.port,
-			"dns":    s.host,
+			"dns":    hostName,
 		}
 
 	// --- Messenger & Social AMF Endpoints ---
