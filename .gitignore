@@ -2,6 +2,10 @@
 .runtime/
 *.log
 *.pid
+*.db
+*.db-shm
+*.db-wal
+.env
 
 # Dependencies
 node_modules/

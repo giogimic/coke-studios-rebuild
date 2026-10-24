@@ -1,0 +1,621 @@
+package main
+
+import (
+	"database/sql"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+	"strings"
+	"sync"
+	"time"
+
+	_ "github.com/go-sql-driver/mysql"
+	_ "modernc.org/sqlite"
+)
+
+type DenizenRecord struct {
+	ID         string
+	ScreenName string
+	Secret     string
+	Gender     int
+	Mission    string
+	AvatarDef  string
+	Decibels   int
+	VCoins     int
+	LastSeenIn string
+}
+
+type StudioRecord struct {
+	ID        string
+	OwnerID   string
+	OwnerName string
+	Name      string
+	Layout    int
+	RoomType  string
+	Wallpaper int
+	Floor     int
+	Doorbell  int
+	IsPublic  bool
+}
+
+type BackpackItemRecord struct {
+	ID            int
+	DenizenID     string
+	CatalogItemID int
+	Properties    map[string]any
+}
+
+type PlacedFurniRecord struct {
+	ID            int
+	StudioID      string
+	CatalogItemID int
+	PosID         string
+	X             int
+	Y             int
+	Z             int
+	HO            int
+	Dir           int
+	State         int
+	IAOT          bool
+	Properties    map[string]any
+}
+
+type Store struct {
+	db     *sql.DB
+	driver string // "sqlite" or "mysql"
+	mu     sync.Mutex
+}
+
+func OpenStore(connStr string) (*Store, error) {
+	driver := "sqlite"
+	dsn := connStr
+
+	// Check if MySQL / MariaDB connection
+	envDriver := os.Getenv("DB_DRIVER")
+	if envDriver == "mysql" || envDriver == "mariadb" || strings.HasPrefix(connStr, "mysql://") || strings.Contains(connStr, "@tcp(") {
+		driver = "mysql"
+		dsn = strings.TrimPrefix(connStr, "mysql://")
+		if !strings.Contains(dsn, "parseTime=true") {
+			if strings.Contains(dsn, "?") {
+				dsn += "&parseTime=true"
+			} else {
+				dsn += "?parseTime=true"
+			}
+		}
+	} else if strings.HasPrefix(connStr, "sqlite://") {
+		dsn = strings.TrimPrefix(connStr, "sqlite://")
+	}
+
+	if driver == "sqlite" && !strings.Contains(dsn, "?") && dsn != ":memory:" {
+		dsn += "?_pragma=busy_timeout(5000)&_pragma=journal_mode(WAL)"
+	}
+
+	db, err := sql.Open(driver, dsn)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open database (%s): %w", driver, err)
+	}
+
+	// Retry connection with backoff for MariaDB startup in Docker
+	if driver == "mysql" {
+		db.SetMaxOpenConns(25)
+		db.SetMaxIdleConns(5)
+		db.SetConnMaxLifetime(5 * time.Minute)
+		for i := 0; i < 15; i++ {
+			if err = db.Ping(); err == nil {
+				break
+			}
+			log.Printf("[DB] Waiting for MariaDB connection... (%d/15): %v", i+1, err)
+			time.Sleep(2 * time.Second)
+		}
+		if err != nil {
+			db.Close()
+			return nil, fmt.Errorf("failed to connect to MariaDB: %w", err)
+		}
+	} else {
+		db.SetMaxOpenConns(1)
+	}
+
+	s := &Store{db: db, driver: driver}
+	if err := s.migrate(); err != nil {
+		db.Close()
+		return nil, fmt.Errorf("failed to migrate db: %w", err)
+	}
+
+	log.Printf("[DB] Storage initialized successfully using %s", strings.ToUpper(driver))
+	return s, nil
+}
+
+func (s *Store) Close() error {
+	return s.db.Close()
+}
+
+func (s *Store) migrate() error {
+	var queries []string
+
+	if s.driver == "mysql" {
+		queries = []string{
+			`CREATE TABLE IF NOT EXISTS denizens (
+				id VARCHAR(64) PRIMARY KEY,
+				screen_name VARCHAR(64) UNIQUE NOT NULL,
+				secret VARCHAR(128) NOT NULL,
+				gender INT NOT NULL DEFAULT 1,
+				mission VARCHAR(255) NOT NULL DEFAULT 'Coke Music',
+				avatar_def TEXT NOT NULL,
+				decibels INT NOT NULL DEFAULT 5000,
+				vcoins INT NOT NULL DEFAULT 500,
+				last_seen_in VARCHAR(64) NOT NULL DEFAULT 'VIS$0',
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+			`CREATE TABLE IF NOT EXISTS studios (
+				id VARCHAR(64) PRIMARY KEY,
+				owner_id VARCHAR(64) NOT NULL,
+				owner_name VARCHAR(64) NOT NULL,
+				name VARCHAR(128) NOT NULL,
+				layout INT NOT NULL DEFAULT 3,
+				room_type VARCHAR(64) NOT NULL DEFAULT 'studio_model_c',
+				wallpaper INT DEFAULT 0,
+				floor INT DEFAULT 0,
+				doorbell INT DEFAULT 0,
+				is_public TINYINT(1) DEFAULT 0
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+			`CREATE TABLE IF NOT EXISTS backpack_items (
+				id INT AUTO_INCREMENT PRIMARY KEY,
+				denizen_id VARCHAR(64) NOT NULL,
+				catalog_item_id INT NOT NULL,
+				properties_json TEXT NOT NULL
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+			`CREATE TABLE IF NOT EXISTS placed_furniture (
+				id INT AUTO_INCREMENT PRIMARY KEY,
+				studio_id VARCHAR(64) NOT NULL,
+				catalog_item_id INT NOT NULL,
+				pos_id VARCHAR(64) NOT NULL,
+				x INT NOT NULL,
+				y INT NOT NULL,
+				z INT NOT NULL,
+				ho INT NOT NULL DEFAULT 0,
+				dir INT NOT NULL DEFAULT 2,
+				state INT NOT NULL DEFAULT 0,
+				iaot TINYINT(1) NOT NULL DEFAULT 0,
+				properties_json TEXT NOT NULL,
+				UNIQUE KEY uq_studio_pos (studio_id, pos_id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+			`CREATE TABLE IF NOT EXISTS songs (
+				id INT AUTO_INCREMENT PRIMARY KEY,
+				denizen_id VARCHAR(64) NOT NULL,
+				title VARCHAR(128) NOT NULL,
+				artist VARCHAR(128) NOT NULL,
+				edl_string TEXT NOT NULL,
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+			`CREATE TABLE IF NOT EXISTS red_caps (
+				pin_code VARCHAR(32) PRIMARY KEY,
+				reward_vcoins INT NOT NULL DEFAULT 50,
+				reward_item_id INT DEFAULT 0,
+				redeemed_by VARCHAR(64),
+				redeemed_at TIMESTAMP NULL
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+		}
+	} else {
+		queries = []string{
+			`CREATE TABLE IF NOT EXISTS denizens (
+				id TEXT PRIMARY KEY,
+				screen_name TEXT UNIQUE NOT NULL,
+				secret TEXT NOT NULL,
+				gender INTEGER NOT NULL DEFAULT 1,
+				mission TEXT NOT NULL DEFAULT 'Coke Music',
+				avatar_def TEXT NOT NULL,
+				decibels INTEGER NOT NULL DEFAULT 5000,
+				vcoins INTEGER NOT NULL DEFAULT 500,
+				last_seen_in TEXT NOT NULL DEFAULT 'VIS$0',
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			);`,
+
+			`CREATE TABLE IF NOT EXISTS studios (
+				id TEXT PRIMARY KEY,
+				owner_id TEXT NOT NULL,
+				owner_name TEXT NOT NULL,
+				name TEXT NOT NULL,
+				layout INTEGER NOT NULL DEFAULT 3,
+				room_type TEXT NOT NULL DEFAULT 'studio_model_c',
+				wallpaper INTEGER DEFAULT 0,
+				floor INTEGER DEFAULT 0,
+				doorbell INTEGER DEFAULT 0,
+				is_public BOOLEAN DEFAULT 0
+			);`,
+
+			`CREATE TABLE IF NOT EXISTS backpack_items (
+				id INTEGER PRIMARY KEY AUTOINCREMENT,
+				denizen_id TEXT NOT NULL,
+				catalog_item_id INTEGER NOT NULL,
+				properties_json TEXT NOT NULL DEFAULT '{}'
+			);`,
+
+			`CREATE TABLE IF NOT EXISTS placed_furniture (
+				id INTEGER PRIMARY KEY AUTOINCREMENT,
+				studio_id TEXT NOT NULL,
+				catalog_item_id INTEGER NOT NULL,
+				pos_id TEXT NOT NULL,
+				x INTEGER NOT NULL,
+				y INTEGER NOT NULL,
+				z INTEGER NOT NULL,
+				ho INTEGER NOT NULL DEFAULT 0,
+				dir INTEGER NOT NULL DEFAULT 2,
+				state INTEGER NOT NULL DEFAULT 0,
+				iaot BOOLEAN NOT NULL DEFAULT 0,
+				properties_json TEXT NOT NULL DEFAULT '{}',
+				UNIQUE(studio_id, pos_id)
+			);`,
+
+			`CREATE TABLE IF NOT EXISTS songs (
+				id INTEGER PRIMARY KEY AUTOINCREMENT,
+				denizen_id TEXT NOT NULL,
+				title TEXT NOT NULL,
+				artist TEXT NOT NULL,
+				edl_string TEXT NOT NULL,
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			);`,
+
+			`CREATE TABLE IF NOT EXISTS red_caps (
+				pin_code TEXT PRIMARY KEY,
+				reward_vcoins INTEGER NOT NULL DEFAULT 50,
+				reward_item_id INTEGER DEFAULT 0,
+				redeemed_by TEXT,
+				redeemed_at TIMESTAMP
+			);`,
+		}
+	}
+
+	for _, q := range queries {
+		if _, err := s.db.Exec(q); err != nil {
+			return fmt.Errorf("migration query failed: %w (%s)", err, q)
+		}
+	}
+
+	// Seed public default studios
+	defaultStudios := []StudioRecord{
+		{ID: "VIS$0", OwnerID: "system", OwnerName: "Coke Studios", Name: "Central Park Studio", Layout: 3, RoomType: "studio_model_c", IsPublic: true},
+		{ID: "VIS$1", OwnerID: "system", OwnerName: "Coke Studios", Name: "San Francisco Studio", Layout: 3, RoomType: "studio_model_c", IsPublic: true},
+		{ID: "VIS$2", OwnerID: "system", OwnerName: "Coke Studios", Name: "London Studio", Layout: 3, RoomType: "studio_model_c", IsPublic: true},
+		{ID: "studio_1", OwnerID: "system", OwnerName: "Adam", Name: "Private Studio #1", Layout: 3, RoomType: "studio_model_c", IsPublic: false},
+	}
+
+	for _, st := range defaultStudios {
+		query := `INSERT OR IGNORE INTO studios (id, owner_id, owner_name, name, layout, room_type, is_public) 
+			VALUES (?, ?, ?, ?, ?, ?, ?)`
+		if s.driver == "mysql" {
+			query = `INSERT IGNORE INTO studios (id, owner_id, owner_name, name, layout, room_type, is_public) 
+				VALUES (?, ?, ?, ?, ?, ?, ?)`
+		}
+		_, _ = s.db.Exec(query, st.ID, st.OwnerID, st.OwnerName, st.Name, st.Layout, st.RoomType, st.IsPublic)
+	}
+
+	// Seed starter red caps promotion codes if empty
+	sampleCaps := []string{"COKE-STUDIOS-2026", "RED-CAP-BEATS-01", "MYCOKE-RETRO-VIP", "SUMMER-CHILL-99"}
+	for _, capCode := range sampleCaps {
+		query := `INSERT OR IGNORE INTO red_caps (pin_code, reward_vcoins, reward_item_id) VALUES (?, 100, 52)`
+		if s.driver == "mysql" {
+			query = `INSERT IGNORE INTO red_caps (pin_code, reward_vcoins, reward_item_id) VALUES (?, 100, 52)`
+		}
+		_, _ = s.db.Exec(query, capCode)
+	}
+
+	return nil
+}
+
+func (s *Store) GetOrCreateDenizen(screenName, gender, avatarDef, mission string) (*DenizenRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	cleanName := strings.TrimSpace(screenName)
+	if cleanName == "" {
+		cleanName = "Adam"
+	}
+
+	var d DenizenRecord
+	row := s.db.QueryRow(`SELECT id, screen_name, secret, gender, mission, avatar_def, decibels, vcoins, last_seen_in 
+		FROM denizens WHERE LOWER(screen_name) = LOWER(?)`, cleanName)
+
+	err := row.Scan(&d.ID, &d.ScreenName, &d.Secret, &d.Gender, &d.Mission, &d.AvatarDef, &d.Decibels, &d.VCoins, &d.LastSeenIn)
+	if err == nil {
+		newSecret := "coke_secret_" + fmt.Sprintf("%x", time.Now().UnixNano())
+		_, _ = s.db.Exec("UPDATE denizens SET secret = ? WHERE id = ?", newSecret, d.ID)
+		d.Secret = newSecret
+		return &d, nil
+	}
+
+	if err != sql.ErrNoRows {
+		return nil, err
+	}
+
+	newID := fmt.Sprintf("usr_%d", time.Now().UnixNano())
+	newSecret := "coke_secret_" + fmt.Sprintf("%x", time.Now().UnixNano())
+	g := 1
+	if strings.ToUpper(gender) == "F" || gender == "2" {
+		g = 2
+	}
+	if avatarDef == "" {
+		avatarDef = "ch=01/01/01&fa=01/01/01&cl=01/01/01"
+	}
+	if mission == "" {
+		mission = "Coke Music Reborn"
+	}
+
+	d = DenizenRecord{
+		ID:         newID,
+		ScreenName: cleanName,
+		Secret:     newSecret,
+		Gender:     g,
+		Mission:    mission,
+		AvatarDef:  avatarDef,
+		Decibels:   5000,
+		VCoins:     500,
+		LastSeenIn: "VIS$0",
+	}
+
+	_, err = s.db.Exec(`INSERT INTO denizens 
+		(id, screen_name, secret, gender, mission, avatar_def, decibels, vcoins, last_seen_in) 
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		d.ID, d.ScreenName, d.Secret, d.Gender, d.Mission, d.AvatarDef, d.Decibels, d.VCoins, d.LastSeenIn)
+	if err != nil {
+		return nil, err
+	}
+
+	// Give starter backpack items to new player:
+	starterItems := []struct {
+		cid   int
+		props map[string]any
+	}{
+		{45, map[string]any{}},
+		{52, map[string]any{}},
+		{89, map[string]any{"songName": "Coke Anthem", "ownerName": cleanName, "edl": "^50,countryOne_guitar00{2,0{4,4{^50,danceOne_bass00{4,0{^"}},
+	}
+	for _, it := range starterItems {
+		pj, _ := json.Marshal(it.props)
+		_, _ = s.db.Exec("INSERT INTO backpack_items (denizen_id, catalog_item_id, properties_json) VALUES (?, ?, ?)",
+			d.ID, it.cid, string(pj))
+	}
+
+	log.Printf("[DB] Created new denizen: %s (ID: %s, Starting dB: %d, Starting V-Coins: %d)", d.ScreenName, d.ID, d.Decibels, d.VCoins)
+	return &d, nil
+}
+
+func (s *Store) GetDenizenByName(screenName string) (*DenizenRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var d DenizenRecord
+	row := s.db.QueryRow(`SELECT id, screen_name, secret, gender, mission, avatar_def, decibels, vcoins, last_seen_in 
+		FROM denizens WHERE LOWER(screen_name) = LOWER(?)`, strings.TrimSpace(screenName))
+	if err := row.Scan(&d.ID, &d.ScreenName, &d.Secret, &d.Gender, &d.Mission, &d.AvatarDef, &d.Decibels, &d.VCoins, &d.LastSeenIn); err != nil {
+		return nil, err
+	}
+	return &d, nil
+}
+
+func (s *Store) GetBalance(screenName string) (int, int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var db, vc int
+	row := s.db.QueryRow("SELECT decibels, vcoins FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName))
+	if err := row.Scan(&db, &vc); err != nil {
+		return 5000, 500, nil
+	}
+	return db, vc, nil
+}
+
+func (s *Store) AdjustBalance(screenName string, decibelsDelta, vcoinsDelta int) (int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	query := `UPDATE denizens 
+		SET decibels = CASE WHEN decibels + ? < 0 THEN 0 ELSE decibels + ? END,
+		    vcoins = CASE WHEN vcoins + ? < 0 THEN 0 ELSE vcoins + ? END
+		WHERE LOWER(screen_name) = LOWER(?)`
+	_, err := s.db.Exec(query, decibelsDelta, decibelsDelta, vcoinsDelta, vcoinsDelta, strings.TrimSpace(screenName))
+	if err != nil {
+		return 0, err
+	}
+
+	var newDB int
+	_ = s.db.QueryRow("SELECT decibels FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&newDB)
+	return newDB, nil
+}
+
+func (s *Store) RedeemRedCap(screenName, pinCode string) (int, int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	cleanCode := strings.ToUpper(strings.TrimSpace(pinCode))
+	var rewardVC, rewardItem int
+	var redeemedBy sql.NullString
+
+	row := s.db.QueryRow("SELECT reward_vcoins, reward_item_id, redeemed_by FROM red_caps WHERE pin_code = ?", cleanCode)
+	if err := row.Scan(&rewardVC, &rewardItem, &redeemedBy); err != nil {
+		if err == sql.ErrNoRows {
+			return 0, 0, fmt.Errorf("invalid or non-existent bottle cap PIN code")
+		}
+		return 0, 0, err
+	}
+
+	if redeemedBy.Valid && redeemedBy.String != "" {
+		return 0, 0, fmt.Errorf("this bottle cap has already been redeemed by %s", redeemedBy.String)
+	}
+
+	// Mark redeemed
+	_, err := s.db.Exec("UPDATE red_caps SET redeemed_by = ?, redeemed_at = CURRENT_TIMESTAMP WHERE pin_code = ?",
+		screenName, cleanCode)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	// Credit V-Coins
+	_, _ = s.db.Exec("UPDATE denizens SET vcoins = vcoins + ? WHERE LOWER(screen_name) = LOWER(?)", rewardVC, strings.TrimSpace(screenName))
+
+	// If cap carries a furniture reward (e.g. Vending machine), grant it
+	if rewardItem > 0 {
+		var denizenID string
+		_ = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&denizenID)
+		if denizenID != "" {
+			_, _ = s.db.Exec("INSERT INTO backpack_items (denizen_id, catalog_item_id, properties_json) VALUES (?, ?, '{}')",
+				denizenID, rewardItem)
+		}
+	}
+
+	return rewardVC, rewardItem, nil
+}
+
+func (s *Store) GetBackpack(screenName string) ([]BackpackItemRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var denizenID string
+	err := s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&denizenID)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := s.db.Query("SELECT id, catalog_item_id, properties_json FROM backpack_items WHERE denizen_id = ? ORDER BY id ASC", denizenID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var items []BackpackItemRecord
+	for rows.Next() {
+		var it BackpackItemRecord
+		var pJson string
+		if err := rows.Scan(&it.ID, &it.CatalogItemID, &pJson); err == nil {
+			it.DenizenID = denizenID
+			it.Properties = make(map[string]any)
+			_ = json.Unmarshal([]byte(pJson), &it.Properties)
+			items = append(items, it)
+		}
+	}
+	return items, nil
+}
+
+func (s *Store) AddBackpackItem(screenName string, catalogItemID int, properties map[string]any) (int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var denizenID string
+	err := s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&denizenID)
+	if err != nil {
+		return 0, err
+	}
+
+	pJson, _ := json.Marshal(properties)
+	res, err := s.db.Exec("INSERT INTO backpack_items (denizen_id, catalog_item_id, properties_json) VALUES (?, ?, ?)",
+		denizenID, catalogItemID, string(pJson))
+	if err != nil {
+		return 0, err
+	}
+	lid, _ := res.LastInsertId()
+	return int(lid), nil
+}
+
+func (s *Store) RemoveBackpackItem(itemID int) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	_, err := s.db.Exec("DELETE FROM backpack_items WHERE id = ?", itemID)
+	return err
+}
+
+func (s *Store) GetRoomFurniture(studioID string) ([]PlacedFurniRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	rows, err := s.db.Query(`SELECT id, catalog_item_id, pos_id, x, y, z, ho, dir, state, iaot, properties_json 
+		FROM placed_furniture WHERE studio_id = ? ORDER BY id ASC`, studioID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var list []PlacedFurniRecord
+	for rows.Next() {
+		var pf PlacedFurniRecord
+		var pJson string
+		if err := rows.Scan(&pf.ID, &pf.CatalogItemID, &pf.PosID, &pf.X, &pf.Y, &pf.Z, &pf.HO, &pf.Dir, &pf.State, &pf.IAOT, &pJson); err == nil {
+			pf.StudioID = studioID
+			pf.Properties = make(map[string]any)
+			_ = json.Unmarshal([]byte(pJson), &pf.Properties)
+			list = append(list, pf)
+		}
+	}
+	return list, nil
+}
+
+func (s *Store) PlaceFurniture(studioID, posID string, catalogItemID, x, y, z, ho, dir, state int, iaot bool, properties map[string]any) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	pJson, _ := json.Marshal(properties)
+	var query string
+	if s.driver == "mysql" {
+		query = `INSERT INTO placed_furniture 
+			(studio_id, catalog_item_id, pos_id, x, y, z, ho, dir, state, iaot, properties_json)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			ON DUPLICATE KEY UPDATE 
+				catalog_item_id = VALUES(catalog_item_id),
+				x = VALUES(x), y = VALUES(y), z = VALUES(z),
+				ho = VALUES(ho), dir = VALUES(dir), state = VALUES(state),
+				iaot = VALUES(iaot), properties_json = VALUES(properties_json)`
+	} else {
+		query = `INSERT INTO placed_furniture 
+			(studio_id, catalog_item_id, pos_id, x, y, z, ho, dir, state, iaot, properties_json)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			ON CONFLICT(studio_id, pos_id) DO UPDATE SET
+				catalog_item_id = excluded.catalog_item_id,
+				x = excluded.x, y = excluded.y, z = excluded.z,
+				ho = excluded.ho, dir = excluded.dir, state = excluded.state,
+				iaot = excluded.iaot, properties_json = excluded.properties_json`
+	}
+
+	_, err := s.db.Exec(query, studioID, catalogItemID, posID, x, y, z, ho, dir, state, iaot, string(pJson))
+	return err
+}
+
+func (s *Store) RemoveFurniture(studioID, posID string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	_, err := s.db.Exec("DELETE FROM placed_furniture WHERE studio_id = ? AND pos_id = ?", studioID, posID)
+	return err
+}
+
+func (s *Store) RotateFurniture(studioID, posID string, dir, state, ho int) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	_, err := s.db.Exec(`UPDATE placed_furniture 
+		SET dir = ?, state = ?, ho = ? 
+		WHERE studio_id = ? AND pos_id = ?`,
+		dir, state, ho, studioID, posID)
+	return err
+}
+
+func (s *Store) GetStudios() ([]StudioRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	rows, err := s.db.Query("SELECT id, owner_id, owner_name, name, layout, room_type, is_public FROM studios ORDER BY id ASC")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var list []StudioRecord
+	for rows.Next() {
+		var st StudioRecord
+		if err := rows.Scan(&st.ID, &st.OwnerID, &st.OwnerName, &st.Name, &st.Layout, &st.RoomType, &st.IsPublic); err == nil {
+			list = append(list, st)
+		}
+	}
+	return list, nil
+}

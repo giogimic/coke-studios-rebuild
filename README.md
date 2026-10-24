@@ -7,34 +7,33 @@
 
 ---
 
-## 🚀 Quick Start (Debian / Linux First)
+## 🚀 Single-File Setup & Auto-Updater (Debian / Linux First)
 
-### 1. Automated Setup & Verification
-Run the Debian setup script to inspect prerequisites, set binary permissions, and verify asset integrity:
+### 1. One-Command Setup & Launch
+Execute `setup.sh` to automatically install prerequisites, provision the scalable MariaDB 11 container, and launch the complete game portal on default port **24902**:
 ```bash
 chmod +x ./setup.sh
 ./setup.sh
 ```
-*(On Debian/Ubuntu, prerequisites can also be installed manually via: `sudo apt-get update && sudo apt-get install -y nodejs git curl tar`)*
 
-### 2. Launch Local Servers
+### 2. Zero-Downtime Updates
+To update the game server, pull the latest git code, apply database migrations, and rebuild the Docker containers with zero data loss:
+```bash
+./setup.sh --update
+```
+
+### 3. Native Service Alternative (Without Docker)
+If you prefer running natively on Debian 12 without Docker:
 ```bash
 chmod +x ./start.sh ./stop.sh
 ./start.sh
 ```
-To run in the foreground instead: `./start.sh -f`  
-To stop the background servers: `./stop.sh`
-
-### 3. Containerized Deployment (Docker / Compose)
-For a completely containerized setup running on Debian:
-```bash
-docker compose up -d
-```
+*(Stop background servers with `./stop.sh` or run in foreground with `./start.sh -f`)*
 
 ### 4. Windows Compatibility Options
 If running directly on Windows:
-- Double-click **`Start-Local.cmd`** (or execute `.\Start-Local.ps1` in PowerShell).
-- Double-click **`Stop-Local.cmd`** (or execute `.\Stop-Local.ps1`) to shut down.
+- Run **`.\setup.ps1`** (or `.\setup.ps1 -Update` for updates) in PowerShell with Docker Desktop.
+- Or double-click **`Start-Local.cmd`** for standalone mode.
 
 ---
 
@@ -44,10 +43,10 @@ Once launched, the following endpoints are accessible:
 
 | Service | Port | Description |
 |---|---|---|
-| **Master Recovery Portal & Launcher** | [http://127.0.0.1:24902/](http://127.0.0.1:24902/) | **Primary entry point**: Character creator, room selector, 129-loop sound player, and unified web gateway. |
-| **GoCoke Game Client & Server** | [http://127.0.0.1:24902/game/](http://127.0.0.1:24902/game/) *(or [8080](http://127.0.0.1:8080/))* | **Authoritative Rebuild**: Ebitengine/WASM client with avatars, isometric rooms, mixer, items, AMF gateway, and realtime WebSocket. |
+| **Official MyCoke Game Portal** | [http://127.0.0.1:24902/](http://127.0.0.1:24902/) | **Primary entry point**: Authentic 2004–2007 Coke Music website with embedded client, 4-track sequencer, Top 40 charts, and Red Caps bottle pin redemption. |
+| **GoCoke Game Client & Server** | [http://127.0.0.1:24902/game/](http://127.0.0.1:24902/game/) *(or [8080](http://127.0.0.1:8080/))* | **Authoritative Rebuild**: Ebitengine/WASM client with avatars, isometric rooms, mixer, items, AMF gateway, MariaDB persistence, and realtime WebSocket. |
+| **Integrated Music Mixer** | [http://127.0.0.1:24902/mixer/](http://127.0.0.1:24902/mixer/) *(or [8082](http://127.0.0.1:8082/))* | Standalone and in-portal recreation of the Coke Studios Music Mixer with 94 sound library loops. |
 | **CokePhase Demo** | [http://127.0.0.1:8081/](http://127.0.0.1:8081/) | HTML5 Canvas / Isogenic engine remake with 7 public & private rooms. |
-| **CSMusicMixer Standalone** | [http://127.0.0.1:8082/](http://127.0.0.1:8082/) | Standalone recreation of the Coke Studios Music Mixer with 56 genre samples. |
 
 ---
 

@@ -13,6 +13,7 @@ import (
 	"mime"
 	"net"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
@@ -21,12 +22,15 @@ import (
 	"gocoke/internal/client/net/amf"
 )
 
-// Standalone Coke Studios Server
+// Standalone Authoritative Coke Studios Server (Debian 12 First)
 // Implements:
 // 1. Static asset server (WebAssembly client, Lingo assets, sounds, fonts)
 // 2. HTTP Flash Remoting AMF0 gateway (/sf/gateway)
 // 3. Denizen XML authentication (/sf/ssldocs/loginDenizen.jsp)
 // 4. WebSocket realtime multiplayer game engine (/ws/realtime)
+// 5. Persistent SQLite state store (denizens, balances, rooms, furniture, songs)
+// 6. DJ Performance voting & Decibel meter battle loop (CD_P, CD_TU, CD_TD, CD_VR, CD_PRS)
+// 7. Interactive furniture (Coke vending machine drinks, seating, lighting toggles)
 
 type Player struct {
 	ID         string
@@ -38,6 +42,7 @@ type Player struct {
 	Gender     int
 	Mission    string
 	Definition string
+	Action     string
 	Conn       *upgradedConn
 	mu         sync.Mutex
 }
@@ -52,13 +57,26 @@ func (p *Player) Send(msg string) error {
 	return p.Conn.WriteBinary(payload)
 }
 
+type PerformanceSession struct {
+	DJ        string
+	SongTitle string
+	EDL       string
+	StartedAt time.Time
+	Duration  time.Duration
+	Cheers    int
+	Boos      int
+	Voters    map[string]bool
+	Done      bool
+	cancelCh  chan struct{}
+}
+
 type Room struct {
-	ID        string
-	Name      string
-	Layout    int
-	mu        sync.RWMutex
-	Players   map[string]*Player
-	Furniture []string // POS elements
+	ID          string
+	Name        string
+	Layout      int
+	mu          sync.RWMutex
+	Players     map[string]*Player
+	Performance *PerformanceSession
 }
 
 func NewRoom(id, name string, layout int) *Room {
@@ -87,25 +105,36 @@ type Server struct {
 	webRoot   string
 	host      string
 	port      string
+	store     *Store
 	nextPosID int
 }
 
-func NewServer(webRoot, host, port string) *Server {
+func NewServer(webRoot, host, port string, store *Store) *Server {
+	if store == nil {
+		var err error
+		store, err = OpenStore(":memory:")
+		if err != nil {
+			log.Fatalf("Failed to open fallback in-memory store: %v", err)
+		}
+	}
+
 	s := &Server{
 		Rooms:     make(map[string]*Room),
 		Players:   make(map[string]*Player),
 		webRoot:   webRoot,
 		host:      host,
 		port:      port,
+		store:     store,
 		nextPosID: 2000,
 	}
 
-	// Initialize default public rooms
+	// Initialize default rooms in memory from store
 	s.Rooms["$LOBBY$"] = NewRoom("$LOBBY$", "Lobby", 0)
-	s.Rooms["VIS$0"] = NewRoom("VIS$0", "Central Park Studio", 3)
-	s.Rooms["VIS$1"] = NewRoom("VIS$1", "San Francisco Studio", 3)
-	s.Rooms["VIS$2"] = NewRoom("VIS$2", "London Studio", 3)
-	s.Rooms["studio_1"] = NewRoom("studio_1", "Private Studio #1", 3)
+	studios, _ := store.GetStudios()
+	for _, st := range studios {
+		s.Rooms[st.ID] = NewRoom(st.ID, st.Name, st.Layout)
+	}
+
 	return s
 }
 
@@ -127,6 +156,14 @@ func main() {
 
 	addr := flag.String("addr", "0.0.0.0:8080", "listen address (default 0.0.0.0:8080)")
 	root := flag.String("root", "./web", "web directory to serve")
+	defaultDB := os.Getenv("DATABASE_URL")
+	if defaultDB == "" {
+		defaultDB = os.Getenv("MARIADB_URL")
+	}
+	if defaultDB == "" {
+		defaultDB = "coke.db"
+	}
+	dbPath := flag.String("db", defaultDB, "Database DSN (MariaDB 'user:pass@tcp(host:port)/db' or SQLite 'coke.db')")
 	flag.Parse()
 
 	host, port, err := net.SplitHostPort(*addr)
@@ -138,7 +175,13 @@ func main() {
 		host = "127.0.0.1"
 	}
 
-	srv := NewServer(*root, host, port)
+	store, err := OpenStore(*dbPath)
+	if err != nil {
+		log.Fatalf("Failed to open database (%s): %v", *dbPath, err)
+	}
+	defer store.Close()
+
+	srv := NewServer(*root, host, port, store)
 
 	mux := http.NewServeMux()
 
@@ -151,10 +194,13 @@ func main() {
 	// 3. WebSocket Realtime Game Server
 	mux.HandleFunc("/ws/realtime", srv.handleWebSocketRealtime)
 
-	// 4. Health endpoint
+	// 4. Red Cap PIN code redemption HTTP API
+	mux.HandleFunc("/sf/ssldocs/redeemCap.jsp", srv.handleRedeemCap)
+
+	// 5. Health endpoint
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"status":"ok","mode":"standalone-server","project":"gocoke"}`))
+		fmt.Fprintf(w, `{"status":"ok","mode":"standalone-server","project":"gocoke","storage":"%s"}`, srv.store.driver)
 	})
 
 	// 5. Static files
@@ -167,8 +213,9 @@ func main() {
 	})
 
 	log.Printf("==========================================================")
-	log.Printf(" Coke Studios Standalone Server (Debian / Linux First)")
+	log.Printf(" Coke Studios Authoritative Server (Debian / Linux First)")
 	log.Printf(" Listening on http://%s (Serving %s)", *addr, *root)
+	log.Printf(" SQLite Store:              %s", *dbPath)
 	log.Printf(" WebSocket Realtime Bridge: ws://%s/ws/realtime", *addr)
 	log.Printf(" AMF0 Flash Gateway:        http://%s/sf/gateway", *addr)
 	log.Printf("==========================================================")
@@ -213,16 +260,32 @@ func (s *Server) handleLoginDenizen(w http.ResponseWriter, r *http.Request) {
 	}
 	avatarDef := q.Get("avatarDef")
 	if avatarDef == "" {
-		avatarDef = "ch=01/01/01&amp;fa=01/01/01&amp;cl=01/01/01"
-	} else {
-		avatarDef = strings.ReplaceAll(avatarDef, "&", "&amp;")
+		avatarDef = "ch=01/01/01&fa=01/01/01&cl=01/01/01"
 	}
 	mission := q.Get("mission")
 	if mission == "" {
 		mission = "Coke Music Reborn"
 	}
 
-	secret := "coke_secret_" + strconv.FormatInt(time.Now().Unix(), 16)
+	// Persistent store retrieval/creation
+	denizen, err := s.store.GetOrCreateDenizen(screenName, gender, avatarDef, mission)
+	if err != nil {
+		log.Printf("[DB] LoginDenizen error: %v, using transient credentials", err)
+		denizen = &DenizenRecord{
+			ScreenName: screenName,
+			Gender:     1,
+			Mission:    mission,
+			AvatarDef:  avatarDef,
+			Secret:     "coke_secret_" + strconv.FormatInt(time.Now().Unix(), 16),
+			LastSeenIn: "VIS$0",
+		}
+	}
+
+	xmlDef := strings.ReplaceAll(denizen.AvatarDef, "&", "&amp;")
+	gStr := "M"
+	if denizen.Gender == 2 {
+		gStr = "F"
+	}
 
 	xmlReply := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?>
 <LoginResult>
@@ -232,15 +295,49 @@ func (s *Server) handleLoginDenizen(w http.ResponseWriter, r *http.Request) {
   <AvatarDefinition>%s</AvatarDefinition>
   <ScreenName>%s</ScreenName>
   <MissionStatement>%s</MissionStatement>
-  <LastSeenIn>VIS$0</LastSeenIn>
+  <LastSeenIn>%s</LastSeenIn>
   <Banned>0</Banned>
   <Secret>%s</Secret>
-</LoginResult>`, gender, avatarDef, screenName, mission, secret)
+</LoginResult>`, gStr, xmlDef, denizen.ScreenName, denizen.Mission, denizen.LastSeenIn, denizen.Secret)
 
 	w.Header().Set("Content-Type", "text/xml;charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(xmlReply))
-	log.Printf("[HTTP] LoginDenizen authenticated: %s (Gender: %s, Secret: %s)", screenName, gender, secret)
+	log.Printf("[HTTP] LoginDenizen authenticated: %s (Gender: %s, dB: %d)", denizen.ScreenName, gStr, denizen.Decibels)
+}
+
+func (s *Server) handleRedeemCap(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	user := q.Get("user")
+	if user == "" {
+		user = "Adam"
+	}
+	pin := q.Get("pin")
+	if pin == "" && r.Method == http.MethodPost {
+		_ = r.ParseForm()
+		pin = r.FormValue("pin")
+		if u := r.FormValue("user"); u != "" {
+			user = u
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if pin == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`{"success":false,"error":"Missing PIN code"}`))
+		return
+	}
+
+	rewardVC, rewardItem, err := s.store.RedeemRedCap(user, pin)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, `{"success":false,"error":%q}`, err.Error())
+		return
+	}
+
+	_, newVC, _ := s.store.GetBalance(user)
+	fmt.Fprintf(w, `{"success":true,"reward_vcoins":%d,"reward_item":%d,"new_vcoins":%d,"user":%q}`,
+		rewardVC, rewardItem, newVC, user)
 }
 
 func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
@@ -267,97 +364,117 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 
 	switch {
 	case strings.Contains(target, "getTip"):
-		responseValue = "Welcome to Coke Studios! Click any tile to walk, open the catalogue to decorate, or open the mixer to create beats."
+		tips := []string{
+			"Welcome to Coke Studios! Click any tile to walk, open the catalogue to decorate, or open the mixer to create beats.",
+			"Play your burned CDs in the studio stereo to host DJ battles and earn Decibels from audience cheers!",
+			"Approach the Coke vending machine to grab an ice-cold can of Coca-Cola.",
+			"Cheer for great tracks using thumbs-up to boost the room's Decibel meter!",
+		}
+		responseValue = tips[time.Now().Unix()%int64(len(tips))]
 
 	case strings.Contains(target, "getDenizenBalance"):
-		// Rich starting balance of 50,000 Decibels!
-		responseValue = float64(50000)
+		// Extract screenName if available, or return default balance
+		decibels, _, _ := s.store.GetBalance("Adam")
+		responseValue = float64(decibels)
 
 	case strings.Contains(target, "getBackpack"):
-		// Return backpack with starter items
-		responseValue = map[string]any{
-			"possessionlist": []any{
-				map[string]any{
-					"id":          float64(1001),
-					"catalogItem": float64(45), // Classic Sofa
-					"properties":  map[string]any{},
-				},
-				map[string]any{
-					"id":          float64(1002),
-					"catalogItem": float64(52), // Coke Vending Machine
-					"properties":  map[string]any{},
-				},
-				map[string]any{
-					"id":          float64(1003),
-					"catalogItem": float64(89), // Burned CD
-					"properties": map[string]any{
-						"ownerName": "DJ Adam",
-						"songName":  "Coke Beats Vol. 1",
+		// Load from persistent SQLite database
+		items, err := s.store.GetBackpack("Adam")
+		if err != nil || len(items) == 0 {
+			// Fallback starter backpack if empty
+			responseValue = map[string]any{
+				"possessionlist": []any{
+					map[string]any{
+						"id":          float64(1001),
+						"catalogItem": float64(45), // Classic Sofa
+						"properties":  map[string]any{},
+					},
+					map[string]any{
+						"id":          float64(1002),
+						"catalogItem": float64(52), // Coke Vending Machine
+						"properties":  map[string]any{},
+					},
+					map[string]any{
+						"id":          float64(1003),
+						"catalogItem": float64(89), // Burned CD
+						"properties": map[string]any{
+							"ownerName": "DJ Adam",
+							"songName":  "Coke Beats Vol. 1",
+							"edl":       "^50,countryOne_guitar00{2,0{4,4{^50,danceOne_bass00{4,0{^",
+						},
 					},
 				},
-			},
+			}
+		} else {
+			var list []any
+			for _, it := range items {
+				list = append(list, map[string]any{
+					"id":          float64(it.ID),
+					"catalogItem": float64(it.CatalogItemID),
+					"properties":  it.Properties,
+				})
+			}
+			responseValue = map[string]any{"possessionlist": list}
 		}
 
 	case strings.Contains(target, "prePurchaseItem"):
+		db, _, _ := s.store.GetBalance("Adam")
 		responseValue = map[string]any{
-			"balance":       float64(50000),
+			"balance":       float64(db),
 			"price":         float64(25),
 			"catalogItemId": float64(1),
 			"properties":    "[:]",
 		}
 
 	case strings.Contains(target, "purchaseItem"):
-		s.mu.Lock()
-		s.nextPosID++
-		newID := s.nextPosID
-		s.mu.Unlock()
+		// Deduct 25 dB and insert into persistent backpack
+		_, _ = s.store.AdjustBalance("Adam", -25, 0)
+		newID, _ := s.store.AddBackpackItem("Adam", 45, map[string]any{})
 		responseValue = []any{
 			map[string]any{
 				"id":          float64(newID),
-				"catalogItem": float64(1),
+				"catalogItem": float64(45),
 				"properties":  map[string]any{},
 			},
 		}
 
-	case strings.Contains(target, "getAllPrivateStudios") || strings.Contains(target, "getMyStudios") || strings.Contains(target, "getFeaturedStudios"):
-		responseValue = []any{
-			map[string]any{
-				"studioId":   "VIS$0",
-				"name":       "Central Park Studio",
-				"layout":     float64(3),
-				"owner":      "Coke Studios",
-				"userCount":  float64(len(s.GetOrCreateRoom("VIS$0").Players)),
-				"maxUsers":   float64(25),
-				"type":       "studio_model_c",
-			},
-			map[string]any{
-				"studioId":   "VIS$1",
-				"name":       "San Francisco Studio",
-				"layout":     float64(3),
-				"owner":      "Coke Studios",
-				"userCount":  float64(len(s.GetOrCreateRoom("VIS$1").Players)),
-				"maxUsers":   float64(25),
-				"type":       "studio_model_c",
-			},
-			map[string]any{
-				"studioId":   "VIS$2",
-				"name":       "London Studio",
-				"layout":     float64(3),
-				"owner":      "Coke Studios",
-				"userCount":  float64(len(s.GetOrCreateRoom("VIS$2").Players)),
-				"maxUsers":   float64(25),
-				"type":       "studio_model_c",
-			},
-			map[string]any{
-				"studioId":   "studio_1",
-				"name":       "Private Studio #1",
-				"layout":     float64(3),
-				"owner":      "Adam",
-				"userCount":  float64(len(s.GetOrCreateRoom("studio_1").Players)),
-				"maxUsers":   float64(25),
-				"type":       "studio_model_c",
-			},
+	case strings.Contains(target, "burnCD"):
+		// Deduct 10 dB and mint a new playable CD (catalogItem 89) into backpack
+		_, _ = s.store.AdjustBalance("Adam", -10, 0)
+		cdProps := map[string]any{
+			"songName":  "Coke Anthem Reborn",
+			"ownerName": "DJ Adam",
+			"edl":       "^50,rockOne_guitar00{2,0{4,4{^50,danceOne_beatz00{4,0{^",
 		}
+		newID, _ := s.store.AddBackpackItem("Adam", 89, cdProps)
+		responseValue = map[string]any{
+			"success":     true,
+			"possession":  float64(newID),
+			"catalogItem": float64(89),
+			"properties":  cdProps,
+		}
+
+	case strings.Contains(target, "getAllPrivateStudios") || strings.Contains(target, "getMyStudios") || strings.Contains(target, "getFeaturedStudios"):
+		studios, err := s.store.GetStudios()
+		var resList []any
+		if err == nil && len(studios) > 0 {
+			for _, st := range studios {
+				userCount := float64(0)
+				if rm := s.GetOrCreateRoom(st.ID); rm != nil {
+					userCount = float64(len(rm.Players))
+				}
+				resList = append(resList, map[string]any{
+					"studioId":  st.ID,
+					"name":      st.Name,
+					"layout":    float64(st.Layout),
+					"owner":     st.OwnerName,
+					"userCount": userCount,
+					"maxUsers":  float64(25),
+					"type":      st.RoomType,
+				})
+			}
+		}
+		responseValue = resList
 
 	case strings.Contains(target, "getGameServerByStudioID"):
 		responseValue = map[string]any{
@@ -398,6 +515,7 @@ func (s *Server) handleWebSocketRealtime(w http.ResponseWriter, r *http.Request)
 		Gender:     1,
 		Mission:    "Coke Music",
 		Definition: "ch=01/01/01&fa=01/01/01&cl=01/01/01",
+		Action:     "std",
 		Dir:        2,
 		X:          0,
 		Z:          0,
@@ -440,7 +558,6 @@ func (s *Server) handleWebSocketRealtime(w http.ResponseWriter, r *http.Request)
 			continue
 		}
 
-		// Frame format: sha1(xml + trip + secret) + " " + trip + " " + xml + "\x00"
 		parts := strings.SplitN(string(raw), " ", 3)
 		var xmlPayload string
 		if len(parts) == 3 {
@@ -459,6 +576,11 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		sn := extractAttr(xml, "username")
 		if sn != "" {
 			player.ScreenName = sn
+			if d, err := s.store.GetDenizenByName(sn); err == nil && d != nil {
+				player.Gender = d.Gender
+				player.Mission = d.Mission
+				player.Definition = d.AvatarDef
+			}
 		}
 		log.Printf("[WS] Player Login: %s (msgID: %s)", player.ScreenName, msgID)
 		_ = player.Send(fmt.Sprintf("<Accepted msgID=\"%s\"/>", msgID))
@@ -470,7 +592,6 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		roomID := extractAttr(xml, "roomID")
 		log.Printf("[WS] Player %s entering room %s (msgID: %s)", player.ScreenName, roomID, msgID)
 
-		// Acknowledge enter
 		_ = player.Send(fmt.Sprintf("<Accepted msgID=\"%s\"/>", msgID))
 
 		if roomID == "$LOBBY$" {
@@ -478,7 +599,6 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 			return
 		}
 
-		// Studio room enter
 		room := s.GetOrCreateRoom(roomID)
 		player.RoomID = roomID
 		player.X = 0
@@ -492,14 +612,28 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		room.mu.RLock()
 		for _, other := range room.Players {
 			if other.ID != player.ID {
-				avXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV av=\"%s\" x=\"%d\" z=\"%d\" d=\"%d\" g=\"%d\" m=\"%s\" def=\"%s\" act=\"std\"/></Room.Action>",
-					room.ID, other.ScreenName, other.X, other.Z, other.Dir, other.Gender, other.Mission, other.Definition)
+				avXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV av=\"%s\" x=\"%d\" z=\"%d\" d=\"%d\" g=\"%d\" m=\"%s\" def=\"%s\" act=\"%s\"/></Room.Action>",
+					room.ID, other.ScreenName, other.X, other.Z, other.Dir, other.Gender, other.Mission, other.Definition, other.Action)
 				_ = player.Send(avXML)
 			}
 		}
-		// Send existing furniture to this player
-		for _, posXML := range room.Furniture {
+
+		// Send persistent placed furniture from SQLite
+		furniList, _ := s.store.GetRoomFurniture(room.ID)
+		for _, pf := range furniList {
+			posXML := fmt.Sprintf("<POS id=\"%s\" cid=\"%d\" x=\"%d\" y=\"%d\" z=\"%d\" ho=\"%d\" d=\"%d\" st=\"%d\" iaot=\"%t\"/>",
+				pf.PosID, pf.CatalogItemID, pf.X, pf.Y, pf.Z, pf.HO, pf.Dir, pf.State, pf.IAOT)
 			_ = player.Send(fmt.Sprintf("<Room.Action roomID=\"%s\">%s</Room.Action>", room.ID, posXML))
+		}
+
+		// If a performance is currently active, sync track playback and vote meter to entering player!
+		if room.Performance != nil && !room.Performance.Done {
+			cdpXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_P av=\"%s\" s=\"%s\" title=\"%s\"/></Room.Action>",
+				room.ID, room.Performance.DJ, room.Performance.EDL, room.Performance.SongTitle)
+			_ = player.Send(cdpXML)
+			meterXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_VR tu=\"%d\" td=\"%d\"/></Room.Action>",
+				room.ID, room.Performance.Cheers, room.Performance.Boos)
+			_ = player.Send(meterXML)
 		}
 		room.mu.RUnlock()
 
@@ -510,21 +644,19 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 	}
 
 	if strings.Contains(xml, "<AV_EN") {
-		// Player entered and is ready to appear
 		roomID := player.RoomID
 		if roomID == "" || roomID == "$LOBBY$" {
 			return
 		}
 		room := s.GetOrCreateRoom(roomID)
-		avXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV av=\"%s\" x=\"%d\" z=\"%d\" d=\"%d\" g=\"%d\" m=\"%s\" def=\"%s\" act=\"std\"/></Room.Action>",
-			room.ID, player.ScreenName, player.X, player.Z, player.Dir, player.Gender, player.Mission, player.Definition)
+		avXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV av=\"%s\" x=\"%d\" z=\"%d\" d=\"%d\" g=\"%d\" m=\"%s\" def=\"%s\" act=\"%s\"/></Room.Action>",
+			room.ID, player.ScreenName, player.X, player.Z, player.Dir, player.Gender, player.Mission, player.Definition, player.Action)
 		room.Broadcast(avXML, "")
 		log.Printf("[WS] Player %s spawned in room %s", player.ScreenName, roomID)
 		return
 	}
 
 	if strings.Contains(xml, "<AV_GSP") {
-		// Path movement: <AV_GSP><P z=".." x=".."/>...</AV_GSP>
 		roomID := player.RoomID
 		if roomID != "" {
 			room := s.GetOrCreateRoom(roomID)
@@ -543,7 +675,6 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 	}
 
 	if strings.Contains(xml, "<AV_MV") {
-		// Direct movement request
 		xStr := extractAttr(xml, "x")
 		zStr := extractAttr(xml, "z")
 		x, _ := strconv.Atoi(xStr)
@@ -562,7 +693,6 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 	}
 
 	if strings.Contains(xml, "<CH ") {
-		// Chat packet: <CH sm="speak" m="HEX"/>
 		sm := extractAttr(xml, "sm")
 		if sm == "" || sm == "speak" {
 			sm = "1"
@@ -583,53 +713,233 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		return
 	}
 
-	if strings.Contains(xml, "<POS_STD") {
-		// Furniture placement: <POS_STD st="0" d="2" ho="0" z="Z" y="Y" x="X" id="ID"/>
-		posID := extractAttr(xml, "id")
-		st := extractAttr(xml, "st")
-		d := extractAttr(xml, "d")
-		ho := extractAttr(xml, "ho")
-		x := extractAttr(xml, "x")
-		y := extractAttr(xml, "y")
-		z := extractAttr(xml, "z")
+	// --- DJ Performance & Cheer/Boo Voting System ---
+	if strings.Contains(xml, "<CD_P") {
+		// Player triggered CD playback or DJ booth performance
+		sEDL := extractAttr(xml, "s")
+		title := extractAttr(xml, "title")
+		if title == "" {
+			title = "Coke Beats Vol. 1"
+		}
+		if sEDL == "" {
+			sEDL = "^50,rockOne_guitar00{2,0{4,4{^50,danceOne_beatz00{4,0{^"
+		}
 
 		roomID := player.RoomID
 		if roomID != "" {
 			room := s.GetOrCreateRoom(roomID)
-			posXML := fmt.Sprintf("<POS id=\"%s\" cid=\"45\" x=\"%s\" y=\"%s\" z=\"%s\" ho=\"%s\" d=\"%s\" st=\"%s\" iaot=\"false\"/>",
-				posID, x, y, z, ho, d, st)
-			room.mu.Lock()
-			room.Furniture = append(room.Furniture, posXML)
-			room.mu.Unlock()
+			s.startPerformance(room, player.ScreenName, title, sEDL)
+		}
+		return
+	}
+
+	if strings.Contains(xml, "<CD_TU") {
+		// Thumbs Up / Cheer vote
+		roomID := player.RoomID
+		if roomID != "" {
+			room := s.GetOrCreateRoom(roomID)
+			s.recordVote(room, player.ScreenName, 1)
+		}
+		return
+	}
+
+	if strings.Contains(xml, "<CD_TD") {
+		// Thumbs Down / Boo vote
+		roomID := player.RoomID
+		if roomID != "" {
+			room := s.GetOrCreateRoom(roomID)
+			s.recordVote(room, player.ScreenName, -1)
+		}
+		return
+	}
+
+	// --- Interactive Furniture & Vending Machine Drinks ---
+	if strings.Contains(xml, "<DRK_REQ") || strings.Contains(xml, "coke_machine") {
+		roomID := player.RoomID
+		if roomID != "" {
+			room := s.GetOrCreateRoom(roomID)
+			drinkXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV_DC av=\"%s\" act=\"drk\" item=\"coke_can\"/></Room.Action>",
+				room.ID, player.ScreenName)
+			room.Broadcast(drinkXML, "")
+			log.Printf("[WS] Player %s received a Coke drink from dispenser in %s", player.ScreenName, roomID)
+		}
+		return
+	}
+
+	// --- Avatar Gestures & Actions ---
+	if strings.Contains(xml, "<AV_ACT") {
+		act := extractAttr(xml, "act")
+		roomID := player.RoomID
+		if roomID != "" && act != "" {
+			player.Action = act
+			room := s.GetOrCreateRoom(roomID)
+			actXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV_DC av=\"%s\" act=\"%s\"/></Room.Action>",
+				room.ID, player.ScreenName, act)
+			room.Broadcast(actXML, "")
+		}
+		return
+	}
+
+	// --- Furniture Placement, Rotation, and Pickup (Persistent in SQLite) ---
+	if strings.Contains(xml, "<POS_STD") {
+		posID := extractAttr(xml, "id")
+		cidStr := extractAttr(xml, "cid")
+		cid, _ := strconv.Atoi(cidStr)
+		if cid == 0 {
+			cid = 45 // fallback to sofa
+		}
+		stStr := extractAttr(xml, "st")
+		st, _ := strconv.Atoi(stStr)
+		dStr := extractAttr(xml, "d")
+		d, _ := strconv.Atoi(dStr)
+		hoStr := extractAttr(xml, "ho")
+		ho, _ := strconv.Atoi(hoStr)
+		xStr := extractAttr(xml, "x")
+		x, _ := strconv.Atoi(xStr)
+		yStr := extractAttr(xml, "y")
+		y, _ := strconv.Atoi(yStr)
+		zStr := extractAttr(xml, "z")
+		z, _ := strconv.Atoi(zStr)
+
+		roomID := player.RoomID
+		if roomID != "" {
+			room := s.GetOrCreateRoom(roomID)
+			_ = s.store.PlaceFurniture(room.ID, posID, cid, x, y, z, ho, d, st, false, nil)
+
+			posXML := fmt.Sprintf("<POS id=\"%s\" cid=\"%d\" x=\"%d\" y=\"%d\" z=\"%d\" ho=\"%d\" d=\"%d\" st=\"%d\" iaot=\"false\"/>",
+				posID, cid, x, y, z, ho, d, st)
 			actionXML := fmt.Sprintf("<Room.Action roomID=\"%s\">%s</Room.Action>", room.ID, posXML)
 			room.Broadcast(actionXML, "")
-			log.Printf("[WS] Player %s placed furniture %s at (%s,%s,%s)", player.ScreenName, posID, x, y, z)
+			log.Printf("[WS] Player %s placed furniture %s (cid: %d) at (%d,%d,%d) in %s", player.ScreenName, posID, cid, x, y, z, roomID)
 		}
 		return
 	}
 
 	if strings.Contains(xml, "<POS_BKPK") {
-		// Furniture pickup: <POS_BKPK id="ID"/>
 		posID := extractAttr(xml, "id")
 		roomID := player.RoomID
 		if roomID != "" && posID != "" {
 			room := s.GetOrCreateRoom(roomID)
-			room.mu.Lock()
-			var updated []string
-			for _, f := range room.Furniture {
-				if !strings.Contains(f, "id=\""+posID+"\"") {
-					updated = append(updated, f)
-				}
-			}
-			room.Furniture = updated
-			room.mu.Unlock()
+			_ = s.store.RemoveFurniture(room.ID, posID)
 
 			rmXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><POS_RM id=\"%s\"/></Room.Action>", room.ID, posID)
 			room.Broadcast(rmXML, "")
-			log.Printf("[WS] Player %s picked up furniture %s", player.ScreenName, posID)
+			log.Printf("[WS] Player %s picked up furniture %s from %s", player.ScreenName, posID, roomID)
 		}
 		return
 	}
+}
+
+// startPerformance manages the 60-second DJ voting battle loop
+func (s *Server) startPerformance(room *Room, dj, title, edl string) {
+	room.mu.Lock()
+	if room.Performance != nil && !room.Performance.Done {
+		close(room.Performance.cancelCh)
+	}
+
+	session := &PerformanceSession{
+		DJ:        dj,
+		SongTitle: title,
+		EDL:       edl,
+		StartedAt: time.Now(),
+		Duration:  60 * time.Second,
+		Cheers:    0,
+		Boos:      0,
+		Voters:    make(map[string]bool),
+		cancelCh:  make(chan struct{}),
+	}
+	room.Performance = session
+	room.mu.Unlock()
+
+	// Broadcast song start and DJ animation to all room occupants
+	cdpXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_P av=\"%s\" s=\"%s\" title=\"%s\"/></Room.Action>",
+		room.ID, dj, edl, title)
+	room.Broadcast(cdpXML, "")
+	log.Printf("[MUSIC] DJ %s started track %q in %s", dj, title, room.ID)
+
+	// Background ticker for 60-second song duration
+	go func() {
+		select {
+		case <-time.After(session.Duration):
+		case <-session.cancelCh:
+			return
+		}
+
+		room.mu.Lock()
+		if session.Done {
+			room.mu.Unlock()
+			return
+		}
+		session.Done = true
+		cheers := session.Cheers
+		boos := session.Boos
+		room.mu.Unlock()
+
+		// Calculate 1:1 reward formula: max(0, (Cheers * 2) - Boos) + 10 audience bonus
+		rewardDB := (cheers * 2) - boos
+		if rewardDB < 0 {
+			rewardDB = 0
+		}
+		rewardDB += 10 // Participation bonus
+
+		// Credit Decibels to DJ in persistent SQLite database
+		newBalance, _ := s.store.AdjustBalance(dj, rewardDB, 0)
+		log.Printf("[MUSIC] Performance ended for %s in %s. Cheers: %d, Boos: %d, Awarded: +%d dB (New Balance: %d)",
+			dj, room.ID, cheers, boos, rewardDB, newBalance)
+
+		// Broadcast official performance results dialog packet (CD_PRS)
+		prsXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_PRS av=\"%s\" tu=\"%d\" td=\"%d\" db=\"%d\"/></Room.Action>",
+			room.ID, dj, cheers, boos, rewardDB)
+		room.Broadcast(prsXML, "")
+	}()
+}
+
+func (s *Server) stopPerformance(room *Room) {
+	room.mu.Lock()
+	defer room.mu.Unlock()
+	if room.Performance != nil && !room.Performance.Done {
+		room.Performance.Done = true
+		select {
+		case <-room.Performance.cancelCh:
+		default:
+			close(room.Performance.cancelCh)
+		}
+	}
+}
+
+func (s *Server) recordVote(room *Room, voter string, delta int) {
+	room.mu.Lock()
+	defer room.mu.Unlock()
+
+	if room.Performance == nil || room.Performance.Done {
+		return
+	}
+	if room.Performance.Voters[voter] {
+		// Already voted in this performance round
+		return
+	}
+	room.Performance.Voters[voter] = true
+
+	act := "cheer"
+	if delta > 0 {
+		room.Performance.Cheers++
+	} else {
+		room.Performance.Boos++
+		act = "boo"
+	}
+
+	// 1. Broadcast real-time Decibel meter update (CD_VR)
+	vrXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_VR tu=\"%d\" td=\"%d\"/></Room.Action>",
+		room.ID, room.Performance.Cheers, room.Performance.Boos)
+	room.Broadcast(vrXML, "")
+
+	// 2. Broadcast voter avatar animation (cheer or boo)
+	avXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV_DC av=\"%s\" act=\"%s\"/></Room.Action>",
+		room.ID, voter, act)
+	room.Broadcast(avXML, "")
+
+	log.Printf("[VOTE] [%s] %s voted %s (Cheers: %d, Boos: %d)",
+		room.ID, voter, act, room.Performance.Cheers, room.Performance.Boos)
 }
 
 func parsePPoints(xml string) [][2]int {

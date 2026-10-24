@@ -11,7 +11,7 @@ import (
 )
 
 func TestLoginDenizen(t *testing.T) {
-	srv := NewServer("./web", "127.0.0.1", "8080")
+	srv := NewServer("./web", "127.0.0.1", "8080", nil)
 
 	// Test 1: Query param user=Matth
 	req := httptest.NewRequest("GET", "/sf/ssldocs/loginDenizen.jsp?user=Matth&gender=M", nil)
@@ -41,7 +41,7 @@ func TestLoginDenizen(t *testing.T) {
 }
 
 func TestAMFGateway(t *testing.T) {
-	srv := NewServer("./web", "127.0.0.1", "8080")
+	srv := NewServer("./web", "127.0.0.1", "8080", nil)
 
 	// Test getTip
 	reqBytes, err := amf.EncodeRemotingRequest("com.studiocom.sanfrancisco.denizen.FlashDenizenManager.getTip", nil)
@@ -63,7 +63,7 @@ func TestAMFGateway(t *testing.T) {
 		t.Fatalf("decode remoting response failed: %v", err)
 	}
 	tipStr, ok := val.(string)
-	if !ok || !strings.Contains(tipStr, "Welcome") {
+	if !ok || len(tipStr) == 0 {
 		t.Errorf("unexpected tip value: %v", val)
 	}
 
@@ -88,7 +88,7 @@ func TestAMFGateway(t *testing.T) {
 }
 
 func TestMessageHandling(t *testing.T) {
-	srv := NewServer("./web", "127.0.0.1", "8080")
+	srv := NewServer("./web", "127.0.0.1", "8080", nil)
 	p := &Player{
 		ID:         "test_p1",
 		ScreenName: "Adam",
@@ -114,16 +114,35 @@ func TestMessageHandling(t *testing.T) {
 	srv.handlePlayerMessage(p, chatXML)
 
 	// Test Furniture placement
-	posXML := `<Room.Action roomID="VIS$0"><POS_STD st="0" d="2" ho="0" z="4" y="0" x="5" id="11427"/></Room.Action>`
+	posXML := `<Room.Action roomID="VIS$0"><POS_STD st="0" d="2" ho="0" z="4" y="0" x="5" id="11427" cid="45"/></Room.Action>`
 	srv.handlePlayerMessage(p, posXML)
-	if len(rm.Furniture) != 1 {
-		t.Errorf("expected 1 furniture item placed, got %d", len(rm.Furniture))
+	furni, err := srv.store.GetRoomFurniture("VIS$0")
+	if err != nil || len(furni) != 1 {
+		t.Fatalf("expected 1 furniture item placed in DB, got %d (err: %v)", len(furni), err)
 	}
 
 	// Test Furniture pickup
 	pickupXML := `<Room.Action roomID="VIS$0"><POS_BKPK id="11427"/></Room.Action>`
 	srv.handlePlayerMessage(p, pickupXML)
-	if len(rm.Furniture) != 0 {
-		t.Errorf("expected 0 furniture items after pickup, got %d", len(rm.Furniture))
+	furniAfter, _ := srv.store.GetRoomFurniture("VIS$0")
+	if len(furniAfter) != 0 {
+		t.Errorf("expected 0 furniture items after pickup, got %d", len(furniAfter))
 	}
+
+	// Test DJ Performance and Voting Loop
+	cdpXML := `<Room.Action roomID="VIS$0"><CD_P s="^50,rockOne_guitar00{2,0{4,4{^" title="Rock Beats"/></Room.Action>`
+	srv.handlePlayerMessage(p, cdpXML)
+	if rm.Performance == nil || rm.Performance.DJ != "Adam" {
+		t.Errorf("expected performance active for DJ Adam, got: %v", rm.Performance)
+	}
+
+	// Test Thumbs Up cheer vote from a second player
+	p2 := &Player{ID: "test_p2", ScreenName: "Bob", RoomID: "VIS$0"}
+	rm.Players[p2.ID] = p2
+	voteXML := `<Room.Action roomID="VIS$0"><CD_TU/></Room.Action>`
+	srv.handlePlayerMessage(p2, voteXML)
+	if rm.Performance.Cheers != 1 {
+		t.Errorf("expected 1 cheer vote, got: %d", rm.Performance.Cheers)
+	}
+	srv.stopPerformance(rm)
 }

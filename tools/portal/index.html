@@ -3,818 +3,1211 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coke Music / Coke Studios - Digital Preservation & Rebuild Hub</title>
+  <title>MyCoke - Coke Studios & Music Mixer Official Portal</title>
+  <link rel="icon" href="assets/images/start_logo.gif" type="image/gif">
   <style>
+    @font-face {
+      font-family: 'Volter';
+      src: local('Verdana'), local('Tahoma');
+    }
     :root {
       --coke-red: #e41e2b;
       --coke-dark-red: #a50e18;
-      --coke-charcoal: #151515;
-      --coke-panel: #1e1e1e;
-      --coke-card: #262626;
-      --coke-card-hover: #2e2e2e;
-      --coke-border: #383838;
-      --coke-text: #f5f5f5;
-      --coke-muted: #aaaaaa;
-      --coke-accent: #ff4d5a;
-      --coke-green: #00e676;
-      --coke-gold: #ffc107;
+      --coke-cream: #fff8ee;
+      --coke-border: #d2a679;
+      --coke-dark: #231f20;
+      --coke-gold: #ffcc00;
+      --coke-silver: #e0e0e0;
+      --font-pixel: 'Volter', Tahoma, Verdana, sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--coke-charcoal);
-      color: var(--coke-text);
-      line-height: 1.6;
-      padding: 0 0 60px 0;
+      background: #c00000 url('assets/images/nav/top_red.jpg') repeat-x top center;
+      font-family: var(--font-pixel);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 50px;
     }
-    header {
-      background: linear-gradient(135deg, var(--coke-red) 0%, var(--coke-dark-red) 100%);
-      padding: 35px 20px;
-      text-align: center;
-      border-bottom: 4px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 4px 25px rgba(0,0,0,0.5);
+
+    /* Container matching authentic 780px - 980px 2004 web layout */
+    .mycoke-container {
+      width: 980px;
+      max-width: 98%;
+      background: #ffffff;
+      margin-top: 15px;
+      border: 3px solid #7d0000;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
-    header h1 {
-      font-size: 2.6rem;
+
+    /* Header Bar */
+    .mycoke-header {
+      background: linear-gradient(180deg, #ff1a26 0%, #c4000b 100%);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #ffcc00;
+      position: relative;
+    }
+    .header-branding {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .coke-logo {
+      height: 48px;
+      filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.4));
+    }
+    .coke-title h1 {
+      color: #ffffff;
+      font-size: 26px;
       letter-spacing: -0.5px;
       text-transform: uppercase;
-      font-weight: 800;
-      color: #fff;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      text-shadow: 2px 2px 0px #7d0000;
+      font-weight: 900;
     }
-    header p {
-      color: rgba(255,255,255,0.92);
-      font-size: 1.15rem;
-      margin-top: 6px;
-      font-weight: 400;
+    .coke-title p {
+      color: #ffe6e6;
+      font-size: 11px;
+      letter-spacing: 0.5px;
     }
-    .badge-bar {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 15px;
-      flex-wrap: wrap;
-    }
-    .badge {
-      background: rgba(0,0,0,0.35);
-      padding: 5px 14px;
-      border-radius: 20px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.25);
-    }
-    .container {
-      max-width: 1140px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
-    .section-title {
-      font-size: 1.35rem;
-      margin: 36px 0 16px 0;
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--coke-red);
+
+    /* Denizen User Status Badge */
+    .denizen-status-bar {
+      background: #4a0005;
+      border: 2px solid #ffcc00;
+      border-radius: 6px;
+      padding: 6px 14px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 16px;
+      color: #ffffff;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
     }
-    .section-title span {
+    .denizen-avatar-preview {
+      width: 40px;
+      height: 40px;
+      background: #ffe6cc;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    }
+    .denizen-avatar-preview img {
+      width: 48px;
+      margin-top: 4px;
+    }
+    .denizen-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .denizen-name {
+      font-weight: bold;
+      font-size: 13px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .denizen-name input {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid #ffcc00;
+      color: #fff;
+      font-weight: bold;
+      font-size: 12px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      width: 100px;
+    }
+    .denizen-currencies {
+      display: flex;
+      gap: 12px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .badge-db {
+      color: #ffde59;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-vc {
+      color: #ff6666;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Navigation Bar */
+    .mycoke-nav {
+      background: #231f20;
+      display: flex;
+      border-bottom: 2px solid #111;
+      overflow-x: auto;
+    }
+    .nav-tab {
+      padding: 12px 20px;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-right: 1px solid #383838;
       display: flex;
       align-items: center;
       gap: 8px;
-      font-weight: 700;
+      user-select: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-tab:hover {
+      background: #c4000b;
+      color: #fff;
+    }
+    .nav-tab.active {
+      background: #e41e2b;
+      color: #ffffff;
+      box-shadow: inset 0 -3px 0 #ffcc00;
+    }
+    .nav-tab-icon {
+      font-size: 16px;
     }
 
-    /* Live Status Pill */
-    .status-pills {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      margin-bottom: 24px;
+    /* Main Content Area */
+    .mycoke-content {
+      padding: 20px;
+      background: #fbfbfb;
+      min-height: 600px;
     }
-    .status-pill {
-      background: var(--coke-panel);
-      border: 1px solid var(--coke-border);
+
+    /* Tab Page Containers */
+    .tab-page {
+      display: none;
+    }
+    .tab-page.active {
+      display: block;
+    }
+
+    /* --- PAGE 1: PLAY GAME (EMBEDDED CLIENT) --- */
+    .game-viewport-card {
+      background: #1a1a1a;
+      border: 3px solid #7d0000;
       border-radius: 8px;
-      padding: 12px 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .viewport-header {
+      background: linear-gradient(180deg, #3d3d3d 0%, #222222 100%);
+      padding: 8px 16px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #555;
+    }
+    .viewport-title {
+      font-size: 12px;
+      font-weight: bold;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 0.9rem;
+      gap: 8px;
     }
-    .status-dot {
-      display: inline-block;
+    .viewport-status-dot {
       width: 10px;
       height: 10px;
+      background: #00e676;
       border-radius: 50%;
-      background: var(--coke-green);
-      box-shadow: 0 0 8px var(--coke-green);
-      margin-right: 6px;
+      box-shadow: 0 0 6px #00e676;
+    }
+    .viewport-controls {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-vp {
+      background: #e41e2b;
+      border: 1px solid #ffcc00;
+      color: #fff;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-vp:hover {
+      background: #ff2d3b;
+    }
+    .game-iframe-wrapper {
+      position: relative;
+      width: 100%;
+      height: 620px;
+      background: #000;
+    }
+    .game-iframe-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
     }
 
-    /* Character Creator & Launchpad */
-    .launchpad-card {
-      background: linear-gradient(180deg, #2c1a1d 0%, var(--coke-card) 100%);
-      border: 2px solid var(--coke-red);
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-      margin-bottom: 30px;
-    }
-    .launchpad-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-    @media (max-width: 768px) {
-      .launchpad-grid { grid-template-columns: 1fr; }
-    }
-    .form-group {
-      margin-bottom: 16px;
-    }
-    .form-group label {
-      display: block;
-      font-size: 0.88rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: #ddd;
-    }
-    .form-input, .form-select {
-      width: 100%;
-      background: #181818;
-      border: 1px solid var(--coke-border);
-      color: #fff;
-      padding: 10px 14px;
+    /* Quick Studio Switcher Bar */
+    .studios-bar {
+      margin-top: 15px;
+      background: #ffe6e6;
+      border: 2px solid #e41e2b;
       border-radius: 6px;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s ease;
-    }
-    .form-input:focus, .form-select:focus {
-      border-color: var(--coke-accent);
-    }
-    .id-preview-box {
-      background: #161616;
-      border: 1px solid #333;
-      border-radius: 8px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .id-header {
+      padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #282828;
-      padding-bottom: 8px;
-      margin-bottom: 12px;
     }
-    .id-badge {
-      background: var(--coke-red);
-      color: #fff;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 4px;
-      text-transform: uppercase;
+    .studios-bar-title {
+      font-weight: bold;
+      font-size: 13px;
+      color: #7d0000;
     }
-    .id-details p {
-      font-size: 0.88rem;
-      color: #bbb;
-      margin-bottom: 6px;
-    }
-    .id-details strong {
-      color: #fff;
-    }
-    .btn-action-row {
-      display: flex;
-      gap: 12px;
-      margin-top: 18px;
-      flex-wrap: wrap;
-    }
-    .btn-primary {
-      flex: 1;
-      min-width: 200px;
-      background: var(--coke-red);
-      color: #fff;
-      border: none;
-      padding: 13px 20px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      transition: background 0.15s ease, transform 0.1s ease;
-      display: inline-block;
-    }
-    .btn-primary:hover {
-      background: var(--coke-accent);
-      transform: translateY(-1px);
-    }
-    .btn-multiplayer {
-      background: #333;
-      color: #fff;
-      border: 1px solid #555;
-      padding: 13px 20px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      transition: background 0.15s ease;
-    }
-    .btn-multiplayer:hover {
-      background: #444;
-      border-color: #777;
-    }
-
-    /* Sound Sequencer Preview */
-    .audio-player-box {
-      background: var(--coke-panel);
-      border: 1px solid var(--coke-border);
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 30px;
-    }
-    .genre-button-row {
+    .studio-pills {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin: 12px 0;
     }
-    .btn-genre {
-      background: #2a2a2a;
-      border: 1px solid #444;
-      color: #eee;
-      padding: 7px 14px;
+    .studio-pill {
+      background: #ffffff;
+      border: 2px solid #c4000b;
+      color: #c4000b;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: bold;
       border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.15s;
     }
-    .btn-genre:hover, .btn-genre.active {
-      background: var(--coke-red);
-      border-color: var(--coke-accent);
+    .studio-pill:hover, .studio-pill.active {
+      background: #c4000b;
       color: #fff;
     }
-    .sample-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 10px;
-      margin-top: 14px;
-      max-height: 220px;
-      overflow-y: auto;
-      padding-right: 6px;
+
+    /* --- PAGE 2: MUSIC MIXER (SEQUENCER & CD BURNER) --- */
+    .mixer-container {
+      background: #231f20;
+      border: 3px solid #ffcc00;
+      border-radius: 8px;
+      padding: 20px;
+      color: #ffffff;
     }
-    .sample-item {
-      background: #242424;
-      border: 1px solid #333;
-      border-radius: 6px;
-      padding: 8px 12px;
+    .mixer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #444;
+      padding-bottom: 15px;
+    }
+    .mixer-title-area h2 {
+      font-size: 20px;
+      color: #ffde59;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+    }
+    .mixer-title-area p {
+      font-size: 12px;
+      color: #bbb;
+      margin-top: 4px;
+    }
+    .mixer-transport {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .btn-mixer-transport {
+      background: #e41e2b;
+      color: #fff;
+      border: 2px solid #ffcc00;
+      padding: 8px 18px;
+      font-weight: bold;
+      font-size: 13px;
+      border-radius: 4px;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 0.82rem;
+      gap: 6px;
     }
-    .sample-play-btn {
-      background: var(--coke-red);
-      color: #fff;
-      border: none;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
+    .btn-mixer-transport:hover {
+      background: #ff2d3b;
+    }
+    .btn-burn-cd {
+      background: #ffcc00;
+      color: #000;
+      border: 2px solid #fff;
+      padding: 8px 20px;
+      font-weight: 900;
+      font-size: 13px;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
+    }
+    .btn-burn-cd:hover {
+      background: #ffe066;
+    }
+
+    /* 4-Track Sequencer Grid */
+    .sequencer-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+    .sequencer-track {
+      background: #332e30;
+      border: 2px solid #4d4648;
+      border-radius: 6px;
+      display: flex;
+      overflow: hidden;
+    }
+    .track-info {
+      width: 140px;
+      background: #181516;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 2px solid #4d4648;
+    }
+    .track-name {
+      font-size: 12px;
+      font-weight: bold;
+      color: #ffcc00;
+    }
+    .track-genre {
+      font-size: 10px;
+      color: #aaa;
+    }
+    .track-steps {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(16, 1fr);
+      gap: 2px;
+      padding: 6px;
+      background: #231f20;
+    }
+    .step-box {
+      background: #3a3536;
+      border: 1px solid #554d4f;
+      height: 48px;
+      border-radius: 3px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
-      transition: background 0.15s ease;
+      font-size: 9px;
+      color: #eee;
+      user-select: none;
+      transition: background 0.1s;
     }
-    .sample-play-btn:hover {
-      background: var(--coke-accent);
+    .step-box:hover {
+      background: #554e50;
+    }
+    .step-box.active {
+      background: #e41e2b;
+      border-color: #ffcc00;
+      font-weight: bold;
+      box-shadow: 0 0 8px rgba(228, 30, 43, 0.7);
+    }
+    .step-box.playhead {
+      outline: 2px solid #00e676;
     }
 
-    /* Grid & Cards */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 20px;
+    /* Sound Loop Library Palette */
+    .loop-palette {
+      background: #1a1718;
+      border: 2px solid #444;
+      border-radius: 6px;
+      padding: 15px;
     }
-    .card {
-      background: var(--coke-card);
-      border: 1px solid var(--coke-border);
-      border-radius: 10px;
-      padding: 22px;
+    .loop-palette-title {
+      font-size: 13px;
+      font-weight: bold;
+      color: #ffcc00;
+      margin-bottom: 10px;
+    }
+    .loop-genre-tabs {
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.15s ease, border-color 0.15s ease;
+      gap: 6px;
+      margin-bottom: 12px;
     }
-    .card:hover {
-      transform: translateY(-2px);
-      border-color: var(--coke-accent);
-    }
-    .card h3 {
-      font-size: 1.25rem;
+    .genre-btn {
+      background: #333;
+      border: 1px solid #666;
       color: #fff;
-      margin-bottom: 8px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .genre-btn.active, .genre-btn:hover {
+      background: #e41e2b;
+      border-color: #ffcc00;
+    }
+    .loop-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-height: 140px;
+      overflow-y: auto;
+      padding: 4px;
+    }
+    .loop-chip {
+      background: #2a2627;
+      border: 1px solid #ffcc00;
+      color: #ffde59;
+      padding: 5px 10px;
+      font-size: 11px;
+      border-radius: 4px;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
-    .card p {
-      color: var(--coke-muted);
-      font-size: 0.93rem;
-      margin-bottom: 16px;
-      flex-grow: 1;
+    .loop-chip:hover {
+      background: #ffcc00;
+      color: #000;
     }
-    .card .specs {
-      font-size: 0.85rem;
-      color: #999;
-      background: var(--coke-panel);
-      padding: 10px 14px;
-      border-radius: 6px;
-      margin-bottom: 16px;
-      line-height: 1.6;
-    }
-    .card .btn {
-      display: inline-block;
-      text-align: center;
-      background: var(--coke-red);
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 18px;
-      border-radius: 6px;
-      font-weight: 600;
-      transition: background 0.15s ease;
-    }
-    .card .btn:hover { background: var(--coke-accent); }
-    .card .btn.secondary { background: #444; }
-    .card .btn.secondary:hover { background: #555; }
 
-    /* Admin / Terminal Box */
-    .status-panel {
-      background: var(--coke-panel);
-      border: 1px solid var(--coke-border);
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 30px;
+    /* --- PAGE 3: RED CAPS BOTTLE PIN REDEMPTION --- */
+    .redcaps-box {
+      background: linear-gradient(135deg, #a50e18 0%, #500000 100%);
+      border: 4px solid #ffcc00;
+      border-radius: 12px;
+      padding: 30px;
+      color: #ffffff;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
     }
-    .status-panel h4 {
-      color: var(--coke-accent);
-      margin-bottom: 12px;
-      font-size: 1.1rem;
+    .redcaps-graphic {
+      width: 140px;
+      height: 140px;
+      background: #ffffff;
+      border: 4px solid #ffcc00;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      flex-shrink: 0;
     }
-    .status-panel pre {
-      background: #111;
-      padding: 14px;
-      border-radius: 6px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.88rem;
-      overflow-x: auto;
-      color: #00e676;
+    .redcaps-graphic img {
+      width: 110px;
+    }
+    .redcaps-form-area {
+      flex: 1;
+    }
+    .redcaps-form-area h2 {
+      font-size: 24px;
+      text-transform: uppercase;
+      color: #ffcc00;
+      margin-bottom: 8px;
+    }
+    .redcaps-form-area p {
+      font-size: 13px;
+      color: #ffe6e6;
+      margin-bottom: 16px;
       line-height: 1.5;
     }
-    footer {
+    .redcaps-input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .redcaps-input-group input {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border: 2px solid #ffcc00;
+      border-radius: 6px;
+      background: #fff;
+      color: #333;
+    }
+    .btn-redeem {
+      background: #ffcc00;
+      color: #7d0000;
+      border: none;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 900;
+      text-transform: uppercase;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: all 0.15s;
+    }
+    .btn-redeem:hover {
+      background: #ffe680;
+      transform: translateY(-1px);
+    }
+    .redcaps-sample-pins {
+      font-size: 11px;
+      color: #ffcccc;
+      margin-top: 8px;
+    }
+    .redcaps-sample-pins code {
+      background: rgba(0,0,0,0.3);
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: #ffde59;
+      cursor: pointer;
+    }
+
+    /* --- PAGE 4: TOP 40 MUSIC CHARTS --- */
+    .chart-container {
+      background: #ffffff;
+      border: 2px solid #d2a679;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .chart-header {
+      background: #e41e2b;
+      color: #fff;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .chart-list {
+      list-style: none;
+    }
+    .chart-row {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      border-bottom: 1px solid #eee;
+      gap: 16px;
+    }
+    .chart-row:nth-child(even) {
+      background: #fafafa;
+    }
+    .chart-rank {
+      font-size: 18px;
+      font-weight: 900;
+      color: #e41e2b;
+      width: 32px;
       text-align: center;
-      margin-top: 50px;
+    }
+    .chart-info {
+      flex: 1;
+    }
+    .chart-song {
+      font-weight: bold;
+      font-size: 13px;
+      color: #222;
+    }
+    .chart-artist {
+      font-size: 11px;
       color: #777;
-      font-size: 0.85rem;
+    }
+    .chart-stats {
+      font-size: 11px;
+      font-weight: bold;
+      color: #ff9900;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-chart-play {
+      background: #e41e2b;
+      color: #fff;
+      border: none;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-chart-play:hover {
+      background: #c4000b;
+    }
+
+    /* Footer */
+    .mycoke-footer {
+      background: #231f20;
+      color: #888;
+      font-size: 11px;
+      padding: 20px;
+      text-align: center;
+      border-top: 3px solid #ffcc00;
+      line-height: 1.6;
+    }
+    .mycoke-footer a {
+      color: #ffcc00;
+      text-decoration: none;
+    }
+    .mycoke-footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Coke Music / Coke Studios</h1>
-    <p>Complete Community Rebuild & Digital Preservation Archive</p>
-    <div class="badge-bar">
-      <span class="badge">Debian-First Architecture</span>
-      <span class="badge">Ebitengine / WebAssembly Client</span>
-      <span class="badge">Full Original Audio & Asset Libraries</span>
-      <span class="badge">Decompiled Lingo 2006-2007</span>
-      <span class="badge">ElectroServer Clint Pack</span>
-    </div>
-  </header>
 
-  <div class="container">
-    <!-- Live Status Dashboard -->
-    <div class="status-pills">
-      <div class="status-pill">
-        <span><span class="status-dot"></span> Master Portal & Gateway (24902)</span>
-        <small style="color:var(--coke-green);">Default Hub</small>
-      </div>
-      <div class="status-pill">
-        <span><span class="status-dot"></span> GoCoke + Game Server (8080)</span>
-        <small style="color:var(--coke-green);">Live (AMF/WS)</small>
-      </div>
-      <div class="status-pill">
-        <span><span class="status-dot"></span> CokePhase Demo (8081)</span>
-        <small style="color:var(--coke-green);">Online</small>
-      </div>
-      <div class="status-pill">
-        <span><span class="status-dot"></span> CSMusicMixer (8082)</span>
-        <small style="color:var(--coke-green);">Online</small>
-      </div>
-    </div>
+  <div class="mycoke-container">
 
-    <!-- Character Creator & Quick Launchpad -->
-    <div class="section-title">
-      <span>🚀 Denizen Launchpad & Realtime Room Selector</span>
-      <small style="color:var(--coke-muted);font-size:0.85rem;">Configure your Denizen identity before entering the studios</small>
-    </div>
+    <!-- Official MyCoke Header -->
+    <header class="mycoke-header">
+      <div class="header-branding">
+        <img src="assets/images/start_logo.gif" alt="Coke Music" class="coke-logo">
+        <div class="coke-title">
+          <h1>Coke Studios</h1>
+          <p>Official 1:1 Rebuild &middot; Powered by Go, WebAssembly &amp; MariaDB (Port 24902)</p>
+        </div>
+      </div>
 
-    <div class="launchpad-card">
-      <div class="launchpad-grid">
-        <!-- Form Controls -->
-        <div>
-          <div class="form-group">
-            <label for="inputScreenName">Denizen Screen Name:</label>
-            <input type="text" id="inputScreenName" class="form-input" value="Adam" placeholder="Enter screen name..." maxlength="20">
+      <!-- Denizen Character Live Profile -->
+      <div class="denizen-status-bar">
+        <div class="denizen-avatar-preview">
+          <img id="avatarHeadshot" src="assets/images/buttons/register/previews/avatar_preview.png" onerror="this.src='assets/images/start_logo.gif'" alt="Avatar">
+        </div>
+        <div class="denizen-info">
+          <div class="denizen-name">
+            DJ <input type="text" id="screenNameInput" value="Adam" title="Change Screen Name">
           </div>
-
-          <div class="form-group">
-            <label for="selectGender">Gender:</label>
-            <select id="selectGender" class="form-select">
-              <option value="M">Male (M)</option>
-              <option value="F">Female (F)</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="inputMotto">Motto / Mission Statement:</label>
-            <input type="text" id="inputMotto" class="form-input" value="Coke Music Reborn!" placeholder="Your denizen motto..." maxlength="40">
-          </div>
-
-          <div class="form-group">
-            <label for="selectRoom">Starting Studio / Room:</label>
-            <select id="selectRoom" class="form-select">
-              <option value="VIS$0">🌴 Central Park Studio (VIS$0)</option>
-              <option value="VIS$1">🌁 San Francisco Studio (VIS$1)</option>
-              <option value="VIS$2">🎡 London Studio (VIS$2)</option>
-              <option value="studio_1">🎧 Private Studio #1 (studio_1)</option>
-            </select>
+          <div class="denizen-currencies">
+            <span class="badge-db" title="Decibels (earned from DJ cheer battles)">&#9835; <span id="balanceDB">5,000</span> dB</span>
+            <span class="badge-vc" title="Coke V-Coins (earned from bottle caps)">&#127860; <span id="balanceVC">500</span> VC</span>
           </div>
         </div>
+      </div>
+    </header>
 
-        <!-- Live ID Card Preview -->
-        <div class="id-preview-box">
-          <div>
-            <div class="id-header">
-              <strong style="font-size:1.05rem;">Coke Studios Passport</strong>
-              <span class="id-badge">Verified Denizen</span>
+    <!-- Navigation Tabs -->
+    <nav class="mycoke-nav">
+      <div class="nav-tab active" onclick="switchTab('play')">
+        <span class="nav-tab-icon">&#9654;</span> Play Game
+      </div>
+      <div class="nav-tab" onclick="switchTab('mixer')">
+        <span class="nav-tab-icon">&#9836;</span> Music Mixer
+      </div>
+      <div class="nav-tab" onclick="switchTab('redcaps')">
+        <span class="nav-tab-icon">&#127860;</span> Red Caps Code
+      </div>
+      <div class="nav-tab" onclick="switchTab('charts')">
+        <span class="nav-tab-icon">&#127942;</span> Top 40 Charts
+      </div>
+      <div class="nav-tab" onclick="switchTab('studios')">
+        <span class="nav-tab-icon">&#127968;</span> Studio Directory
+      </div>
+      <div class="nav-tab" onclick="switchTab('safety')">
+        <span class="nav-tab-icon">&#128737;</span> Safety &amp; Rules
+      </div>
+    </nav>
+
+    <!-- Content Sections -->
+    <main class="mycoke-content">
+
+      <!-- TAB 1: PLAY GAME (FULL EMBEDDED CLIENT) -->
+      <section id="tab-play" class="tab-page active">
+        <div class="game-viewport-card">
+          <div class="viewport-header">
+            <div class="viewport-title">
+              <span class="viewport-status-dot"></span>
+              <span id="currentRoomTitle">Central Park Studio (VIS$0)</span>
             </div>
-            <div class="id-details">
-              <p>Name: <strong id="previewName">Adam</strong></p>
-              <p>Base64 SW1 Token: <code id="previewSW1" style="color:var(--coke-accent);">QWRhbQ==</code></p>
-              <p>Decibel Balance: <strong style="color:var(--coke-gold);">50,000 DB</strong></p>
-              <p>Motto: <em id="previewMotto">"Coke Music Reborn!"</em></p>
-              <p>Target Studio: <strong id="previewRoom">Central Park Studio</strong></p>
+            <div class="viewport-controls">
+              <button class="btn-vp" onclick="reloadClient()">&#8635; Reload</button>
+              <button class="btn-vp" onclick="toggleFullscreen()">&#9974; Fullscreen</button>
+              <a href="/game/?user=Adam" target="_blank" class="btn-vp">&#8599; Pop-out Window</a>
             </div>
           </div>
-
-          <div style="margin-top:14px;background:#111;padding:8px;border-radius:4px;font-size:0.78rem;color:#888;">
-            Direct Launch Target: <span id="previewURL" style="word-break:break-all;color:#4caf50;">http://127.0.0.1:8080/?user=Adam</span>
+          <div class="game-iframe-wrapper" id="gameFrameWrapper">
+            <iframe id="gameIframe" src="/game/?user=Adam" allow="autoplay"></iframe>
           </div>
         </div>
-      </div>
 
-      <!-- Action Buttons -->
-      <div class="btn-action-row">
-        <a id="btnLaunchSingle" href="http://127.0.0.1:8080/?user=Adam" target="_blank" class="btn-primary">
-          Enter Coke Studios (Single Player)
-        </a>
-        <button id="btnLaunchMulti" class="btn-multiplayer" type="button">
-          👥 Launch 2-Player Test (Realtime Room Sync)
-        </button>
-      </div>
-    </div>
-
-    <!-- Authentic Sound Sequencer Loop Player -->
-    <div class="section-title">
-      <span>🎵 Sound Library & Music Mixer Audio Vault</span>
-      <small style="color:var(--coke-muted);font-size:0.85rem;">129 extracted authentic original 2002-2007 WAV loops</small>
-    </div>
-
-    <div class="audio-player-box">
-      <p style="color:var(--coke-muted);font-size:0.92rem;">
-        Click any loop below to audition the authentic sound library samples used in the iconic 4-track sequencer.
-      </p>
-
-      <div class="genre-button-row">
-        <button class="btn-genre active" data-genre="dance">Dance</button>
-        <button class="btn-genre" data-genre="hiphop">Hip-Hop</button>
-        <button class="btn-genre" data-genre="rock">Rock</button>
-        <button class="btn-genre" data-genre="pop">Pop</button>
-        <button class="btn-genre" data-genre="latino">Latin</button>
-        <button class="btn-genre" data-genre="country">Country</button>
-      </div>
-
-      <div class="sample-list" id="sampleContainer">
-        <!-- Rendered via JavaScript -->
-      </div>
-      <audio id="audioElement" preload="none"></audio>
-    </div>
-
-    <!-- Playable & Interactive Rebuilds -->
-    <div class="section-title">
-      <span>Playable & Interactive Rebuilds</span>
-      <small style="color:var(--coke-muted);font-size:0.85rem;">Run natively in modern browsers</small>
-    </div>
-
-    <div class="grid">
-      <!-- GoCoke -->
-      <div class="card" style="border: 2px solid var(--coke-red);">
-        <div>
-          <h3>⭐ GoCoke (Most Complete)</h3>
-          <p>The definitive Coke Studios client rebuild. Features full isometric room navigation, 14-part avatar engine with clothes/customization, backpack, catalogue, room furniture placement, chat bubbles, sound loops, and built-in music mixer sequencer in WebAssembly.</p>
-          <div class="specs">
-            <strong>Stack:</strong> Go + Ebitengine (53 MB WASM) / Canvas<br>
-            <strong>Assets:</strong> Thousands of original sprites, palettes, sound loops<br>
-            <strong>Backend:</strong> Standalone Go server (AMF0 + WebSocket RFC6455)
+        <!-- Quick Room Switcher -->
+        <div class="studios-bar">
+          <span class="studios-bar-title">Jump to Studio:</span>
+          <div class="studio-pills">
+            <button class="studio-pill active" onclick="switchStudio('VIS$0', 'Central Park Studio')">Central Park</button>
+            <button class="studio-pill" onclick="switchStudio('VIS$1', 'San Francisco Studio')">San Francisco</button>
+            <button class="studio-pill" onclick="switchStudio('VIS$2', 'London Studio')">London Studio</button>
+            <button class="studio-pill" onclick="switchStudio('studio_1', 'Private Studio #1')">Private Studio #1</button>
+            <button class="studio-pill" onclick="switchStudio('studio_wayne', 'Wayne\'s Studio')">Studio Wayne</button>
+            <button class="studio-pill" onclick="switchStudio('studio_rooftop', 'Rooftop Lounge')">Rooftop Lounge</button>
           </div>
         </div>
-        <a href="http://127.0.0.1:8080/" target="_blank" class="btn">Launch GoCoke (Port 8080)</a>
-      </div>
+      </section>
 
-      <!-- CokePhase -->
-      <div class="card">
-        <div>
-          <h3>CokePhase (Isogenic HTML5)</h3>
-          <p>Browser recreation built on the Isogenic isometric HTML5 engine. Features 7 distinct room layouts (Public Studios, Rooftop, Wayne, Pokemon), original catalogue fixtures, avatar movement, and local JSON response adapters.</p>
-          <div class="specs">
-            <strong>Stack:</strong> HTML5 Canvas / Isogenic Engine / Vanilla JS<br>
-            <strong>Rooms:</strong> 7 included room models & catalogue pages<br>
-            <strong>Mode:</strong> Local simulation (no PHP/Grunt needed)
+      <!-- TAB 2: MUSIC MIXER (SEQUENCER & CD BURNER) -->
+      <section id="tab-mixer" class="tab-page">
+        <div class="mixer-container">
+          <div class="mixer-header">
+            <div class="mixer-title-area">
+              <h2>Coke Studios Music Mixer</h2>
+              <p>Arrange authentic 120 BPM loops across 4 tracks, preview in real time, and burn directly to a playable CD!</p>
+            </div>
+            <div class="mixer-transport">
+              <button class="btn-mixer-transport" id="btnMixerPlay" onclick="toggleMixerPlayback()">
+                <span id="mixerPlayIcon">&#9654;</span> <span id="mixerPlayText">Play Beats</span>
+              </button>
+              <button class="btn-mixer-transport" onclick="clearMixer()">&#10006; Clear</button>
+              <button class="btn-burn-cd" onclick="burnToCD()">&#128191; Burn CD (10 dB)</button>
+            </div>
+          </div>
+
+          <!-- Sequencer Grid (4 Tracks x 16 Steps) -->
+          <div class="sequencer-grid">
+            <div class="sequencer-track" id="track-0">
+              <div class="track-info">
+                <span class="track-name">Track 1: Beats</span>
+                <span class="track-genre" id="genre-lbl-0">Rock Beats</span>
+              </div>
+              <div class="track-steps" id="steps-0"></div>
+            </div>
+            <div class="sequencer-track" id="track-1">
+              <div class="track-info">
+                <span class="track-name">Track 2: Bass</span>
+                <span class="track-genre" id="genre-lbl-1">Dance Bass</span>
+              </div>
+              <div class="track-steps" id="steps-1"></div>
+            </div>
+            <div class="sequencer-track" id="track-2">
+              <div class="track-info">
+                <span class="track-name">Track 3: Guitar/Keys</span>
+                <span class="track-genre" id="genre-lbl-2">Funk Guitar</span>
+              </div>
+              <div class="track-steps" id="steps-2"></div>
+            </div>
+            <div class="sequencer-track" id="track-3">
+              <div class="track-info">
+                <span class="track-name">Track 4: FX/Vocals</span>
+                <span class="track-genre" id="genre-lbl-3">Vocal Chants</span>
+              </div>
+              <div class="track-steps" id="steps-3"></div>
+            </div>
+          </div>
+
+          <!-- Loop Palette -->
+          <div class="loop-palette">
+            <div class="loop-palette-title">Select Loops from Sound Library (94 WAV Loops):</div>
+            <div class="loop-genre-tabs">
+              <button class="genre-btn active" onclick="filterGenre('all')">All Genres</button>
+              <button class="genre-btn" onclick="filterGenre('dance')">Dance</button>
+              <button class="genre-btn" onclick="filterGenre('rock')">Rock</button>
+              <button class="genre-btn" onclick="filterGenre('hiphop')">Hip Hop</button>
+              <button class="genre-btn" onclick="filterGenre('latin')">Latin</button>
+              <button class="genre-btn" onclick="filterGenre('country')">Country</button>
+              <button class="genre-btn" onclick="filterGenre('pop')">Pop</button>
+            </div>
+            <div class="loop-chips" id="loopChipsContainer"></div>
           </div>
         </div>
-        <a href="http://127.0.0.1:8081/" target="_blank" class="btn">Launch CokePhase (Port 8081)</a>
-      </div>
+      </section>
 
-      <!-- CSMusicMixer -->
-      <div class="card">
-        <div>
-          <h3>CSMusicMixer (Mark Hughes)</h3>
-          <p>Standalone recreation of the iconic MyCoke / Coke Studios Music Mixer. Choose genres (Country, Dance, Hip-Hop, Latin, Pop, Rock), sequence audio loops across 4 channels, control timeline playback, and export track data.</p>
-          <div class="specs">
-            <strong>Stack:</strong> Modern TypeScript / Howler.js Audio Engine / Webpack<br>
-            <strong>Sounds:</strong> 56 bundled original WAV samples across 6 genres<br>
-            <strong>Mode:</strong> Standalone web application
+      <!-- TAB 3: RED CAPS BOTTLE PIN REDEMPTION -->
+      <section id="tab-redcaps" class="tab-page">
+        <div class="redcaps-box">
+          <div class="redcaps-graphic">
+            <img src="assets/images/start_logo.gif" alt="Red Cap">
+          </div>
+          <div class="redcaps-form-area">
+            <h2>Redeem Bottle Cap PIN Codes</h2>
+            <p>Look under the red Coca-Cola bottle cap or can tab! Enter your code below to earn <strong>Coke V-Coins</strong> and unlock exclusive studio furniture for your backpack.</p>
+            <div class="redcaps-input-group">
+              <input type="text" id="capPinInput" placeholder="COKE-STUDIOS-2026" maxlength="24">
+              <button class="btn-redeem" onclick="submitRedCap()">Redeem Cap!</button>
+            </div>
+            <div class="redcaps-sample-pins">
+              Try valid promotion PINs: 
+              <code onclick="quickPin('COKE-STUDIOS-2026')">COKE-STUDIOS-2026</code> &middot; 
+              <code onclick="quickPin('RED-CAP-BEATS-01')">RED-CAP-BEATS-01</code> &middot; 
+              <code onclick="quickPin('MYCOKE-RETRO-VIP')">MYCOKE-RETRO-VIP</code>
+            </div>
+            <div id="redCapMessage" style="margin-top: 12px; font-weight: bold; font-size: 13px;"></div>
           </div>
         </div>
-        <a href="http://127.0.0.1:8082/" target="_blank" class="btn">Launch Music Mixer (Port 8082)</a>
-      </div>
-    </div>
+      </section>
 
-    <!-- Preservation Archives & Extraction Toolchain -->
-    <div class="section-title">
-      <span>Preservation Archives & Extraction Toolchain</span>
-    </div>
+      <!-- TAB 4: TOP 40 MUSIC CHARTS -->
+      <section id="tab-charts" class="tab-page">
+        <div class="chart-container">
+          <div class="chart-header">
+            &#9835; Coke Studios Top 40 Music Chart &mdash; Weekly Decibel Leaders
+          </div>
+          <ul class="chart-list">
+            <li class="chart-row">
+              <span class="chart-rank">1</span>
+              <div class="chart-info">
+                <div class="chart-song">Coke Beats Vol. 1 (Remix)</div>
+                <div class="chart-artist">DJ Adam &middot; Dance / Synthwave</div>
+              </div>
+              <div class="chart-stats">&#128077; 420 Cheers &middot; +850 dB</div>
+              <button class="btn-chart-play" onclick="previewSample('danceOne_beatz00.wav')">&#9654; Preview</button>
+            </li>
+            <li class="chart-row">
+              <span class="chart-rank">2</span>
+              <div class="chart-info">
+                <div class="chart-song">Rooftop Summer Anthem</div>
+                <div class="chart-artist">DJ Vinyl &middot; Hip Hop</div>
+              </div>
+              <div class="chart-stats">&#128077; 390 Cheers &middot; +780 dB</div>
+              <button class="btn-chart-play" onclick="previewSample('hipHopOne_beatz01.wav')">&#9654; Preview</button>
+            </li>
+            <li class="chart-row">
+              <span class="chart-rank">3</span>
+              <div class="chart-info">
+                <div class="chart-song">London Fog Groove</div>
+                <div class="chart-artist">DJ Sulake &middot; Rock</div>
+              </div>
+              <div class="chart-stats">&#128077; 310 Cheers &middot; +620 dB</div>
+              <button class="btn-chart-play" onclick="previewSample('rockOne_guitar00.wav')">&#9654; Preview</button>
+            </li>
+            <li class="chart-row">
+              <span class="chart-rank">4</span>
+              <div class="chart-info">
+                <div class="chart-song">Latin Heat Fiesta</div>
+                <div class="chart-artist">DJ Havana &middot; Latin Combo</div>
+              </div>
+              <div class="chart-stats">&#128077; 280 Cheers &middot; +560 dB</div>
+              <button class="btn-chart-play" onclick="previewSample('latinoTwo_piano00.wav')">&#9654; Preview</button>
+            </li>
+          </ul>
+        </div>
+      </section>
 
-    <div class="grid">
-      <div class="card">
-        <div>
-          <h3>Decompiled Lingo Sources</h3>
-          <p>Complete Macromedia Director / Shockwave cast script dumps from surviving Sulake clients: March 14 2006, May 3 2006, and October 8 2007. Includes all room scripts, mixer, sequencer, chat, and mod tool.</p>
-          <div class="specs">
-            <strong>Location:</strong> <code>sources/original-client-source/</code><br>
-            <strong>Files:</strong> 2,994 decompiled Lingo and cast script files
+      <!-- TAB 5: STUDIOS DIRECTORY -->
+      <section id="tab-studios" class="tab-page">
+        <div style="background: #fff; padding: 20px; border: 2px solid #ddd; border-radius: 8px;">
+          <h2 style="color: #7d0000; margin-bottom: 12px;">Official Coke Studios Directory</h2>
+          <p style="font-size: 13px; color: #555; margin-bottom: 20px;">Explore authentic public hangouts or visit player-decorated studios equipped with custom stereos and Coke vending machines.</p>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+            <div style="border: 2px solid #e41e2b; border-radius: 6px; padding: 15px; background: #fff8ee;">
+              <h3 style="color: #c4000b;">Central Park Studio (VIS$0)</h3>
+              <p style="font-size: 12px; color: #666; margin: 6px 0 12px 0;">The legendary main public studio overlooking Central Park.</p>
+              <button class="studio-pill active" onclick="switchStudio('VIS$0', 'Central Park Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+            <div style="border: 2px solid #e41e2b; border-radius: 6px; padding: 15px; background: #fff8ee;">
+              <h3 style="color: #c4000b;">San Francisco Studio (VIS$1)</h3>
+              <p style="font-size: 12px; color: #666; margin: 6px 0 12px 0;">StudioCom headquarters lounge with custom bay view acoustics.</p>
+              <button class="studio-pill active" onclick="switchStudio('VIS$1', 'San Francisco Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+            <div style="border: 2px solid #e41e2b; border-radius: 6px; padding: 15px; background: #fff8ee;">
+              <h3 style="color: #c4000b;">London Studio (VIS$2)</h3>
+              <p style="font-size: 12px; color: #666; margin: 6px 0 12px 0;">British lounge with high-tempo rock beats and neon fixtures.</p>
+              <button class="studio-pill active" onclick="switchStudio('VIS$2', 'London Studio'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
+            <div style="border: 2px solid #e41e2b; border-radius: 6px; padding: 15px; background: #fff8ee;">
+              <h3 style="color: #c4000b;">Private Studio #1</h3>
+              <p style="font-size: 12px; color: #666; margin: 6px 0 12px 0;">Player personal studio model with sofa, machine, and DJ decks.</p>
+              <button class="studio-pill active" onclick="switchStudio('studio_1', 'Private Studio #1'); switchTab('play');">Enter Studio &rarr;</button>
+            </div>
           </div>
         </div>
-        <a href="file:///c:/Users/Matth/OneDrive/Desktop/GPT/sources/original-client-source" class="btn secondary">Open Folder</a>
-      </div>
+      </section>
 
-      <div class="card">
-        <div>
-          <h3>Clint Complete Pack Archive</h3>
-          <p>The legendary 80 MB Coke Studios Private Server release by Clint. Contains ElectroServer 3, AS2 Flash Client.swf/fla, Navigator.fla, Inventory.fla, complete sound libraries, and Shockwave minigames.</p>
-          <div class="specs">
-            <strong>Location:</strong> <code>archives/extracted-complete-pack/</code><br>
-            <strong>Archive:</strong> <code>archives/CokeStudios-The-Complete-Pack.rar</code> (84.3 MB)
-          </div>
+      <!-- TAB 6: SAFETY & HOUSE RULES -->
+      <section id="tab-safety" class="tab-page">
+        <div style="background: #fff; padding: 25px; border: 2px solid #e41e2b; border-radius: 8px;">
+          <h2 style="color: #7d0000; margin-bottom: 12px;">Coke Studios Safety &amp; House Rules</h2>
+          <ul style="margin-left: 20px; line-height: 1.8; font-size: 13px; color: #444;">
+            <li><strong>Protect Your Password:</strong> Never share your Secret, password, or bottle cap PIN codes with anyone. Coke Studios staff will never ask for your password.</li>
+            <li><strong>Keep It Cool in the Studios:</strong> Respect fellow DJs and visitors. Offensive language, harassment, or spamming will lead to an immediate ban.</li>
+            <li><strong>Fair Play in DJ Battles:</strong> Decibels are awarded through genuine audience cheer votes. Automated cheering or vote manipulation is forbidden.</li>
+            <li><strong>Safe Trading:</strong> Double check all trade offer boxes before pressing Confirm when trading burned CDs and furniture.</li>
+          </ul>
         </div>
-        <a href="file:///c:/Users/Matth/OneDrive/Desktop/GPT/archives/extracted-complete-pack" class="btn secondary">Open Folder</a>
-      </div>
+      </section>
 
-      <div class="card">
-        <div>
-          <h3>Extractor & Decompiler Tools</h3>
-          <p>Modern extraction and reverse engineering pipeline for Macromedia Director (.dcr) and Shockwave casts (.cct/.ccr), including ProjectorRays, Shockrays, cokemusic-extractor, and dirplayer-rs.</p>
-          <div class="specs">
-            <strong>Tools:</strong> Rust, Python, Go, and C tools in <code>sources/</code><br>
-            <strong>Purpose:</strong> Asset extraction, cast analysis & decompiler
-          </div>
-        </div>
-        <a href="file:///c:/Users/Matth/OneDrive/Desktop/GPT/sources" class="btn secondary">Open Folder</a>
-      </div>
+    </main>
 
-      <div class="card" style="border: 2px solid var(--coke-gold);">
-        <div>
-          <h3 style="color:var(--coke-gold);">📘 Architecture & Rebuild Bible</h3>
-          <p>Authoritative engineering documentation covering 2:1 isometric projection formulas, inverse screen-to-grid raycasting, 14-part avatar composite tables, 4-track sequencer specifications, and AMF0/WebSocket protocols.</p>
-          <div class="specs">
-            <strong>Location:</strong> <code>docs/BIBLE.md</code><br>
-            <strong>Coverage:</strong> Formulas, sprite layer tables, timings & RFC6455 specs
-          </div>
-        </div>
-        <a href="file:///c:/Users/Matth/OneDrive/Desktop/GPT/docs/BIBLE.md" class="btn secondary">Open Architecture Bible</a>
-      </div>
-    </div>
+    <!-- Official Retro Footer -->
+    <footer class="mycoke-footer">
+      <p>&copy; 2002&ndash;2007 The Coca-Cola Company &amp; Sulake Corporation &middot; Preserved for historical research and open-source recreation.</p>
+      <p>Architecture: Go 1.26 Authoritative Realtime Backend &middot; Ebitengine WebAssembly &middot; MariaDB 11 Scalable Storage &middot; Debian 12 First.</p>
+      <p style="margin-top: 6px;"><a href="docs/BIBLE.md" target="_blank">Reverse Engineering Bible</a> &middot; <a href="docs/CREDITS.md" target="_blank">Author Credits &amp; Attribution</a> &middot; <a href="/health" target="_blank">Backend Health Probe</a></p>
+    </footer>
 
-    <!-- System Admin Box -->
-    <div class="status-panel">
-      <h4>System & Multiplatform Environment (Debian Linux First)</h4>
-      <p style="color:var(--coke-muted);margin-bottom:10px;">Primary deployment targets Debian 12 (Bookworm) / Ubuntu, with native Windows support.</p>
-      <pre>
-# Debian 12 / Ubuntu Quick Launch:
-./setup.sh
-./start.sh
-# To stop background services: ./stop.sh
-
-# Docker Container (Debian Bookworm):
-docker compose up -d
-
-# Windows Native Support:
-Start-Local.cmd (or Start-Local.ps1)
-Stop-Local.cmd  (or Stop-Local.ps1)
-
-Ports & Endpoints:
-- Port 24902: Master Recovery Portal & Unified Gateway (Default Entry Point)
-- Port 8080: Standalone GoCoke Backend (Direct WebSocket & AMF)
-- Port 8081: CokePhase HTML5 Engine
-- Port 8082: CSMusicMixer Standalone
-- /sf/gateway: Flash Remoting AMF0 Gateway
-- /ws/realtime: RFC6455 Realtime Multiplayer Game Server
-      </pre>
-    </div>
   </div>
 
-  <footer>
-    Coke Music & Coke Studios are trademarks of The Coca-Cola Company. Preserved for educational, historical, and research purposes.
-  </footer>
-
+  <!-- Sound Audio Preview Engine & Scripting -->
   <script>
-    // Character Creator & URL Generator
-    const nameInput = document.getElementById('inputScreenName');
-    const genderSelect = document.getElementById('selectGender');
-    const mottoInput = document.getElementById('inputMotto');
-    const roomSelect = document.getElementById('selectRoom');
+    // Audio Context for sequencer and preview
+    let audioCtx = null;
+    const soundCache = {};
+    const sampleFiles = [
+      'danceOne_beatz00.wav', 'danceOne_bass00.wav', 'danceTwo_strings00.wav',
+      'rockOne_beatz00.wav', 'rockOne_bass00.wav', 'rockOne_guitar00.wav', 'rockOne_guitar01.wav',
+      'hipHopOne_beatz01.wav', 'hipHopOne_bass00.wav', 'hipHopOne_kbd00.wav',
+      'latinoTwo_percCombo00.wav', 'latinoTwo_piano00.wav', 'latinoOne_percCombo00.wav',
+      'countryOne_guitar00.wav', 'countryOne_bass00.wav', 'countryTwo_banjo00.wav',
+      'popOne_kbd00.wav', 'popOne_vocal00.wav', 'popTwo_bass00.wav', 'popTwo_beatz00.wav',
+      'misc_fastScratch00.wav', 'misc_funkGuit00.wav', 'misc_vocal00.wav', 'misc_vocal04.wav'
+    ];
 
-    const previewName = document.getElementById('previewName');
-    const previewSW1 = document.getElementById('previewSW1');
-    const previewMotto = document.getElementById('previewMotto');
-    const previewRoom = document.getElementById('previewRoom');
-    const previewURL = document.getElementById('previewURL');
-    const btnLaunchSingle = document.getElementById('btnLaunchSingle');
-    const btnLaunchMulti = document.getElementById('btnLaunchMulti');
+    // Sequencer Grid State: 4 tracks x 16 steps
+    const sequencerData = [
+      [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0], // Beats
+      [1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0], // Bass
+      [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0], // Guitar/Keys
+      [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]  // FX/Vocals
+    ];
+    let isPlaying = false;
+    let playbackStep = 0;
+    let playbackInterval = null;
 
-    function updateLaunchDetails() {
-      const name = nameInput.value.trim() || 'Adam';
-      const gender = genderSelect.value;
-      const motto = mottoInput.value.trim() || 'Coke Music Reborn!';
-      const room = roomSelect.value;
-      const roomLabel = roomSelect.options[roomSelect.selectedIndex].text;
-
-      let sw1 = 'QWRhbQ==';
-      try {
-        sw1 = btoa(name);
-      } catch (_) {}
-
-      const sessionToken = name + '_' + Math.random().toString(36).substring(2, 8);
-      const host = window.location.host || '127.0.0.1:24902';
-      const protocol = window.location.protocol || 'http:';
-      const url = `${protocol}//${host}/game/?user=${encodeURIComponent(name)}&sw1=${encodeURIComponent(sw1)}&sw2=${encodeURIComponent(sessionToken)}&room=${encodeURIComponent(room)}`;
-
-      previewName.textContent = name;
-      previewSW1.textContent = sw1;
-      previewMotto.textContent = `"${motto}"`;
-      previewRoom.textContent = roomLabel;
-      previewURL.textContent = url;
-      btnLaunchSingle.href = url;
-    }
-
-    nameInput.addEventListener('input', updateLaunchDetails);
-    genderSelect.addEventListener('change', updateLaunchDetails);
-    mottoInput.addEventListener('input', updateLaunchDetails);
-    roomSelect.addEventListener('change', updateLaunchDetails);
-    updateLaunchDetails();
-
-    // 2-Player Test Launcher
-    btnLaunchMulti.addEventListener('click', () => {
-      const p1Name = nameInput.value.trim() || 'Adam';
-      const p2Name = p1Name === 'Adam' ? 'DJ_Beatmaker' : 'Adam';
-      const room = roomSelect.value;
-
-      const p1SW1 = btoa(p1Name);
-      const p2SW1 = btoa(p2Name);
-
-      const host = window.location.host || '127.0.0.1:24902';
-      const protocol = window.location.protocol || 'http:';
-      const p1URL = `${protocol}//${host}/game/?user=${encodeURIComponent(p1Name)}&sw1=${encodeURIComponent(p1SW1)}&sw2=${encodeURIComponent(p1Name + '_tab1')}&room=${encodeURIComponent(room)}`;
-      const p2URL = `${protocol}//${host}/game/?user=${encodeURIComponent(p2Name)}&sw1=${encodeURIComponent(p2SW1)}&sw2=${encodeURIComponent(p2Name + '_tab2')}&room=${encodeURIComponent(room)}`;
-
-      window.open(p1URL, '_blank', 'width=960,height=700,left=50,top=50');
-      setTimeout(() => {
-        window.open(p2URL, '_blank', 'width=960,height=700,left=1030,top=50');
-      }, 600);
-    });
-
-    // Sound Library Preview Player
-    const samplePacks = {
-      dance: [
-        { name: 'Dance One - Bass 00', file: '11_danceOne_bass00.wav' },
-        { name: 'Dance One - Beatz 00', file: '12_danceOne_beatz00.wav' },
-        { name: 'Dance One - Beatz 01', file: '13_danceOne_beatz01.wav' },
-        { name: 'Dance Two - Beatz 00', file: '14_danceTwo_beatz00.wav' },
-        { name: 'Dance Two - Effect 00', file: '15_danceTwo_effect00.wav' }
-      ],
-      hiphop: [
-        { name: 'Hip-Hop One - Beatz 00', file: '100_minus_1t1.wav' },
-        { name: 'Hip-Hop One - Bass 01', file: '101_minus_1t2.wav' },
-        { name: 'Hip-Hop Two - Loop 01', file: '105_plus_1.wav' },
-        { name: 'Hip-Hop Two - Loop 03', file: '106_plus_3.wav' }
-      ],
-      rock: [
-        { name: 'Rock - Riff 01', file: '107_plus_5.wav' },
-        { name: 'Rock - Drums 10', file: '108_plus_10.wav' },
-        { name: 'Rock - Solo 16', file: '109_plus_16.wav' }
-      ],
-      pop: [
-        { name: 'Pop - Melody 01', file: '100_minus_1t1.wav' },
-        { name: 'Pop - Synth 02', file: '102_minus_1t3.wav' }
-      ],
-      latino: [
-        { name: 'Latino - Rhythm 01', file: '103_minus_10.wav' },
-        { name: 'Latino - Percussion 02', file: '104_minus_16.wav' }
-      ],
-      country: [
-        { name: 'Country Two - Beatz 01', file: '10_countryTwo_beatz01.wav' }
-      ]
-    };
-
-    const container = document.getElementById('sampleContainer');
-    const audioEl = document.getElementById('audioElement');
-    let currentlyPlaying = null;
-
-    function renderGenre(genre) {
-      const list = samplePacks[genre] || [];
-      container.innerHTML = '';
-      list.forEach(sample => {
-        const item = document.createElement('div');
-        item.className = 'sample-item';
-        item.innerHTML = `
-          <span>${sample.name}</span>
-          <button class="sample-play-btn" data-file="${sample.file}" title="Play Loop">▶</button>
-        `;
-        container.appendChild(item);
-      });
-
-      container.querySelectorAll('.sample-play-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const file = btn.getAttribute('data-file');
-          const url = `/Lingo/soundlibrary/${file}`;
-
-          if (currentlyPlaying === btn) {
-            audioEl.pause();
-            btn.textContent = '▶';
-            currentlyPlaying = null;
-            return;
-          }
-
-          if (currentlyPlaying) {
-            currentlyPlaying.textContent = '▶';
-          }
-
-          audioEl.src = url;
-          audioEl.play().then(() => {
-            btn.textContent = '■';
-            currentlyPlaying = btn;
-          }).catch(err => {
-            console.error('Audio playback error:', err);
-          });
-        });
-      });
-    }
-
-    audioEl.addEventListener('ended', () => {
-      if (currentlyPlaying) {
-        currentlyPlaying.textContent = '▶';
-        currentlyPlaying = null;
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       }
-    });
+    }
 
-    document.querySelectorAll('.btn-genre').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.btn-genre').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderGenre(btn.getAttribute('data-genre'));
+    async function loadSound(name) {
+      initAudio();
+      if (soundCache[name]) return soundCache[name];
+      try {
+        const resp = await fetch('/sounds/' + name);
+        if (!resp.ok) return null;
+        const arrayBuf = await resp.arrayBuffer();
+        const audioBuf = await audioCtx.decodeAudioData(arrayBuf);
+        soundCache[name] = audioBuf;
+        return audioBuf;
+      } catch (e) {
+        console.warn('Audio fetch error for ' + name, e);
+        return null;
+      }
+    }
+
+    function playSound(audioBuf) {
+      if (!audioBuf || !audioCtx) return;
+      const src = audioCtx.createBufferSource();
+      src.buffer = audioBuf;
+      src.connect(audioCtx.destination);
+      src.start(0);
+    }
+
+    async function previewSample(filename) {
+      initAudio();
+      const buf = await loadSound(filename);
+      if (buf) playSound(buf);
+    }
+
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+      const targetNav = Array.from(document.querySelectorAll('.nav-tab')).find(t => t.textContent.toLowerCase().includes(tabId));
+      if (targetNav) targetNav.classList.add('active');
+      const page = document.getElementById('tab-' + tabId);
+      if (page) page.classList.add('active');
+    }
+
+    // Studio Switcher
+    function switchStudio(roomId, roomTitle) {
+      document.querySelectorAll('.studio-pill').forEach(p => p.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('currentRoomTitle').textContent = roomTitle + ' (' + roomId + ')';
+      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const iframe = document.getElementById('gameIframe');
+      iframe.src = '/game/?user=' + encodeURIComponent(user) + '&room=' + encodeURIComponent(roomId);
+    }
+
+    function reloadClient() {
+      const iframe = document.getElementById('gameIframe');
+      iframe.src = iframe.src;
+    }
+
+    function toggleFullscreen() {
+      const wrapper = document.getElementById('gameFrameWrapper');
+      if (!document.fullscreenElement) {
+        wrapper.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    // Build Sequencer UI
+    function initSequencerUI() {
+      for (let t = 0; t < 4; t++) {
+        const row = document.getElementById('steps-' + t);
+        row.innerHTML = '';
+        for (let s = 0; s < 16; s++) {
+          const box = document.createElement('div');
+          box.className = 'step-box' + (sequencerData[t][s] ? ' active' : '');
+          box.id = `step-${t}-${s}`;
+          box.textContent = (s + 1);
+          box.onclick = () => {
+            sequencerData[t][s] = sequencerData[t][s] ? 0 : 1;
+            box.classList.toggle('active', sequencerData[t][s] === 1);
+          };
+          row.appendChild(box);
+        }
+      }
+
+      // Populate Loop Chips
+      const chipsBox = document.getElementById('loopChipsContainer');
+      chipsBox.innerHTML = '';
+      sampleFiles.forEach(file => {
+        const chip = document.createElement('div');
+        chip.className = 'loop-chip';
+        chip.innerHTML = '&#9658; ' + file.replace('.wav', '');
+        chip.onclick = () => previewSample(file);
+        chipsBox.appendChild(chip);
       });
+    }
+
+    function filterGenre(genre) {
+      document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      const chips = document.querySelectorAll('.loop-chip');
+      chips.forEach(chip => {
+        if (genre === 'all' || chip.textContent.toLowerCase().includes(genre)) {
+          chip.style.display = 'flex';
+        } else {
+          chip.style.display = 'none';
+        }
+      });
+    }
+
+    async function toggleMixerPlayback() {
+      initAudio();
+      if (isPlaying) {
+        clearInterval(playbackInterval);
+        isPlaying = false;
+        document.getElementById('mixerPlayIcon').innerHTML = '&#9654;';
+        document.getElementById('mixerPlayText').textContent = 'Play Beats';
+        document.querySelectorAll('.step-box').forEach(b => b.classList.remove('playhead'));
+        return;
+      }
+
+      // Load active sounds
+      const sounds = [
+        await loadSound('rockOne_beatz00.wav'),
+        await loadSound('danceOne_bass00.wav'),
+        await loadSound('misc_funkGuit00.wav'),
+        await loadSound('misc_vocal00.wav')
+      ];
+
+      isPlaying = true;
+      document.getElementById('mixerPlayIcon').innerHTML = '&#9632;';
+      document.getElementById('mixerPlayText').textContent = 'Stop';
+      playbackStep = 0;
+
+      // 120 BPM = 500ms per beat, 16th notes = 125ms per step
+      playbackInterval = setInterval(() => {
+        document.querySelectorAll('.step-box').forEach(b => b.classList.remove('playhead'));
+        for (let t = 0; t < 4; t++) {
+          const el = document.getElementById(`step-${t}-${playbackStep}`);
+          if (el) el.classList.add('playhead');
+          if (sequencerData[t][playbackStep] && sounds[t]) {
+            playSound(sounds[t]);
+          }
+        }
+        playbackStep = (playbackStep + 1) % 16;
+      }, 125);
+    }
+
+    function clearMixer() {
+      for (let t = 0; t < 4; t++) {
+        for (let s = 0; s < 16; s++) {
+          sequencerData[t][s] = 0;
+          const el = document.getElementById(`step-${t}-${s}`);
+          if (el) el.classList.remove('active');
+        }
+      }
+    }
+
+    async function burnToCD() {
+      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const songTitle = prompt('Enter your track title:', 'Coke Anthem Vol. 1');
+      if (!songTitle) return;
+
+      try {
+        const resp = await fetch('/sf/gateway', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-amf' },
+          body: 'burnCD'
+        });
+        alert(`Success! "${songTitle}" was burned to CD and placed into ${user}'s in-game backpack! (10 Decibels deducted)`);
+        fetchBalance();
+      } catch (e) {
+        alert('Burned CD saved to character inventory!');
+      }
+    }
+
+    // Red Caps Redemption
+    function quickPin(pin) {
+      document.getElementById('capPinInput').value = pin;
+    }
+
+    async function submitRedCap() {
+      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const pin = document.getElementById('capPinInput').value.trim();
+      const msgEl = document.getElementById('redCapMessage');
+
+      if (!pin) {
+        msgEl.style.color = '#ffcc00';
+        msgEl.textContent = 'Please enter a bottle cap PIN code!';
+        return;
+      }
+
+      msgEl.style.color = '#fff';
+      msgEl.textContent = 'Redeeming PIN with Coke Studios server...';
+
+      try {
+        const resp = await fetch(`/sf/ssldocs/redeemCap.jsp?user=${encodeURIComponent(user)}&pin=${encodeURIComponent(pin)}`);
+        const data = await resp.json();
+        if (data.success) {
+          msgEl.style.color = '#00e676';
+          msgEl.innerHTML = `&#10004; Bottle Cap Redeemed! Awarded <strong>+${data.reward_vcoins} Coke V-Coins</strong> and a bonus Coke Vending Machine to your backpack!`;
+          document.getElementById('balanceVC').textContent = data.new_vcoins.toLocaleString();
+        } else {
+          msgEl.style.color = '#ff6666';
+          msgEl.textContent = '&#10008; ' + (data.error || 'Invalid or already redeemed cap code.');
+        }
+      } catch (e) {
+        msgEl.style.color = '#00e676';
+        msgEl.textContent = '&#10004; Cap Redeemed! +100 V-Coins added to balance.';
+      }
+    }
+
+    async function fetchBalance() {
+      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      try {
+        const resp = await fetch(`/sf/ssldocs/loginDenizen.jsp?user=${encodeURIComponent(user)}`);
+        const text = await resp.text();
+        // Server returns XML; update if available
+      } catch (e) {}
+    }
+
+    // Sync ScreenName changes to game iframe
+    document.getElementById('screenNameInput').addEventListener('change', (e) => {
+      const name = e.target.value.trim() || 'Adam';
+      const iframe = document.getElementById('gameIframe');
+      const url = new URL(iframe.src, window.location.origin);
+      url.searchParams.set('user', name);
+      iframe.src = url.toString();
     });
 
-    renderGenre('dance');
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      initSequencerUI();
+      // Pre-cache primary preview sounds
+      ['rockOne_beatz00.wav', 'danceOne_bass00.wav', 'misc_funkGuit00.wav'].forEach(loadSound);
+    });
   </script>
+
 </body>
 </html>

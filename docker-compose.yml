@@ -1,17 +1,46 @@
 services:
+  mariadb:
+    image: mariadb:11
+    container_name: coke-mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-coke_root_secret}
+      MYSQL_DATABASE: ${DB_NAME:-coke_studios}
+      MYSQL_USER: ${DB_USER:-coke}
+      MYSQL_PASSWORD: ${DB_PASS:-coke_secret}
+    volumes:
+      - coke_mariadb_data:/var/lib/mysql
+    ports:
+      - "127.0.0.1:3306:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
   coke-studios:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: coke-studios-recovery
+    container_name: coke-studios-app
     restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_healthy
     ports:
-      - "24902:24902"  # Master Recovery Portal & Gateway (Default Entry Point)
-      - "8080:8080"    # Standalone GoCoke Backend (Direct WebSocket & AMF)
-      - "8081:8081"    # CokePhase HTML5 Engine
-      - "8082:8082"    # CSMusicMixer Standalone
+      - "${PORT:-24902}:24902"  # Official MyCoke Game Portal & Gateway
+      - "8080:8080"            # Standalone Authoritative Backend (WebSocket & AMF)
+      - "8081:8081"            # CokePhase HTML5 Engine
+      - "8082:8082"            # CSMusicMixer Standalone
     volumes:
       - .:/app
     environment:
       - NODE_ENV=production
-      - PORT=24902
+      - PORT=${PORT:-24902}
+      - DB_DRIVER=mysql
+      - DATABASE_URL=coke:coke_secret@tcp(mariadb:3306)/coke_studios?parseTime=true
+
+volumes:
+  coke_mariadb_data:
+    name: coke_mariadb_data

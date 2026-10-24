@@ -339,4 +339,104 @@ Every component of this rebuild is verified with automated tests:
 
 ---
 
+## 9. Scalable MariaDB 11 Architecture & Single-File Auto-Update Engine
+
+### A. Scalable MariaDB 11 Relational Schema
+For enterprise scalability beyond SQLite, the authoritative Go game server connects to MariaDB 11 using connection pooling and automated schema initialization:
+
+```sql
+-- Denizen Accounts & Dual-Currency Balances
+CREATE TABLE IF NOT EXISTS denizens (
+    id VARCHAR(64) PRIMARY KEY,
+    screen_name VARCHAR(64) UNIQUE NOT NULL,
+    secret VARCHAR(128) NOT NULL,
+    gender INT NOT NULL DEFAULT 1,
+    mission VARCHAR(255) NOT NULL DEFAULT 'Coke Music',
+    avatar_def TEXT NOT NULL,
+    decibels INT NOT NULL DEFAULT 5000,
+    vcoins INT NOT NULL DEFAULT 500,
+    last_seen_in VARCHAR(64) NOT NULL DEFAULT 'VIS$0',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Studio Models & Room State
+CREATE TABLE IF NOT EXISTS studios (
+    id VARCHAR(64) PRIMARY KEY,
+    owner_id VARCHAR(64) NOT NULL,
+    owner_name VARCHAR(64) NOT NULL,
+    name VARCHAR(128) NOT NULL,
+    layout INT NOT NULL DEFAULT 3,
+    room_type VARCHAR(64) NOT NULL DEFAULT 'studio_model_c',
+    wallpaper INT DEFAULT 0,
+    floor INT DEFAULT 0,
+    doorbell INT DEFAULT 0,
+    is_public TINYINT(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Persistent Backpack Inventory
+CREATE TABLE IF NOT EXISTS backpack_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    denizen_id VARCHAR(64) NOT NULL,
+    catalog_item_id INT NOT NULL,
+    properties_json TEXT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Placed Furniture with Grid Coordinates & Height Offsets
+CREATE TABLE IF NOT EXISTS placed_furniture (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    studio_id VARCHAR(64) NOT NULL,
+    catalog_item_id INT NOT NULL,
+    pos_id VARCHAR(64) NOT NULL,
+    x INT NOT NULL,
+    y INT NOT NULL,
+    z INT NOT NULL,
+    ho INT NOT NULL DEFAULT 0,
+    dir INT NOT NULL DEFAULT 2,
+    state INT NOT NULL DEFAULT 0,
+    iaot TINYINT(1) NOT NULL DEFAULT 0,
+    properties_json TEXT NOT NULL,
+    UNIQUE KEY uq_studio_pos (studio_id, pos_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Burned CD Registry (prodID 89)
+CREATE TABLE IF NOT EXISTS songs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    denizen_id VARCHAR(64) NOT NULL,
+    title VARCHAR(128) NOT NULL,
+    artist VARCHAR(128) NOT NULL,
+    edl_string TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Red Caps Promotion PIN Codes
+CREATE TABLE IF NOT EXISTS red_caps (
+    pin_code VARCHAR(32) PRIMARY KEY,
+    reward_vcoins INT NOT NULL DEFAULT 50,
+    reward_item_id INT DEFAULT 0,
+    redeemed_by VARCHAR(64),
+    redeemed_at TIMESTAMP NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+### B. DJ Battle Cheer / Boo Voting Loop Formula
+1. Performance initiated via `<CD_P av="DJ" s="EDL" title="SongName"/>`.
+2. Real-time audience voting via `<CD_TU/>` (cheer) and `<CD_TD/>` (boo).
+3. Real-time Decibel meter updates broadcast via `<Room.Action><CD_VR tu="Cheers" td="Boos"/></Room.Action>`.
+4. Performance resolution formula:
+   $$\text{Reward Decibels} = \max\left(0, (\text{Cheers} \times 2) - \text{Boos}\right) + \text{AudienceBonus}$$
+5. Result dialog broadcast to all occupants via `<Room.Action><CD_PRS av="DJ" tu="X" td="Y" db="Reward"/></Room.Action>`.
+
+### C. Single-File Debian 12 Docker Deployment & Auto-Updater (`setup.sh`)
+```bash
+# Initial Setup & Launch
+chmod +x setup.sh
+./setup.sh
+
+# Zero-Downtime Update (Pulls latest code, applies migrations, rebuilds container)
+./setup.sh --update
+```
+
+---
+
 *Authored and verified for the Coke Music / Coke Studios Preservation Archive.*
+

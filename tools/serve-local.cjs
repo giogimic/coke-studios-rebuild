@@ -123,6 +123,28 @@ function makeServer(project) {
         }
       }
 
+      if (project === 'portal' && url.pathname.startsWith('/mixer/')) {
+        const sub = url.pathname.slice(7);
+        const rel = (!sub || sub === '/') ? 'index.html' : sub;
+        const file = path.resolve(root, 'sources', 'music-mixer', 'dist', rel);
+        if (file.startsWith(path.join(root, 'sources', 'music-mixer', 'dist'))) {
+          const ext = path.extname(file).toLowerCase();
+          if (mime[ext]) {
+            const body = await fs.readFile(file);
+            return send(res, 200, body, mime[ext]);
+          }
+        }
+      }
+
+      if (project === 'portal' && url.pathname.startsWith('/sounds/')) {
+        const audioFile = path.resolve(root, 'sources', 'gocoke', 'web', 'Lingo', 'soundlibrary', url.pathname.slice(8));
+        const ext = path.extname(audioFile).toLowerCase();
+        if (mime[ext]) {
+          const body = await fs.readFile(audioFile);
+          return send(res, 200, body, mime[ext]);
+        }
+      }
+
       if (project === 'cokephase' && url.pathname === '/jsonreply/room.php') {
         const params = await fields(req, url);
         const id = Number(params.get('id'));
