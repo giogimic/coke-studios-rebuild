@@ -1417,7 +1417,7 @@
         </div>
         <div class="denizen-info">
           <div class="denizen-name">
-            DJ <input type="text" id="screenNameInput" value="Adam" title="Change Screen Name">
+            DJ <input type="text" id="screenNameInput" value="" placeholder="Guest" title="Screen Name">
           </div>
           <div class="denizen-currencies">
             <span class="badge-db" title="Decibels (earned from DJ cheer battles)">&#9835; <span id="balanceDB">5,000</span> dB</span>
@@ -1471,7 +1471,7 @@
             </div>
           </div>
           <div class="game-iframe-wrapper" id="gameFrameWrapper">
-            <iframe id="gameIframe" src="/game/?user=Adam&sw1=QWRhbQ==" allow="autoplay"></iframe>
+            <iframe id="gameIframe" src="/game/" allow="autoplay"></iframe>
           </div>
         </div>
 
@@ -1756,43 +1756,8 @@
           <div class="chart-header">
             &#9835; Coke Studios Top 40 Music Chart &mdash; Weekly Decibel Leaders
           </div>
-          <ul class="chart-list">
-            <li class="chart-row">
-              <span class="chart-rank">1</span>
-              <div class="chart-info">
-                <div class="chart-song">Coke Beats Vol. 1 (Remix)</div>
-                <div class="chart-artist">DJ Adam &middot; Dance / Synthwave</div>
-              </div>
-              <div class="chart-stats">&#128077; 420 Cheers &middot; +850 dB</div>
-              <button class="btn-chart-play" onclick="previewSample('danceOne_beatz00.wav')">&#9654; Preview</button>
-            </li>
-            <li class="chart-row">
-              <span class="chart-rank">2</span>
-              <div class="chart-info">
-                <div class="chart-song">Rooftop Summer Anthem</div>
-                <div class="chart-artist">DJ Vinyl &middot; Hip Hop</div>
-              </div>
-              <div class="chart-stats">&#128077; 390 Cheers &middot; +780 dB</div>
-              <button class="btn-chart-play" onclick="previewSample('hipHopOne_beatz01.wav')">&#9654; Preview</button>
-            </li>
-            <li class="chart-row">
-              <span class="chart-rank">3</span>
-              <div class="chart-info">
-                <div class="chart-song">London Fog Groove</div>
-                <div class="chart-artist">DJ Sulake &middot; Rock</div>
-              </div>
-              <div class="chart-stats">&#128077; 310 Cheers &middot; +620 dB</div>
-              <button class="btn-chart-play" onclick="previewSample('rockOne_guitar00.wav')">&#9654; Preview</button>
-            </li>
-            <li class="chart-row">
-              <span class="chart-rank">4</span>
-              <div class="chart-info">
-                <div class="chart-song">Latin Heat Fiesta</div>
-                <div class="chart-artist">DJ Havana &middot; Latin Combo</div>
-              </div>
-              <div class="chart-stats">&#128077; 280 Cheers &middot; +560 dB</div>
-              <button class="btn-chart-play" onclick="previewSample('latinoTwo_piano00.wav')">&#9654; Preview</button>
-            </li>
+          <ul class="chart-list" id="top40ChartList">
+            <li style="padding: 30px; text-align: center; color: #888; font-style: italic;">Loading authoritative chart data...</li>
           </ul>
         </div>
       </section>
@@ -2540,7 +2505,7 @@
         window.event.target.classList.add('active');
       }
       document.getElementById('currentRoomTitle').textContent = roomTitle;
-      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || 'Adam';
+      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
       const avatarDef = localStorage.getItem('coke_avatarDef') || (document.getElementById('avatarDefText') ? document.getElementById('avatarDefText').textContent : '');
       const iframe = document.getElementById('gameIframe');
       const base = '/game/';
@@ -2656,7 +2621,7 @@
     }
 
     async function burnToCD() {
-      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
       const songTitle = prompt('Enter your track title:', 'Coke Anthem Vol. 1');
       if (!songTitle) return;
 
@@ -2697,7 +2662,7 @@
     }
 
     async function submitRedCap() {
-      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
       const pin = document.getElementById('capPinInput').value.trim();
       const msgEl = document.getElementById('redCapMessage');
 
@@ -2728,7 +2693,7 @@
     }
 
     async function fetchBalance() {
-      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
       try {
         const sid = localStorage.getItem('coke_session') || sessionStorage.getItem('coke_sw2') || '';
         const resp = await fetch(`/sf/ssldocs/loginDenizen.jsp?user=${encodeURIComponent(user)}&sid=${encodeURIComponent(sid)}`);
@@ -2739,7 +2704,7 @@
 
     // Sync ScreenName changes to game iframe
     document.getElementById('screenNameInput').addEventListener('change', (e) => {
-      const name = e.target.value.trim() || 'Adam';
+      const name = e.target.value.trim();
       const iframe = document.getElementById('gameIframe');
       const url = new URL(iframe.src, window.location.origin);
       url.searchParams.set('user', name);
@@ -3026,7 +2991,7 @@
     }
 
     async function saveAvatarProfile() {
-      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
       const mission = document.getElementById('avatarMissionInput').value.trim() || 'Coke Music Reborn';
       const defText = document.getElementById('avatarDefText').textContent;
       const statusEl = document.getElementById('avatarSaveStatus');
@@ -3084,7 +3049,7 @@
     }
 
     async function loadDenizenProfile() {
-      let user = localStorage.getItem('coke_user') || document.getElementById('screenNameInput').value.trim() || 'Adam';
+      let user = localStorage.getItem('coke_user') || document.getElementById('screenNameInput').value.trim() || '';
       document.getElementById('screenNameInput').value = user;
       const savedDef = localStorage.getItem('coke_avatarDef');
       const savedRoom = localStorage.getItem('coke_studioType') || 'studio_model_b';
@@ -3159,7 +3124,7 @@
     // V-Ego Messenger & Social Systems
     // =========================================================================
     async function loadMessenger() {
-      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
       try {
         const res = await fetch('/api/messenger/friends?user=' + encodeURIComponent(user));
         if (res.ok) {
@@ -3218,7 +3183,7 @@
     }
 
     async function sendMessengerMessage() {
-      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
       const to = document.getElementById('msgRecipientInput').value.trim();
       const msg = document.getElementById('msgContentInput').value.trim();
       if (!to || !msg) return;
@@ -3241,7 +3206,7 @@
     }
 
     async function addMessengerFriend() {
-      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
       const friend = document.getElementById('addFriendInput').value.trim();
       if (!friend) return;
       try {
@@ -3262,7 +3227,7 @@
 
     async function removeMessengerFriend(friend) {
       if (!confirm(`Are you sure you want to remove ${friend} from your friends?`)) return;
-      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
       try {
         const formData = new URLSearchParams();
         formData.append('user', user);
@@ -3388,7 +3353,7 @@
 
     // --- ENGINE & POP-OUT WINDOW CONTROLS ---
     function openPopoutGame() {
-      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
       const targetUrl = `/game/?user=${encodeURIComponent(user)}&sw1=${btoa(user)}`;
       const w = 960, h = 640;
       const left = Math.max(0, (screen.width - w) / 2);
@@ -3548,7 +3513,7 @@
     async function submitRegistration() {
       const btn = document.getElementById('btnSubmitReg');
       const statusMsg = document.getElementById('regStatusMsg');
-      const name = document.getElementById('regScreenName').value.trim() || 'Adam';
+      const name = document.getElementById('regScreenName').value.trim();
       const pw = document.getElementById('regPassword').value;
       const email = document.getElementById('regEmail').value.trim();
       const mission = document.getElementById('regMission').value.trim() || 'Coke Music Legend';
@@ -3769,7 +3734,7 @@
     }
 
     async function sendPostcard() {
-      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
       const to = document.getElementById('cardRecipientInput').value.trim();
       const track = document.getElementById('cardTrackSelect').value;
       const text = document.getElementById('cardMessageInput').value.trim();
@@ -3831,7 +3796,7 @@
     }
 
     async function playVegoSanMove(playerMove) {
-      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || 'Adam';
+      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
       const cBox = document.getElementById('sumoCommentaryBox');
       const pBadge = document.getElementById('sumoPlayerMoveBadge');
       const oBadge = document.getElementById('sumoOpponentMoveBadge');
@@ -3870,7 +3835,45 @@
       }
     }
 
+    
+    function escapeHtml(str) {
+      return String(str || '').replace(/[&<>"']/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+      });
+    }
+
+    async function loadTop40Charts() {
+      const listEl = document.getElementById('top40ChartList');
+      if (!listEl) return;
+      try {
+        const res = await fetch('/api/music/top40');
+        if (!res.ok) {
+          listEl.innerHTML = '<li style="padding: 30px; text-align: center; color: #888; font-style: italic;">No tracks recorded on the chart yet. Perform your mix in a studio and earn cheers to reach the Top 40!</li>';
+          return;
+        }
+        const data = await res.json();
+        const tracks = data.top40 || (Array.isArray(data) ? data : []);
+        if (!tracks || tracks.length === 0) {
+          listEl.innerHTML = '<li style="padding: 30px; text-align: center; color: #888; font-style: italic;">No tracks recorded on the chart yet. Perform your mix in a studio and earn cheers to reach the Top 40!</li>';
+          return;
+        }
+        listEl.innerHTML = tracks.map((t, idx) => `
+          <li class="chart-row">
+            <span class="chart-rank">${idx + 1}</span>
+            <div class="chart-info">
+              <div class="chart-song">${escapeHtml(t.song_title || t.title || 'Track')}</div>
+              <div class="chart-artist">DJ ${escapeHtml(t.creator_name || t.artist || 'Unknown')}</div>
+            </div>
+            <div class="chart-stats">&#128077; ${t.vote_count || t.votes || 0} Cheers</div>
+          </li>
+        `).join('');
+      } catch (err) {
+        listEl.innerHTML = '<li style="padding: 30px; text-align: center; color: #888; font-style: italic;">No tracks recorded on the chart yet. Perform your mix in a studio and earn cheers to reach the Top 40!</li>';
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
+      loadTop40Charts();
       initSkinSwatches();
       loadDenizenProfile();
       initSequencerUI();
