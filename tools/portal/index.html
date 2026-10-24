@@ -1047,6 +1047,174 @@
       border-top: 2px solid rgba(0,0,0,0.3);
     }
 
+    /* Registration Wizard Modal */
+    .coke-modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 99999;
+      justify-content: center;
+      align-items: center;
+    }
+    .coke-modal-backdrop.open {
+      display: flex;
+    }
+    .coke-modal-window {
+      background: #1e1e1e;
+      border: 3px solid #ffcc00;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 760px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+      color: #eee;
+      font-family: Verdana, sans-serif;
+    }
+    .coke-modal-header {
+      background: linear-gradient(180deg, #d80000 0%, #990000 100%);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #ffcc00;
+    }
+    .coke-modal-title {
+      font-size: 15px;
+      font-weight: bold;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .coke-modal-close {
+      background: #111;
+      color: #ffcc00;
+      border: 1px solid #ffcc00;
+      border-radius: 4px;
+      width: 28px;
+      height: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .coke-modal-close:hover {
+      background: #ffcc00;
+      color: #000;
+    }
+    .coke-stepper {
+      display: flex;
+      background: #141414;
+      border-bottom: 1px solid #333;
+    }
+    .coke-step-tab {
+      flex: 1;
+      padding: 10px 4px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: bold;
+      color: #777;
+      border-right: 1px solid #222;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .coke-step-tab.active {
+      background: #252525;
+      color: #ffcc00;
+      border-bottom: 2px solid #ffcc00;
+    }
+    .coke-step-tab.completed {
+      color: #4CAF50;
+    }
+    .coke-modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .reg-step-pane {
+      display: none;
+    }
+    .reg-step-pane.active {
+      display: block;
+    }
+    .reg-form-group {
+      margin-bottom: 14px;
+    }
+    .reg-form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: bold;
+      color: #ffcc00;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+    .reg-input {
+      width: 100%;
+      background: #111;
+      color: #fff;
+      border: 1px solid #444;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    .reg-input:focus {
+      outline: none;
+      border-color: #ffcc00;
+    }
+    .reg-studio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .reg-studio-card {
+      background: #181818;
+      border: 2px solid #333;
+      border-radius: 6px;
+      padding: 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .reg-studio-card:hover {
+      border-color: #888;
+    }
+    .reg-studio-card.selected {
+      border-color: #ffcc00;
+      background: #282414;
+    }
+    .reg-studio-icon {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+    .reg-studio-name {
+      font-size: 11px;
+      font-weight: bold;
+      color: #fff;
+    }
+    .reg-studio-desc {
+      font-size: 10px;
+      color: #aaa;
+      margin-top: 3px;
+    }
+    .coke-modal-footer {
+      background: #141414;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #333;
+    }
+
     /* Footer */
     .mycoke-footer {
       background: #231f20;
@@ -1094,6 +1262,7 @@
             <span class="badge-vc" title="Coke V-Coins (earned from bottle caps)">&#127860; <span id="balanceVC">500</span> VC</span>
           </div>
         </div>
+        <button class="btn-vp" style="background:#ffcc00;color:#000;font-weight:bold;margin-left:12px;padding:8px 16px;border:none;border-radius:4px;cursor:pointer;font-size:12px;" onclick="openRegisterModal()">&#10024; Register New V-Ego</button>
       </div>
     </header>
 
@@ -1126,6 +1295,9 @@
       <div class="nav-tab" onclick="switchTab('safety')">
         <span class="nav-tab-icon">&#128737;</span> Safety &amp; Rules
       </div>
+      <div class="nav-tab" onclick="openRegisterModal()" style="color:#ffcc00;">
+        <span class="nav-tab-icon">&#10024;</span> Registration
+      </div>
     </nav>
 
     <!-- Content Sections -->
@@ -1140,9 +1312,13 @@
               <span id="currentRoomTitle">Central Park Studio (VIS$0)</span>
             </div>
             <div class="viewport-controls">
+              <select id="engineSelector" class="btn-vp" onchange="switchEngine(this.value)" style="background:#111;color:#ffcc00;border:1px solid #ffcc00;font-weight:bold;cursor:pointer;">
+                <option value="wasm">★ 1:1 WebAssembly Engine</option>
+                <option value="phase">⚡ HTML5 CokePhase Engine</option>
+              </select>
               <button class="btn-vp" onclick="reloadClient()">&#8635; Reload</button>
               <button class="btn-vp" onclick="toggleFullscreen()">&#9974; Fullscreen</button>
-              <a href="/game/?user=Adam" target="_blank" class="btn-vp">&#8599; Pop-out Window</a>
+              <button class="btn-vp" onclick="openPopoutGame()">&#8599; Pop-out Window</button>
             </div>
           </div>
           <div class="game-iframe-wrapper" id="gameFrameWrapper">
@@ -1604,6 +1780,215 @@
       <p style="margin-top: 6px;"><a href="docs/BIBLE.md" target="_blank">Reverse Engineering Bible</a> &middot; <a href="docs/CREDITS.md" target="_blank">Author Credits &amp; Attribution</a> &middot; <a href="/health" target="_blank">Backend Health Probe</a></p>
     </footer>
 
+  </div>
+
+  <!-- 5-STEP AUTHENTIC DENIZEN REGISTRATION MODAL -->
+  <div id="registerModal" class="coke-modal-backdrop">
+    <div class="coke-modal-window">
+      <div class="coke-modal-header">
+        <div class="coke-modal-title">
+          <img src="assets/images/start_logo.gif" alt="Coke" style="height: 20px;">
+          <span>NEW DENIZEN REGISTRATION &middot; CREATE YOUR V-EGO</span>
+        </div>
+        <button class="coke-modal-close" onclick="closeRegisterModal()">&times;</button>
+      </div>
+
+      <!-- Stepper Header -->
+      <div class="coke-stepper">
+        <div class="coke-step-tab active" id="tabStep1" onclick="goToRegStep(1)">1. IDENTITY</div>
+        <div class="coke-step-tab" id="tabStep2" onclick="goToRegStep(2)">2. V-EGO LOOK</div>
+        <div class="coke-step-tab" id="tabStep3" onclick="goToRegStep(3)">3. STUDIO MODEL</div>
+        <div class="coke-step-tab" id="tabStep4" onclick="goToRegStep(4)">4. RED CAP CODE</div>
+        <div class="coke-step-tab" id="tabStep5" onclick="goToRegStep(5)">5. LAUNCH</div>
+      </div>
+
+      <div class="coke-modal-body">
+
+        <!-- STEP 1: IDENTITY -->
+        <div id="regPane1" class="reg-step-pane active">
+          <div style="background: #111; border-left: 4px solid #ffcc00; padding: 12px; margin-bottom: 16px; font-size: 12px; color: #ccc;">
+            Welcome to Coke Studios! Your Screen Name is your DJ identity in lounges and studios. Choose wisely&mdash;it will appear over your avatar's head and on burned CDs.
+          </div>
+          <div class="reg-form-group">
+            <label>Screen Name (DJ Handle)</label>
+            <input type="text" id="regScreenName" class="reg-input" placeholder="e.g. NeoCokeDJ" maxlength="15">
+            <small style="color: #888; font-size: 10px;">3 to 15 alphanumeric characters. Letters, numbers, and underscores.</small>
+          </div>
+          <div class="reg-form-group">
+            <label>Password</label>
+            <input type="password" id="regPassword" class="reg-input" placeholder="Minimum 6 characters">
+          </div>
+          <div class="reg-form-group">
+            <label>Email Address</label>
+            <input type="email" id="regEmail" class="reg-input" placeholder="your-email@example.com">
+            <small style="color: #888; font-size: 10px;">Used for account recovery and decibel reward notifications.</small>
+          </div>
+          <div class="reg-form-group">
+            <label>Date of Birth (COPPA Compliance)</label>
+            <div style="display: flex; gap: 8px;">
+              <select id="regBirthMonth" class="reg-input" style="flex: 2;">
+                <option value="1">January</option><option value="2">February</option><option value="3">March</option>
+                <option value="4">April</option><option value="5">May</option><option value="6">June</option>
+                <option value="7">July</option><option value="8">August</option><option value="9">September</option>
+                <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+              </select>
+              <input type="number" id="regBirthDay" class="reg-input" style="flex: 1;" placeholder="Day" min="1" max="31" value="15">
+              <input type="number" id="regBirthYear" class="reg-input" style="flex: 1.5;" placeholder="Year" min="1950" max="2020" value="1995">
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: V-EGO AVATAR CUSTOMIZATION -->
+        <div id="regPane2" class="reg-step-pane">
+          <div style="display: grid; grid-template-columns: 140px 1fr; gap: 20px; align-items: start;">
+            <!-- Avatar Live Preview Podium -->
+            <div style="background: #111; border: 2px solid #ffcc00; border-radius: 6px; padding: 15px; text-align: center;">
+              <div style="font-size: 10px; color: #ffcc00; font-weight: bold; margin-bottom: 8px;">V-EGO PREVIEW</div>
+              <canvas id="regAvatarCanvas" width="77" height="110" style="image-rendering: pixelated; width: 100px; height: 143px; background: #222; border-radius: 4px; border: 1px solid #444;"></canvas>
+              <div style="margin-top: 10px; display: flex; gap: 6px; justify-content: center;">
+                <button type="button" class="btn-vp" style="padding: 3px 8px; font-size: 10px;" onclick="cycleRegGender('male')">M</button>
+                <button type="button" class="btn-vp" style="padding: 3px 8px; font-size: 10px;" onclick="cycleRegGender('female')">F</button>
+              </div>
+            </div>
+
+            <!-- Customizer Controls -->
+            <div>
+              <div class="reg-form-group">
+                <label>Skin Tone</label>
+                <div style="display: flex; gap: 8px;" id="regSkinSwatches">
+                  <span class="skin-swatch" style="background:#ffdbac;width:24px;height:24px;border-radius:3px;cursor:pointer;display:inline-block;border:2px solid #fff;" onclick="setRegSkin(1)"></span>
+                  <span class="skin-swatch" style="background:#f1c27d;width:24px;height:24px;border-radius:3px;cursor:pointer;display:inline-block;border:2px solid #333;" onclick="setRegSkin(2)"></span>
+                  <span class="skin-swatch" style="background:#e0ac69;width:24px;height:24px;border-radius:3px;cursor:pointer;display:inline-block;border:2px solid #333;" onclick="setRegSkin(3)"></span>
+                  <span class="skin-swatch" style="background:#c68642;width:24px;height:24px;border-radius:3px;cursor:pointer;display:inline-block;border:2px solid #333;" onclick="setRegSkin(4)"></span>
+                  <span class="skin-swatch" style="background:#8d5524;width:24px;height:24px;border-radius:3px;cursor:pointer;display:inline-block;border:2px solid #333;" onclick="setRegSkin(5)"></span>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="reg-form-group">
+                  <label>Hair Style</label>
+                  <div style="display: flex; gap: 6px;">
+                    <button type="button" class="btn-vp" onclick="cycleRegItem('hair', -1)">&larr;</button>
+                    <span id="regHairLabel" style="flex: 1; text-align: center; font-size: 11px; padding: 6px; background: #111; border-radius: 4px;">Style 1</span>
+                    <button type="button" class="btn-vp" onclick="cycleRegItem('hair', 1)">&rarr;</button>
+                  </div>
+                </div>
+                <div class="reg-form-group">
+                  <label>Shirt / Top</label>
+                  <div style="display: flex; gap: 6px;">
+                    <button type="button" class="btn-vp" onclick="cycleRegItem('top', -1)">&larr;</button>
+                    <span id="regTopLabel" style="flex: 1; text-align: center; font-size: 11px; padding: 6px; background: #111; border-radius: 4px;">Top 1</span>
+                    <button type="button" class="btn-vp" onclick="cycleRegItem('top', 1)">&rarr;</button>
+                  </div>
+                </div>
+                <div class="reg-form-group">
+                  <label>Pants / Bottoms</label>
+                  <div style="display: flex; gap: 6px;">
+                    <button type="button" class="btn-vp" onclick="cycleRegItem('legs', -1)">&larr;</button>
+                    <span id="regLegsLabel" style="flex: 1; text-align: center; font-size: 11px; padding: 6px; background: #111; border-radius: 4px;">Legs 1</span>
+                    <button type="button" class="btn-vp" onclick="cycleRegItem('legs', 1)">&rarr;</button>
+                  </div>
+                </div>
+                <div class="reg-form-group">
+                  <label>Shoes</label>
+                  <div style="display: flex; gap: 6px;">
+                    <button type="button" class="btn-vp" onclick="cycleRegItem('shoes', -1)">&larr;</button>
+                    <span id="regShoesLabel" style="flex: 1; text-align: center; font-size: 11px; padding: 6px; background: #111; border-radius: 4px;">Shoes 1</span>
+                    <button type="button" class="btn-vp" onclick="cycleRegItem('shoes', 1)">&rarr;</button>
+                  </div>
+                </div>
+              </div>
+              <div class="reg-form-group" style="margin-top: 6px;">
+                <label>Mission Statement</label>
+                <input type="text" id="regMission" class="reg-input" value="Coke Music Legend" maxlength="64">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: STUDIO SELECTION -->
+        <div id="regPane3" class="reg-step-pane">
+          <div style="font-size: 12px; color: #ccc; margin-bottom: 12px;">
+            Every Denizen receives their personal private Studio. Select your starting layout (you can furnish and decorate it later!):
+          </div>
+          <div class="reg-studio-grid">
+            <div class="reg-studio-card selected" id="card_studio_model_c" onclick="selectRegStudio('studio_model_c')">
+              <div class="reg-studio-icon">&#127926;</div>
+              <div class="reg-studio-name">Studio Model C</div>
+              <div class="reg-studio-desc">Split-level lounge with elevated DJ stage</div>
+            </div>
+            <div class="reg-studio-card" id="card_studio_model_b" onclick="selectRegStudio('studio_model_b')">
+              <div class="reg-studio-icon">&#128378;</div>
+              <div class="reg-studio-name">Studio Model B</div>
+              <div class="reg-studio-desc">Classic open room with dancefloor</div>
+            </div>
+            <div class="reg-studio-card" id="card_studio_model_a" onclick="selectRegStudio('studio_model_a')">
+              <div class="reg-studio-icon">&#127968;</div>
+              <div class="reg-studio-name">Studio Model A</div>
+              <div class="reg-studio-desc">Cozy loft with brick balcony</div>
+            </div>
+            <div class="reg-studio-card" id="card_studio_model_d" onclick="selectRegStudio('studio_model_d')">
+              <div class="reg-studio-icon">&#127981;</div>
+              <div class="reg-studio-name">Studio Model D</div>
+              <div class="reg-studio-desc">Industrial loft with high ceiling</div>
+            </div>
+            <div class="reg-studio-card" id="card_studio_model_rooftop" onclick="selectRegStudio('studio_model_rooftop')">
+              <div class="reg-studio-icon">&#127747;</div>
+              <div class="reg-studio-name">Rooftop Lounge</div>
+              <div class="reg-studio-desc">Skyline view with neon lights</div>
+            </div>
+          </div>
+          <div style="background: #222; border-radius: 6px; padding: 12px; margin-top: 15px; border: 1px solid #444; font-size: 11px;">
+            <strong style="color: #ffcc00;">Starter Furniture Included:</strong>
+            <span style="color: #bbb;"> 1x Interactive DJ Turntable Console, 1x Coca-Cola Red Leather Sofa, 1x Coca-Cola Drink Vending Machine, and 1x Coke Anthem Burned CD.</span>
+          </div>
+        </div>
+
+        <!-- STEP 4: RED CAP VOUCHER & BONUS -->
+        <div id="regPane4" class="reg-step-pane">
+          <div style="text-align: center; margin-bottom: 16px;">
+            <img src="assets/images/start_logo.gif" alt="Coke" style="height: 36px; margin-bottom: 8px;">
+            <h3 style="color: #ffcc00; margin: 0; font-size: 16px;">COCA-COLA RED CAP BONUS</h3>
+            <p style="font-size: 12px; color: #aaa; margin-top: 4px;">Redeem your registration promo voucher for free starting Decibels &amp; V-Coins!</p>
+          </div>
+          <div class="reg-form-group">
+            <label>Bottle Cap Voucher Code</label>
+            <input type="text" id="regPromoCode" class="reg-input" value="COKE-MUSIC-2026" style="text-transform: uppercase; font-family: monospace; letter-spacing: 2px; text-align: center; font-size: 15px; color: #ffcc00;">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px;">
+            <div style="background: #111; border: 1px solid #ffcc00; border-radius: 6px; padding: 12px; text-align: center;">
+              <div style="font-size: 20px; color: #ffcc00;">&#9835; 5,000 dB</div>
+              <div style="font-size: 10px; color: #aaa; margin-top: 3px;">Starting Decibels for Buying Furniture</div>
+            </div>
+            <div style="background: #111; border: 1px solid #ffcc00; border-radius: 6px; padding: 12px; text-align: center;">
+              <div style="font-size: 20px; color: #ffcc00;">&#127860; 500 VC</div>
+              <div style="font-size: 10px; color: #aaa; margin-top: 3px;">Coke V-Coins Balance</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 5: READY TO LAUNCH -->
+        <div id="regPane5" class="reg-step-pane">
+          <div style="text-align: center; padding: 10px 0;">
+            <div style="font-size: 40px; margin-bottom: 10px;">&#127911;</div>
+            <h2 style="color: #ffcc00; margin: 0 0 8px 0; font-size: 18px;">YOUR V-EGO IS READY TO JAM!</h2>
+            <p style="font-size: 12px; color: #ccc; max-width: 500px; margin: 0 auto 16px auto;">
+              Click below to finalize your account in MariaDB, generate your cryptographic session ticket, and step inside Coke Studios!
+            </p>
+            <div id="regStatusMsg" style="display: none; padding: 10px; border-radius: 4px; font-size: 12px; margin-bottom: 14px;"></div>
+            <button type="button" class="btn-vp" id="btnSubmitReg" style="background: linear-gradient(180deg, #d80000 0%, #a00000 100%); color: #fff; font-size: 14px; padding: 10px 28px; border: 2px solid #ffcc00; border-radius: 6px; font-weight: bold; cursor: pointer;" onclick="submitRegistration()">
+              &#9654; CREATE ACCOUNT &amp; ENTER COKE STUDIOS
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Stepper Footer Navigation Buttons -->
+      <div class="coke-modal-footer">
+        <button type="button" class="btn-vp" id="btnRegPrev" style="visibility: hidden;" onclick="prevRegStep()">&larr; Back</button>
+        <button type="button" class="btn-vp" id="btnRegNext" style="background: #ffcc00; color: #000; font-weight: bold;" onclick="nextRegStep()">Next &rarr;</button>
+      </div>
+    </div>
   </div>
 
   <!-- Sound Audio Preview Engine & Scripting -->
@@ -2485,6 +2870,254 @@
         }
       } catch (e) {
         alert('Decor apply error: ' + e);
+      }
+    }
+
+    // --- ENGINE & POP-OUT WINDOW CONTROLS ---
+    function openPopoutGame() {
+      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const engine = document.getElementById('engineSelector').value;
+      const targetUrl = engine === 'phase' 
+        ? `/phase/?user=${encodeURIComponent(user)}` 
+        : `/game/?user=${encodeURIComponent(user)}`;
+      const w = 960, h = 640;
+      const left = Math.max(0, (screen.width - w) / 2);
+      const top = Math.max(0, (screen.height - h) / 2);
+      window.open(targetUrl, 'CokeStudiosGame', `width=${w},height=${h},top=${top},left=${left},resizable=yes,scrollbars=no`);
+    }
+
+    function switchEngine(engine) {
+      const user = document.getElementById('screenNameInput').value.trim() || 'Adam';
+      const iframe = document.getElementById('gameIframe');
+      if (engine === 'phase') {
+        iframe.src = `/phase/?user=${encodeURIComponent(user)}`;
+      } else {
+        iframe.src = `/game/?user=${encodeURIComponent(user)}`;
+      }
+    }
+
+    // --- REGISTRATION WIZARD STATE & LOGIC ---
+    const regWizard = {
+      step: 1,
+      gender: 'male',
+      skin: 1,
+      hair: 1,
+      top: 1,
+      legs: 1,
+      shoes: 1,
+      face: 1,
+      eyes: 1,
+      studioType: 'studio_model_c'
+    };
+
+    function openRegisterModal() {
+      document.getElementById('registerModal').classList.add('open');
+      goToRegStep(1);
+      renderRegAvatar();
+    }
+
+    function closeRegisterModal() {
+      document.getElementById('registerModal').classList.remove('open');
+    }
+
+    function goToRegStep(n) {
+      if (n < 1 || n > 5) return;
+      regWizard.step = n;
+      for (let i = 1; i <= 5; i++) {
+        const pane = document.getElementById('regPane' + i);
+        const tab = document.getElementById('tabStep' + i);
+        if (pane) pane.classList.toggle('active', i === n);
+        if (tab) {
+          tab.classList.toggle('active', i === n);
+          if (i < n) tab.classList.add('completed');
+          else tab.classList.remove('completed');
+        }
+      }
+
+      const btnPrev = document.getElementById('btnRegPrev');
+      const btnNext = document.getElementById('btnRegNext');
+      if (btnPrev) btnPrev.style.visibility = n === 1 ? 'hidden' : 'visible';
+      if (btnNext) {
+        if (n === 5) {
+          btnNext.style.display = 'none';
+        } else {
+          btnNext.style.display = 'inline-block';
+          btnNext.textContent = 'Next \u2192';
+        }
+      }
+
+      if (n === 2) {
+        setTimeout(renderRegAvatar, 50);
+      }
+    }
+
+    function nextRegStep() {
+      if (regWizard.step === 1) {
+        const name = document.getElementById('regScreenName').value.trim();
+        const pw = document.getElementById('regPassword').value;
+        const email = document.getElementById('regEmail').value.trim();
+        if (!name || name.length < 3) {
+          alert('Please enter a screen name with at least 3 characters.');
+          return;
+        }
+        if (!pw || pw.length < 6) {
+          alert('Please enter a password with at least 6 characters.');
+          return;
+        }
+        if (!email || !email.includes('@')) {
+          alert('Please enter a valid email address.');
+          return;
+        }
+      }
+      goToRegStep(regWizard.step + 1);
+    }
+
+    function prevRegStep() {
+      goToRegStep(regWizard.step - 1);
+    }
+
+    function cycleRegGender(g) {
+      regWizard.gender = g;
+      renderRegAvatar();
+    }
+
+    function setRegSkin(skinNum) {
+      regWizard.skin = skinNum;
+      const swatches = document.querySelectorAll('#regSkinSwatches .skin-swatch');
+      swatches.forEach((sw, idx) => {
+        sw.style.borderColor = (idx + 1 === skinNum) ? '#fff' : '#333';
+      });
+      renderRegAvatar();
+    }
+
+    function cycleRegItem(part, delta) {
+      const maxes = { hair: 10, top: 20, legs: 15, shoes: 5 };
+      const max = maxes[part] || 10;
+      regWizard[part] = ((regWizard[part] - 1 + delta + max) % max) + 1;
+      const label = document.getElementById('reg' + part.charAt(0).toUpperCase() + part.slice(1) + 'Label');
+      if (label) {
+        label.textContent = part.charAt(0).toUpperCase() + part.slice(1) + ' ' + regWizard[part];
+      }
+      renderRegAvatar();
+    }
+
+    function selectRegStudio(stType) {
+      regWizard.studioType = stType;
+      document.querySelectorAll('.reg-studio-card').forEach(c => c.classList.remove('selected'));
+      const sel = document.getElementById('card_' + stType);
+      if (sel) sel.classList.add('selected');
+    }
+
+    async function renderRegAvatar() {
+      const canvas = document.getElementById('regAvatarCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const g = regWizard.gender;
+      const basePath = 'assets/avatar/';
+      const topsWithoutArms = [2, 16, 17];
+
+      let armAPath = `${basePath}body/shared/a/arm-1.png`;
+      let topArmAPath = !topsWithoutArms.includes(regWizard.top) ? `${basePath}top/${regWizard.top}/arm-a-1.png` : null;
+      let bodyPath = `${basePath}body/${g}/body-se-stand.png`;
+      let legsPath = `${basePath}legs/${regWizard.legs}/legs-se-stand.png`;
+      let shoesPath = `${basePath}shoes/${regWizard.shoes}/stand-se-1.png`;
+      let topPath = `${basePath}top/${regWizard.top}/top-se-stand.png`;
+      let armBPath = `${basePath}body/shared/b/arm-1.png`;
+      let topArmBPath = !topsWithoutArms.includes(regWizard.top) ? `${basePath}top/${regWizard.top}/arm-b-1.png` : null;
+      let headPath = `${basePath}head/se/${regWizard.skin}.png`;
+      let eyesPath = `${basePath}eyes/${regWizard.eyes}/se.png`;
+      let facePath = `${basePath}faces/${regWizard.face}/se.png`;
+      let hairPath = `${basePath}hair/${regWizard.hair}/se.png`;
+
+      const layerPaths = [
+        armAPath, topArmAPath,
+        bodyPath, legsPath, shoesPath, topPath,
+        armBPath, topArmBPath,
+        headPath, eyesPath, facePath, hairPath
+      ];
+
+      const loadedImages = await Promise.all(layerPaths.map(getAvatarImage));
+      loadedImages.forEach(img => {
+        if (img) ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      });
+    }
+
+    async function submitRegistration() {
+      const btn = document.getElementById('btnSubmitReg');
+      const statusMsg = document.getElementById('regStatusMsg');
+      const name = document.getElementById('regScreenName').value.trim() || 'Adam';
+      const pw = document.getElementById('regPassword').value;
+      const email = document.getElementById('regEmail').value.trim();
+      const mission = document.getElementById('regMission').value.trim() || 'Coke Music Legend';
+      const promo = document.getElementById('regPromoCode').value.trim();
+
+      const figureDef = `hr=${pad(regWizard.hair, 3)}/${regWizard.skin}&hd=${pad(regWizard.skin, 3)}/1&ch=${pad(regWizard.top, 3)}/1&lg=${pad(regWizard.legs, 3)}/1&sh=${pad(regWizard.shoes, 3)}/1&fa=${pad(regWizard.face, 3)}/1&ey=${pad(regWizard.eyes, 3)}/1&g=${regWizard.gender === 'male' ? 1 : 2}`;
+
+      btn.disabled = true;
+      btn.textContent = 'Registering in MariaDB...';
+      statusMsg.style.display = 'block';
+      statusMsg.style.background = '#222';
+      statusMsg.style.color = '#ffcc00';
+      statusMsg.textContent = 'Minting Denizen, studio layout, and starter equipment...';
+
+      try {
+        const payload = {
+          screenName: name,
+          password: pw,
+          email: email,
+          gender: regWizard.gender === 'male' ? 1 : 2,
+          avatarDef: figureDef,
+          mission: mission,
+          studioType: regWizard.studioType,
+          promoCode: promo
+        };
+
+        const res = await fetch('/api/denizen/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (data.status === 'success') {
+          statusMsg.style.background = '#1b5e20';
+          statusMsg.style.color = '#fff';
+          statusMsg.textContent = `Welcome to Coke Studios, DJ ${data.screenName}! Launching game...`;
+
+          document.getElementById('screenNameInput').value = data.screenName;
+          if (document.getElementById('balanceDB')) {
+            document.getElementById('balanceDB').textContent = Number(data.decibels).toLocaleString();
+          }
+          if (document.getElementById('balanceVC')) {
+            document.getElementById('balanceVC').textContent = Number(data.vcoins).toLocaleString();
+          }
+
+          setTimeout(() => {
+            closeRegisterModal();
+            switchTab('play');
+            const iframe = document.getElementById('gameIframe');
+            const engine = document.getElementById('engineSelector').value;
+            if (engine === 'phase') {
+              iframe.src = `/phase/?user=${encodeURIComponent(data.screenName)}`;
+            } else {
+              iframe.src = data.gameUrl || `/game/?user=${encodeURIComponent(data.screenName)}&sw1=${encodeURIComponent(data.sw1)}&sw2=${encodeURIComponent(data.sw2)}`;
+            }
+          }, 1200);
+        } else {
+          statusMsg.style.background = '#b71c1c';
+          statusMsg.style.color = '#fff';
+          statusMsg.textContent = 'Registration failed: ' + (data.message || 'Unknown error');
+          btn.disabled = false;
+          btn.textContent = '\u25B6 CREATE ACCOUNT & ENTER COKE STUDIOS';
+        }
+      } catch (err) {
+        statusMsg.style.background = '#b71c1c';
+        statusMsg.style.color = '#fff';
+        statusMsg.textContent = 'Network error connecting to backend: ' + err;
+        btn.disabled = false;
+        btn.textContent = '\u25B6 CREATE ACCOUNT & ENTER COKE STUDIOS';
       }
     }
 

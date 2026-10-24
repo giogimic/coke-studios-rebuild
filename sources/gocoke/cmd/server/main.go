@@ -14,6 +14,7 @@ import (
 	"mime"
 	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -164,6 +165,10 @@ func (s *Server) GetOrCreateRoom(roomID string) *Room {
 func main() {
 	_ = mime.AddExtensionType(".wasm", "application/wasm")
 	_ = mime.AddExtensionType(".br", "application/x-brotli")
+	_ = mime.AddExtensionType(".ls", "text/plain; charset=utf-8")
+	_ = mime.AddExtensionType(".csv", "text/csv; charset=utf-8")
+	_ = mime.AddExtensionType(".txt", "text/plain; charset=utf-8")
+	_ = mime.AddExtensionType(".htm", "text/html; charset=utf-8")
 
 	addr := flag.String("addr", "0.0.0.0:8080", "listen address (default 0.0.0.0:8080)")
 	root := flag.String("root", "./web", "web directory to serve")
@@ -195,6 +200,12 @@ func main() {
 	srv := NewServer(*root, host, port, store)
 
 	mux := http.NewServeMux()
+
+	// 0. Denizen Registration & Legacy Login APIs
+	mux.HandleFunc("/api/denizen/register", srv.handleRegisterDenizen)
+	mux.HandleFunc("/sf/ssldocs/registerDenizen.jsp", srv.handleRegisterDenizen)
+	mux.HandleFunc("/login/Login", srv.handleLegacyLogin)
+	mux.HandleFunc("/login/LoginPerson", srv.handleLegacyLogin)
 
 	// 1. Denizen login JSP
 	mux.HandleFunc("/sf/ssldocs/loginDenizen.jsp", srv.handleLoginDenizen)
@@ -252,6 +263,154 @@ func main() {
 	if err := http.ListenAndServe(*addr, mux); err != nil {
 		log.Fatalf("Server error: %v", err)
 	}
+}
+
+type RegisterRequest struct {
+	ScreenName string `json:"screenName"`
+	Password   string `json:"password"`
+	Email      string `json:"email"`
+	Gender     int    `json:"gender"`
+	AvatarDef  string `json:"avatarDef"`
+	Mission    string `json:"mission"`
+	StudioType string `json:"studioType"`
+	PromoCode  string `json:"promoCode"`
+}
+
+func (s *Server) handleRegisterDenizen(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	var req RegisterRequest
+	if r.Method == http.MethodPost {
+		ct := r.Header.Get("Content-Type")
+		if strings.Contains(ct, "application/json") {
+			_ = json.NewDecoder(r.Body).Decode(&req)
+		} else {
+			_ = r.ParseForm()
+			req.ScreenName = r.FormValue("screenName")
+			req.Password = r.FormValue("password")
+			req.Email = r.FormValue("email")
+			g, _ := strconv.Atoi(r.FormValue("gender"))
+			req.Gender = g
+			req.AvatarDef = r.FormValue("avatarDef")
+			req.Mission = r.FormValue("mission")
+			req.StudioType = r.FormValue("studioType")
+			req.PromoCode = r.FormValue("promoCode")
+		}
+	} else {
+		q := r.URL.Query()
+		req.ScreenName = q.Get("screenName")
+		req.Password = q.Get("password")
+		req.Email = q.Get("email")
+		g, _ := strconv.Atoi(q.Get("gender"))
+		req.Gender = g
+		req.AvatarDef = q.Get("avatarDef")
+		req.Mission = q.Get("mission")
+		req.StudioType = q.Get("studioType")
+		req.PromoCode = q.Get("promoCode")
+	}
+
+	cleanName := strings.TrimSpace(req.ScreenName)
+	if cleanName == "" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(map[string]any{"status": "error", "message": "Screen name is required"})
+		return
+	}
+
+	if req.Gender <= 0 {
+		req.Gender = 1
+	}
+	genderStr := fmt.Sprintf("%d", req.Gender)
+	if req.AvatarDef == "" {
+		req.AvatarDef = "hr=001/255,194,115&hd=001/245,226,203&ey=001/245,226,203&fc=001/245,226,203&bd=001/245,226,203&lh=001/245,226,203&rh=001/245,226,203&ch=001/255,194,115&ls=002/238,238,238&rs=002/238,238,238&lg=001/127,102,64&sh=001/194,123,56"
+	}
+	if req.Mission == "" {
+		req.Mission = "Coke Music Legend"
+	}
+	if req.StudioType == "" {
+		req.StudioType = "studio_model_c"
+	}
+
+	d, err := s.store.GetOrCreateDenizen(cleanName, genderStr, req.AvatarDef, req.Mission)
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(map[string]any{"status": "error", "message": err.Error()})
+		return
+	}
+
+	// Create user's personal Studio
+	layoutMap := map[string]int{
+		"studio_model_a":       1,
+		"studio_model_b":       2,
+		"studio_model_c":       3,
+		"studio_model_d":       4,
+		"studio_model_rooftop": 5,
+	}
+	layout := layoutMap[req.StudioType]
+	if layout == 0 {
+		layout = 3
+	}
+	studioID := fmt.Sprintf("studio_%s", strings.ToLower(cleanName))
+	studio, _ := s.store.CreateStudio(studioID, d.ID, cleanName, fmt.Sprintf("%s's Studio", cleanName), req.StudioType, layout)
+	if studio != nil {
+		s.mu.Lock()
+		s.Rooms[studio.ID] = NewRoom(studio.ID, studio.Name, studio.Layout)
+		s.mu.Unlock()
+	}
+
+	// Handle promo voucher bonus if provided
+	if req.PromoCode != "" {
+		_, _, _ = s.store.RedeemRedCap(cleanName, req.PromoCode)
+	}
+
+	// Generate Base64 SW1 and SW2
+	sw1 := base64.StdEncoding.EncodeToString([]byte(cleanName))
+	sw2 := d.Secret
+
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(map[string]any{
+		"status":     "success",
+		"screenName": cleanName,
+		"gender":     d.Gender,
+		"avatarDef":  d.AvatarDef,
+		"mission":    d.Mission,
+		"decibels":   d.Decibels,
+		"vcoins":     d.VCoins,
+		"studioId":   studioID,
+		"sw1":        sw1,
+		"sw2":        sw2,
+		"gameUrl":    fmt.Sprintf("/game/?user=%s&sw1=%s&sw2=%s", url.QueryEscape(cleanName), url.QueryEscape(sw1), url.QueryEscape(sw2)),
+	})
+}
+
+func (s *Server) handleLegacyLogin(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	_ = r.ParseForm()
+	user := r.FormValue("screenName")
+	if user == "" {
+		user = r.FormValue("user")
+	}
+	if user == "" {
+		user = "Adam"
+	}
+	d, _ := s.store.GetOrCreateDenizen(user, "1", "", "")
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	fmt.Fprintf(w, "rCode=CMLOGGEDIN\n")
+	fmt.Fprintf(w, "avatar_str=%s\n", d.AvatarDef)
+	fmt.Fprintf(w, "screen_name=%s\n", d.ScreenName)
+	fmt.Fprintf(w, "db_total=%d\n", d.Decibels)
+	fmt.Fprintf(w, "person_id=%s\n", d.ID)
+	fmt.Fprintf(w, "SACStatus=1\n")
+	fmt.Fprintf(w, "daysToExpire=100\n")
+	fmt.Fprintf(w, "refresh=no\n")
+	fmt.Fprintf(w, "showStore=yes\n")
 }
 
 func (s *Server) handleLoginDenizen(w http.ResponseWriter, r *http.Request) {

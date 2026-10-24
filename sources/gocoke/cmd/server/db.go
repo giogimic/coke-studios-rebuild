@@ -825,3 +825,47 @@ func (s *Store) UpdateStudioDecor(studioID string, wallpaper, floor, doorbell in
 	return err
 }
 
+func (s *Store) CreateStudio(studioID, ownerID, ownerName, studioName, roomType string, layout int) (*StudioRecord, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if studioID == "" {
+		studioID = fmt.Sprintf("studio_%s", strings.ToLower(strings.TrimSpace(ownerName)))
+	}
+	if studioName == "" {
+		studioName = fmt.Sprintf("%s's Studio", ownerName)
+	}
+	if roomType == "" {
+		roomType = "studio_model_c"
+	}
+	if layout <= 0 {
+		layout = 3
+	}
+
+	var query string
+	if s.driver == "mysql" {
+		query = `INSERT INTO studios (id, owner_id, owner_name, name, layout, room_type, is_public) 
+			VALUES (?, ?, ?, ?, ?, ?, 0) 
+			ON DUPLICATE KEY UPDATE name = VALUES(name), room_type = VALUES(room_type), layout = VALUES(layout)`
+	} else {
+		query = `INSERT INTO studios (id, owner_id, owner_name, name, layout, room_type, is_public) 
+			VALUES (?, ?, ?, ?, ?, ?, 0) 
+			ON CONFLICT(id) DO UPDATE SET name = excluded.name, room_type = excluded.room_type, layout = excluded.layout`
+	}
+
+	_, err := s.db.Exec(query, studioID, ownerID, ownerName, studioName, layout, roomType)
+	if err != nil {
+		return nil, err
+	}
+
+	return &StudioRecord{
+		ID:        studioID,
+		OwnerID:   ownerID,
+		OwnerName: ownerName,
+		Name:      studioName,
+		Layout:    layout,
+		RoomType:  roomType,
+		IsPublic:  false,
+	}, nil
+}
+

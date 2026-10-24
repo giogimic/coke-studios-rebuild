@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/hex"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -333,5 +334,68 @@ func TestCDBurnAndModeration(t *testing.T) {
 	// 3. Test Doorbell Knock
 	knockXML := `<Room.Action roomID="studio_test"><ST_KNOCK roomID="studio_test"/></Room.Action>`
 	srv.handlePlayerMessage(p2, knockXML)
+}
+
+func TestRegisterDenizen(t *testing.T) {
+	srv := NewServer("./web", "127.0.0.1", "8080", nil)
+
+	// Test 5-step registration payload
+	regJSON := `{
+		"screenName": "NeoCokeDJ",
+		"password": "secretPassword123",
+		"email": "neo@coke.com",
+		"gender": 2,
+		"avatarDef": "hr=002/255,100,50&ch=005/200,50,50&lg=003/50,50,200&sh=001/0,0,0",
+		"mission": "Be the #1 DJ in Central Park",
+		"studioType": "studio_model_rooftop",
+		"promoCode": "COKE-MUSIC-2026"
+	}`
+
+	req := httptest.NewRequest("POST", "/api/denizen/register", strings.NewReader(regJSON))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+
+	srv.handleRegisterDenizen(w, req)
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d (body: %s)", w.Code, w.Body.String())
+	}
+
+	var resp map[string]any
+	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to parse json response: %v", err)
+	}
+
+	if resp["status"] != "success" {
+		t.Errorf("expected status success, got %v", resp["status"])
+	}
+	if resp["screenName"] != "NeoCokeDJ" {
+		t.Errorf("expected NeoCokeDJ, got %v", resp["screenName"])
+	}
+	if resp["studioId"] != "studio_neocokedj" {
+		t.Errorf("expected studio_neocokedj, got %v", resp["studioId"])
+	}
+
+	// Verify denizen in store
+	d, err := srv.store.GetDenizenByName("NeoCokeDJ")
+	if err != nil {
+		t.Fatalf("denizen not found in store: %v", err)
+	}
+	if d.Gender != 2 {
+		t.Errorf("expected gender 2, got %d", d.Gender)
+	}
+
+	// Verify starting studio exists in room list
+	room := srv.GetOrCreateRoom("studio_neocokedj")
+	if room.Layout != 5 {
+		t.Errorf("expected rooftop studio layout 5, got %d", room.Layout)
+	}
+
+	// Verify legacy login compatibility endpoint
+	reqLogin := httptest.NewRequest("POST", "/login/Login?screenName=NeoCokeDJ", nil)
+	wLogin := httptest.NewRecorder()
+	srv.handleLegacyLogin(wLogin, reqLogin)
+	if !strings.Contains(wLogin.Body.String(), "rCode=CMLOGGEDIN") {
+		t.Errorf("expected CMLOGGEDIN in legacy login response, got: %s", wLogin.Body.String())
+	}
 }
 

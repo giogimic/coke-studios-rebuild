@@ -93,22 +93,57 @@
       
       const go = new Go();
 
-      if (!WebAssembly.instantiateStreaming) {
-        WebAssembly.instantiateStreaming = async (response, importObject) => {
-          const source = await (await response).arrayBuffer();
-          return await WebAssembly.instantiate(source, importObject);
-        };
-      }
+      async function launchGameEngine() {
+        const statusEl = document.createElement("div");
+        statusEl.id = "engineStatus";
+        statusEl.style.position = "fixed";
+        statusEl.style.top = "50%";
+        statusEl.style.left = "50%";
+        statusEl.style.transform = "translate(-50%, -50%)";
+        statusEl.style.background = "rgba(20, 20, 20, 0.9)";
+        statusEl.style.color = "#FF2D2D";
+        statusEl.style.padding = "20px 30px";
+        statusEl.style.borderRadius = "8px";
+        statusEl.style.fontFamily = "Verdana, sans-serif";
+        statusEl.style.fontSize = "14px";
+        statusEl.style.textAlign = "center";
+        statusEl.style.zIndex = "9999";
+        statusEl.innerHTML = "<div style='font-weight:bold;margin-bottom:8px;'>COKE STUDIOS ENGINE</div><div id='engineSub'>Initializing WebAssembly Client...</div>";
+        document.body.appendChild(statusEl);
 
-      WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject)
-        .then((result) => go.run(result.instance))
-        .catch((err) => {
+        try {
+          let wasmModule;
+          const subEl = document.getElementById("engineSub");
+          if (subEl) subEl.textContent = "Loading 1:1 isometric engine (main.wasm)...";
+
+          if (WebAssembly.instantiateStreaming) {
+            try {
+              wasmModule = await WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject);
+            } catch (streamErr) {
+              console.warn("instantiateStreaming failed, falling back to arrayBuffer:", streamErr);
+              const resp = await fetch("main.wasm");
+              const bytes = await resp.arrayBuffer();
+              wasmModule = await WebAssembly.instantiate(bytes, go.importObject);
+            }
+          } else {
+            const resp = await fetch("main.wasm");
+            const bytes = await resp.arrayBuffer();
+            wasmModule = await WebAssembly.instantiate(bytes, go.importObject);
+          }
+
+          if (statusEl.parentNode) statusEl.parentNode.removeChild(statusEl);
+          await go.run(wasmModule.instance);
+        } catch (err) {
           console.error("Failed to load WASM:", err);
-          const el = document.createElement("pre");
-          el.id = "log";
-          el.textContent = String(err && err.stack ? err.stack : err);
-          document.body.appendChild(el);
-        });
+          statusEl.style.color = "#FFF";
+          statusEl.style.background = "#8B0000";
+          statusEl.style.maxWidth = "80%";
+          statusEl.innerHTML = `<div style="font-weight:bold;margin-bottom:8px;">Client Launch Error</div>
+            <div style="font-size:12px;text-align:left;white-space:pre-wrap;font-family:monospace;">${String(err && err.stack ? err.stack : err)}</div>
+            <div style="margin-top:12px;"><a href="/phase/" style="color:#FFF;background:#222;padding:6px 12px;text-decoration:none;border-radius:4px;display:inline-block;">Launch HTML5 Engine (CokePhase) &rarr;</a></div>`;
+        }
+      }
+      launchGameEngine();
     </script>
     <script>
       (function () {

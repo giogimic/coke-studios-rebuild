@@ -7,11 +7,14 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const mime = {
   '.html': 'text/html; charset=utf-8',
+  '.htm': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.xml': 'application/xml; charset=utf-8',
   '.txt': 'text/plain; charset=utf-8',
+  '.ls': 'text/plain; charset=utf-8',
+  '.csv': 'text/csv; charset=utf-8',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
@@ -26,7 +29,13 @@ const mime = {
   '.wasm': 'application/wasm',
   '.ico': 'image/x-icon',
   '.map': 'application/json; charset=utf-8',
-  '.swf': 'application/x-shockwave-flash'
+  '.swf': 'application/x-shockwave-flash',
+  '.bin': 'application/octet-stream',
+  '.dat': 'application/octet-stream',
+  '.cct': 'application/octet-stream',
+  '.dcr': 'application/x-director',
+  '.dir': 'application/x-director',
+  '.dxr': 'application/x-director'
 };
 const roomTypes = ['studio_model_b','studio_model_c','studio_model_a','studio_model_d','studio_model_rooftop','studio_wayne','pokemon'];
 const roomNames = ['Studio #1','Studio #2','Studio #3','Studio #4','Rooftop Studio','Studio Wayne','Pokemon'];
@@ -41,7 +50,10 @@ function send(res, status, body, type = 'text/plain; charset=utf-8') {
   res.writeHead(status, {
     'Content-Type': type,
     'Cache-Control': 'no-store',
-    'X-Content-Type-Options': 'nosniff'
+    'X-Content-Type-Options': 'nosniff',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, HEAD',
+    'Access-Control-Allow-Headers': '*'
   });
   res.end(body);
 }
@@ -113,20 +125,60 @@ function makeServer(project) {
         const rel = (!sub || sub === '/') ? 'index.html' : sub;
         const file = path.resolve(root, 'sources', 'gocoke', 'web', rel);
         if (file.startsWith(path.join(root, 'sources', 'gocoke', 'web'))) {
-          const ext = path.extname(file).toLowerCase();
-          if (mime[ext]) {
+          try {
+            const ext = path.extname(file).toLowerCase();
+            const contentType = mime[ext] || 'application/octet-stream';
             const body = await fs.readFile(file);
-            return send(res, 200, body, mime[ext]);
-          }
+            return send(res, 200, body, contentType);
+          } catch (_) {}
         }
       }
 
-      if (project === 'portal' && url.pathname.startsWith('/Lingo/')) {
-        const audioFile = path.resolve(root, 'sources', 'gocoke', 'web', url.pathname.slice(1));
-        const ext = path.extname(audioFile).toLowerCase();
-        if (mime[ext]) {
-          const body = await fs.readFile(audioFile);
-          return send(res, 200, body, mime[ext]);
+      if (project === 'portal' && (
+        url.pathname.startsWith('/Lingo/') ||
+        url.pathname.startsWith('/data/') ||
+        url.pathname.startsWith('/fonts/') ||
+        url.pathname.startsWith('/assets/')
+      )) {
+        const file = path.resolve(root, 'sources', 'gocoke', 'web', url.pathname.slice(1));
+        if (file.startsWith(path.join(root, 'sources', 'gocoke', 'web'))) {
+          try {
+            const ext = path.extname(file).toLowerCase();
+            const contentType = mime[ext] || 'application/octet-stream';
+            const body = await fs.readFile(file);
+            return send(res, 200, body, contentType);
+          } catch (_) {}
+        }
+      }
+
+      if (project === 'portal' && url.pathname.startsWith('/avatar-assets/')) {
+        const file = path.resolve(root, 'sources', 'avatar-assets', 'assets', url.pathname.slice(15));
+        if (file.startsWith(path.join(root, 'sources', 'avatar-assets', 'assets'))) {
+          try {
+            const ext = path.extname(file).toLowerCase();
+            const contentType = mime[ext] || 'image/png';
+            const body = await fs.readFile(file);
+            return send(res, 200, body, contentType);
+          } catch (_) {}
+        }
+      }
+
+      if (project === 'portal' && url.pathname.startsWith('/phase/')) {
+        const sub = url.pathname.slice(7);
+        const rel = (!sub || sub === '/') ? 'index.html' : sub;
+        const file = path.resolve(root, 'sources', 'cokephase', rel);
+        if (file.startsWith(path.join(root, 'sources', 'cokephase'))) {
+          try {
+            const ext = path.extname(file).toLowerCase();
+            const contentType = mime[ext] || 'application/octet-stream';
+            let body = await fs.readFile(file);
+            if (rel === 'index.html') {
+              body = body.toString('utf8')
+                .replace('https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js', '/engine/components/editor/vendor/jquery.2.0.3.min.js')
+                .replace(/<script>\s*\(function\(i,s,o,g,r,a,m\)[\s\S]*?<\/script>/, '');
+            }
+            return send(res, 200, body, contentType);
+          } catch (_) {}
         }
       }
 
@@ -135,24 +187,26 @@ function makeServer(project) {
         const rel = (!sub || sub === '/') ? 'index.html' : sub;
         const file = path.resolve(root, 'sources', 'music-mixer', 'dist', rel);
         if (file.startsWith(path.join(root, 'sources', 'music-mixer', 'dist'))) {
-          const ext = path.extname(file).toLowerCase();
-          if (mime[ext]) {
+          try {
+            const ext = path.extname(file).toLowerCase();
+            const contentType = mime[ext] || 'application/octet-stream';
             const body = await fs.readFile(file);
-            return send(res, 200, body, mime[ext]);
-          }
+            return send(res, 200, body, contentType);
+          } catch (_) {}
         }
       }
 
       if (project === 'portal' && url.pathname.startsWith('/sounds/')) {
         const audioFile = path.resolve(root, 'sources', 'gocoke', 'web', 'Lingo', 'soundlibrary', url.pathname.slice(8));
-        const ext = path.extname(audioFile).toLowerCase();
-        if (mime[ext]) {
+        try {
+          const ext = path.extname(audioFile).toLowerCase();
+          const contentType = mime[ext] || 'audio/wav';
           const body = await fs.readFile(audioFile);
-          return send(res, 200, body, mime[ext]);
-        }
+          return send(res, 200, body, contentType);
+        } catch (_) {}
       }
 
-      if (project === 'cokephase' && url.pathname === '/jsonreply/room.php') {
+      if ((project === 'cokephase' || project === 'portal') && url.pathname === '/jsonreply/room.php') {
         const params = await fields(req, url);
         const id = Number(params.get('id'));
         const data = Number.isInteger(id) && id >= 1 && id <= 7
@@ -161,16 +215,15 @@ function makeServer(project) {
         return send(res, 200, JSON.stringify(data), 'application/json');
       }
 
-      if (project === 'cokephase' && url.pathname === '/jsonreply/catalog.php') {
+      if ((project === 'cokephase' || project === 'portal') && url.pathname === '/jsonreply/catalog.php') {
         const params = await fields(req, url);
         if (!params.has('page') && params.has('page-number')) {
           return send(res, 200, '{"pages":15}', 'application/json');
         }
         const page = params.get('page') || '0';
         if (!/^(?:[0-9]|1[0-5])$/.test(page)) return send(res, 400, 'Invalid catalogue page');
-        // Disabled by the upstream PHP file.
         if (page === '12' || page === '13') return send(res, 200, '', 'application/json');
-        const content = await fs.readFile(path.join(base, 'jsonreply', 'catalog', 'page-' + page + '.json'), 'utf8');
+        const content = await fs.readFile(path.join(root, 'sources', 'cokephase', 'jsonreply', 'catalog', 'page-' + page + '.json'), 'utf8');
         const cleaned = content.replace(/^\s*\/\/.*$/gm, '').replace(/,\s*]/g, ']');
         return send(res, 200, JSON.stringify(JSON.parse(cleaned)), 'application/json');
       }
@@ -195,7 +248,7 @@ function makeServer(project) {
       }
 
       const ext = path.extname(file).toLowerCase();
-      if (!mime[ext]) return send(res, 403, 'File type not served');
+      const contentType = mime[ext] || 'application/octet-stream';
 
       let body = await fs.readFile(file);
       if (project === 'cokephase' && rel === 'index.html') {
@@ -206,12 +259,12 @@ function makeServer(project) {
 
       if (req.method === 'HEAD') {
         res.writeHead(200, {
-          'Content-Type': mime[ext],
+          'Content-Type': contentType,
           'Content-Length': Buffer.byteLength(body)
         });
         res.end();
       } else {
-        send(res, 200, body, mime[ext]);
+        send(res, 200, body, contentType);
       }
     } catch (error) {
       send(res, error.code === 'ENOENT' ? 404 : 400, error.code === 'ENOENT' ? 'Not found' : 'Unable to serve request');
