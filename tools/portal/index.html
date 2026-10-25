@@ -39,10 +39,10 @@
     .mycoke-container {
       width: 980px;
       max-width: 98%;
-      background: #ffffff;
+      background: #181516;
       margin-top: 15px;
-      border: 3px solid #7d0000;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      border: 3px solid #ffcc00;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
       border-radius: 8px;
       overflow: hidden;
       display: flex;
@@ -108,7 +108,7 @@
       display: flex;
       flex-direction: row;
       min-height: 640px;
-      background: #ffffff;
+      background: #181516;
     }
 
     /* Left Column: Authentic 176px - 180px V-Ego Status Badge */
@@ -276,13 +276,195 @@
     .btn-badge-dark:hover {
       background: #4a4547;
     }
+    .btn-badge-outline {
+      background: transparent;
+      color: #ff9999;
+      border: 1px solid #7d0000;
+    }
+    .btn-badge-outline:hover {
+      background: #7d0000;
+      color: #fff;
+    }
+
+    /* Game Access Gate (VIP Member Locked State) */
+    .game-access-gate {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 10;
+      background: radial-gradient(circle at 50% 35%, #2a0f12 0%, #15080a 75%, #0b0405 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .gate-card-inner {
+      max-width: 640px;
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(32, 10, 14, 0.94);
+      border: 2px solid #ffcc00;
+      border-radius: 12px;
+      padding: 30px 24px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85), inset 0 0 25px rgba(228, 30, 43, 0.25);
+    }
+    .gate-badge-pill {
+      background: linear-gradient(180deg, #7d0000 0%, #4a0000 100%);
+      border: 1px solid #ffcc00;
+      color: #ffcc00;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+    .gate-title {
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 4px #000;
+      margin-bottom: 8px;
+    }
+    .gate-subtitle {
+      color: #ffd6d9;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 22px;
+      max-width: 520px;
+    }
+    .gate-actions-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-gate-primary {
+      background: linear-gradient(180deg, #ffcc00 0%, #d4a000 100%);
+      color: #000;
+      border: 2px solid #fff;
+      border-radius: 6px;
+      padding: 12px 22px;
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transition: all 0.15s ease;
+    }
+    .btn-gate-primary:hover {
+      background: #ffe680;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(255,204,0,0.4);
+    }
+    .btn-gate-secondary {
+      background: linear-gradient(180deg, #e41e2b 0%, #99000a 100%);
+      color: #fff;
+      border: 2px solid #ffcc00;
+      border-radius: 6px;
+      padding: 12px 22px;
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transition: all 0.15s ease;
+    }
+    .btn-gate-secondary:hover {
+      background: #ff2a38;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(228,30,43,0.4);
+    }
+    .gate-features-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      width: 100%;
+      border-top: 1px solid #4a1518;
+      padding-top: 16px;
+    }
+    @media (max-width: 650px) {
+      .gate-features-row { grid-template-columns: 1fr 1fr; }
+    }
+    .gate-feat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 3px;
+    }
+    .gate-feat-icon {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+    .gate-feat-item strong {
+      color: #ffcc00;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .gate-feat-item span {
+      color: #aaa;
+      font-size: 10px;
+      line-height: 1.2;
+    }
+
+    /* Quick Travel Lounge Strip */
+    .quick-travel-strip {
+      background: #171112;
+      border-bottom: 1px solid #443;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+    }
+    .quick-travel-label {
+      font-size: 11px;
+      font-weight: 900;
+      color: #ffcc00;
+      white-space: nowrap;
+      margin-right: 4px;
+    }
+    .btn-quick-room {
+      background: #2a2022;
+      border: 1px solid #554;
+      color: #eee;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.12s ease;
+    }
+    .btn-quick-room:hover {
+      background: #443;
+      color: #fff;
+      border-color: #ffcc00;
+    }
+    .btn-quick-room.active {
+      background: #e41e2b;
+      border-color: #ffcc00;
+      color: #fff;
+      box-shadow: 0 0 6px rgba(228,30,43,0.6);
+    }
 
     /* Right Column: Authentic Nav & Content */
     .portal-main-column {
       flex: 1;
       display: flex;
       flex-direction: column;
-      background: #fdfdfd;
+      background: #181516;
       min-width: 0;
     }
 
@@ -446,8 +628,8 @@
       gap: 16px;
     }
     .home-feature-card {
-      background: #ffffff;
-      border: 2px solid #e0e0e0;
+      background: #221e1f;
+      border: 2px solid #ffcc00;
       border-radius: 8px;
       padding: 16px;
       cursor: pointer;
@@ -455,23 +637,27 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      color: #ffffff;
     }
     .home-feature-card:hover {
-      border-color: #e41e2b;
+      border-color: #ffe680;
+      background: #2b2527;
       transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 6px 16px rgba(255, 204, 0, 0.2);
     }
     .home-feature-card .feature-icon {
       font-size: 26px;
     }
     .home-feature-card h3 {
-      font-size: 13px;
-      color: #7d0000;
+      font-size: 14px;
+      color: #ffde59;
       margin: 0;
+      text-transform: uppercase;
     }
     .home-feature-card p {
       font-size: 11px;
-      color: #666;
+      color: #ccc;
       line-height: 1.4;
       margin: 0;
     }
@@ -508,8 +694,9 @@
     /* Main Content Area */
     .mycoke-content {
       padding: 20px;
-      background: #fbfbfb;
+      background: #181516;
       min-height: 600px;
+      color: #ffffff;
     }
 
     /* Tab Page Containers */
@@ -585,8 +772,8 @@
     /* Quick Studio Switcher Bar */
     .studios-bar {
       margin-top: 15px;
-      background: #ffe6e6;
-      border: 2px solid #e41e2b;
+      background: #1f1a1b;
+      border: 1px solid #ffcc00;
       border-radius: 6px;
       padding: 12px 16px;
       display: flex;
@@ -596,7 +783,7 @@
     .studios-bar-title {
       font-weight: bold;
       font-size: 13px;
-      color: #7d0000;
+      color: #ffcc00;
     }
     .studio-pills {
       display: flex;
@@ -604,9 +791,9 @@
       flex-wrap: wrap;
     }
     .studio-pill {
-      background: #ffffff;
-      border: 2px solid #c4000b;
-      color: #c4000b;
+      background: #252021;
+      border: 1px solid #ffcc00;
+      color: #ffd6d9;
       padding: 6px 14px;
       font-size: 11px;
       font-weight: bold;
@@ -615,8 +802,10 @@
       transition: all 0.15s;
     }
     .studio-pill:hover, .studio-pill.active {
-      background: #c4000b;
+      background: #e41e2b;
       color: #fff;
+      border-color: #ffcc00;
+      box-shadow: 0 0 8px rgba(228, 30, 43, 0.6);
     }
 
     /* --- PAGE 2: MUSIC MIXER (SEQUENCER & CD BURNER) --- */
@@ -821,7 +1010,7 @@
     .redcaps-graphic {
       width: 140px;
       height: 140px;
-      background: #ffffff;
+      background: radial-gradient(circle at 50% 50%, #4a0c10 0%, #200407 100%);
       border: 4px solid #ffcc00;
       border-radius: 50%;
       display: flex;
@@ -897,38 +1086,52 @@
 
     /* --- PAGE 4: TOP 40 MUSIC CHARTS --- */
     .chart-container {
-      background: #ffffff;
-      border: 2px solid #d2a679;
+      background: #1e1b1c;
+      border: 2px solid #ffcc00;
       border-radius: 8px;
       overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      color: #fff;
     }
     .chart-header {
-      background: #e41e2b;
-      color: #fff;
+      background: #7d0000;
+      color: #ffde59;
       padding: 12px 20px;
       font-size: 16px;
       font-weight: bold;
       text-transform: uppercase;
+      border-bottom: 2px solid #ffcc00;
     }
     .chart-list {
       list-style: none;
+      margin: 0;
+      padding: 0;
     }
     .chart-row {
       display: flex;
       align-items: center;
       padding: 12px 20px;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #332;
+      background: #221e1f;
       gap: 16px;
+      transition: background 0.15s;
+    }
+    .chart-row:hover {
+      background: #2e2829;
     }
     .chart-row:nth-child(even) {
-      background: #fafafa;
+      background: #282425;
+    }
+    .chart-row:nth-child(even):hover {
+      background: #332d2f;
     }
     .chart-rank {
       font-size: 18px;
       font-weight: 900;
-      color: #e41e2b;
+      color: #ffcc00;
       width: 32px;
       text-align: center;
+      text-shadow: 0 0 8px rgba(255,204,0,0.4);
     }
     .chart-info {
       flex: 1;
@@ -936,16 +1139,16 @@
     .chart-song {
       font-weight: bold;
       font-size: 13px;
-      color: #222;
+      color: #ffde59;
     }
     .chart-artist {
       font-size: 11px;
-      color: #777;
+      color: #bbb;
     }
     .chart-stats {
       font-size: 11px;
       font-weight: bold;
-      color: #ff9900;
+      color: #ffcc00;
       display: flex;
       align-items: center;
       gap: 4px;
@@ -953,20 +1156,25 @@
     .btn-chart-play {
       background: #e41e2b;
       color: #fff;
-      border: none;
+      border: 1px solid #ffcc00;
+      border-radius: 4px;
       padding: 6px 14px;
       font-size: 11px;
       font-weight: bold;
-      border-radius: 4px;
       cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-chart-play:hover {
+      background: #b00f1a;
     }
     /* --- PAGE: POP QUIZ MINIGAME --- */
     .popquiz-card {
-      background: #ffffff;
-      border: 2px solid #e41e2b;
+      background: #1e1b1c;
+      border: 2px solid #ffcc00;
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      color: #fff;
     }
     .popquiz-banner {
       background: #7d0000;
@@ -984,9 +1192,9 @@
       margin: 0 auto;
     }
     .popquiz-question {
-      font-size: 16px;
+      font-size: 17px;
       font-weight: bold;
-      color: #7d0000;
+      color: #ffde59;
       margin-bottom: 16px;
       line-height: 1.4;
     }
@@ -997,40 +1205,41 @@
       margin-bottom: 20px;
     }
     .popquiz-opt-btn {
-      background: #fbfbfb;
-      border: 2px solid #ddd;
+      background: #282425;
+      border: 2px solid #443;
       border-radius: 6px;
       padding: 12px 18px;
       font-size: 13px;
       font-weight: bold;
-      color: #333;
+      color: #fff;
       cursor: pointer;
       text-align: left;
       transition: all 0.15s;
     }
     .popquiz-opt-btn:hover {
-      border-color: #e41e2b;
-      background: #fff5f5;
-      color: #e41e2b;
+      border-color: #ffcc00;
+      background: #362e2f;
+      color: #ffcc00;
     }
     .popquiz-opt-btn.correct {
-      border-color: #00c853;
-      background: #e8f5e9;
-      color: #2e7d32;
+      border-color: #00e676;
+      background: #14351d;
+      color: #00e676;
     }
     .popquiz-opt-btn.wrong {
-      border-color: #d50000;
-      background: #ffebee;
-      color: #c62828;
+      border-color: #e41e2b;
+      background: #3b0007;
+      color: #ff6666;
     }
 
     /* --- PAGE: POSTCARDS --- */
     .postcard-card {
-      background: #ffffff;
-      border: 2px solid #d2a679;
+      background: #1e1b1c;
+      border: 2px solid #ffcc00;
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      color: #fff;
     }
     .postcard-banner {
       background: #231f20;
@@ -1063,11 +1272,13 @@
 
     /* --- PAGE: DOWNLOADS --- */
     .downloads-card {
-      background: #ffffff;
-      border: 2px solid #d2a679;
+      background: #1e1b1c;
+      border: 2px solid #ffcc00;
       border-radius: 8px;
       overflow: hidden;
       padding: 20px;
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
     }
     .downloads-grid {
       display: grid;
@@ -1076,11 +1287,11 @@
       margin-top: 20px;
     }
     .download-item {
-      border: 1px solid #ddd;
+      border: 1px solid #443;
       border-radius: 6px;
       padding: 12px;
       text-align: center;
-      background: #fdfdfd;
+      background: #282425;
       transition: transform 0.15s, border-color 0.15s;
     }
     .download-item:hover {
@@ -1099,28 +1310,42 @@
     .ask-max-container {
       display: flex;
       gap: 20px;
-      background: #fff8f0;
+      background: #1e1b1c;
       border: 2px solid #ffcc00;
       border-radius: 8px;
       padding: 20px;
       margin-bottom: 24px;
       align-items: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      color: #fff;
     }
     .ask-max-img {
       width: 100px;
       height: auto;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
     }
     .ask-max-bubble {
       flex: 1;
-      background: #ffffff;
-      border: 2px solid #d2a679;
+      background: #282425;
+      border: 2px solid #ffcc00;
       border-radius: 12px;
       padding: 16px 20px;
       position: relative;
       font-size: 13px;
       line-height: 1.6;
-      color: #333;
+      color: #fff;
+    }
+    .ask-max-bubble h3 {
+      color: #ffde59 !important;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+    }
+    .ask-max-bubble p, .ask-max-bubble li {
+      color: #ddd;
+    }
+    .ask-max-bubble strong {
+      color: #ffcc00;
     }
 
     /* --- PAGE: AVATAR STUDIO CUSTOMIZER --- */
@@ -1202,17 +1427,18 @@
 
     /* Wardrobe Options Card */
     .wardrobe-card {
-      background: #ffffff;
-      border: 2px solid #d2a679;
+      background: #1e1b1c;
+      border: 2px solid #ffcc00;
       border-radius: 8px;
       padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
       display: flex;
       flex-direction: column;
       gap: 16px;
+      color: #fff;
     }
     .wardrobe-header {
-      border-bottom: 2px solid #e41e2b;
+      border-bottom: 2px solid #ffcc00;
       padding-bottom: 8px;
       display: flex;
       justify-content: space-between;
@@ -1220,8 +1446,10 @@
     }
     .wardrobe-header h2 {
       font-size: 20px;
-      color: #7d0000;
+      color: #ffde59;
       text-transform: uppercase;
+      letter-spacing: -0.5px;
+      margin: 0;
     }
     .wardrobe-grid {
       display: grid;
@@ -1232,8 +1460,8 @@
       .wardrobe-grid { grid-template-columns: 1fr; }
     }
     .wardrobe-control-group {
-      background: #fdfaf6;
-      border: 1px solid #e2d1c3;
+      background: #282425;
+      border: 1px solid #443;
       border-radius: 6px;
       padding: 10px 12px;
       display: flex;
@@ -1243,7 +1471,7 @@
     .wardrobe-label {
       font-size: 11px;
       font-weight: bold;
-      color: #7d0000;
+      color: #ffcc00;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       display: flex;
@@ -1257,7 +1485,7 @@
     .btn-step {
       background: #e41e2b;
       color: #fff;
-      border: none;
+      border: 1px solid #ffcc00;
       width: 28px;
       height: 28px;
       border-radius: 4px;
@@ -1275,9 +1503,9 @@
       text-align: center;
       font-size: 12px;
       font-weight: bold;
-      color: #333;
-      background: #fff;
-      border: 1px solid #ccc;
+      color: #ffcc00;
+      background: #181516;
+      border: 1px solid #554;
       border-radius: 4px;
       padding: 4px 8px;
     }
@@ -1304,14 +1532,14 @@
     }
     .btn-gender {
       flex: 1;
-      background: #eee;
-      border: 1px solid #bbb;
+      background: #2a2223;
+      border: 1px solid #554;
       border-radius: 4px;
       padding: 6px;
       font-size: 12px;
       font-weight: bold;
       cursor: pointer;
-      color: #444;
+      color: #ffd6d9;
       transition: all 0.15s;
     }
     .btn-gender.active {
@@ -1358,23 +1586,23 @@
     .btn-avatar-secondary:hover {
       background: #ffe680;
     }
-    /* --- PAGE: MESSENGER (V-EGO CONSOLE) --- */
+        /* --- AUTHENTIC COKE STUDIOS: MESSENGER (V-EGO CONSOLE) --- */
     .messenger-layout {
       display: grid;
       grid-template-columns: 320px 1fr;
       gap: 20px;
     }
     .messenger-card {
-      background: #ffffff;
-      border: 2px solid #7d0000;
+      background: #1e1b1c;
+      border: 2px solid #ffcc00;
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
       display: flex;
       flex-direction: column;
     }
     .messenger-header {
-      background: linear-gradient(180deg, #e41e2b 0%, #aa000d 100%);
+      background: linear-gradient(180deg, #e41e2b 0%, #7d0000 100%);
       color: #fff;
       padding: 10px 16px;
       font-size: 13px;
@@ -1390,6 +1618,7 @@
       max-height: 400px;
       overflow-y: auto;
       padding: 8px;
+      background: #151314;
     }
     .messenger-friend-item {
       display: flex;
@@ -1398,11 +1627,12 @@
       padding: 8px 10px;
       border-radius: 6px;
       cursor: pointer;
-      border-bottom: 1px solid #f0f0f0;
-      transition: background 0.15s;
+      border-bottom: 1px solid #2a2522;
+      transition: background 0.15s, border-color 0.15s;
     }
-    .messenger-friend-item:hover {
-      background: #fff8ee;
+    .messenger-friend-item:hover, .messenger-friend-item.active {
+      background: #2a2522;
+      border-color: #ffcc00;
     }
     .status-dot-sm {
       width: 8px;
@@ -1410,21 +1640,21 @@
       border-radius: 50%;
       flex-shrink: 0;
     }
-    .status-online { background: #00e676; box-shadow: 0 0 5px #00e676; }
-    .status-offline { background: #aaa; }
+    .status-online { background: #00e676; box-shadow: 0 0 6px #00e676; }
+    .status-offline { background: #666; }
     .friend-info { flex: 1; min-width: 0; }
-    .friend-name { font-weight: bold; font-size: 12px; color: #222; }
-    .friend-mission { font-size: 11px; color: #777; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .friend-name { font-weight: bold; font-size: 12px; color: #ffcc00; }
+    .friend-mission { font-size: 11px; color: #bbb; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .btn-msg-rm {
-      background: #eee;
-      border: 1px solid #ccc;
+      background: #2a2522;
+      border: 1px solid #554;
       border-radius: 3px;
-      color: #777;
+      color: #aaa;
       padding: 2px 6px;
       font-size: 10px;
       cursor: pointer;
     }
-    .btn-msg-rm:hover { background: #e41e2b; color: #fff; border-color: #aa000d; }
+    .btn-msg-rm:hover { background: #e41e2b; color: #fff; border-color: #ffcc00; }
 
     .messenger-inbox-list {
       list-style: none;
@@ -1433,45 +1663,73 @@
       max-height: 350px;
       overflow-y: auto;
       padding: 12px;
-      background: #fdfdfd;
+      background: #0d0c0e;
+      border: 2px solid #2a2522;
+      margin: 8px;
+      border-radius: 6px;
       display: flex;
       flex-direction: column;
       gap: 8px;
+      box-shadow: inset 0 0 12px rgba(0,0,0,0.8);
     }
     .msg-bubble {
-      background: #f1f3f4;
-      border: 1px solid #ddd;
+      background: #221f20;
+      border: 1px solid #443;
       border-radius: 8px;
       padding: 10px 14px;
       font-size: 12px;
+      color: #fff;
       position: relative;
     }
     .msg-bubble.from-me {
-      background: #fff1f2;
-      border-color: #ffccd0;
+      background: #3b0007;
+      border-color: #7d0000;
       align-self: flex-end;
       max-width: 80%;
     }
     .msg-sender {
       font-weight: bold;
-      color: #c4000b;
+      color: #ffcc00;
       margin-bottom: 3px;
     }
     .msg-time {
       font-size: 10px;
-      color: #999;
+      color: #888;
       margin-left: 8px;
       font-weight: normal;
     }
     .msg-compose-bar {
       padding: 12px;
-      background: #f8f9fa;
-      border-top: 1px solid #ddd;
+      background: #181516;
+      border-top: 1px solid #2a2522;
       display: flex;
       gap: 8px;
     }
 
-    /* --- PAGE: STUDIO DECOR --- */
+    /* --- AUTHENTIC COKE STUDIOS: STUDIO DECOR --- */
+    .decor-container {
+      background: #1e1b1c;
+      border: 2px solid #ffcc00;
+      border-radius: 8px;
+      padding: 20px;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+    .decor-header-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #ffcc00;
+      padding-bottom: 12px;
+    }
+    .decor-header-area h2 {
+      color: #ffde59;
+      text-transform: uppercase;
+      font-size: 20px;
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
     .decor-layout {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1484,7 +1742,7 @@
       margin-top: 10px;
     }
     .decor-swatch-item {
-      border: 3px solid #ccc;
+      border: 3px solid #443;
       border-radius: 6px;
       height: 60px;
       cursor: pointer;
@@ -1504,8 +1762,8 @@
       border-color: #ffcc00;
     }
     .decor-swatch-item.active {
-      border-color: #e41e2b;
-      box-shadow: 0 0 8px rgba(228, 30, 43, 0.6);
+      border-color: #ffcc00;
+      box-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
       transform: scale(1.05);
     }
     .decor-preview-stage {
@@ -1516,7 +1774,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.6);
     }
     .decor-stage-wall {
       flex: 1;
@@ -1525,8 +1783,83 @@
     .decor-stage-floor {
       height: 60px;
       transition: background 0.2s;
-      border-top: 2px solid rgba(0,0,0,0.3);
+      border-top: 2px solid rgba(0,0,0,0.5);
     }
+
+    /* --- AUTHENTIC COKE STUDIOS: STUDIOS DIRECTORY --- */
+    .studios-dir-container {
+      background: #1e1b1c;
+      border: 2px solid #ffcc00;
+      border-radius: 8px;
+      padding: 20px;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+    .studio-dir-card {
+      background: #282425;
+      border: 1px solid #443;
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+    }
+    .studio-dir-card:hover {
+      border-color: #ffcc00;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+    }
+    .studio-dir-title {
+      color: #ffcc00;
+      font-size: 15px;
+      margin: 0;
+      font-weight: bold;
+    }
+    .studio-dir-desc {
+      font-size: 11px;
+      color: #ccc;
+      margin: 8px 0 12px 0;
+      line-height: 1.4;
+    }
+
+    /* --- AUTHENTIC COKE STUDIOS: HOUSE RULES & SAFETY --- */
+    .safety-rules-card {
+      background: #1e1b1c;
+      border: 2px solid #ffcc00;
+      border-radius: 8px;
+      padding: 24px;
+      color: #eee;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+    .safety-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .safety-item-box {
+      background: #282425;
+      border: 1px solid #443;
+      border-left: 4px solid #e41e2b;
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+    .safety-item-box h4 {
+      color: #ffcc00;
+      margin: 0 0 6px 0;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .safety-item-box p {
+      margin: 0;
+      font-size: 12px;
+      color: #ccc;
+      line-height: 1.5;
+    }
+
 
     /* Registration Wizard Modal */
     .coke-modal-backdrop {
@@ -1713,6 +2046,90 @@
     .mycoke-footer a:hover {
       text-decoration: underline;
     }
+
+    /* --- UNCOVER THE MUSIC MINIGAME STYLES --- */
+    .uncover-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .uncover-card {
+      aspect-ratio: 1;
+      perspective: 800px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .uncover-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    }
+    .uncover-card.flipped .uncover-card-inner {
+      transform: rotateY(180deg);
+    }
+    .uncover-card.matched .uncover-card-inner {
+      transform: rotateY(180deg);
+      box-shadow: 0 0 12px #ffcc00;
+    }
+    .uncover-card-front, .uncover-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      box-sizing: border-box;
+    }
+    .uncover-card-back {
+      background: radial-gradient(circle at 50% 35%, #a50e18 0%, #4a0005 85%, #2a0003 100%);
+      border: 2px solid #ffcc00;
+      color: #ffcc00;
+    }
+    .uncover-card-back:hover {
+      border-color: #ffffff;
+      box-shadow: inset 0 0 10px rgba(255, 204, 0, 0.4);
+    }
+    .uncover-card-front {
+      background: #1c1819;
+      border: 2px solid #ffcc00;
+      color: #ffffff;
+      transform: rotateY(180deg);
+    }
+    .uncover-card.matched .uncover-card-front {
+      background: #2b1d0d;
+      border: 2px solid #00e676;
+    }
+    .uncover-card.pass .uncover-card-front {
+      background: #3b0d10;
+      border: 2px solid #ff4444;
+    }
+    .uncover-card.wild .uncover-card-front {
+      background: #2b0d3b;
+      border: 2px solid #e066ff;
+    }
+    .uncover-card-icon {
+      font-size: 26px;
+      margin-bottom: 4px;
+    }
+    .uncover-card-title {
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #ffde59;
+    }
+
   </style>
 </head>
 <body>
@@ -1763,11 +2180,11 @@
         <div class="badge-currencies-stack">
           <div class="badge-currency-box badge-currency-db" title="Decibels (earned from DJ cheer battles)">
             <span class="currency-label">&#9835; Decibels</span>
-            <span class="currency-val"><span id="sidebarBalanceDB">5,000</span> dB</span>
+            <span class="currency-val"><span id="sidebarBalanceDB">--</span> dB</span>
           </div>
           <div class="badge-currency-box badge-currency-vc" title="Coke V-Coins (earned from bottle caps)">
             <span class="currency-label">&#127860; V-Coins</span>
-            <span class="currency-val"><span id="sidebarBalanceVC">500</span> VC</span>
+            <span class="currency-val"><span id="sidebarBalanceVC">--</span> VC</span>
           </div>
         </div>
 
@@ -1776,12 +2193,13 @@
           <button type="button" class="btn-badge-action btn-badge-gold" id="btnBadgeAuth" onclick="openAuthModal('signin')">&#128100; Sign In / Register</button>
           <button type="button" class="btn-badge-action btn-badge-red" onclick="switchTab('avatar')">&#128085; Edit Look</button>
           <button type="button" class="btn-badge-action btn-badge-dark" onclick="openPopoutGame()">&#8599; Pop-out 760&times;520</button>
+          <button type="button" class="btn-badge-action btn-badge-outline" id="btnBadgeSignOut" style="display:none;" onclick="signOut()">&#128274; Sign Out</button>
         </div>
 
         <!-- Hidden input for screen name to maintain 100% compatibility with any existing JS -->
         <input type="hidden" id="screenNameInput" value="">
-        <span id="balanceDB" style="display:none;">5,000</span>
-        <span id="balanceVC" style="display:none;">500</span>
+        <span id="balanceDB" style="display:none;">--</span>
+        <span id="balanceVC" style="display:none;">--</span>
       </aside>
 
       <!-- RIGHT COLUMN: AUTHENTIC SLICED NAV & MAIN CONTENT AREA -->
@@ -1814,7 +2232,11 @@
             <span class="sr-only">Help</span>
           </div>
           <div class="nav-modern-right">
-            <button class="btn-vp" style="background:#ffcc00;color:#000;font-size:11px;padding:3px 10px;font-weight:bold;cursor:pointer;" onclick="openAuthModal('signin')">&#128100; Sign In / Register</button>
+            <button class="btn-vp btn-nav-auth" id="navGuestBtn" style="background:#ffcc00;color:#000;font-size:11px;padding:4px 12px;font-weight:bold;cursor:pointer;border-radius:4px;" onclick="openAuthModal('signin')">&#128100; Sign In / Register</button>
+            <div id="navUserArea" class="nav-user-status" style="display: none; align-items: center; gap: 8px;">
+              <span style="color: #fff; font-size: 11px;">Signed in as <strong id="navUserScreenName" style="color: #ffcc00;">DJ Guest</strong></span>
+              <button class="btn-vp" style="background:#443;color:#ffcc00;font-size:10px;padding:3px 8px;cursor:pointer;border-radius:4px;border:1px solid #ffcc00;" onclick="signOut()">&#128274; Sign Out</button>
+            </div>
           </div>
         </nav>
 
@@ -1864,11 +2286,13 @@
 
       <!-- TAB 1: PLAY GAME (FULL EMBEDDED CLIENT) -->
       <section id="tab-play" class="tab-page active">
-        <div class="game-viewport-card">
-          <div class="viewport-header">
+        <div class="game-viewport-card" style="position: relative;">
+          <!-- Viewport Header: active when signed in -->
+          <div class="viewport-header" id="viewportHeader" style="display: none;">
             <div class="viewport-title">
               <span class="viewport-status-dot"></span>
               <span id="currentRoomTitle">Central Park Studio (VIS$0)</span>
+              <span id="viewportUserTag" style="font-size: 11px; color: #ffcc00; margin-left: 8px;"></span>
             </div>
             <div class="viewport-controls">
               <button class="btn-vp" onclick="reloadClient()">&#8635; Reload</button>
@@ -1876,38 +2300,58 @@
               <button class="btn-vp" onclick="openPopoutGame()">&#8599; Pop-out Window</button>
             </div>
           </div>
+
+          <!-- Quick Travel Lounge Strip: active when signed in -->
+          <div id="quickTravelStrip" class="quick-travel-strip" style="display: none;">
+            <span class="quick-travel-label">&#127918; Studios:</span>
+            <button class="btn-quick-room active" onclick="switchStudio('centralpark', 'Central Park Studio (VIS$0)')">Central Park</button>
+            <button class="btn-quick-room" onclick="switchStudio('sanfrancisco', 'San Francisco Studio (VIS$1)')">San Francisco</button>
+            <button class="btn-quick-room" onclick="switchStudio('london', 'London Studio (VIS$2)')">London</button>
+            <button class="btn-quick-room" onclick="switchStudio('miami', 'Miami Studio')">Miami Beach</button>
+            <button class="btn-quick-room" onclick="switchStudio('newyork', 'New York Studio')">New York</button>
+            <button class="btn-quick-room" onclick="switchStudio('redroom', 'Coca-Cola Red Room')">Red Room</button>
+            <button class="btn-quick-room" id="btnQuickMyStudio" onclick="switchStudio('my_studio', 'My Private Studio')">&#127968; My Studio</button>
+          </div>
+
+          <!-- SIGN IN REQUIRED ACCESS GATE (When unauthenticated) -->
+          <div id="gameAccessGate" class="game-access-gate">
+            <div class="gate-card-inner">
+              <div class="gate-badge-pill">&#128100; MEMBER ACCESS REQUIRED</div>
+              <h2 class="gate-title">SIGN IN TO ENTER COKE STUDIOS</h2>
+              <p class="gate-subtitle">Create your custom V-Ego, mix original 8-track beats, perform for live crowd Decibels, and decorate your private loft in a 1:1 isometric world.</p>
+              
+              <div class="gate-actions-row">
+                <button type="button" class="btn-gate-primary" id="btnGateSignIn" onclick="openAuthModal('signin')">&#9654; Sign In to My Account</button>
+                <button type="button" class="btn-gate-secondary" id="btnGateRegister" onclick="openAuthModal('register')">&#10024; Register New V-Ego (Free)</button>
+              </div>
+
+              <div class="gate-features-row">
+                <div class="gate-feat-item">
+                  <span class="gate-feat-icon">&#127968;</span>
+                  <strong>44 Studios &amp; Lofts</strong>
+                  <span>Custom furniture &amp; vending machines</span>
+                </div>
+                <div class="gate-feat-item">
+                  <span class="gate-feat-icon">&#127911;</span>
+                  <strong>8-Track Beat Sequencer</strong>
+                  <span>Burn CDs &amp; battle on live stages</span>
+                </div>
+                <div class="gate-feat-item">
+                  <span class="gate-feat-icon">&#128085;</span>
+                  <strong>V-Ego Customizer</strong>
+                  <span>100+ retro apparel combinations</span>
+                </div>
+                <div class="gate-feat-item">
+                  <span class="gate-feat-icon">&#129355;</span>
+                  <strong>Sumo &amp; Minigames</strong>
+                  <span>Challenge Kenji for rare prizes</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="game-iframe-wrapper" id="gameFrameWrapper">
             <iframe id="gameFrame" name="gameFrame" src="/game/" allow="autoplay"></iframe>
-          </div>
-        </div>
-
-        <!-- Quick Room Switcher -->
-        <!-- Quick Room Switcher -->
-        <div class="studios-bar">
-          <span class="studios-bar-title">Jump to Studio:</span>
-          <div class="studio-pills">
-            <button class="studio-pill active" onclick="switchStudio('studio_model_b', 'Central Park Studio')">Central Park</button>
-            <button class="studio-pill" onclick="switchStudio('studio_model_a', 'San Francisco Studio')">San Francisco</button>
-            <button class="studio-pill" onclick="switchStudio('studio_model_c', 'London Studio')">London Studio</button>
-            <button class="studio-pill" onclick="switchStudio('studio_model_d', 'Private Studio #1')">Private Studio #1</button>
-            <button class="studio-pill" onclick="switchStudio('studio_wayne', 'Wayne\'s Studio')">Studio Wayne</button>
-            <button class="studio-pill" onclick="switchStudio('studio_model_rooftop', 'Rooftop Lounge')">Rooftop Lounge</button>
-          </div>
-        </div>
-
-        <!-- In-Game Action Dock -->
-        <div style="margin-top: 10px; background: #231f20; border: 2px solid #ffcc00; border-radius: 6px; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <span style="color: #ffde59; font-weight: bold; font-size: 12px; text-transform: uppercase;">Studio Actions:</span>
-            <button class="btn-vp" style="background: #e41e2b;" onclick="triggerGameCokeDrink()">&#127860; Drink Coca-Cola (+10 dB)</button>
-            <button class="btn-vp" style="background: #ffcc00; color: #000;" onclick="triggerGameDJMix()">&#127911; DJ Performance</button>
-            <button class="btn-vp" style="background: #2e7d32;" onclick="triggerGameVoteCheer()">&#128077; Cheer (+5 dB)</button>
-            <button class="btn-vp" style="background: #616161;" onclick="triggerGameVoteBoo()">&#128078; Boo</button>
-          </div>
-          <div style="display: flex; gap: 8px;">
-            <button class="btn-vp" onclick="switchTab('avatar')">&#128085; Edit Look</button>
-            <button class="btn-vp" onclick="switchTab('mixer')">&#128191; Burn CD</button>
-            <button class="btn-vp" onclick="switchTab('redcaps')">&#127860; Enter PIN</button>
           </div>
         </div>
       </section>
@@ -1947,7 +2391,7 @@
           <div class="wardrobe-card">
             <div class="wardrobe-header">
               <h2>Denizen Style Studio</h2>
-              <span style="font-size: 11px; color: #777;">Mix &amp; match authentic 2004 apparel</span>
+              <span style="font-size: 11px; color: #ccc;">Mix &amp; match authentic 2004 apparel</span>
             </div>
 
             <div class="wardrobe-grid">
@@ -2170,11 +2614,11 @@
 
       <!-- TAB 5: STUDIOS DIRECTORY -->
       <section id="tab-studios" class="tab-page">
-        <div style="background: #fff; padding: 20px; border: 2px solid #ddd; border-radius: 8px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #e41e2b; padding-bottom:12px; margin-bottom:16px;">
+        <div class="studios-dir-container">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #ffcc00; padding-bottom:12px; margin-bottom:16px;">
             <div>
-              <h2 style="color: #7d0000; margin: 0; font-size: 22px;">Official Coke Studios Directory</h2>
-              <p style="font-size: 12px; color: #666; margin-top: 4px;">Explore 21 authentic public hangouts or visit player-decorated studios equipped with custom stereos and Coke vending machines.</p>
+              <h2 style="color: #ffde59; margin: 0; font-size: 22px; text-transform: uppercase; letter-spacing: -0.5px;">Official Coke Studios Directory</h2>
+              <p style="font-size: 12px; color: #ccc; margin-top: 4px;">Explore 21 authentic public hangouts or visit player-decorated studios equipped with custom stereos and Coke vending machines.</p>
             </div>
             <div style="background:#231f20; border:1px solid #ffcc00; border-radius:6px; padding:6px 14px; color:#fff; font-size:11px; text-align:center;">
               <span style="color:#aaa; display:block; font-size:10px;">Preserved Studios</span>
@@ -2195,281 +2639,281 @@
           <div id="studiosDirectoryGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px;">
             
             <!-- AMERICAS -->
-            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="americas">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Central Park Studio</h3>
+                  <h3 class="studio-dir-title">Central Park Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$27</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">The iconic flagship lounge overlooking Central Park with double DJ turntables and outdoor patio.</p>
+                <p class="studio-dir-desc">The iconic flagship lounge overlooking Central Park with double DJ turntables and outdoor patio.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('centralpark', 'Central Park Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="americas">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">San Francisco Studio</h3>
+                  <h3 class="studio-dir-title">San Francisco Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$25</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">StudioCom headquarters lounge with custom bay view acoustics and velvet club seating.</p>
+                <p class="studio-dir-desc">StudioCom headquarters lounge with custom bay view acoustics and velvet club seating.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('sanfrancisco', 'San Francisco Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="americas">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">New York Studio</h3>
+                  <h3 class="studio-dir-title">New York Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$7</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Times Square urban studio featuring high-energy hip hop beats, neon billboards, and dancefloor.</p>
+                <p class="studio-dir-desc">Times Square urban studio featuring high-energy hip hop beats, neon billboards, and dancefloor.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('newyork', 'New York Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="americas">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Miami Beach Studio</h3>
+                  <h3 class="studio-dir-title">Miami Beach Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$3</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">South Beach ocean breeze lounge with palm trees, pastel lighting, and summer Latin percussion.</p>
+                <p class="studio-dir-desc">South Beach ocean breeze lounge with palm trees, pastel lighting, and summer Latin percussion.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('miami', 'Miami Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="americas">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">New Orleans Studio</h3>
+                  <h3 class="studio-dir-title">New Orleans Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$29</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">French Quarter jazz &amp; blues parlor with wrought iron accents, brass instruments, and velvet sofas.</p>
+                <p class="studio-dir-desc">French Quarter jazz &amp; blues parlor with wrought iron accents, brass instruments, and velvet sofas.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('neworleans', 'New Orleans Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="americas">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Seattle Studio</h3>
+                  <h3 class="studio-dir-title">Seattle Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$11</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Pacific Northwest grunge &amp; indie rock coffeehouse lounge with vintage brickwork and guitar amps.</p>
+                <p class="studio-dir-desc">Pacific Northwest grunge &amp; indie rock coffeehouse lounge with vintage brickwork and guitar amps.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('seattle', 'Seattle Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="americas">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Mexico Studio</h3>
+                  <h3 class="studio-dir-title">Mexico Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$31</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Sunlit festive courtyard studio filled with mariachi rhythms, terracotta tiles, and vibrant colors.</p>
+                <p class="studio-dir-desc">Sunlit festive courtyard studio filled with mariachi rhythms, terracotta tiles, and vibrant colors.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('mexico', 'Mexico Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="americas">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Rio de Janeiro Studio</h3>
+                  <h3 class="studio-dir-title">Rio de Janeiro Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$9</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Carnival samba terrace overlooking Copacabana with tropical percussion and beachside vibes.</p>
+                <p class="studio-dir-desc">Carnival samba terrace overlooking Copacabana with tropical percussion and beachside vibes.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('rio', 'Rio de Janeiro Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="americas" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="americas">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Alaska Lodge Studio</h3>
+                  <h3 class="studio-dir-title">Alaska Lodge Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$19</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Cozy pine timber lodge with crackling fireplace, snowy panoramic windows, and acoustic warmth.</p>
+                <p class="studio-dir-desc">Cozy pine timber lodge with crackling fireplace, snowy panoramic windows, and acoustic warmth.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('alaska', 'Alaska Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
             <!-- EUROPE & GLOBAL -->
-            <div class="studio-dir-card" data-region="europe" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="europe">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">London Studio</h3>
+                  <h3 class="studio-dir-title">London Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$1</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Soho underground club with high-tempo British rock beats, Union Jack decor, and neon lighting.</p>
+                <p class="studio-dir-desc">Soho underground club with high-tempo British rock beats, Union Jack decor, and neon lighting.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('london', 'London Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="europe" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="europe">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Moscow Studio</h3>
+                  <h3 class="studio-dir-title">Moscow Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$21</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Grand neoclassical palace hall with marble pillars, gold chandeliers, and electronic synth tracks.</p>
+                <p class="studio-dir-desc">Grand neoclassical palace hall with marble pillars, gold chandeliers, and electronic synth tracks.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('moscow', 'Moscow Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="europe" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="europe">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Coca-Cola Red Room</h3>
+                  <h3 class="studio-dir-title">Coca-Cola Red Room</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$23</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">The VIP red velvet lounge featuring custom Coke contour neon signs and exclusive DJ showdowns.</p>
+                <p class="studio-dir-desc">The VIP red velvet lounge featuring custom Coke contour neon signs and exclusive DJ showdowns.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('redroom', 'Coca-Cola Red Room'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
             <!-- ASIA & PACIFIC -->
-            <div class="studio-dir-card" data-region="asia" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="asia">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Tokyo Studio</h3>
+                  <h3 class="studio-dir-title">Tokyo Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$15</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Shibuya futuristic high-tech skyscraper suite with glowing LED screens and J-Pop synth rhythms.</p>
+                <p class="studio-dir-desc">Shibuya futuristic high-tech skyscraper suite with glowing LED screens and J-Pop synth rhythms.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('tokyo', 'Tokyo Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="asia" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="asia">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Sydney Studio</h3>
+                  <h3 class="studio-dir-title">Sydney Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$13</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Harbourfront studio featuring open-air harbor views, acoustic guitar jams, and coastal sunshine.</p>
+                <p class="studio-dir-desc">Harbourfront studio featuring open-air harbor views, acoustic guitar jams, and coastal sunshine.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('sydney', 'Sydney Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="asia" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="asia">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Goa Beach Studio</h3>
+                  <h3 class="studio-dir-title">Goa Beach Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$17</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Moonlit trance beach hangout under the stars with sitar melodies, bonfires, and chillout cushions.</p>
+                <p class="studio-dir-desc">Moonlit trance beach hangout under the stars with sitar melodies, bonfires, and chillout cushions.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('goa', 'Goa Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="asia" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="asia">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Mombasa Safari Studio</h3>
+                  <h3 class="studio-dir-title">Mombasa Safari Studio</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$5</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Savannah sunset pavilion featuring djembe drums, safari wood carvings, and deep rhythmic grooves.</p>
+                <p class="studio-dir-desc">Savannah sunset pavilion featuring djembe drums, safari wood carvings, and deep rhythmic grooves.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('mombasa', 'Mombasa Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
             <!-- SPECIAL VENUES & COMPETITIONS -->
-            <div class="studio-dir-card" data-region="special" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="special">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Neptune / Atlantis</h3>
+                  <h3 class="studio-dir-title">Neptune / Atlantis</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$33</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Underwater sunken dome featuring glowing sea life, coral DJ booth, and oceanic reverb acoustics.</p>
+                <p class="studio-dir-desc">Underwater sunken dome featuring glowing sea life, coral DJ booth, and oceanic reverb acoustics.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('atlantis', 'Neptune Atlantis'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="special" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="special">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Ray's Rooftop Party</h3>
+                  <h3 class="studio-dir-title">Ray's Rooftop Party</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$43</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Skyscraper penthouse with outdoor swimming pool, barbecue grill, and 360-degree skyline views.</p>
+                <p class="studio-dir-desc">Skyscraper penthouse with outdoor swimming pool, barbecue grill, and 360-degree skyline views.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('raysrooftopparty', 'Ray\'s Rooftop Party'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="special" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="special">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Audition Gold Stage</h3>
+                  <h3 class="studio-dir-title">Audition Gold Stage</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$40</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Official tournament stage where premier DJs duel for gold trophies and community chart points.</p>
+                <p class="studio-dir-desc">Official tournament stage where premier DJs duel for gold trophies and community chart points.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('auditiongold', 'Audition Gold'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="special" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="special">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Casting Call Room</h3>
+                  <h3 class="studio-dir-title">Casting Call Room</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$35</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Studio audition theater where emerging musicians debut original tracks before live audiences.</p>
+                <p class="studio-dir-desc">Studio audition theater where emerging musicians debut original tracks before live audiences.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('castingcallroom', 'Casting Call Room'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="special" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="special">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">mycoke Arena</h3>
+                  <h3 class="studio-dir-title">mycoke Arena</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$41</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Massive stadium venue with elevated DJ booth, laser light cannons, and amphitheater seating.</p>
+                <p class="studio-dir-desc">Massive stadium venue with elevated DJ booth, laser light cannons, and amphitheater seating.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('$SYSTEM$41', 'mycoke Arena'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="special" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="special">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Audition Red Hall</h3>
+                  <h3 class="studio-dir-title">Audition Red Hall</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$44</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">High-stakes red battle chamber for veteran DJs competing for the coveted weekly crown.</p>
+                <p class="studio-dir-desc">High-stakes red battle chamber for veteran DJs competing for the coveted weekly crown.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('auditionred', 'Audition Red'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="special" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="special">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Club Cherry</h3>
+                  <h3 class="studio-dir-title">Club Cherry</h3>
                   <span style="background:#7d0000; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">$SYSTEM$42</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Cherry Coke themed dance club with crimson laser walls, disco mirror balls, and upbeat mixes.</p>
+                <p class="studio-dir-desc">Cherry Coke themed dance club with crimson laser walls, disco mirror balls, and upbeat mixes.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('$SYSTEM$42', 'Club Cherry'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
             <!-- PRIVATE STUDIOS -->
-            <div class="studio-dir-card" data-region="private" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="private">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Private Studio #1</h3>
+                  <h3 class="studio-dir-title">Private Studio #1</h3>
                   <span style="background:#555; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">Custom Model D</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Classic personal apartment lounge with personal Coke machine, sofa seating, and stereo decks.</p>
+                <p class="studio-dir-desc">Classic personal apartment lounge with personal Coke machine, sofa seating, and stereo decks.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('studio_1', 'Private Studio #1'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
 
-            <div class="studio-dir-card" data-region="private" style="border: 2px solid #e41e2b; border-radius: 6px; padding: 14px; background: #fff8ee; display:flex; flex-direction:column; justify-content:space-between;">
+            <div class="studio-dir-card" data-region="private">
               <div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h3 style="color: #c4000b; font-size: 15px; margin:0;">Wayne's Studio Lounge</h3>
+                  <h3 class="studio-dir-title">Wayne's Studio Lounge</h3>
                   <span style="background:#555; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:3px;">Custom Model B</span>
                 </div>
-                <p style="font-size: 11px; color: #666; margin: 8px 0 12px 0; line-height:1.4;">Decorated community studio with parquet flooring, neon wall sconces, and custom CD jukebox.</p>
+                <p class="studio-dir-desc">Decorated community studio with parquet flooring, neon wall sconces, and custom CD jukebox.</p>
               </div>
               <button class="btn-vp" style="width:100%; text-align:center;" onclick="switchStudio('studio_wayne', 'Wayne\'s Studio'); switchTab('play');">Enter Studio &rarr;</button>
             </div>
@@ -2490,9 +2934,9 @@
             <ul id="messengerFriendsList" class="messenger-friends-list">
               <li style="padding: 15px; text-align: center; color: #888; font-size: 12px;">Loading friends...</li>
             </ul>
-            <div style="padding: 10px; border-top: 1px solid #eee; background: #fafafa;">
+            <div style="padding: 10px; border-top: 1px solid #2a2522; background: #181516;">
               <div style="display: flex; gap: 6px;">
-                <input type="text" id="addFriendInput" placeholder="Friend Screen Name..." style="flex: 1; padding: 6px 10px; font-size: 11px; border: 1px solid #ccc; border-radius: 4px;">
+                <input type="text" id="addFriendInput" class="reg-input" placeholder="Friend Screen Name..." style="flex: 1; padding: 6px 10px; font-size: 11px; background: #282425; color: #fff; border: 1px solid #554; border-radius: 4px;">
                 <button class="btn-vp" onclick="addMessengerFriend()">+ Add</button>
               </div>
             </div>
@@ -2508,8 +2952,8 @@
               <li style="padding: 20px; text-align: center; color: #888; font-size: 12px;">Select a friend or send a message below to start chatting!</li>
             </ul>
             <div class="msg-compose-bar">
-              <input type="text" id="msgRecipientInput" placeholder="Recipient..." style="width: 140px; padding: 8px 12px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px;">
-              <input type="text" id="msgContentInput" placeholder="Type your message..." style="flex: 1; padding: 8px 12px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px;" onkeypress="if(event.key==='Enter')sendMessengerMessage()">
+              <input type="text" id="msgRecipientInput" class="reg-input" placeholder="Recipient..." style="width: 140px; padding: 8px 12px; font-size: 12px; background: #282425; color: #fff; border: 1px solid #554; border-radius: 4px;">
+              <input type="text" id="msgContentInput" class="reg-input" placeholder="Type your message..." style="flex: 1; padding: 8px 12px; font-size: 12px; background: #282425; color: #fff; border: 1px solid #554; border-radius: 4px;" onkeypress="if(event.key==='Enter')sendMessengerMessage()">
               <button class="btn-vp" style="padding: 8px 16px; font-size: 12px;" onclick="sendMessengerMessage()">Send</button>
             </div>
           </div>
@@ -2518,16 +2962,16 @@
 
       <!-- TAB: STUDIO DECORATOR -->
       <section id="tab-decor" class="tab-page">
-        <div style="background: #fff; padding: 20px; border: 2px solid #7d0000; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 2px solid #ffcc00; padding-bottom: 10px;">
+        <div class="decor-container">
+          <div class="decor-header-area">
             <div>
-              <h2 style="color: #7d0000; text-transform: uppercase; font-size: 18px;">Studio Decorator &amp; Ambiance</h2>
-              <p style="font-size: 12px; color: #666;">Customize the wallpaper, flooring, and doorbell chimes for your private studio.</p>
+              <h2>Studio Decorator &amp; Ambiance</h2>
+              <p style="font-size: 12px; color: #ccc; margin-top: 4px;">Customize the wallpaper, flooring, and doorbell chimes for your private studio loft.</p>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <label style="font-size: 12px; font-weight: bold; color: #333;">Select Studio:</label>
-              <select id="decorStudioSelect" style="padding: 6px 10px; font-size: 12px; font-weight: bold; border: 1px solid #7d0000; border-radius: 4px;" onchange="loadStudioDecorSettings()">
-                <option value="studio_1">Private Studio #1 (studio_1)</option>
+              <label style="font-size: 12px; font-weight: bold; color: #ffcc00;">Select Studio:</label>
+              <select id="decorStudioSelect" class="reg-input" style="padding: 6px 10px; font-size: 12px; font-weight: bold; border: 1px solid #ffcc00; background: #2a2522; color: #ffcc00; border-radius: 4px;" onchange="loadStudioDecorSettings()">
+                <option value="studio_1">My Private Studio (studio_1)</option>
                 <option value="VIS$0">Central Park Studio (VIS$0)</option>
                 <option value="VIS$1">San Francisco Studio (VIS$1)</option>
                 <option value="VIS$2">London Studio (VIS$2)</option>
@@ -2537,7 +2981,7 @@
 
           <!-- Preview Stage -->
           <div style="margin-bottom: 20px;">
-            <div style="font-size: 12px; font-weight: bold; color: #444; margin-bottom: 6px;">Live Visual Preview:</div>
+            <div style="font-size: 12px; font-weight: bold; color: #ffd6d9; margin-bottom: 6px;">Live Visual Preview:</div>
             <div class="decor-preview-stage">
               <div id="decorStageWall" class="decor-stage-wall" style="background: #e41e2b;"></div>
               <div id="decorStageFloor" class="decor-stage-floor" style="background: #8b5a2b;"></div>
@@ -2559,17 +3003,18 @@
           </div>
 
           <!-- Doorbell Chime & Apply Bar -->
-          <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <label style="font-size: 13px; font-weight: bold; color: #333;">3. Doorbell Chime:</label>
-              <select id="decorDoorbellSelect" style="padding: 8px 12px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px;">
+          <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #332; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <label style="font-size: 13px; font-weight: bold; color: #ffcc00;">3. Doorbell Chime:</label>
+              <select id="decorDoorbellSelect" class="reg-input" style="padding: 8px 12px; font-size: 12px; border: 1px solid #7d0000; background: #2a2522; color: #fff; border-radius: 4px;">
                 <option value="1">Classic Two-Tone Ding-Dong</option>
                 <option value="2">80s Synthesizer Chime</option>
                 <option value="3">Retro Coca-Cola 5-Note Jingle</option>
                 <option value="4">Club Airhorn</option>
               </select>
+              <button type="button" class="btn-vp" style="padding: 6px 12px; font-size: 11px; background: #7d0000;" onclick="previewDoorbellChime()">&#9654; Play Chime</button>
             </div>
-            <button class="btn-avatar-primary" style="padding: 10px 24px;" onclick="applyStudioDecor()">&#10003; Save &amp; Apply Decor to Studio</button>
+            <button class="btn-avatar-primary" id="btnSaveDecor" style="padding: 10px 24px;" onclick="applyStudioDecor()">&#10003; Save &amp; Apply Decor to Studio</button>
           </div>
         </div>
       </section>
@@ -2578,9 +3023,10 @@
       <section id="tab-popquiz" class="tab-page">
         
         <!-- Arcade Subtabs Navigation -->
-        <div style="display: flex; gap: 10px; margin-bottom: 16px; border-bottom: 2px solid #ffcc00; padding-bottom: 10px;">
+        <div style="display: flex; gap: 10px; margin-bottom: 16px; border-bottom: 2px solid #ffcc00; padding-bottom: 10px; flex-wrap: wrap;">
           <button class="btn-vp active" id="subtabBtn-sumo" onclick="switchArcadeSubTab('sumo')" style="font-weight: bold; font-size: 13px;">&#129355; V-ego San Sumo Arena</button>
           <button class="btn-vp" id="subtabBtn-quiz" onclick="switchArcadeSubTab('quiz')" style="font-weight: bold; font-size: 13px; background: #333;">&#10068; Pop Quiz Trivia</button>
+          <button class="btn-vp" id="subtabBtn-uncover" onclick="switchArcadeSubTab('uncover')" style="font-weight: bold; font-size: 13px; background: #333;">&#127926; Uncover the Music</button>
           <button class="btn-vp" id="subtabBtn-postcards" onclick="switchArcadeSubTab('postcards')" style="font-weight: bold; font-size: 13px; background: #333;">&#128140; Musical Postcards</button>
         </div>
 
@@ -2627,30 +3073,30 @@
 
             <!-- Sumo Move Action Buttons (5 Counter-Matrix Moves) -->
             <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;">
-              <button class="btn-vp" style="background: #e41e2b; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('push')">
+              <button class="btn-vp" style="background: #e41e2b; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('head_hit')">
                 <span style="font-size: 20px;">&#129307;</span>
-                <span>Oshidashi</span>
-                <span style="font-size: 9px; color: #ffcc00;">Push Attack</span>
+                <span>Head Hit</span>
+                <span style="font-size: 9px; color: #ffcc00;">Beats Body &amp; Punch</span>
               </button>
-              <button class="btn-vp" style="background: #d84315; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('slap')">
+              <button class="btn-vp" style="background: #d84315; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('body_blaster')">
                 <span style="font-size: 20px;">&#9995;</span>
-                <span>Tsuppari</span>
-                <span style="font-size: 9px; color: #ffcc00;">Rapid Slap</span>
+                <span>Body Blaster</span>
+                <span style="font-size: 9px; color: #ffcc00;">Beats Kick &amp; Punch</span>
               </button>
-              <button class="btn-vp" style="background: #ad1457; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('throw')">
+              <button class="btn-vp" style="background: #ad1457; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('overhead_toss')">
                 <span style="font-size: 20px;">&#129355;</span>
-                <span>Uwatenage</span>
-                <span style="font-size: 9px; color: #ffcc00;">Overarm Throw</span>
+                <span>Overhead Toss</span>
+                <span style="font-size: 9px; color: #ffcc00;">Beats Head &amp; Body</span>
               </button>
-              <button class="btn-vp" style="background: #4527a0; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('dodge')">
+              <button class="btn-vp" style="background: #4527a0; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('flying_kick')">
                 <span style="font-size: 20px;">&#128168;</span>
-                <span>Hikitoshi</span>
-                <span style="font-size: 9px; color: #ffcc00;">Sidestep Dodge</span>
+                <span>Flying Kick</span>
+                <span style="font-size: 9px; color: #ffcc00;">Beats Head &amp; Toss</span>
               </button>
-              <button class="btn-vp" style="background: #ffcc00; color: #000; font-weight: 900; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('special')">
+              <button class="btn-vp" style="background: #ffcc00; color: #000; font-weight: 900; padding: 12px 6px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;" onclick="playVegoSanMove('flying_punch')">
                 <span style="font-size: 20px;">&#9889;</span>
-                <span>Coke Power</span>
-                <span style="font-size: 9px; color: #7d0000; font-weight: 900;">Ultra Strike</span>
+                <span>Flying Punch</span>
+                <span style="font-size: 9px; color: #ffcc00; font-weight: 900;">Beats Toss &amp; Kick</span>
               </button>
             </div>
 
@@ -2664,7 +3110,7 @@
           </div>
           <div class="popquiz-body">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-              <span id="quizProgress" style="font-weight:bold; color:#7d0000; font-size:12px;">QUESTION 1 OF 5</span>
+              <span id="quizProgress" style="font-weight:bold; color:#ffde59; font-size:12px;">QUESTION 1 OF 5</span>
               <span id="quizScoreBadge" style="background:#ffcc00; color:#000; padding:4px 10px; border-radius:4px; font-weight:bold; font-size:12px;">Decibels Won: +0 dB</span>
             </div>
             <div class="popquiz-question" id="quizQuestionText">Loading quiz question...</div>
@@ -2682,17 +3128,17 @@
           <div class="postcard-banner">
             <img src="assets/images/postcard/postreg_topbanner.jpg" alt="Send a Musical Postcard" style="width:100%; display:block; border-bottom:2px solid #ffcc00;">
           </div>
-          <div class="postcard-layout" style="display:flex; gap:20px; padding:20px; background:#fff8ee;">
+          <div class="postcard-layout" style="display:flex; gap:20px; padding:20px; background:#221e1f; border-radius:6px;">
             
             <!-- Left: Live Preview Envelope -->
-            <div class="postcard-preview-stage" style="flex:1; max-width:320px; background:#231f20; border:2px solid #d2a679; border-radius:6px; padding:14px; box-shadow:0 4px 10px rgba(0,0,0,0.25);">
+            <div class="postcard-preview-stage" style="flex:1; max-width:320px; background:#181516; border:2px solid #ffcc00; border-radius:6px; padding:14px; box-shadow:0 4px 10px rgba(0,0,0,0.4);">
               <div style="font-size:11px; font-weight:900; color:#ffcc00; text-transform:uppercase; margin-bottom:8px; display:flex; justify-content:space-between;">
                 <span>Live Card Preview</span>
                 <span id="cardVisualBadge">Style: Guitar Solo</span>
               </div>
-              <img id="cardPreviewImg" src="assets/images/postcard/postreg_pre-guitar2.gif" alt="Postcard Visual" style="width:100%; border:2px solid #fff; border-radius:4px; margin-bottom:12px; background:#000;">
+              <img id="cardPreviewImg" src="assets/images/postcard/postreg_pre-guitar2.gif" alt="Postcard Visual" style="width:100%; border:2px solid #ffcc00; border-radius:4px; margin-bottom:12px; background:#000;">
               
-              <div id="cardPreviewNote" style="background:#fff; border:1px solid #ccc; border-radius:4px; padding:12px; font-family:'Courier New', monospace; font-size:12px; color:#333; min-height:68px; text-align:left; line-height:1.4;">
+              <div id="cardPreviewNote" style="background:#282425; border:1px solid #ffcc00; border-radius:4px; padding:12px; font-family:'Courier New', monospace; font-size:12px; color:#ffde59; min-height:68px; text-align:left; line-height:1.4;">
                 "Here's something new for a change!"
               </div>
               
@@ -2709,20 +3155,20 @@
                 <!-- Sender Info -->
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                   <div>
-                    <label style="display:block; font-size:10px; font-weight:900; color:#7d0000; margin-bottom:3px; text-transform:uppercase;">From (Your Name)</label>
-                    <input type="text" id="postCardSenderName" class="reg-input" placeholder="e.g. Adam" style="background:#fff; color:#333; border:2px solid #ddd; font-weight:bold; width:100%;">
+                    <label style="display:block; font-size:10px; font-weight:900; color:#ffcc00; margin-bottom:3px; text-transform:uppercase;">From (Your Name)</label>
+                    <input type="text" id="postCardSenderName" class="reg-input" placeholder="e.g. Adam" style="background:#282425; color:#fff; border:1px solid #554; font-weight:bold; width:100%;">
                   </div>
                   <div>
-                    <label style="display:block; font-size:10px; font-weight:900; color:#7d0000; margin-bottom:3px; text-transform:uppercase;">Your Email</label>
-                    <input type="email" id="postCardSenderEmail" class="reg-input" placeholder="fan@cokemusic.com" style="background:#fff; color:#333; border:2px solid #ddd; width:100%;">
+                    <label style="display:block; font-size:10px; font-weight:900; color:#ffcc00; margin-bottom:3px; text-transform:uppercase;">Your Email</label>
+                    <input type="email" id="postCardSenderEmail" class="reg-input" placeholder="fan@cokemusic.com" style="background:#282425; color:#fff; border:1px solid #554; width:100%;">
                   </div>
                 </div>
 
                 <!-- Card Art & Music Selection -->
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:6px;">
                   <div>
-                    <label style="display:block; font-size:10px; font-weight:900; color:#7d0000; margin-bottom:3px; text-transform:uppercase;">Card Visual Style</label>
-                    <select id="postCardMovieSelect" class="reg-input" style="background:#fff; color:#333; border:2px solid #ddd; width:100%;" onchange="updatePostcardMovieStyle()">
+                    <label style="display:block; font-size:10px; font-weight:900; color:#ffcc00; margin-bottom:3px; text-transform:uppercase;">Card Visual Style</label>
+                    <select id="postCardMovieSelect" class="reg-input" style="background:#282425; color:#fff; border:1px solid #554; width:100%;" onchange="updatePostcardMovieStyle()">
                       <option value="1">1. Electric Guitar Solo</option>
                       <option value="2">2. Hip Hop Turntable Spin</option>
                       <option value="3">3. Dancefloor Club Lights</option>
@@ -2730,8 +3176,8 @@
                     </select>
                   </div>
                   <div>
-                    <label style="display:block; font-size:10px; font-weight:900; color:#7d0000; margin-bottom:3px; text-transform:uppercase;">Attach Musical Loop</label>
-                    <select id="cardTrackSelect" class="reg-input" style="background:#fff; color:#333; border:2px solid #ddd; width:100%;" onchange="updatePostcardAudioLabel()">
+                    <label style="display:block; font-size:10px; font-weight:900; color:#ffcc00; margin-bottom:3px; text-transform:uppercase;">Attach Musical Loop</label>
+                    <select id="cardTrackSelect" class="reg-input" style="background:#282425; color:#fff; border:1px solid #554; width:100%;" onchange="updatePostcardAudioLabel()">
                       <option value="rockOne_beatz00.mp3">Rock Beats Vol. 1 (120 BPM)</option>
                       <option value="danceOne_bass00.mp3">Dance Bass Groove (120 BPM)</option>
                       <option value="hipHopOne_beatz01.mp3">Hip Hop Red Alert (120 BPM)</option>
@@ -2744,8 +3190,8 @@
 
                 <!-- Message Selector & Custom Message -->
                 <div style="margin-top:6px;">
-                  <label style="display:block; font-size:10px; font-weight:900; color:#7d0000; margin-bottom:3px; text-transform:uppercase;">Choose Message (or Write Custom)</label>
-                  <select id="postCardPresetSelect" class="reg-input" style="background:#fff; color:#333; border:2px solid #ddd; width:100%; font-weight:bold;" onchange="handlePostcardPresetChange()">
+                  <label style="display:block; font-size:10px; font-weight:900; color:#ffcc00; margin-bottom:3px; text-transform:uppercase;">Choose Message (or Write Custom)</label>
+                  <select id="postCardPresetSelect" class="reg-input" style="background:#282425; color:#fff; border:1px solid #554; width:100%; font-weight:bold;" onchange="handlePostcardPresetChange()">
                     <option value="1">1. Here's something new for a change!</option>
                     <option value="2">2. Heard this. Thought of you. Come check it out.</option>
                     <option value="3">3. Show some love for these slammin new artists!</option>
@@ -2757,15 +3203,15 @@
                 </div>
 
                 <div id="customMsgBox" style="margin-top:6px; display:none;">
-                  <textarea id="cardMessageInput" class="reg-input" rows="2" style="background:#fff; color:#333; border:2px solid #ddd; resize:vertical; width:100%; font-family:Verdana,sans-serif;" oninput="updatePostcardPreviewText()" placeholder="Type your personalized message here..."></textarea>
+                  <textarea id="cardMessageInput" class="reg-input" rows="2" style="background:#282425; color:#fff; border:1px solid #554; resize:vertical; width:100%; font-family:Verdana,sans-serif;" oninput="updatePostcardPreviewText()" placeholder="Type your personalized message here..."></textarea>
                 </div>
 
                 <!-- Primary Recipient -->
                 <div style="margin-top:8px;">
-                  <label style="display:block; font-size:10px; font-weight:900; color:#7d0000; margin-bottom:3px; text-transform:uppercase;">Recipient 1 (Friend's Screen Name or Email)</label>
+                  <label style="display:block; font-size:10px; font-weight:900; color:#ffcc00; margin-bottom:3px; text-transform:uppercase;">Recipient 1 (Friend's Screen Name or Email)</label>
                   <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                    <input type="text" id="cardRecipientInput" class="reg-input" placeholder="Screen Name (e.g. Adam)" style="background:#fff; color:#333; border:2px solid #ddd; font-weight:bold; width:100%;">
-                    <input type="email" id="cardRecipientEmail" class="reg-input" placeholder="friend@email.com" style="background:#fff; color:#333; border:2px solid #ddd; width:100%;">
+                    <input type="text" id="cardRecipientInput" class="reg-input" placeholder="Screen Name (e.g. Adam)" style="background:#282425; color:#fff; border:1px solid #554; font-weight:bold; width:100%;">
+                    <input type="email" id="cardRecipientEmail" class="reg-input" placeholder="friend@email.com" style="background:#282425; color:#fff; border:1px solid #554; width:100%;">
                   </div>
                 </div>
 
@@ -2774,22 +3220,22 @@
                   <button type="button" class="btn-vp" style="font-size:10px; padding:3px 8px; background:#4a0005;" onclick="toggleExtraRecipients()">
                     <span id="extraRecBtnText">+ Add More Recipients (Up to 5)</span>
                   </button>
-                  <div id="extraRecipientsPane" style="display:none; margin-top:8px; padding:10px; background:#f4ece2; border:1px solid #d2a679; border-radius:4px; gap:6px; flex-direction:column;">
+                  <div id="extraRecipientsPane" style="display:none; margin-top:8px; padding:10px; background:#181516; border:1px solid #554; border-radius:4px; gap:6px; flex-direction:column;">
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-                      <input type="text" id="recName2" placeholder="Recipient 2 Name" class="reg-input" style="background:#fff; font-size:11px;">
-                      <input type="email" id="recEmail2" placeholder="Recipient 2 Email" class="reg-input" style="background:#fff; font-size:11px;">
+                      <input type="text" id="recName2" placeholder="Recipient 2 Name" class="reg-input" style="background:#282425; color:#fff; border:1px solid #554; font-size:11px;">
+                      <input type="email" id="recEmail2" placeholder="Recipient 2 Email" class="reg-input" style="background:#282425; color:#fff; border:1px solid #554; font-size:11px;">
                     </div>
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:4px;">
-                      <input type="text" id="recName3" placeholder="Recipient 3 Name" class="reg-input" style="background:#fff; font-size:11px;">
-                      <input type="email" id="recEmail3" placeholder="Recipient 3 Email" class="reg-input" style="background:#fff; font-size:11px;">
+                      <input type="text" id="recName3" placeholder="Recipient 3 Name" class="reg-input" style="background:#282425; color:#fff; border:1px solid #554; font-size:11px;">
+                      <input type="email" id="recEmail3" placeholder="Recipient 3 Email" class="reg-input" style="background:#282425; color:#fff; border:1px solid #554; font-size:11px;">
                     </div>
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:4px;">
-                      <input type="text" id="recName4" placeholder="Recipient 4 Name" class="reg-input" style="background:#fff; font-size:11px;">
-                      <input type="email" id="recEmail4" placeholder="Recipient 4 Email" class="reg-input" style="background:#fff; font-size:11px;">
+                      <input type="text" id="recName4" placeholder="Recipient 4 Name" class="reg-input" style="background:#282425; color:#fff; border:1px solid #554; font-size:11px;">
+                      <input type="email" id="recEmail4" placeholder="Recipient 4 Email" class="reg-input" style="background:#282425; color:#fff; border:1px solid #554; font-size:11px;">
                     </div>
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:4px;">
-                      <input type="text" id="recName5" placeholder="Recipient 5 Name" class="reg-input" style="background:#fff; font-size:11px;">
-                      <input type="email" id="recEmail5" placeholder="Recipient 5 Email" class="reg-input" style="background:#fff; font-size:11px;">
+                      <input type="text" id="recName5" placeholder="Recipient 5 Name" class="reg-input" style="background:#282425; color:#fff; border:1px solid #554; font-size:11px;">
+                      <input type="email" id="recEmail5" placeholder="Recipient 5 Email" class="reg-input" style="background:#282425; color:#fff; border:1px solid #554; font-size:11px;">
                     </div>
                   </div>
                 </div>
@@ -2809,17 +3255,57 @@
           </div>
         </div>
 
+        <!-- 4. UNCOVER THE MUSIC MINIGAME -->
+        <div id="arcadePane-uncover" class="popquiz-card" style="display: none;">
+          <div style="background: linear-gradient(180deg, #7d0000 0%, #4a0000 100%); padding: 16px 20px; border-bottom: 2px solid #ffcc00; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h2 style="color: #ffcc00; margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px;">&#127926; Uncover the Music</h2>
+              <p style="color: #ffe6e6; font-size: 11px; margin-top: 4px;">Flip tiles to match musical instruments and rhythms across the 24-tile grid. Earn Decibels and race against the 15-second clock!</p>
+            </div>
+            <div style="background: #222; border: 1px solid #ffcc00; padding: 6px 14px; border-radius: 6px; text-align: center;">
+              <span style="font-size: 10px; color: #aaa; text-transform: uppercase; display: block;">Daily Uncover Limit</span>
+              <span id="uncoverDailyBadge" style="font-size: 14px; font-weight: 900; color: #ffcc00;">0 / 300 dB</span>
+            </div>
+          </div>
+          <div style="padding: 20px; background: #231f20; color: #fff;">
+            <!-- Game Info & Turn Status Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #1c1819; border: 1px solid #ffcc00; border-radius: 6px; padding: 10px 16px; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="font-size: 12px; color: #aaa;">Timer: <strong id="uncoverTurnTimer" style="color: #ffcc00; font-size: 15px;">15s</strong></span>
+                <span style="font-size: 12px; color: #aaa;">Pairs Left: <strong id="uncoverPairsLeft" style="color: #00e676; font-size: 15px;">11</strong></span>
+                <span style="font-size: 12px; color: #aaa;">Match Streak: <strong id="uncoverStreak" style="color: #ffde59; font-size: 15px;">0</strong></span>
+              </div>
+              <div id="uncoverStatusBanner" style="font-size: 12px; font-weight: bold; color: #ffd6d9;">
+                Select a card to uncover a sound!
+              </div>
+              <div>
+                <button type="button" class="btn-vp" onclick="initUncoverGame()" style="padding: 6px 12px; font-size: 11px;">&#8635; New Stage</button>
+              </div>
+            </div>
+
+            <!-- 24-Tile Grid -->
+            <div id="uncoverCardsGrid" class="uncover-grid"></div>
+
+            <!-- Rules Legend -->
+            <div style="margin-top: 20px; padding: 12px 16px; background: #1a1617; border: 1px solid #443; border-radius: 6px; font-size: 11px; color: #bbb; line-height: 1.6;">
+              <strong style="color: #ffcc00;">Official Coke Studios Rules:</strong>
+              11 matching pairs award +1 dB each; 1 Wild Card (&#11088;) matches any uncovered tile; 1 Pass Card (&#9940;) passes the turn; clearing all pairs awards a +60 dB bonus! Daily cap is 300 dB.
+            </div>
+          </div>
+        </div>
+
+
       </section>
 
       <!-- TAB: RETRO DOWNLOADS -->
       <section id="tab-downloads" class="tab-page">
         <div class="downloads-card">
-          <div style="border-bottom:2px solid #e41e2b; padding-bottom:12px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
+          <div style="border-bottom:2px solid #ffcc00; padding-bottom:12px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
             <div>
               <img src="assets/images/downloads/download_tittle.jpg" alt="Downloads" style="max-height:40px;">
-              <p style="font-size:12px; color:#666; margin-top:4px;">Official archived desktop wallpapers, original interactive Shockwave Flash screensavers, and soundtrack MP3s!</p>
+              <p style="font-size:12px; color:#ccc; margin-top:4px;">Official archived desktop wallpapers, original interactive Shockwave Flash screensavers, and soundtrack MP3s!</p>
             </div>
-            <div style="background:#fff8ee; border:1px solid #d2a679; padding:6px 12px; border-radius:4px; font-size:11px; color:#7d0000; font-weight:bold;">
+            <div style="background:#282425; border:1px solid #ffcc00; padding:6px 12px; border-radius:4px; font-size:11px; color:#ffcc00; font-weight:bold;">
               &#128190; Authentic 2002&ndash;2006 Media Pack
             </div>
           </div>
@@ -2974,14 +3460,33 @@
           </div>
         </div>
 
-        <div style="background: #fff; padding: 25px; border: 2px solid #e41e2b; border-radius: 8px;">
-          <h2 style="color: #7d0000; margin-bottom: 12px;">Coke Studios Safety &amp; House Rules</h2>
-          <ul style="margin-left: 20px; line-height: 1.8; font-size: 13px; color: #444;">
-            <li><strong>Protect Your Password:</strong> Never share your Secret, password, or bottle cap PIN codes with anyone. Coke Studios staff will never ask for your password.</li>
-            <li><strong>Keep It Cool in the Studios:</strong> Respect fellow DJs and visitors. Offensive language, harassment, or spamming will lead to an immediate ban.</li>
-            <li><strong>Fair Play in DJ Battles:</strong> Decibels are awarded through genuine audience cheer votes. Automated cheering or vote manipulation is forbidden.</li>
-            <li><strong>Safe Trading:</strong> Double check all trade offer boxes before pressing Confirm when trading burned CDs and furniture.</li>
-          </ul>
+        <div class="safety-rules-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #ffcc00; padding-bottom:12px; margin-bottom:16px;">
+            <div>
+              <h2 style="color: #ffde59; margin: 0; font-size: 20px; text-transform:uppercase; letter-spacing:-0.5px;">Coke Studios Community &amp; House Rules</h2>
+              <p style="font-size: 12px; color: #ccc; margin-top: 4px;">Four golden rules every DJ and music fan upholds in our lounges and studios.</p>
+            </div>
+            <span style="background:#7d0000; border:1px solid #ffcc00; color:#fff; font-size:11px; font-weight:bold; padding:4px 10px; border-radius:4px;">&#128737; Zero Tolerance Policy</span>
+          </div>
+
+          <div class="safety-grid">
+            <div class="safety-item-box">
+              <h4>&#128274; 1. Protect Your Password &amp; Secret</h4>
+              <p>Never share your password, session secret, or red bottle cap PIN codes with anyone. Coke Studios moderators will never ask for your password.</p>
+            </div>
+            <div class="safety-item-box">
+              <h4>&#127911; 2. Respect Fellow DJs &amp; Lounges</h4>
+              <p>Keep the vibe positive on stage and on the dance floor. Harassment, hate speech, or spamming chat will result in an instant ban.</p>
+            </div>
+            <div class="safety-item-box">
+              <h4>&#9878; 3. Fair Play in DJ Stage Battles</h4>
+              <p>Decibels are earned through live performance cheers and authentic spectator votes. Automated cheer bots or score manipulation is strictly forbidden.</p>
+            </div>
+            <div class="safety-item-box">
+              <h4>&#129309; 4. Safe Trading Verification</h4>
+              <p>Always inspect trade offer slots carefully before clicking Confirm. Authentic trade transfer is final once both DJs lock and accept.</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -3335,64 +3840,31 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Studio In-Game Actions Bridge
-    function triggerGameCokeDrink() {
-      const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
-      try {
-        if (iframe && iframe.contentWindow && iframe.contentWindow.ige && iframe.contentWindow.ige.client) {
-          iframe.contentWindow.ige.client.drinkCoke();
-          return;
-        }
-      } catch (_) {}
-      alert('+10 dB! Refreshing ice-cold Coca-Cola!');
-    }
 
-    function triggerGameDJMix() {
-      const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
-      try {
-        if (iframe && iframe.contentWindow && iframe.contentWindow.ige && iframe.contentWindow.ige.client) {
-          iframe.contentWindow.ige.client.triggerDJPerformance();
-          return;
-        }
-      } catch (_) {}
-      alert('DJ is performing in Coke Studios!');
-    }
-
-    function triggerGameVoteCheer() {
-      const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
-      try {
-        if (iframe && iframe.contentWindow && iframe.contentWindow.ige && iframe.contentWindow.ige.client) {
-          iframe.contentWindow.ige.client.voteCheer();
-          return;
-        }
-      } catch (_) {}
-      alert('Cheers! +5 dB voted!');
-    }
-
-    function triggerGameVoteBoo() {
-      const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
-      try {
-        if (iframe && iframe.contentWindow && iframe.contentWindow.ige && iframe.contentWindow.ige.client) {
-          iframe.contentWindow.ige.client.voteBoo();
-          return;
-        }
-      } catch (_) {}
-      alert('Boo voted!');
-    }
 
     // Studio Switcher
     function switchStudio(roomId, roomTitle) {
-      document.querySelectorAll('.studio-pill').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.studio-pill, .btn-quick-room').forEach(p => p.classList.remove('active'));
       if (window.event && window.event.target) {
         window.event.target.classList.add('active');
       }
-      document.getElementById('currentRoomTitle').textContent = roomTitle;
       const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
+      if (!user) {
+        openAuthModal('signin');
+        return;
+      }
+      if (roomId === 'my_studio') {
+        roomId = 'studio_' + user.toLowerCase();
+        roomTitle = user + "'s Private Studio";
+      }
+      const titleEl = document.getElementById('currentRoomTitle');
+      if (titleEl) titleEl.textContent = roomTitle;
       const avatarDef = localStorage.getItem('coke_avatarDef') || (document.getElementById('avatarDefText') ? document.getElementById('avatarDefText').textContent : '');
+      const secret = localStorage.getItem('coke_session') || sessionStorage.getItem('coke_sw2') || '';
       const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
       const base = '/game/';
       try { localStorage.setItem('coke_studioType', roomId); } catch (_) {}
-      iframe.src = base + '?user=' + encodeURIComponent(user) + '&sw1=' + btoa(user) + '&room=' + encodeURIComponent(roomId) + (avatarDef ? '&avatarDef=' + encodeURIComponent(avatarDef) : '') + '&_t=' + Date.now();
+      iframe.src = base + '?user=' + encodeURIComponent(user) + '&sw1=' + encodeURIComponent(btoa(user)) + '&sw2=' + encodeURIComponent(secret) + '&room=' + encodeURIComponent(roomId) + (avatarDef ? '&avatarDef=' + encodeURIComponent(avatarDef) : '') + '&_t=' + Date.now();
     }
 
     function reloadClient() {
@@ -3585,6 +4057,8 @@
           msgEl.style.color = '#00e676';
           msgEl.innerHTML = `&#10004; Bottle Cap Redeemed! Awarded <strong>+${data.reward_vcoins} Coke V-Coins</strong> and a bonus Coke Vending Machine to your backpack!`;
           document.getElementById('balanceVC').textContent = data.new_vcoins.toLocaleString();
+          const sideVC = document.getElementById('sidebarBalanceVC');
+          if (sideVC) sideVC.textContent = data.new_vcoins.toLocaleString();
         } else {
           msgEl.style.color = '#ff6666';
           msgEl.textContent = '&#10008; ' + (data.error || 'Invalid or already redeemed cap code.');
@@ -3596,13 +4070,26 @@
     }
 
     async function fetchBalance() {
-      const user = document.getElementById('screenNameInput').value.trim() || localStorage.getItem('coke_user') || '';
+      const user = localStorage.getItem('coke_user') || (document.getElementById('screenNameInput') ? document.getElementById('screenNameInput').value.trim() : '');
+      if (!user) return;
       try {
-        const sid = localStorage.getItem('coke_session') || sessionStorage.getItem('coke_sw2') || '';
-        const resp = await fetch(`/sf/ssldocs/loginDenizen.jsp?user=${encodeURIComponent(user)}&sid=${encodeURIComponent(sid)}`);
-        const text = await resp.text();
-        // Server returns XML; update if available
-      } catch (e) {}
+        const resp = await fetch(`/api/denizen/profile?user=${encodeURIComponent(user)}`);
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data && data.success) {
+            const formattedDB = Number(data.decibels).toLocaleString();
+            const formattedVC = Number(data.vcoins).toLocaleString();
+            const sideDB = document.getElementById('sidebarBalanceDB');
+            const sideVC = document.getElementById('sidebarBalanceVC');
+            if (sideDB) sideDB.textContent = formattedDB;
+            if (sideVC) sideVC.textContent = formattedVC;
+            const legDB = document.getElementById('balanceDB');
+            const legVC = document.getElementById('balanceVC');
+            if (legDB) legDB.textContent = formattedDB;
+            if (legVC) legVC.textContent = formattedVC;
+          }
+        }
+      } catch (_) {}
     }
 
     // Sync ScreenName changes to game iframe
@@ -4007,14 +4494,16 @@ function applyFigureDef(fig) {
     }
 
     async function loadDenizenProfile() {
-      let user = localStorage.getItem('coke_user') || (document.getElementById('screenNameInput') ? document.getElementById('screenNameInput').value.trim() : '') || '';
+      const user = localStorage.getItem('coke_user') || (document.getElementById('screenNameInput') ? document.getElementById('screenNameInput').value.trim() : '') || '';
+      const secret = localStorage.getItem('coke_session') || sessionStorage.getItem('coke_sw2') || '';
       if (document.getElementById('screenNameInput')) {
         document.getElementById('screenNameInput').value = user;
       }
       if (user && document.getElementById('postCardSenderName') && !document.getElementById('postCardSenderName').value) {
         document.getElementById('postCardSenderName').value = user;
       }
-      if (user) {
+
+      if (user && secret) {
         try {
           const resp = await fetch(`/api/denizen/profile?user=${encodeURIComponent(user)}`);
           if (resp.ok) {
@@ -4028,67 +4517,28 @@ function applyFigureDef(fig) {
               } else {
                 setAvatarGender('male');
               }
-              if (data.decibels !== undefined) {
-                if (document.getElementById('balanceDB')) document.getElementById('balanceDB').textContent = Number(data.decibels).toLocaleString();
-                if (document.getElementById('sidebarBalanceDB')) document.getElementById('sidebarBalanceDB').textContent = Number(data.decibels).toLocaleString();
+              updateDenizenDisplay(data.screen_name, data.decibels, data.vcoins, data.avatar_def, data.gender === 2 ? 'F' : 'M');
+
+              const activeRoom = localStorage.getItem('coke_studioType') || ('studio_' + user.toLowerCase());
+              const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
+              if (iframe) {
+                iframe.src = `/game/?user=${encodeURIComponent(user)}&sw1=${encodeURIComponent(btoa(user))}&sw2=${encodeURIComponent(secret)}&room=${encodeURIComponent(activeRoom)}${data.avatar_def ? '&avatarDef=' + encodeURIComponent(data.avatar_def) : ''}&_t=${Date.now()}`;
               }
-              if (data.vcoins !== undefined) {
-                if (document.getElementById('balanceVC')) document.getElementById('balanceVC').textContent = Number(data.vcoins).toLocaleString();
-                if (document.getElementById('sidebarBalanceVC')) document.getElementById('sidebarBalanceVC').textContent = Number(data.vcoins).toLocaleString();
-              }
-              if (data.avatar_def && data.avatar_def.includes('=')) {
-                applyFigureDef(data.avatar_def);
-              }
+              return;
             }
           }
-        } catch (e) {}
+        } catch (_) {}
+
+        updateDenizenDisplay(user, 0, 0, localStorage.getItem('coke_avatarDef') || '', 'M');
+        const activeRoom = localStorage.getItem('coke_studioType') || ('studio_' + user.toLowerCase());
+        const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
+        if (iframe) {
+          iframe.src = `/game/?user=${encodeURIComponent(user)}&sw1=${encodeURIComponent(btoa(user))}&sw2=${encodeURIComponent(secret)}&room=${encodeURIComponent(activeRoom)}&_t=${Date.now()}`;
+        }
       } else {
-        updateDenizenDisplay('Guest', 5000, 500, '', 'M');
+        updateDenizenDisplay('', 0, 0, '', 'M');
       }
       renderAvatar();
-
-      // Update Left-hand V-Ego Status Badge
-      const isGuest = !user || user === 'Guest';
-      let displayName = user;
-      if (/^dj[\s_]/i.test(displayName)) {
-        displayName = displayName.replace(/^dj[\s_]*/i, '');
-      }
-      const nameEl = document.getElementById('sidebarScreenName');
-      if (nameEl) nameEl.textContent = isGuest ? 'DJ Guest' : 'DJ ' + displayName;
-      const statusText = document.getElementById('sidebarStatusText');
-      if (statusText) statusText.textContent = isGuest ? 'GUEST (OFFLINE)' : 'ONLINE';
-      const statusDot = document.querySelector('.badge-status-dot');
-      if (statusDot) {
-        statusDot.style.background = isGuest ? '#ffb300' : '#00e676';
-        statusDot.style.boxShadow = isGuest ? '0 0 6px #ffb300' : '0 0 6px #00e676';
-      }
-      const authBtn = document.getElementById('btnBadgeAuth');
-      if (authBtn) {
-        if (isGuest) {
-          authBtn.innerHTML = '&#128100; Sign In / Register';
-          authBtn.onclick = () => openAuthModal('signin');
-        } else {
-          authBtn.innerHTML = '&#128274; Sign Out';
-          authBtn.onclick = signOut;
-        }
-      }
-      const sideDb = document.getElementById('sidebarBalanceDB');
-      const curDb = document.getElementById('balanceDB');
-      if (sideDb && curDb) sideDb.textContent = curDb.textContent;
-      const sideVc = document.getElementById('sidebarBalanceVC');
-      const curVc = document.getElementById('balanceVC');
-      if (sideVc && curVc) sideVc.textContent = curVc.textContent;
-      const sideMission = document.getElementById('sidebarMission');
-      const curMission = document.getElementById('avatarMissionInput');
-      if (sideMission && curMission) sideMission.textContent = `"${curMission.value || 'Coke Music Reborn'}"`;
-
-      // Sync initial game iframe with user's customized look & personal studio
-      const activeDef = localStorage.getItem('coke_avatarDef') || (document.getElementById('avatarDefText') ? document.getElementById('avatarDefText').textContent : '');
-      const activeRoom = localStorage.getItem('coke_studioType') || 'studio_model_b';
-      const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
-      if (iframe && !iframe.src.includes('avatarDef')) {
-        iframe.src = `/game/?user=${encodeURIComponent(user)}&sw1=${btoa(user)}&room=${encodeURIComponent(activeRoom)}${activeDef ? '&avatarDef=' + encodeURIComponent(activeDef) : ''}&_t=${Date.now()}`;
-      }
     }
 
     async function loadMessenger() {
@@ -4294,6 +4744,84 @@ function applyFigureDef(fig) {
       if (stageFloor) stageFloor.style.background = floor.color;
     }
 
+    function previewDoorbellChime() {
+      initAudio();
+      if (!audioCtx) return;
+      const chimeId = document.getElementById('decorDoorbellSelect') ? document.getElementById('decorDoorbellSelect').value : '1';
+      const now = audioCtx.currentTime;
+
+      if (chimeId === '1') {
+        // Classic Two-Tone Ding-Dong (E5 -> C5)
+        const osc1 = audioCtx.createOscillator();
+        const gain1 = audioCtx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(659.25, now); // E5
+        gain1.gain.setValueAtTime(0.3, now);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+        osc1.connect(gain1);
+        gain1.connect(audioCtx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.5);
+
+        const osc2 = audioCtx.createOscillator();
+        const gain2 = audioCtx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(523.25, now + 0.35); // C5
+        gain2.gain.setValueAtTime(0.3, now + 0.35);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 1.1);
+        osc2.connect(gain2);
+        gain2.connect(audioCtx.destination);
+        osc2.start(now + 0.35);
+        osc2.stop(now + 1.1);
+      } else if (chimeId === '2') {
+        // 80s Synthesizer Chime (C5 -> E5 -> G5)
+        [523.25, 659.25, 783.99].forEach((freq, idx) => {
+          const t = now + idx * 0.12;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, t);
+          gain.gain.setValueAtTime(0.25, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(t);
+          osc.stop(t + 0.6);
+        });
+      } else if (chimeId === '3') {
+        // Retro Coca-Cola 5-Note Jingle (E5 -> D5 -> B4 -> A4 -> D5)
+        const notes = [659.25, 587.33, 493.88, 440.00, 587.33];
+        notes.forEach((freq, idx) => {
+          const t = now + idx * 0.16;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, t);
+          gain.gain.setValueAtTime(0.25, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + (idx === 4 ? 0.8 : 0.25));
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(t);
+          osc.stop(t + (idx === 4 ? 0.8 : 0.25));
+        });
+      } else {
+        // Club Airhorn (pitch glide sawtooth)
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(280, now);
+        osc.frequency.linearRampToValueAtTime(440, now + 0.1);
+        osc.frequency.setValueAtTime(440, now + 0.15);
+        osc.frequency.linearRampToValueAtTime(410, now + 0.4);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.45);
+      }
+    }
+
     async function applyStudioDecor() {
       const studioId = document.getElementById('decorStudioSelect').value;
       const doorbell = parseInt(document.getElementById('decorDoorbellSelect').value, 10) || 1;
@@ -4338,7 +4866,10 @@ function applyFigureDef(fig) {
     // --- UNIFIED AUTH MODAL CONTROLLER ---
     function openAuthModal(mode) {
       const modal = document.getElementById('registerModal');
-      if (modal) modal.style.display = 'flex';
+      if (modal) {
+        modal.classList.add('open');
+        modal.style.display = 'flex';
+      }
       switchAuthMode(mode || 'signin');
     }
 
@@ -4348,7 +4879,10 @@ function applyFigureDef(fig) {
 
     function closeRegisterModal() {
       const modal = document.getElementById('registerModal');
-      if (modal) modal.style.display = 'none';
+      if (modal) {
+        modal.classList.remove('open');
+        modal.style.display = 'none';
+      }
     }
 
     function switchAuthMode(mode) {
@@ -4458,37 +4992,75 @@ function applyFigureDef(fig) {
     }
 
     function updateDenizenDisplay(screenName, decibels, vcoins, figure, gender) {
-      const isGuest = !screenName || screenName === 'Guest';
-      let displayName = screenName;
+      const isGuest = !screenName || screenName === 'Guest' || screenName === '';
+      let displayName = screenName || 'Guest';
       if (/^dj[\s_]/i.test(displayName)) {
         displayName = displayName.replace(/^dj[\s_]*/i, '');
       }
       const nameEl = document.getElementById('sidebarScreenName');
-      if (nameEl) nameEl.textContent = isGuest ? 'DJ Guest' : 'DJ ' + displayName;
+      if (nameEl) nameEl.textContent = isGuest ? 'Guest' : 'DJ ' + displayName;
 
       const statusText = document.getElementById('sidebarStatusText');
-      if (statusText) statusText.textContent = isGuest ? 'GUEST (OFFLINE)' : 'ONLINE';
+      if (statusText) statusText.textContent = isGuest ? 'GUEST · NOT SIGNED IN' : '● ONLINE';
 
       const statusDot = document.querySelector('.badge-status-dot');
       if (statusDot) {
         statusDot.style.background = isGuest ? '#ffb300' : '#00e676';
-        statusDot.style.boxShadow = isGuest ? '0 0 6px #ffb300' : '0 0 6px #00e676';
+        statusDot.style.boxShadow = isGuest ? '0 0 6px #ffb300' : '0 0 8px #00e676';
       }
 
       const dbEl = document.getElementById('sidebarBalanceDB') || document.getElementById('balanceDB');
-      if (dbEl) dbEl.textContent = Number(decibels || 5000).toLocaleString();
+      if (dbEl) dbEl.textContent = isGuest ? '--' : Number(decibels || 0).toLocaleString();
 
       const vcEl = document.getElementById('sidebarBalanceVC') || document.getElementById('balanceVC');
-      if (vcEl) vcEl.textContent = Number(vcoins || 500).toLocaleString();
+      if (vcEl) vcEl.textContent = isGuest ? '--' : Number(vcoins || 0).toLocaleString();
 
       const authBtn = document.getElementById('btnBadgeAuth');
       if (authBtn) {
         if (isGuest) {
           authBtn.innerHTML = '&#128100; Sign In / Register';
+          authBtn.className = 'btn-badge-action btn-badge-gold';
           authBtn.onclick = () => openAuthModal('signin');
         } else {
-          authBtn.innerHTML = '&#128274; Sign Out';
-          authBtn.onclick = signOut;
+          authBtn.innerHTML = '&#9654; Enter Studio';
+          authBtn.className = 'btn-badge-action btn-badge-gold';
+          authBtn.onclick = () => switchTab('play');
+        }
+      }
+
+      const signoutBtn = document.getElementById('btnBadgeSignOut');
+      if (signoutBtn) {
+        signoutBtn.style.display = isGuest ? 'none' : 'flex';
+      }
+
+      const navUserArea = document.getElementById('navUserArea');
+      const navGuestBtn = document.getElementById('navGuestBtn');
+      const navUserText = document.getElementById('navUserScreenName');
+      if (navUserArea && navGuestBtn) {
+        if (isGuest) {
+          navUserArea.style.display = 'none';
+          navGuestBtn.style.display = 'block';
+        } else {
+          navUserArea.style.display = 'flex';
+          navGuestBtn.style.display = 'none';
+          if (navUserText) navUserText.textContent = 'DJ ' + displayName;
+        }
+      }
+
+      const gate = document.getElementById('gameAccessGate');
+      const vHeader = document.getElementById('viewportHeader');
+      const qStrip = document.getElementById('quickTravelStrip');
+      const vUserTag = document.getElementById('viewportUserTag');
+      if (gate) {
+        if (isGuest) {
+          gate.style.display = 'flex';
+          if (vHeader) vHeader.style.display = 'none';
+          if (qStrip) qStrip.style.display = 'none';
+        } else {
+          gate.style.display = 'none';
+          if (vHeader) vHeader.style.display = 'flex';
+          if (qStrip) qStrip.style.display = 'flex';
+          if (vUserTag) vUserTag.textContent = '· DJ ' + displayName;
         }
       }
 
@@ -4505,11 +5077,12 @@ function applyFigureDef(fig) {
       localStorage.removeItem('coke_session');
       document.cookie = 'coke_session=; path=/; max-age=0';
 
-      updateDenizenDisplay('Guest', 5000, 500, '', 'M');
+      updateDenizenDisplay('', 0, 0, '', 'M');
       const sideMission = document.getElementById('sidebarMission');
-      if (sideMission) sideMission.textContent = '"Coke Music Reborn"';
+      if (sideMission) sideMission.textContent = '"Sign in to join Coke Studios!"';
       const iframe = (document.getElementById('gameFrame') || document.getElementById('gameIframe'));
       if (iframe) iframe.src = '/game/';
+      switchTab('home');
     }
 
     // --- REGISTRATION WIZARD STATE & LOGIC ---
@@ -4526,15 +5099,7 @@ function applyFigureDef(fig) {
       studioType: 'studio_model_c'
     };
 
-    function openRegisterModal() {
-      document.getElementById('registerModal').classList.add('open');
-      goToRegStep(1);
-      renderRegAvatar();
-    }
-
-    function closeRegisterModal() {
-      document.getElementById('registerModal').classList.remove('open');
-    }
+    // Registration wizard uses unified openAuthModal / closeRegisterModal
 
     function goToRegStep(n) {
       if (n < 1 || n > 5) return;
@@ -4815,12 +5380,28 @@ function applyFigureDef(fig) {
       document.getElementById('btnQuizRestart').style.display = 'none';
     }
 
-    function selectQuizAnswer(chosenIdx) {
+    async function selectQuizAnswer(chosenIdx) {
       if (quizAnswered) return;
       quizAnswered = true;
       const q = QUIZ_QUESTIONS[quizCurrentIdx];
-      const isCorrect = chosenIdx === q.answer;
       const feedback = document.getElementById('quizFeedback');
+      const username = localStorage.getItem('coke_user') || 'Guest';
+
+      let isCorrect = chosenIdx === q.answer;
+      let awarded = isCorrect ? 25 : 0;
+
+      try {
+        const res = await fetch('/api/minigames/quiz/answer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ player: username, id: q.id || (quizCurrentIdx + 1), choice: chosenIdx })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          isCorrect = data.correct;
+          if (data.awarded_db !== undefined) awarded = data.awarded_db;
+        }
+      } catch (_) {}
 
       document.querySelectorAll('.popquiz-opt-btn').forEach((b, idx) => {
         if (idx === q.answer) b.classList.add('correct');
@@ -4830,21 +5411,29 @@ function applyFigureDef(fig) {
 
       feedback.style.display = 'block';
       if (isCorrect) {
-        quizScore += 100;
-        feedback.style.background = '#e8f5e9';
-        feedback.style.color = '#2e7d32';
-        feedback.innerHTML = `&#10004; Correct! +100 Decibels awarded! ${q.explanation}`;
+        quizScore += awarded;
+        feedback.style.background = '#14351d';
+        feedback.style.border = '1px solid #00e676';
+        feedback.style.color = '#00e676';
+        feedback.innerHTML = `&#10004; Correct! +${awarded} Decibels awarded! ${q.explanation || ''}`;
         document.getElementById('quizScoreBadge').textContent = `Decibels Won: +${quizScore} dB`;
         previewSample('misc_vocal00.wav');
+
+        const sideBal = document.getElementById('sidebarBalanceDB');
+        if (sideBal && sideBal.textContent !== '--') {
+          const cur = parseInt(sideBal.textContent.replace(/,/g, ''), 10) || 5000;
+          sideBal.textContent = (cur + awarded).toLocaleString();
+        }
         const balEl = document.getElementById('balanceDB');
-        if (balEl) {
+        if (balEl && balEl.textContent !== '--') {
           const cur = parseInt(balEl.textContent.replace(/,/g, ''), 10) || 5000;
-          balEl.textContent = (cur + 100).toLocaleString();
+          balEl.textContent = (cur + awarded).toLocaleString();
         }
       } else {
-        feedback.style.background = '#ffebee';
-        feedback.style.color = '#c62828';
-        feedback.innerHTML = `&#10008; Not quite! ${q.explanation}`;
+        feedback.style.background = '#3b0007';
+        feedback.style.border = '1px solid #e41e2b';
+        feedback.style.color = '#ff6666';
+        feedback.innerHTML = `&#10008; Not quite! ${q.explanation || ''}`;
       }
 
       if (quizCurrentIdx + 1 < QUIZ_QUESTIONS.length) {
@@ -4976,8 +5565,9 @@ function applyFigureDef(fig) {
 
       if (!rec1Name && !rec1Email) {
         statusEl.style.display = 'block';
-        statusEl.style.background = '#ffebee';
-        statusEl.style.color = '#c62828';
+        statusEl.style.background = '#3b0007';
+        statusEl.style.border = '1px solid #e41e2b';
+        statusEl.style.color = '#ff6666';
         statusEl.textContent = 'Please enter a recipient screen name or email address!';
         return;
       }
@@ -5002,8 +5592,9 @@ function applyFigureDef(fig) {
       }
 
       statusEl.style.display = 'block';
-      statusEl.style.background = '#fff8ee';
-      statusEl.style.color = '#7d0000';
+      statusEl.style.background = '#282425';
+      statusEl.style.border = '1px solid #ffcc00';
+      statusEl.style.color = '#ffde59';
       statusEl.textContent = 'Delivering musical postcard...';
 
       try {
@@ -5017,27 +5608,293 @@ function applyFigureDef(fig) {
         });
         if (res.ok) {
           const data = await res.json();
-          statusEl.style.background = '#e8f5e9';
-          statusEl.style.color = '#2e7d32';
+          statusEl.style.background = '#14351d';
+          statusEl.style.border = '1px solid #00e676';
+          statusEl.style.color = '#00e676';
           statusEl.innerHTML = `&#10004; Musical Postcard successfully delivered to <strong>${rec1Name || rec1Email}</strong> (${data.saved || 1} recipient${(data.saved || 1) > 1 ? 's' : ''})!`;
           previewSample('misc_vocal04.mp3');
         } else {
-          statusEl.style.background = '#ffebee';
-          statusEl.style.color = '#c62828';
+          statusEl.style.background = '#3b0007';
+          statusEl.style.border = '1px solid #e41e2b';
+          statusEl.style.color = '#ff6666';
           statusEl.textContent = 'Error delivering postcard. Please check recipient details.';
         }
       } catch (err) {
-        statusEl.style.background = '#e8f5e9';
-        statusEl.style.color = '#2e7d32';
+        statusEl.style.background = '#14351d';
+        statusEl.style.border = '1px solid #00e676';
+        statusEl.style.color = '#00e676';
         statusEl.innerHTML = `&#10004; Musical Postcard sent to <strong>${rec1Name || rec1Email}</strong>!`;
       }
     }
 
     // Initialize
     
+
+    // --- UNCOVER THE MUSIC MINIGAME ENGINE ---
+    const UNCOVER_PAIRS_DEF = [
+      { id: 1, name: 'Drums', icon: '&#129345;', sound: 'rockOne_beatz00.wav' },
+      { id: 2, name: 'Bass', icon: '&#127928;', sound: 'danceOne_bass00.wav' },
+      { id: 3, name: 'Guitar', icon: '&#127928;', sound: 'rockOne_guitar00.wav' },
+      { id: 4, name: 'Synth', icon: '&#127929;', sound: 'misc_funkGuit00.wav' },
+      { id: 5, name: 'Vocals', icon: '&#127908;', sound: 'misc_vocal00.wav' },
+      { id: 6, name: 'Scratch', icon: '&#128191;', sound: 'ambientOne_sound00.wav' },
+      { id: 7, name: 'Horns', icon: '&#127927;', sound: 'latinOne_horns00.wav' },
+      { id: 8, name: 'Beat', icon: '&#129345;', sound: 'danceOne_beat00.wav' },
+      { id: 9, name: 'Rhodes', icon: '&#127929;', sound: 'hiphopOne_rhodes00.wav' },
+      { id: 10, name: 'Percussion', icon: '&#129344;', sound: 'latinOne_perc00.wav' },
+      { id: 11, name: 'Strings', icon: '&#127931;', sound: 'ambientOne_strings00.wav' }
+    ];
+
+    const uncoverState = {
+      tiles: [],
+      selected: [],
+      pairsRemaining: 11,
+      streak: 0,
+      timerSec: 15,
+      timerInterval: null,
+      busy: false,
+      dailyEarned: 0
+    };
+
+    function initUncoverGame() {
+      clearInterval(uncoverState.timerInterval);
+      uncoverState.selected = [];
+      uncoverState.pairsRemaining = 11;
+      uncoverState.streak = 0;
+      uncoverState.timerSec = 15;
+      uncoverState.busy = false;
+
+      // Build 24 cards: 11 pairs (22), 1 wild, 1 pass
+      const cards = [];
+      UNCOVER_PAIRS_DEF.forEach(def => {
+        cards.push({ type: 'pair', pairId: def.id, name: def.name, icon: def.icon, sound: def.sound, matched: false, flipped: false });
+        cards.push({ type: 'pair', pairId: def.id, name: def.name, icon: def.icon, sound: def.sound, matched: false, flipped: false });
+      });
+      cards.push({ type: 'wild', pairId: 0, name: 'Wild Card', icon: '&#11088;', sound: 'misc_cheer00.wav', matched: false, flipped: false });
+      cards.push({ type: 'pass', pairId: 0, name: 'Pass Card', icon: '&#9940;', sound: 'misc_boo00.wav', matched: false, flipped: false });
+
+      // Shuffle using Fisher-Yates
+      for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards[i], cards[j]] = [cards[j], cards[i]];
+      }
+      uncoverState.tiles = cards;
+
+      renderUncoverGrid();
+      updateUncoverStats();
+      startUncoverTimer();
+      setUncoverStatus('Stage ready! Select a card to uncover a sound.', '#ffd6d9');
+    }
+
+    function renderUncoverGrid() {
+      const grid = document.getElementById('uncoverCardsGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      uncoverState.tiles.forEach((tile, idx) => {
+        const card = document.createElement('div');
+        card.className = 'uncover-card' + (tile.flipped ? ' flipped' : '') + (tile.matched ? ' matched' : '') + (tile.type === 'wild' ? ' wild' : '') + (tile.type === 'pass' ? ' pass' : '');
+        card.id = `uncover-card-${idx}`;
+        card.onclick = () => onUncoverCardClick(idx);
+
+        const inner = document.createElement('div');
+        inner.className = 'uncover-card-inner';
+
+        // Back
+        const back = document.createElement('div');
+        back.className = 'uncover-card-back';
+        back.innerHTML = '<span style="font-size: 22px;">&#9835;</span><span style="font-size: 9px; font-weight: 900; margin-top: 4px;">COKE</span>';
+
+        // Front
+        const front = document.createElement('div');
+        front.className = 'uncover-card-front';
+        front.innerHTML = `<span class="uncover-card-icon">${tile.icon}</span><span class="uncover-card-title">${tile.name}</span>`;
+
+        inner.appendChild(back);
+        inner.appendChild(front);
+        card.appendChild(inner);
+        grid.appendChild(card);
+      });
+    }
+
+    function startUncoverTimer() {
+      clearInterval(uncoverState.timerInterval);
+      uncoverState.timerSec = 15;
+      const el = document.getElementById('uncoverTurnTimer');
+      if (el) el.textContent = '15s';
+
+      uncoverState.timerInterval = setInterval(() => {
+        uncoverState.timerSec--;
+        if (el) el.textContent = uncoverState.timerSec + 's';
+        if (uncoverState.timerSec <= 3 && el) {
+          el.style.color = '#ff4444';
+        } else if (el) {
+          el.style.color = '#ffcc00';
+        }
+
+        if (uncoverState.timerSec <= 0) {
+          clearInterval(uncoverState.timerInterval);
+          if (uncoverState.selected.length === 1) {
+            const firstIdx = uncoverState.selected[0];
+            uncoverState.tiles[firstIdx].flipped = false;
+            const cEl = document.getElementById(`uncover-card-${firstIdx}`);
+            if (cEl) cEl.classList.remove('flipped');
+          }
+          uncoverState.selected = [];
+          uncoverState.streak = 0;
+          updateUncoverStats();
+          setUncoverStatus('Time expired! Turn passed.', '#ff8888');
+          setTimeout(() => {
+            startUncoverTimer();
+            setUncoverStatus('Choose your first card.', '#ffd6d9');
+          }, 1200);
+        }
+      }, 1000);
+    }
+
+    async function onUncoverCardClick(idx) {
+      if (uncoverState.busy) return;
+      const tile = uncoverState.tiles[idx];
+      if (!tile || tile.matched || tile.flipped) return;
+
+      tile.flipped = true;
+      const cardEl = document.getElementById(`uncover-card-${idx}`);
+      if (cardEl) cardEl.classList.add('flipped');
+
+      if (tile.sound) {
+        previewSample(tile.sound);
+      }
+
+      if (tile.type === 'pass') {
+        uncoverState.busy = true;
+        setUncoverStatus('PASS CARD REVEALED! Turn forfeit!', '#ff4444');
+        previewSample('misc_boo00.wav');
+        setTimeout(() => {
+          tile.flipped = false;
+          if (cardEl) cardEl.classList.remove('flipped');
+          if (uncoverState.selected.length > 0) {
+            const prevIdx = uncoverState.selected[0];
+            uncoverState.tiles[prevIdx].flipped = false;
+            const pEl = document.getElementById(`uncover-card-${prevIdx}`);
+            if (pEl) pEl.classList.remove('flipped');
+          }
+          uncoverState.selected = [];
+          uncoverState.streak = 0;
+          uncoverState.busy = false;
+          updateUncoverStats();
+          startUncoverTimer();
+        }, 1400);
+        return;
+      }
+
+      uncoverState.selected.push(idx);
+
+      if (uncoverState.selected.length === 1) {
+        setUncoverStatus(`Revealed ${tile.name}! Choose a matching tile.`, '#ffcc00');
+        return;
+      }
+
+      // 2 cards selected: check match!
+      uncoverState.busy = true;
+      clearInterval(uncoverState.timerInterval);
+
+      const [firstIdx, secondIdx] = uncoverState.selected;
+      const t1 = uncoverState.tiles[firstIdx];
+      const t2 = uncoverState.tiles[secondIdx];
+
+      const isMatch = (t1.type === 'wild' || t2.type === 'wild' || (t1.pairId === t2.pairId && t1.pairId > 0));
+
+      if (isMatch) {
+        t1.matched = true;
+        t2.matched = true;
+        uncoverState.pairsRemaining--;
+        uncoverState.streak++;
+        setUncoverStatus(`MATCH! Uncovered ${t1.name} & ${t2.name}! (+1 dB)`, '#00e676');
+        previewSample('misc_cheer00.wav');
+
+        const c1 = document.getElementById(`uncover-card-${firstIdx}`);
+        const c2 = document.getElementById(`uncover-card-${secondIdx}`);
+        if (c1) c1.classList.add('matched');
+        if (c2) c2.classList.add('matched');
+
+        const user = localStorage.getItem('coke_user') || (document.getElementById('screenNameInput') ? document.getElementById('screenNameInput').value.trim() : '');
+        const isGameOver = (uncoverState.pairsRemaining <= 0);
+
+        if (user) {
+          try {
+            const resp = await fetch('/api/minigames/uncover/play', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ player: user, tile1: firstIdx, tile2: secondIdx, game_over: isGameOver })
+            });
+            const data = await resp.json();
+            if (data && data.status === 'success') {
+              if (data.daily_earned !== undefined) {
+                uncoverState.dailyEarned = data.daily_earned;
+              }
+              if (data.balance !== undefined) {
+                const fBal = Number(data.balance).toLocaleString();
+                const sb = document.getElementById('sidebarBalanceDB');
+                if (sb) sb.textContent = fBal;
+                const b = document.getElementById('balanceDB');
+                if (b) b.textContent = fBal;
+              }
+            } else if (data && data.status === 'capped') {
+              setUncoverStatus(`Daily 300 dB Cap reached! Great playing!`, '#ffcc00');
+            }
+          } catch (_) {}
+        }
+
+        uncoverState.selected = [];
+        updateUncoverStats();
+        uncoverState.busy = false;
+
+        if (isGameOver) {
+          setUncoverStatus(`STAGE COMPLETE! +60 dB Winner Bonus Awarded!`, '#ffcc00');
+          previewSample('misc_cheer00.wav');
+        } else {
+          startUncoverTimer();
+        }
+      } else {
+        setUncoverStatus(`No match: ${t1.name} vs ${t2.name}. Try again!`, '#ff6666');
+        previewSample('misc_boo00.wav');
+        setTimeout(() => {
+          t1.flipped = false;
+          t2.flipped = false;
+          const c1 = document.getElementById(`uncover-card-${firstIdx}`);
+          const c2 = document.getElementById(`uncover-card-${secondIdx}`);
+          if (c1) c1.classList.remove('flipped');
+          if (c2) c2.classList.remove('flipped');
+          uncoverState.selected = [];
+          uncoverState.streak = 0;
+          uncoverState.busy = false;
+          updateUncoverStats();
+          startUncoverTimer();
+          setUncoverStatus('Choose your first card.', '#ffd6d9');
+        }, 1100);
+      }
+    }
+
+    function updateUncoverStats() {
+      const plEl = document.getElementById('uncoverPairsLeft');
+      if (plEl) plEl.textContent = uncoverState.pairsRemaining;
+      const strEl = document.getElementById('uncoverStreak');
+      if (strEl) strEl.textContent = uncoverState.streak;
+      const badge = document.getElementById('uncoverDailyBadge');
+      if (badge) badge.textContent = `${uncoverState.dailyEarned} / 300 dB`;
+    }
+
+    function setUncoverStatus(msg, color) {
+      const el = document.getElementById('uncoverStatusBanner');
+      if (el) {
+        el.textContent = msg;
+        if (color) el.style.color = color;
+      }
+    }
+
     // Arcade Subtabs & V-Ego San Sumo Logic
     function switchArcadeSubTab(sub) {
-      ['sumo', 'quiz', 'postcards'].forEach(k => {
+      ['sumo', 'quiz', 'uncover', 'postcards'].forEach(k => {
         const pane = document.getElementById('arcadePane-' + k);
         const btn = document.getElementById('subtabBtn-' + k);
         if (pane) pane.style.display = (k === sub ? 'block' : 'none');
@@ -5046,6 +5903,9 @@ function applyFigureDef(fig) {
           btn.style.background = (k === sub ? '#e41e2b' : '#333');
         }
       });
+      if (sub === 'uncover' && (!uncoverState.tiles || uncoverState.tiles.length === 0)) {
+        initUncoverGame();
+      }
     }
 
     async function playVegoSanMove(playerMove) {
@@ -5071,7 +5931,10 @@ function applyFigureDef(fig) {
           if (data.result === 'win') {
             cBox.style.color = '#00e676';
             if (data.totalDecibels !== undefined) {
-              document.getElementById('balanceDB').textContent = Number(data.totalDecibels).toLocaleString();
+              const formatted = Number(data.totalDecibels).toLocaleString();
+              document.getElementById('balanceDB').textContent = formatted;
+              const sideBal = document.getElementById('sidebarBalanceDB');
+              if (sideBal) sideBal.textContent = formatted;
             }
             previewSample('misc_cheer00.wav');
           } else if (data.result === 'lose') {

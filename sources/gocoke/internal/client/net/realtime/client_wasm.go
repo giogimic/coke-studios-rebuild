@@ -528,6 +528,7 @@ func (c *Client) Connect(ctx context.Context, host string, port string) error {
 
 					name := parseAttrStrIn(seg, "av")
 					sm := parseAttrStrIn(seg, "sm")
+					to := parseAttrStrIn(seg, "to")
 					encodedMsg := parseAttrStrIn(seg, "m")
 
 					if c.logger != nil {
@@ -544,10 +545,18 @@ func (c *Client) Connect(ctx context.Context, host string, port string) error {
 						} else {
 							message := string(decoded)
 							if sc := studioscene.GetActiveScene(); sc != nil {
-								// Emit chat bubble with correct speech mode
 								speechMode := 1 // default to speak
 								if sm == "2" {
 									speechMode = 2 // shout
+								} else if sm == "0" || sm == "whisper" {
+									speechMode = 0 // whisper
+									if to != "" && !strings.EqualFold(name, sc.GetCurrentUserName()) {
+										message = "(whisper): " + message
+									} else if to != "" {
+										message = "(to " + to + "): " + message
+									}
+								} else if sm == "3" || sm == "sing" {
+									speechMode = 3 // sing
 								}
 								sc.EnqueueChat(name, message, speechMode)
 								if c.logger != nil {
@@ -675,22 +684,29 @@ func (c *Client) Connect(ctx context.Context, host string, port string) error {
 				sc.UpdateTradeDisplay(traderName, tradeeName, traderItems, tradeeItems, traderAccepts, tradeeAccepts)
 			}
 		}
-		// If this is a drink dispenser response (AV_DC)
+		// If this is a drink dispenser response or avatar action (AV_DC)
 		if containsSubstr(b, []byte("<Room.Action")) && containsSubstr(b, []byte("<AV_DC")) {
 			// Parse: <Room.Action roomID="ADAM$4"><AV_DC av="Adam" pts="10"/></Room.Action>
 			avatarName := parseXMLAttrString(b, "av")
 			ptsStr := parseXMLAttrString(b, "pts")
+			actStr := parseXMLAttrString(b, "act")
+			itemStr := parseXMLAttrString(b, "item")
 			decibels := 0
 			if pts, err := strconv.Atoi(ptsStr); err == nil {
 				decibels = pts
 			}
 
 			if c.logger != nil {
-				c.logger.Printf("Realtime IN AV_DC: avatar=%s decibels=%d", avatarName, decibels)
+				c.logger.Printf("Realtime IN AV_DC: avatar=%s act=%s item=%s decibels=%d", avatarName, actStr, itemStr, decibels)
 			}
 
 			if sc := studioscene.GetActiveScene(); sc != nil {
-				sc.HandleDrinkDispenserResponse(avatarName, decibels)
+				if actStr != "" {
+					sc.ApplyAvatarAction(avatarName, actStr, -1)
+				}
+				if decibels > 0 || itemStr == "coke_can" || actStr == "drk" {
+					sc.HandleDrinkDispenserResponse(avatarName, decibels)
+				}
 			}
 		}
 		// If this is a CD request accepted (CD_RA), open choose song window
@@ -747,6 +763,42 @@ func (c *Client) Connect(ctx context.Context, host string, port string) error {
 
 			if sc := studioscene.GetActiveScene(); sc != nil {
 				sc.CompleteTradeFromNetwork(receivedItems)
+			}
+		}
+
+		// Messenger events (friend requests, friend accept, instant messages)
+		if containsSubstr(b, []byte("<MSGR_INV")) || containsSubstr(b, []byte("<MMS_REQ")) {
+			sn := parseXMLAttrString(b, "sn")
+			if sn == "" {
+				sn = parseXMLAttrString(b, "from")
+			}
+			if sn != "" {
+				if sc := studioscene.GetActiveScene(); sc != nil {
+					sc.HandleIncomingFriendRequest(sn)
+				}
+			}
+		}
+		if containsSubstr(b, []byte("<MSGR_AD_F")) || containsSubstr(b, []byte("<MMS_ACC")) {
+			sn := parseXMLAttrString(b, "sn")
+			if sn == "" {
+				sn = parseXMLAttrString(b, "from")
+			}
+			if sn != "" {
+				if sc := studioscene.GetActiveScene(); sc != nil {
+					sc.HandleFriendAccepted(sn)
+				}
+			}
+		}
+		if containsSubstr(b, []byte("<MSGR_SND_M")) || containsSubstr(b, []byte("<MMS_MSG")) {
+			snd := parseXMLAttrString(b, "snd")
+			if snd == "" {
+				snd = parseXMLAttrString(b, "from")
+			}
+			msg := parseXMLAttrString(b, "msg")
+			if snd != "" && msg != "" {
+				if sc := studioscene.GetActiveScene(); sc != nil {
+					sc.HandleIncomingMessengerMessage(snd, msg)
+				}
 			}
 		}
 		if c.logger != nil {
@@ -1221,6 +1273,10 @@ func (c *Client) SendChat(roomID string, message string, speechMode int) error {
 	b.WriteString("\"><CH sm=\"")
 	if speechMode == 2 {
 		b.WriteString("shout")
+	} else if speechMode == 0 {
+		b.WriteString("whisper")
+	} else if speechMode == 3 {
+		b.WriteString("sing")
 	} else {
 		b.WriteString("speak")
 	}
@@ -1230,6 +1286,59 @@ func (c *Client) SendChat(roomID string, message string, speechMode int) error {
 
 	if c.logger != nil {
 		c.logger.Printf("Realtime OUT CH: room=%s mode=%d msg=%q", roomID, speechMode, message)
+	}
+	return c.SendXML(b.String())
+}
+
+// SendWhisper sends a private Room.Action CH packet targeted to a specific denizen.
+func (c *Client) SendWhisper(roomID, target, message string) error {
+	c.mu.Lock()
+	if roomID == "" {
+		roomID = c.roomID
+	}
+	c.mu.Unlock()
+	if strings.TrimSpace(roomID) == "" {
+		return fmt.Errorf("roomID is empty")
+	}
+
+	encodedMsg := strings.ToUpper(hex.EncodeToString([]byte(message)))
+	var b strings.Builder
+	b.Grow(128 + len(encodedMsg))
+	b.WriteString("<Room.Action roomID=\"")
+	b.WriteString(roomID)
+	b.WriteString("\"><CH sm=\"whisper\" to=\"")
+	b.WriteString(target)
+	b.WriteString("\" m=\"")
+	b.WriteString(encodedMsg)
+	b.WriteString("\"/></Room.Action>")
+
+	if c.logger != nil {
+		c.logger.Printf("Realtime OUT CH (whisper): room=%s to=%s msg=%q", roomID, target, message)
+	}
+	return c.SendXML(b.String())
+}
+
+// SendKickAvatar sends an authoritative Room.Action ST_KICK packet to expel a visitor from a room.
+func (c *Client) SendKickAvatar(roomID, target string) error {
+	c.mu.Lock()
+	if roomID == "" {
+		roomID = c.roomID
+	}
+	c.mu.Unlock()
+	if strings.TrimSpace(roomID) == "" {
+		return fmt.Errorf("roomID is empty")
+	}
+
+	var b strings.Builder
+	b.Grow(128)
+	b.WriteString("<Room.Action roomID=\"")
+	b.WriteString(roomID)
+	b.WriteString("\"><ST_KICK target=\"")
+	b.WriteString(target)
+	b.WriteString("\"/></Room.Action>")
+
+	if c.logger != nil {
+		c.logger.Printf("Realtime OUT ST_KICK: room=%s target=%s", roomID, target)
 	}
 	return c.SendXML(b.String())
 }
@@ -1429,6 +1538,31 @@ func (c *Client) SendFurnitureRotation(roomID string, posID string, clientRow, c
 	return c.SendXML(b.String())
 }
 
+// SendAvatarAction sends a Room.Action AV_ACT packet to perform an avatar action (dance, drink, etc.)
+func (c *Client) SendAvatarAction(roomID string, act string) error {
+	c.mu.Lock()
+	if roomID == "" {
+		roomID = c.roomID
+	}
+	c.mu.Unlock()
+	if strings.TrimSpace(roomID) == "" {
+		return fmt.Errorf("roomID is empty")
+	}
+
+	var b strings.Builder
+	b.Grow(80)
+	b.WriteString("<Room.Action roomID=\"")
+	b.WriteString(roomID)
+	b.WriteString("\"><AV_ACT act=\"")
+	b.WriteString(act)
+	b.WriteString("\"/></Room.Action>")
+
+	if c.logger != nil {
+		c.logger.Printf("Realtime OUT AV_ACT: room=%s act=%s", roomID, act)
+	}
+	return c.SendXML(b.String())
+}
+
 // SendDrinkDispenser sends a Room.Action AV_DC packet to request decibels from a drink dispenser.
 func (c *Client) SendDrinkDispenser(roomID string) error {
 	c.mu.Lock()
@@ -1583,6 +1717,56 @@ func (c *Client) SendCDEnd(roomID string) error {
 	return c.SendXML(b.String())
 }
 
+// SendFriendRequest sends a Room.Action MMS_REQ packet to invite another denizen as friend.
+
+func (c *Client) SendFriendRequest(roomID string, targetName string) error {
+
+	c.mu.Lock()
+
+	if roomID == "" {
+
+		roomID = c.roomID
+
+	}
+
+	c.mu.Unlock()
+
+	if strings.TrimSpace(roomID) == "" {
+
+		return fmt.Errorf("roomID is empty")
+
+	}
+
+
+
+	var b strings.Builder
+
+	b.Grow(80)
+
+	b.WriteString("<Room.Action roomID=\"")
+
+	b.WriteString(roomID)
+
+	b.WriteString("\"><MMS_REQ to=\"")
+
+	b.WriteString(targetName)
+
+	b.WriteString("\"/></Room.Action>")
+
+
+
+	if c.logger != nil {
+
+		c.logger.Printf("Realtime OUT MMS_REQ: room=%s to=%s", roomID, targetName)
+
+	}
+
+	return c.SendXML(b.String())
+
+}
+
+
+
 // SendTradeStart sends a Room.Action TD_ST packet to initiate a trade with another player.
 func (c *Client) SendTradeStart(roomID string, targetName string) error {
 	c.mu.Lock()
@@ -1681,4 +1865,40 @@ func (c *Client) SendTradeCancel(roomID string) error {
 		c.logger.Printf("Realtime OUT TD_CN: room=%s (cancel trade)", roomID)
 	}
 	return c.SendXML(b.String())
+}
+
+// SendMessengerMessage sends a direct instant message to another denizen
+func (c *Client) SendMessengerMessage(targetName, message string) error {
+	c.mu.Lock()
+	roomID := c.roomID
+	c.mu.Unlock()
+	if strings.TrimSpace(roomID) == "" {
+		roomID = "$LOBBY$"
+	}
+	xml := fmt.Sprintf("<Room.Action roomID=\"%s\"><MMS_MSG to=\"%s\" msg=\"%s\"/></Room.Action>", roomID, targetName, message)
+	return c.SendXML(xml)
+}
+
+// SendFriendAccept sends an authoritative acceptance of a friend request
+func (c *Client) SendFriendAccept(fromUser string) error {
+	c.mu.Lock()
+	roomID := c.roomID
+	c.mu.Unlock()
+	if strings.TrimSpace(roomID) == "" {
+		roomID = "$LOBBY$"
+	}
+	xml := fmt.Sprintf("<Room.Action roomID=\"%s\"><MMS_ACC from=\"%s\"/></Room.Action>", roomID, fromUser)
+	return c.SendXML(xml)
+}
+
+// SendFriendReject declines a pending friend request
+func (c *Client) SendFriendReject(fromUser string) error {
+	c.mu.Lock()
+	roomID := c.roomID
+	c.mu.Unlock()
+	if strings.TrimSpace(roomID) == "" {
+		roomID = "$LOBBY$"
+	}
+	xml := fmt.Sprintf("<Room.Action roomID=\"%s\"><MMS_REJ from=\"%s\"/></Room.Action>", roomID, fromUser)
+	return c.SendXML(xml)
 }

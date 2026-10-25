@@ -42,6 +42,9 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/api/messenger/friend/list", s.handleMessengerFriends)
 	mux.HandleFunc("/api/messenger/send", s.handleMessengerSend)
 	mux.HandleFunc("/api/messenger/messages", s.handleMessengerMessages)
+	mux.HandleFunc("/api/messenger/requests", s.handleMessengerRequests)
+	mux.HandleFunc("/api/messenger/accept", s.handleMessengerAcceptHTTP)
+	mux.HandleFunc("/api/messenger/reject", s.handleMessengerRejectHTTP)
 	mux.HandleFunc("/api/messenger/friend/add", s.handleMessengerAddFriend)
 	mux.HandleFunc("/api/messenger/friend/remove", s.handleMessengerRemoveFriend)
 

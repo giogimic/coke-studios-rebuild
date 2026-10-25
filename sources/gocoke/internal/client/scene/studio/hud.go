@@ -52,6 +52,7 @@ type HUDManager struct {
 	studioList    *studios.StudioList
 	getScreenName func() string
 	getGatewayURL func() string
+	enterStudio   func(studioID string)
 
 	// Messenger toggle state
 	messengerOpen bool
@@ -107,7 +108,7 @@ func NewHUDManager(tm *textmgr.Manager) *HUDManager {
 		buttons: make(map[string]*ui.InteractiveElement),
 		offsetX: 0,
 		offsetY: -75, // move HUD up as requested
-		balance: 99999,
+		balance: 0,
 	}
 }
 
@@ -242,48 +243,20 @@ func (h *HUDManager) Initialize() error {
 	return nil
 }
 
-// OpenMessenger toggles the Messenger console window (console_myinfo)
+// OpenMessenger toggles the Messenger console window
 func (h *HUDManager) OpenMessenger() {
 	if h.windowManager == nil {
 		return
 	}
-	// Toggle existing
-	if h.windowManager.GetWindow("console_myinfo") != nil {
-		h.windowManager.CloseWindow("console_myinfo")
-		h.messengerOpen = false
-		return
+	// If any console window is open, close it (toggle off)
+	for _, name := range []string{"console_myinfo", "console_friends", "console_compose", "console_getmessage", "console_getrequest", "console_removefriend"} {
+		if h.windowManager.GetWindow(name) != nil {
+			h.windowManager.CloseWindow(name)
+			h.messengerOpen = false
+			return
+		}
 	}
-	// Load definition and assets from cc_messenger[1]
-	messengerDir := filepath.Join("Lingo", "cc_messenger[1]")
-	defPath := filepath.Join(messengerDir, "10_console_myinfo.window.txt")
-	def, err := window.ParseFile(defPath)
-	if err != nil {
-		return
-	}
-	assets := lingoassets.LoadAssetsForDefinition(def, messengerDir)
-	// Ensure key shell/button assets are available for nested windows/actions
-	extra := lingoassets.LoadAssetsByNames([]string{
-		"mmsSHELL1", "mmsSHELL2", "mmsSHELL3_b1dn", "mmsSHELL3_b2dn",
-		"MMS_INT_WIN_TOP_LEFT", "MMS_INT_WIN_TOP_MIDDLE", "MMS_INT_WIN_TOP_RIGHT",
-		"MMS_INT_WIN_MIDDLE_LEFT", "MMS_INT_WIN_MIDDLE", "MMS_INT_WIN_MIDDLE_RIGHT",
-		"MMS_INT_WIN_BOTTOM_LEFT", "MMS_INT_WIN_BOTTOM_MIDDLE", "MMS_INT_WIN_BOTTOM_RIGHT",
-		"MMS_INT_CLOSEBUTTON",
-		"button.d6.left.active", "button.d6.middle.active", "button.d6.right.active",
-		"button.d6.left.pressed", "button.d6.middle.pressed", "button.d6.right.pressed",
-		"button.d7.left.active", "button.d7.middle.active", "button.d7.right.active",
-		"button.d7.left.pressed", "button.d7.middle.pressed", "button.d7.right.pressed",
-	}, messengerDir)
-	for k, v := range extra {
-		assets[k] = v
-	}
-	w := h.windowManager.OpenWindow("console_myinfo", def, assets, h.tm)
-	// Match absolute rect from def
-	w.Rect = def.Rect
-	// Frameless drag: allow dragging by the whole content for now
-	if w.TempVars == nil {
-		w.TempVars = map[string]interface{}{}
-	}
-	w.TempVars["customDragRects"] = [][4]int{{0, 0, def.Rect[2] - def.Rect[0], def.Rect[3] - def.Rect[1]}}
+	h.windowManager.OpenConsoleWindow("console_myinfo", [4]int{0, 0, 0, 0})
 	h.messengerOpen = true
 }
 
@@ -570,6 +543,105 @@ func (h *HUDManager) OpenPerformanceResultsDialog(thumbsUp, thumbsDown, decibels
 	}
 }
 
+// OpenHelpWindow toggles the authentic Coke Studios Help window (20_cc_help.window.txt)
+func (h *HUDManager) OpenHelpWindow() {
+	if h == nil || h.windowManager == nil || h.tm == nil {
+		return
+	}
+	if w := h.windowManager.GetWindow("cc_help"); w != nil {
+		h.windowManager.CloseWindow("cc_help")
+		return
+	}
+	defPath := filepath.Join("Lingo", "cc_interface[1]", "20_cc_help.window.txt")
+	def, err := window.ParseFile(defPath)
+	if err != nil {
+		return
+	}
+	interfaceDir := filepath.Join("Lingo", "cc_interface[1]")
+	assets := lingoassets.LoadAssetsForDefinition(def, interfaceDir)
+	extra := lingoassets.LoadAssetsByNames([]string{
+		"button.e1.left.active", "button.e1.middle.active", "button.e1.right.active",
+		"button.e1.left.pressed", "button.e1.middle.pressed", "button.e1.right.pressed",
+	}, interfaceDir)
+	for k, v := range extra {
+		assets[k] = v
+	}
+
+	w := h.windowManager.OpenWindow("cc_help", def, assets, h.tm)
+	if w == nil {
+		return
+	}
+	w.Rect = def.Rect
+
+	// Wire OK interactive button
+	if w.Interactive == nil {
+		w.Interactive = make(map[string]*ui.InteractiveElement)
+	}
+	var okBtn *window.Element
+	for i := range w.Definition.Elements {
+		if w.Definition.Elements[i].ID == "help_ok" {
+			okBtn = &w.Definition.Elements[i]
+			break
+		}
+	}
+	if okBtn != nil {
+		be := *okBtn
+		be.Member = "button.e1"
+		ie := w.Renderer.CreateInteractiveElement(be)
+		if ie != nil {
+			ie.TextKey = "Ok"
+			w.Interactive["help_ok"] = ie
+		}
+	}
+}
+
+// OpenJukeboxWindow toggles the authentic Infinite Jukebox window (158_cc.infinite_jukebox.catalog.window.txt)
+func (h *HUDManager) OpenJukeboxWindow() {
+	if h == nil || h.windowManager == nil || h.tm == nil {
+		return
+	}
+	if w := h.windowManager.GetWindow("cc_jukebox.catalog"); w != nil {
+		h.windowManager.CloseWindow("cc_jukebox.catalog")
+		return
+	}
+	roomDir := filepath.Join("Lingo", "cc_room")
+	defPath := filepath.Join(roomDir, "158_cc.infinite_jukebox.catalog.window.txt")
+	def, err := window.ParseFile(defPath)
+	if err != nil {
+		return
+	}
+	assets := lingoassets.LoadAssetsForDefinition(def, roomDir)
+	extra := lingoassets.LoadAssetsByNames([]string{
+		"cc.jukebox.closebox.active", "cc.jukebox.closebox.pressed",
+		"cc.jukebox.catalog.drawer", "cc.jukebox.bg",
+	}, roomDir)
+	for k, v := range extra {
+		assets[k] = v
+	}
+
+	w := h.windowManager.OpenWindow("cc_jukebox.catalog", def, assets, h.tm)
+	if w == nil {
+		return
+	}
+	w.Rect = def.Rect
+	if w.Interactive == nil {
+		w.Interactive = make(map[string]*ui.InteractiveElement)
+	}
+	var closeBtn *window.Element
+	for i := range w.Definition.Elements {
+		if w.Definition.Elements[i].ID == "cc.jukebox.catalog.close" {
+			closeBtn = &w.Definition.Elements[i]
+			break
+		}
+	}
+	if closeBtn != nil {
+		ie := w.Renderer.CreateInteractiveElement(*closeBtn)
+		if ie != nil {
+			w.Interactive["cc.jukebox.catalog.close"] = ie
+		}
+	}
+}
+
 // UpdateMessengerMyInfo populates the console_myinfo window with avatar preview and texts
 func (h *HUDManager) UpdateMessengerMyInfo(name string, mission string, messages int, requests int, avatarBuf *ebiten.Image) {
 	if h.windowManager == nil {
@@ -760,6 +832,30 @@ func (h *HUDManager) Update() error {
 				}
 			}
 		}
+		// Help window OK click-to-close
+		if w := h.windowManager.GetWindow("cc_help"); w != nil {
+			if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) {
+				if ie := w.Interactive["help_ok"]; ie != nil {
+					x := int(w.StageOffsetX) + w.Rect[0] + ie.Rect[0]
+					y := int(w.StageOffsetY) + w.Rect[1] + ie.Rect[1]
+					if mx, my := ebiten.CursorPosition(); mx >= x && mx < x+ie.Rect[2] && my >= y && my < y+ie.Rect[3] {
+						h.windowManager.CloseWindow("cc_help")
+					}
+				}
+			}
+		}
+		// Jukebox catalog window close click-to-close
+		if w := h.windowManager.GetWindow("cc_jukebox.catalog"); w != nil {
+			if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) {
+				if ie := w.Interactive["cc.jukebox.catalog.close"]; ie != nil {
+					x := int(w.StageOffsetX) + w.Rect[0] + ie.Rect[0]
+					y := int(w.StageOffsetY) + w.Rect[1] + ie.Rect[1]
+					if mx, my := ebiten.CursorPosition(); mx >= x && mx < x+ie.Rect[2] && my >= y && my < y+ie.Rect[3] {
+						h.windowManager.CloseWindow("cc_jukebox.catalog")
+					}
+				}
+			}
+		}
 	}
 
 	return nil
@@ -932,7 +1028,7 @@ func (h *HUDManager) OpenNavigatorWindow() {
 	}
 	navigator.OpenOverlay(h.windowManager, h.tm, navigator.Options{
 		StudioMode:    true,
-		EnterStudio:   nil, // In-studio Go! is typically a no-op; entry scene handles transitions
+		EnterStudio:   h.enterStudio,
 		GetScreenName: h.getScreenName,
 		GetGatewayURL: h.getGatewayURL,
 		StudioList:    h.studioList,
@@ -948,6 +1044,11 @@ func (h *HUDManager) SetStudioList(list *studios.StudioList) {
 func (h *HUDManager) SetNavigatorProviders(screenNameProvider func() string, gatewayURLProvider func() string) {
 	h.getScreenName = screenNameProvider
 	h.getGatewayURL = gatewayURLProvider
+}
+
+// SetEnterStudio sets the callback for entering a studio from the in-studio navigator
+func (h *HUDManager) SetEnterStudio(fn func(studioID string)) {
+	h.enterStudio = fn
 }
 
 // Balance helpers

@@ -159,6 +159,36 @@ func (g *game) Update() error {
 			g.sm.Set(navigator)
 		}
 	} else if studioScene, ok := g.sm.Current().(*studioscene.Scene); ok {
+		// Transition to another room via in-studio navigator
+		if targetStudioID := studioScene.ShouldChangeStudio(); targetStudioID != "" {
+			log.Printf("Studio changing room to %s...", targetStudioID)
+			studioScene.ClearTargetStudio()
+			studio := studioScene.GetStudioByID(targetStudioID)
+			if studio != nil {
+				if rc := session.GetRealtimeClient(); rc != nil && session.IsRealtimeReady() {
+					if err := rc.EnterRoom(targetStudioID); err != nil {
+						log.Printf("Realtime enter room failed during room transition: %v", err)
+					}
+				}
+				newScene, err := studioscene.New(g.dataDir, studio)
+				if err != nil {
+					log.Printf("Failed to create studio scene: %v", err)
+				} else {
+					newScene.SetCatalog(studioScene.GetCatalog())
+					newScene.SetStudioList(studioScene.GetStudioList())
+					studioscene.SetActiveScene(newScene)
+					if sn, sec := session.GetCredentials(); strings.TrimSpace(sn) != "" {
+						newScene.SetCurrentUserName(sn)
+						newScene.LoadPossessionsFromGateway(sn, sec, session.GetGatewayURL())
+					}
+					g.sm.Set(newScene)
+					return nil
+				}
+			} else {
+				log.Printf("Target studio %s not found in studio list", targetStudioID)
+			}
+		}
+
 		// Transition from studio back to boot (which will load entry/nav exactly as initial flow)
 		if studioScene.ShouldExit() {
 			log.Println("Studio requested exit, restarting boot -> entry flow...")
@@ -232,6 +262,76 @@ func (g *game) Update() error {
 				}); ok {
 					// x=row, y=col, z=stackLevel(y in server terms)
 					return sender.SendFurnitureRotation(roomID, posID, x, y, z, dir, state, ho)
+				}
+			}
+			return fmt.Errorf("realtime client not available")
+		})
+
+		// Inject avatar action sender once per scene instance
+		studioScene.SetAvatarActionSender(func(act string) error {
+			if rc := session.GetRealtimeClient(); rc != nil {
+				if sender, ok := any(rc).(interface{ SendAvatarAction(string, string) error }); ok {
+					return sender.SendAvatarAction(studioScene.GetStudio().StudioID, act)
+				}
+			}
+			return fmt.Errorf("realtime client not available")
+		})
+
+		// Inject friend request sender once per scene instance
+		studioScene.SetFriendRequestSender(func(target string) error {
+			if rc := session.GetRealtimeClient(); rc != nil {
+				if sender, ok := any(rc).(interface{ SendFriendRequest(string, string) error }); ok {
+					return sender.SendFriendRequest(studioScene.GetStudio().StudioID, target)
+				}
+			}
+			return fmt.Errorf("realtime client not available")
+		})
+
+		// Inject instant message sender once per scene instance
+		studioScene.SetMessengerSender(func(to, message string) error {
+			if rc := session.GetRealtimeClient(); rc != nil {
+				if sender, ok := any(rc).(interface{ SendMessengerMessage(string, string) error }); ok {
+					return sender.SendMessengerMessage(to, message)
+				}
+			}
+			return fmt.Errorf("realtime client not available")
+		})
+
+		// Inject friend accept sender once per scene instance
+		studioScene.SetFriendAcceptSender(func(from string) error {
+			if rc := session.GetRealtimeClient(); rc != nil {
+				if sender, ok := any(rc).(interface{ SendFriendAccept(string) error }); ok {
+					return sender.SendFriendAccept(from)
+				}
+			}
+			return fmt.Errorf("realtime client not available")
+		})
+
+		// Inject friend reject sender once per scene instance
+		studioScene.SetFriendRejectSender(func(from string) error {
+			if rc := session.GetRealtimeClient(); rc != nil {
+				if sender, ok := any(rc).(interface{ SendFriendReject(string) error }); ok {
+					return sender.SendFriendReject(from)
+				}
+			}
+			return fmt.Errorf("realtime client not available")
+		})
+
+		// Inject private whisper sender once per scene instance
+		studioScene.SetWhisperSender(func(roomID, target, message string) error {
+			if rc := session.GetRealtimeClient(); rc != nil {
+				if sender, ok := any(rc).(interface{ SendWhisper(string, string, string) error }); ok {
+					return sender.SendWhisper(roomID, target, message)
+				}
+			}
+			return fmt.Errorf("realtime client not available")
+		})
+
+		// Inject host moderation kick sender once per scene instance
+		studioScene.SetKickSender(func(roomID, target string) error {
+			if rc := session.GetRealtimeClient(); rc != nil {
+				if sender, ok := any(rc).(interface{ SendKickAvatar(string, string) error }); ok {
+					return sender.SendKickAvatar(roomID, target)
 				}
 			}
 			return fmt.Errorf("realtime client not available")

@@ -155,7 +155,10 @@ func ParseRoomFile(path string) (*RoomDefinition, error) {
 
 // parseElement parses a single element definition
 func parseElement(elementStr string) (RoomElement, error) {
-	element := RoomElement{}
+	element := RoomElement{
+		Active: 1,
+		Blend:  100,
+	}
 
 	// Parse key-value pairs from the element string
 	// Format: #member: "value", #media: #bitmap, #locH: 123, etc.

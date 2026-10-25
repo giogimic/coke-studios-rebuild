@@ -274,3 +274,45 @@ func TestPublicRoomsCompleteInventory(t *testing.T) {
 		t.Error("expected error for non-existent room ID, got nil")
 	}
 }
+
+func TestVegoSanMoveEndpoint(t *testing.T) {
+	store, _ := OpenStore(":memory:")
+	defer store.Close()
+	srv := NewServer(".", "127.0.0.1", "8080", store)
+
+	// 1. Unauthenticated / empty user should be rejected
+	reqNoUser := httptest.NewRequest("POST", "/api/minigames/vegosan/move", strings.NewReader(`{"move":"head_hit"}`))
+	wNoUser := httptest.NewRecorder()
+	srv.Handler().ServeHTTP(wNoUser, reqNoUser)
+	if wNoUser.Code != http.StatusUnauthorized {
+		t.Errorf("expected 401 Unauthorized for empty user, got %d", wNoUser.Code)
+	}
+
+	// 2. Register a player and send JSON move
+	d, _ := store.RegisterDenizen("KenjiStudent", "pass123", "kenji@test.com", "1", "avatar_def")
+	bodyJSON, _ := json.Marshal(map[string]string{
+		"user":       d.ScreenName,
+		"playerMove": "head_hit",
+	})
+	req := httptest.NewRequest("POST", "/api/minigames/vegosan/move", bytes.NewReader(bodyJSON))
+	w := httptest.NewRecorder()
+	srv.Handler().ServeHTTP(w, req)
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200 OK for valid vegosan move, got %d", w.Code)
+	}
+
+	var res VegoSanResult
+	if err := json.Unmarshal(w.Body.Bytes(), &res); err != nil {
+		t.Fatalf("failed to decode response: %v", err)
+	}
+
+	if res.Status != "success" {
+		t.Errorf("expected status 'success', got %q", res.Status)
+	}
+	if res.PlayerMove != "head_hit" {
+		t.Errorf("expected player_move 'head_hit', got %q", res.PlayerMove)
+	}
+	if res.MasterMove == "" || res.Commentary == "" {
+		t.Errorf("expected MasterMove and Commentary to be populated, got: %+v", res)
+	}
+}

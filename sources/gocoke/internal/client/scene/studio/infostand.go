@@ -226,7 +226,7 @@ func (i *InfoStand) rebuildButtonsForAvatar() {
 	if self {
 		if i.selectedAvatar.Engine.IsDancing {
 			buttons = append(buttons, "Stop Dancing")
-		} else {
+		} else if i.selectedAvatar.Engine.GetBodyAction() != "sit" {
 			buttons = append(buttons, "Dance")
 		}
 		// If a performance is ongoing by this user, include Stop Performing to the left of Dance
@@ -237,11 +237,12 @@ func (i *InfoStand) rebuildButtonsForAvatar() {
 			}
 		}
 	} else {
+		buttons = append(buttons, "Whisper")
 		buttons = append(buttons, "Trade")
 		buttons = append(buttons, "Ask to become a friend")
-		// Show Kick when current user is room owner
+		// Show Kick Out when current user is room owner (authentic Lingo label)
 		if i.IsRoomOwner != nil && i.IsRoomOwner() {
-			buttons = append(buttons, "Kick")
+			buttons = append(buttons, "Kick Out")
 		}
 	}
 
@@ -302,21 +303,37 @@ func (i *InfoStand) HandleMouse(mouseX, mouseY int, mousePressed, mouseClicked, 
 func (i *InfoStand) onButtonClick(id string) {
 	switch id {
 	case "Dance":
-		if i.selectedAvatar != nil && i.selectedAvatar.Engine != nil {
+		if sc := GetActiveScene(); sc != nil {
+			sc.SendAvatarAction("dnc")
+		} else if i.selectedAvatar != nil && i.selectedAvatar.Engine != nil {
 			i.selectedAvatar.Engine.SetDance(true)
 		}
 		i.rebuildButtonsForAvatar()
 	case "Stop Dancing":
-		if i.selectedAvatar != nil && i.selectedAvatar.Engine != nil {
+		if sc := GetActiveScene(); sc != nil {
+			sc.SendAvatarAction("")
+		} else if i.selectedAvatar != nil && i.selectedAvatar.Engine != nil {
 			i.selectedAvatar.Engine.SetDance(false)
 		}
 		i.rebuildButtonsForAvatar()
+	case "Whisper":
+		if i.selectedAvatar != nil {
+			if sc := GetActiveScene(); sc != nil && sc.chatManager != nil {
+				sc.chatManager.SetInput(":whisper " + i.selectedAvatar.GetScreenName() + " ")
+				sc.chatManager.SetFocused(true)
+				i.Clear()
+			}
+		}
 	case "Trade":
 		if i.selectedAvatar != nil && i.OnTrade != nil {
 			i.OnTrade(i.selectedAvatar.GetScreenName())
 		}
 	case "Ask to become a friend":
-		// Friend request clicked (placeholder - not yet wired)
+		if i.selectedAvatar != nil {
+			if sc := GetActiveScene(); sc != nil {
+				sc.SendFriendRequest(i.selectedAvatar.GetScreenName())
+			}
+		}
 	case "Rotate":
 		if i.selectedFurni != nil && i.OnRotateFurni != nil {
 			i.OnRotateFurni(i.selectedFurni)
@@ -329,7 +346,7 @@ func (i *InfoStand) onButtonClick(id string) {
 		if i.selectedFurni != nil && i.OnPickupFurni != nil {
 			i.OnPickupFurni(i.selectedFurni)
 		}
-	case "Kick":
+	case "Kick", "Kick Out":
 		if i.selectedAvatar != nil && i.OnKick != nil {
 			i.OnKick(i.selectedAvatar.GetScreenName())
 		}

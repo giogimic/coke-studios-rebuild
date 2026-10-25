@@ -1865,19 +1865,8 @@ func (s *Scene) displayPrivatePeople() {
 		return
 	}
 
-	// TODO: Implement actual user data loading
-	// For now, create placeholder user data
-	var users []ui.UserListItem
-	users = append(users, ui.UserListItem{
-		UserID:   "user1",
-		Username: "TestUser1",
-		Status:   "online",
-	})
-	users = append(users, ui.UserListItem{
-		UserID:   "user2",
-		Username: "TestUser2",
-		Status:   "away",
-	})
+	// Real people list: empty state until actual users are discovered (no fake seeded players)
+	users := make([]ui.UserListItem, 0)
 
 	// Update list content
 	list.UserItems = users

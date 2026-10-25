@@ -233,3 +233,21 @@ func parseAcceptedMsgID(b []byte) (uint64, bool) {
 	}
 	return 0, false
 }
+
+// SendMessengerMessage stubs instant message send for non-wasm
+func (c *Client) SendMessengerMessage(targetName, message string) error {
+	xml := fmt.Sprintf("<Room.Action roomID=\"$LOBBY$\"><MMS_MSG to=\"%s\" msg=\"%s\"/></Room.Action>", targetName, message)
+	return c.SendXML(xml)
+}
+
+// SendFriendAccept stubs friend accept for non-wasm
+func (c *Client) SendFriendAccept(fromUser string) error {
+	xml := fmt.Sprintf("<Room.Action roomID=\"$LOBBY$\"><MMS_ACC from=\"%s\"/></Room.Action>", fromUser)
+	return c.SendXML(xml)
+}
+
+// SendFriendReject stubs friend reject for non-wasm
+func (c *Client) SendFriendReject(fromUser string) error {
+	xml := fmt.Sprintf("<Room.Action roomID=\"$LOBBY$\"><MMS_REJ from=\"%s\"/></Room.Action>", fromUser)
+	return c.SendXML(xml)
+}

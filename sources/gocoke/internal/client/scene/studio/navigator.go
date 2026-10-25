@@ -162,9 +162,8 @@ func (n *NavigatorManager) displayPrivatePeople() {
 	if list == nil {
 		return
 	}
-	var users []ui.UserListItem
-	users = append(users, ui.UserListItem{UserID: "user1", Username: "TestUser1", Status: "online"})
-	users = append(users, ui.UserListItem{UserID: "user2", Username: "TestUser2", Status: "away"})
+	// Real people list: honest empty state instead of seeded players
+	users := make([]ui.UserListItem, 0)
 	list.UserItems = users
 	list.UpdateContent()
 }

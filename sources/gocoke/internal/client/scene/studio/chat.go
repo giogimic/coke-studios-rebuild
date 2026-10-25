@@ -110,6 +110,16 @@ func (cm *ChatManager) GetInput() string {
 	return cm.input
 }
 
+// SetInput sets the current chat input text
+func (cm *ChatManager) SetInput(s string) {
+	cm.input = s
+}
+
+// SetFocused sets the chat input focus state
+func (cm *ChatManager) SetFocused(b bool) {
+	cm.focused = b
+}
+
 // IsFocused returns whether the chat input is currently focused
 func (cm *ChatManager) IsFocused() bool {
 	return cm.focused
@@ -225,7 +235,7 @@ func (cm *ChatManager) HandleSpeechSwitch(mouseX, mouseY int, mouseClicked, mous
 }
 
 // EmitChatBubble composes a chat bubble based on Lingo style and adds it to render list
-func (cm *ChatManager) EmitChatBubble(message string, playerAvatar *isoengine.IsoAvatar) {
+func (cm *ChatManager) EmitChatBubble(message string, playerAvatar *isoengine.IsoAvatar, speechMode int) {
 	if playerAvatar == nil {
 		return
 	}
@@ -236,17 +246,33 @@ func (cm *ChatManager) EmitChatBubble(message string, playerAvatar *isoengine.Is
 		log.Printf("ChatManager: bubble assets missing - left:%v right:%v fontManager:%v", left != nil, right != nil, cm.fontManager != nil)
 		return
 	}
-	log.Printf("ChatManager: emitting bubble for %s: %q", playerAvatar.GetScreenName(), message)
+	log.Printf("ChatManager: emitting bubble for %s (mode=%d): %q", playerAvatar.GetScreenName(), speechMode, message)
 
-	// Name and message composition roughly matching Lingo (bold name, normal msg)
+	// Name and message composition matching Lingo
 	name := playerAvatar.GetScreenName()
 	nameFont := cm.fontManager.GetFont("Verdana", "bold", 10)
 	msgFont := cm.fontManager.GetFont("Verdana", "plain", 10)
-	if cm.speechMode == SpeechModeShout {
+
+	// Mode 2 = Shout (all bold), Mode 0 = Whisper (smaller italic), Mode 3 = Sing (bold italic)
+	switch speechMode {
+	case 2: // shout
 		if bold := cm.fontManager.GetFont("Verdana", "bold", 10); bold != nil {
 			msgFont = bold
 		}
+	case 0: // whisper
+		if italic := cm.fontManager.GetFont("Verdana", "italic", 9); italic != nil {
+			msgFont = italic
+		} else if plain := cm.fontManager.GetFont("Verdana", "plain", 9); plain != nil {
+			msgFont = plain
+		}
+	case 3: // sing
+		if boldItalic := cm.fontManager.GetFont("Verdana", "bold italic", 10); boldItalic != nil {
+			msgFont = boldItalic
+		} else if bold := cm.fontManager.GetFont("Verdana", "bold", 10); bold != nil {
+			msgFont = bold
+		}
 	}
+
 	if nameFont == nil || msgFont == nil {
 		return
 	}
@@ -341,12 +367,14 @@ func (cm *ChatManager) EmitChatBubble(message string, playerAvatar *isoengine.Is
 	baseY := float64(100) // Base Y position for the bottom-most bubble (raised by 150px)
 	y := baseY
 
-	// Lifetime based on speak/shout/sing
-	life := 60 * time.Second // 10x longer baseline
-	switch cm.speechMode {
-	case SpeechModeShout:
+	// Lifetime based on speechMode (whisper=40s, speak=60s, shout=80s, sing=100s)
+	life := 60 * time.Second
+	switch speechMode {
+	case 0:
+		life = 40 * time.Second
+	case 2:
 		life = 80 * time.Second
-	case SpeechModeSing:
+	case 3:
 		life = 100 * time.Second
 	}
 
@@ -370,6 +398,27 @@ func (cm *ChatManager) EmitChatBubble(message string, playerAvatar *isoengine.Is
 	// Keep the last 10 bubbles maximum (even if expired)
 	if len(cm.bubbles) > 5 {
 		cm.bubbles = cm.bubbles[len(cm.bubbles)-5:]
+	}
+	// Animate avatar mouth speaking and emotion expressions
+	if playerAvatar.Engine != nil {
+		lowerMsg := strings.ToLower(message)
+		if strings.Contains(lowerMsg, ":)") || strings.Contains(lowerMsg, ":-)") || strings.Contains(lowerMsg, ":d") || strings.Contains(lowerMsg, "^_^") {
+			playerAvatar.Engine.StartEmote("sml")
+		} else if strings.Contains(lowerMsg, ":(") || strings.Contains(lowerMsg, ":-(") || strings.Contains(lowerMsg, ";_;") {
+			playerAvatar.Engine.StartEmote("sad")
+		} else if strings.Contains(lowerMsg, ":o") || strings.Contains(lowerMsg, ":-o") || strings.Contains(lowerMsg, ":0") {
+			playerAvatar.Engine.StartEmote("srp")
+		} else if strings.Contains(lowerMsg, ">:(") || strings.Contains(lowerMsg, ":angry:") || strings.Contains(lowerMsg, "grr") {
+			playerAvatar.Engine.StartEmote("agr")
+		} else {
+			duration := time.Duration(len(message)*50) * time.Millisecond
+			if duration < 1200*time.Millisecond {
+				duration = 1200 * time.Millisecond
+			} else if duration > 4000*time.Millisecond {
+				duration = 4000 * time.Millisecond
+			}
+			playerAvatar.Engine.StartChattingWithDuration(duration, 1.0)
+		}
 	}
 	log.Printf("ChatManager: bubble created at %.0f,%.0f lifetime=%v total=%d", x, y, life, len(cm.bubbles))
 }

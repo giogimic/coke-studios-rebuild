@@ -53,7 +53,7 @@ func (fm *FontManager) loadFontsFromDirectory() {
 
 	// WASM environment: avoid os.Stat/os.ReadDir which are not implemented
 	if runtime.GOOS == "js" || runtime.GOARCH == "wasm" {
-		for _, name := range []string{"CokeStudioschat.ttf", "CokeStudioschatb.ttf"} {
+		for _, name := range []string{"CokeStudioschat.ttf", "CokeStudioschatb.ttf", "Verdana.ttf", "CgAlpinGthNo1.ttf", "CokeMIRGothic.ttf"} {
 			fontPath := filepath.Join(fontsDir, name)
 			if err := fm.loadFont(fontPath); err == nil {
 				log.Printf("FontManager: loaded font %s (wasm)", name)
@@ -75,7 +75,7 @@ func (fm *FontManager) loadFontsFromDirectory() {
 	if err != nil {
 		log.Printf("FontManager: failed to read fonts directory: %v", err)
 		// WASM fallback: try loading known font filenames directly
-		for _, name := range []string{"CokeStudioschat.ttf", "CokeStudioschatb.ttf"} {
+		for _, name := range []string{"CokeStudioschat.ttf", "CokeStudioschatb.ttf", "Verdana.ttf", "CgAlpinGthNo1.ttf", "CokeMIRGothic.ttf"} {
 			fontPath := filepath.Join(fontsDir, name)
 			if err := fm.loadFont(fontPath); err == nil {
 				log.Printf("FontManager: loaded font %s (fallback)", name)
@@ -154,8 +154,9 @@ func (fm *FontManager) createFontFace(fontName, fontStyle string, fontSize int) 
 	var actualFontName string
 	switch fontName {
 	case "Verdana":
-		// Try to find a suitable font in our fonts directory
-		if fontStyle == "bold" {
+		if _, ok := fm.loadedFonts["Verdana"]; ok {
+			actualFontName = "Verdana"
+		} else if fontStyle == "bold" {
 			actualFontName = "CokeStudioschatb" // Bold version
 		} else {
 			actualFontName = "CokeStudioschat" // Regular version

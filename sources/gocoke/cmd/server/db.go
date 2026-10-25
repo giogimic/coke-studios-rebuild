@@ -15,6 +15,8 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	_ "modernc.org/sqlite"
+
+	"gocoke/internal/client/minigames/sumo"
 )
 
 var denizenSeq int64
@@ -103,15 +105,20 @@ type Top40Entry struct {
 }
 
 type VegoSanResult struct {
-	Win          bool   `json:"win"`
-	Draw         bool   `json:"draw"`
-	PlayerMove   string `json:"player_move"`
-	OpponentMove string `json:"opponent_move"`
-	Message      string `json:"message"`
-	Streak       int    `json:"streak"`
-	AwardedDB    int    `json:"awarded_db"`
-	PrizeItem    string `json:"prize_item,omitempty"`
-	PrizeItemID  int    `json:"prize_item_id,omitempty"`
+	Status        string `json:"status"`
+	Result        string `json:"result"`
+	Win           bool   `json:"win"`
+	Draw          bool   `json:"draw"`
+	PlayerMove    string `json:"player_move"`
+	OpponentMove  string `json:"opponent_move"`
+	MasterMove    string `json:"masterMove"`
+	Commentary    string `json:"commentary"`
+	Message       string `json:"message"`
+	Streak        int    `json:"streak"`
+	AwardedDB     int    `json:"awarded_db"`
+	TotalDecibels int    `json:"totalDecibels"`
+	PrizeItem     string `json:"prize_item,omitempty"`
+	PrizeItemID   int    `json:"prize_item_id,omitempty"`
 }
 
 type Store struct {
@@ -544,7 +551,7 @@ func (s *Store) GetOrCreateDenizen(screenName, gender, avatarDef, mission string
 
 	cleanName := strings.TrimSpace(screenName)
 	if cleanName == "" {
-		cleanName = "Adam"
+		return nil, fmt.Errorf("screenName cannot be empty")
 	}
 
 	var d DenizenRecord
@@ -806,7 +813,7 @@ func (s *Store) CleanExpiredSessions() error {
 func (s *Store) UpdateDenizenProfile(screenName string, gender int, avatarDef, mission string) (*DenizenRecord, error) {
 	cleanName := strings.TrimSpace(screenName)
 	if cleanName == "" {
-		cleanName = "Adam"
+		return nil, fmt.Errorf("screenName cannot be empty")
 	}
 
 	d, err := s.GetOrCreateDenizen(cleanName, fmt.Sprintf("%d", gender), avatarDef, mission)
@@ -1387,6 +1394,16 @@ func (s *Store) RotateFurniture(studioID, posID string, dir, state, ho int) erro
 	return err
 }
 
+func (s *Store) UpdatePlacedFurniture(studioID, posID string, x, y, z, dir, state, ho int) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	_, err := s.db.Exec(`UPDATE placed_furniture 
+		SET x = ?, y = ?, z = ?, dir = ?, state = ?, ho = ? 
+		WHERE studio_id = ? AND pos_id = ?`,
+		x, y, z, dir, state, ho, studioID, posID)
+	return err
+}
+
 func (s *Store) GetStudios() ([]StudioRecord, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -1862,89 +1879,68 @@ func (s *Store) ProcessVegoSanMove(screenName, playerMove string) (*VegoSanResul
 	defer s.mu.Unlock()
 
 	var denizenID string
-	_ = s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&denizenID)
-
-	pMove := strings.ToLower(strings.TrimSpace(playerMove))
-	validMoves := []string{"slap", "grab", "thrust", "sweep", "block"}
-	valid := false
-	for _, m := range validMoves {
-		if m == pMove {
-			valid = true
-			break
-		}
-	}
-	if !valid {
-		pMove = "slap"
+	var currentDB int
+	err := s.db.QueryRow("SELECT id, decibels FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&denizenID, &currentDB)
+	if err != nil || denizenID == "" {
+		return nil, fmt.Errorf("user not found: %s", screenName)
 	}
 
-	// 5-move circular counter rules:
-	// slap beats sweep & block
-	// grab beats slap & thrust
-	// thrust beats slap & sweep
-	// sweep beats grab & block
-	// block beats grab & thrust
-	aiMove := validMoves[time.Now().UnixNano()%int64(len(validMoves))]
+	pMoveStr := strings.ToLower(strings.TrimSpace(playerMove))
+	var pMove sumo.Move
+	switch pMoveStr {
+	case "1", "head_hit", "head", "push", "oshidashi":
+		pMove = sumo.MoveHeadHit
+	case "2", "body_blaster", "body", "slap", "tsuppari":
+		pMove = sumo.MoveBodyBlaster
+	case "3", "overhead_toss", "toss", "throw", "uwatenage", "grab":
+		pMove = sumo.MoveOverheadToss
+	case "4", "flying_kick", "kick", "dodge", "hikitoshi", "sweep":
+		pMove = sumo.MoveFlyingKick
+	case "5", "flying_punch", "punch", "special", "coke_power", "block":
+		pMove = sumo.MoveFlyingPunch
+	default:
+		pMove = sumo.MoveBodyBlaster
+	}
+
+	aiMove := sumo.RandomMove()
+	roundRes := sumo.EvaluateRound(pMove, aiMove)
 
 	res := &VegoSanResult{
-		PlayerMove:   pMove,
-		OpponentMove: aiMove,
+		Status:       "success",
+		PlayerMove:   playerMove,
+		OpponentMove: strings.ToLower(strings.ReplaceAll(aiMove.String(), " ", "_")),
+		MasterMove:   aiMove.String(),
 	}
 
-	if pMove == aiMove {
+	var streak, totalWins int
+	_ = s.db.QueryRow("SELECT streak, total_wins FROM vegosan_streaks WHERE denizen_id = ?", denizenID).Scan(&streak, &totalWins)
+
+	switch roundRes {
+	case sumo.ResultDraw:
+		res.Result = "draw"
 		res.Draw = true
-		res.Message = fmt.Sprintf("Both chose %s! It's a standoff!", pMove)
-	} else {
-		win := false
-		switch pMove {
-		case "slap":
-			win = (aiMove == "sweep" || aiMove == "block")
-		case "grab":
-			win = (aiMove == "slap" || aiMove == "thrust")
-		case "thrust":
-			win = (aiMove == "slap" || aiMove == "sweep")
-		case "sweep":
-			win = (aiMove == "grab" || aiMove == "block")
-		case "block":
-			win = (aiMove == "grab" || aiMove == "thrust")
-		}
+		res.Streak = streak
+		res.TotalDecibels = currentDB
+		res.Commentary = fmt.Sprintf("Both chose %s! Standoff in the dohyo!", pMove.String())
+		res.Message = res.Commentary
 
-		res.Win = win
-		if win {
-			res.Message = fmt.Sprintf("Victory! Your %s counters V-ego San's %s!", pMove, aiMove)
-		} else {
-			res.Message = fmt.Sprintf("Defeat! V-ego San's %s overpowered your %s!", aiMove, pMove)
-		}
-	}
+	case sumo.ResultPlayer1Wins:
+		streak++
+		totalWins++
+		res.Result = "win"
+		res.Win = true
+		res.Streak = streak
 
-	if denizenID != "" {
-		var streak, totalWins int
-		_ = s.db.QueryRow("SELECT streak, total_wins FROM vegosan_streaks WHERE denizen_id = ?", denizenID).Scan(&streak, &totalWins)
-		if res.Win {
-			streak++
-			totalWins++
-			rewardDB := streak * 10
-			res.AwardedDB = rewardDB
-			res.Streak = streak
-			_, _ = s.db.Exec("UPDATE denizens SET decibels = decibels + ? WHERE id = ?", rewardDB, denizenID)
-
-			// Streak milestone furniture prizes
-			if streak == 3 {
-				res.PrizeItem = "Tatami Mat"
-				res.PrizeItemID = 93
-				_, _ = s.db.Exec("INSERT INTO backpack_items (denizen_id, catalog_item_id, properties_json) VALUES (?, 93, '{}')", denizenID)
-			} else if streak == 5 {
-				res.PrizeItem = "Rice Paper Divider"
-				res.PrizeItemID = 94
-				_, _ = s.db.Exec("INSERT INTO backpack_items (denizen_id, catalog_item_id, properties_json) VALUES (?, 94, '{}')", denizenID)
-			} else if streak == 10 {
-				res.PrizeItem = "Ceremonial Gong"
-				res.PrizeItemID = 95
-				_, _ = s.db.Exec("INSERT INTO backpack_items (denizen_id, catalog_item_id, properties_json) VALUES (?, 95, '{}')", denizenID)
-			}
-		} else if !res.Draw {
-			streak = 0
-			res.Streak = 0
+		tier := sumo.GetRewardForStreak(streak)
+		rewardDB := 25
+		if tier != nil && tier.RewardDB > 0 {
+			rewardDB = tier.RewardDB
 		}
+		res.AwardedDB = rewardDB
+		currentDB += rewardDB
+		res.TotalDecibels = currentDB
+
+		_, _ = s.db.Exec("UPDATE denizens SET decibels = ? WHERE id = ?", currentDB, denizenID)
 
 		if s.driver == "mysql" {
 			_, _ = s.db.Exec(`INSERT INTO vegosan_streaks (denizen_id, streak, total_wins, updated_at) 
@@ -1957,6 +1953,27 @@ func (s *Store) ProcessVegoSanMove(screenName, playerMove string) (*VegoSanResul
 				ON CONFLICT(denizen_id) DO UPDATE SET streak = excluded.streak, total_wins = excluded.total_wins, updated_at = CURRENT_TIMESTAMP`,
 				denizenID, streak, totalWins)
 		}
+
+		if tier != nil && tier.RewardFurni > 0 {
+			res.PrizeItem = tier.RewardName
+			res.PrizeItemID = tier.RewardFurni
+			props := map[string]any{"sumo_prize": true, "streak": streak, "name": tier.RewardName}
+			propsJSON, _ := json.Marshal(props)
+			_, _ = s.db.Exec("INSERT INTO backpack_items (denizen_id, catalog_item_id, properties_json) VALUES (?, ?, ?)",
+				denizenID, tier.RewardFurni, string(propsJSON))
+		}
+
+		res.Commentary = fmt.Sprintf("Victory! Your %s counters Master Kenji's %s! (+%d dB)", pMove.String(), aiMove.String(), rewardDB)
+		res.Message = res.Commentary
+
+	case sumo.ResultPlayer2Wins:
+		res.Result = "lose"
+		res.Win = false
+		res.Streak = 0
+		res.TotalDecibels = currentDB
+		_, _ = s.db.Exec("UPDATE vegosan_streaks SET streak = 0, updated_at = CURRENT_TIMESTAMP WHERE denizen_id = ?", denizenID)
+		res.Commentary = fmt.Sprintf("Defeat! Master Kenji's %s overpowered your %s! Try again!", aiMove.String(), pMove.String())
+		res.Message = res.Commentary
 	}
 
 	return res, nil

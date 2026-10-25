@@ -134,12 +134,69 @@ func TestMessageHandling(t *testing.T) {
 		t.Fatalf("expected 1 furniture item placed in DB, got %d (err: %v)", len(furni), err)
 	}
 
+	// Test In-place Furniture Rotation and State Toggle
+	rotateXML := `<Room.Action roomID="studio_1"><POS st="1" d="4" ho="0" z="4" y="0" x="5" id="11427"/></Room.Action>`
+	srv.handlePlayerMessage(p, rotateXML)
+	furniRot, _ := srv.store.GetRoomFurniture("studio_1")
+	if len(furniRot) != 1 || furniRot[0].Dir != 4 || furniRot[0].State != 1 {
+		t.Errorf("expected furniture dir=4 state=1 after rotation, got: %+v", furniRot)
+	}
+
+	// Test Furniture Solidity Rules (Chairs/Sofas/Rugs non-solid, Tables/Bars solid)
+	if !srv.isItemSolid(7) { // Premier Table
+		t.Errorf("expected Premier Table (cid 7) to be solid")
+	}
+	if srv.isItemSolid(3) { // Premier Chair
+		t.Errorf("expected Premier Chair (cid 3) to be non-solid/walkable")
+	}
+	if srv.isItemSolid(5) { // Premier Sofa
+		t.Errorf("expected Premier Sofa (cid 5) to be non-solid/walkable")
+	}
+	if srv.isItemSolid(1) { // Wallpaper
+		t.Errorf("expected Wallpaper (cid 1) to be non-solid/walkable")
+	}
+
 	// Test Furniture pickup back to backpack
 	pickupXML := `<Room.Action roomID="studio_1"><POS_BKPK id="11427"/></Room.Action>`
 	srv.handlePlayerMessage(p, pickupXML)
 	furniAfter, _ := srv.store.GetRoomFurniture("studio_1")
 	if len(furniAfter) != 0 {
 		t.Errorf("expected 0 furniture items after pickup, got %d", len(furniAfter))
+	}
+	p.RoomID = "VIS$0"
+
+	// Test Private Whisper Routing
+	p2Whisper := &Player{ID: "test_p2", ScreenName: "Bob", RoomID: "VIS$0", Authenticated: true}
+	p3Spectator := &Player{ID: "test_p3", ScreenName: "Charlie", RoomID: "VIS$0", Authenticated: true}
+	rm.Players[p2Whisper.ID] = p2Whisper
+	rm.Players[p3Spectator.ID] = p3Spectator
+	srv.Players[p2Whisper.ID] = p2Whisper
+	srv.Players[p3Spectator.ID] = p3Spectator
+
+	whisperHex := hex.EncodeToString([]byte("Secret whisper to Bob"))
+	whisperXML := `<Room.Action roomID="VIS$0"><CH sm="whisper" to="Bob" m="` + whisperHex + `"/></Room.Action>`
+	srv.handlePlayerMessage(p, whisperXML)
+
+	// Test Host Moderation Kick in Studio
+	_, _ = srv.store.CreateStudio("studio_adam", d.ID, "Adam", "Adam's Studio", "studio_model_c", 3)
+	p.RoomID = "studio_adam"
+	rmStudio, _ := srv.GetRoom("studio_adam")
+	p2Whisper.RoomID = "studio_adam"
+	rmStudio.Players[p2Whisper.ID] = p2Whisper
+
+	// Unauthorized non-owner kick attempt (Bob tries to kick owner Adam)
+	srv.handlePlayerMessage(p2Whisper, `<Room.Action roomID="studio_adam"><ST_KICK target="Adam"/></Room.Action>`)
+	if _, stillIn := rmStudio.Players[p.ID]; !stillIn && p.RoomID != "studio_adam" {
+		t.Errorf("expected non-owner kick attempt to fail")
+	}
+
+	// Authorized owner kick (Adam kicks Bob)
+	srv.handlePlayerMessage(p, `<Room.Action roomID="studio_adam"><ST_KICK target="Bob"/></Room.Action>`)
+	if _, stillIn := rmStudio.Players[p2Whisper.ID]; stillIn {
+		t.Errorf("expected Bob to be removed from studio_adam after host kick")
+	}
+	if p2Whisper.RoomID != "$LOBBY$" {
+		t.Errorf("expected kicked player room to be $LOBBY$, got: %s", p2Whisper.RoomID)
 	}
 	p.RoomID = "VIS$0"
 

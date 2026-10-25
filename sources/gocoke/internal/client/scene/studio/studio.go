@@ -1,11 +1,13 @@
 package studio
 
 import (
+	"encoding/json"
 	"fmt"
 	"image"
 	"image/color"
 	"log"
 	"net/http"
+	"net/url"
 
 	mrand "math/rand"
 	"path/filepath"
@@ -34,6 +36,11 @@ import (
 
 // Scene represents a studio room scene
 type Scene struct {
+	messengerMu       sync.RWMutex
+	messengerFriends  []ui.FriendListItem
+	messengerRequests []string
+	messengerMessages []ui.ConsoleMessage
+
 	tm         *textmgr.Manager
 	studio     *studios.Studio
 	roomDef    *studioroom.RoomDefinition
@@ -74,7 +81,8 @@ type Scene struct {
 	}
 
 	// Exit control
-	kicked bool // set true when the local user is kicked
+	kicked         bool   // set true when the local user is kicked
+	targetStudioID string // set when transitioning to another studio via navigator
 
 	// Backpack manager
 	backpackManager *BackpackManager
@@ -90,6 +98,7 @@ type Scene struct {
 	lastF7Press     time.Time            // Carry toggle
 	lastF8Press     time.Time            // Drink toggle
 	lastF9Press     time.Time            // Lighting toggle
+	showDebugUI     bool                 // Developer debug overlay (FPS counter, buttons)
 
 	// Avatar engine
 	playerAvatar   *isoengine.IsoAvatar
@@ -146,6 +155,17 @@ type Scene struct {
 
 	// Optional hook provided by app to send POS furniture rotation over realtime
 	sendRotateIfAvailable func(roomID string, posID string, x, y, z, dir, state, ho int) error
+
+	// Optional hook provided by app to send AV_ACT avatar actions over realtime
+	sendAvatarActionIfAvailable func(act string) error
+
+	// Optional hook provided by app to send friend requests over realtime
+	sendFriendRequestIfAvailable func(target string) error
+
+	// Optional hooks for messenger interactions over realtime
+	sendMessengerMessageIfAvailable func(to, message string) error
+	sendFriendAcceptIfAvailable     func(from string) error
+	sendFriendRejectIfAvailable     func(from string) error
 
 	// Optional hook provided by app to send AV_DC drink dispenser request over realtime
 	sendDrinkDispenserIfAvailable func(roomID string) error
@@ -236,6 +256,13 @@ type Scene struct {
 	pendingStereoTargetCol int
 	pendingStereoExpire    time.Time
 	pendingStereoPosID     string
+
+	// Manual sitting toggle via chat or action
+	manualSit bool
+
+	// Network senders for whispers and moderation
+	sendWhisperIfAvailable func(roomID, target, message string) error
+	sendKickIfAvailable    func(roomID, target string) error
 }
 
 // GetCurrentUserName returns the local player's screen name.
@@ -291,6 +318,79 @@ func (s *Scene) SetRotateSender(fn func(roomID string, posID string, x, y, z, di
 	if s != nil {
 		s.sendRotateIfAvailable = fn
 		//log.Printf("Studio: rotate sender injected")
+	}
+}
+
+// SetAvatarActionSender allows the app to inject a network sender for AV_ACT avatar actions.
+func (s *Scene) SetAvatarActionSender(fn func(act string) error) {
+	if s != nil {
+		s.sendAvatarActionIfAvailable = fn
+	}
+}
+
+// SetFriendRequestSender allows the app to inject a network sender for friend requests.
+func (s *Scene) SetFriendRequestSender(fn func(target string) error) {
+	if s != nil {
+		s.sendFriendRequestIfAvailable = fn
+	}
+}
+
+// SetMessengerSender allows the app to inject a network sender for instant messages.
+func (s *Scene) SetMessengerSender(fn func(to, message string) error) {
+	if s != nil {
+		s.sendMessengerMessageIfAvailable = fn
+	}
+}
+
+// SetFriendAcceptSender allows the app to inject a network sender for friend accept.
+func (s *Scene) SetFriendAcceptSender(fn func(from string) error) {
+	if s != nil {
+		s.sendFriendAcceptIfAvailable = fn
+	}
+}
+
+// SetFriendRejectSender allows the app to inject a network sender for friend reject.
+func (s *Scene) SetFriendRejectSender(fn func(from string) error) {
+	if s != nil {
+		s.sendFriendRejectIfAvailable = fn
+	}
+}
+
+// SetWhisperSender allows the app to inject a network sender for private CH whispers.
+func (s *Scene) SetWhisperSender(fn func(roomID, target, message string) error) {
+	if s != nil {
+		s.sendWhisperIfAvailable = fn
+	}
+}
+
+// SetKickSender allows the app to inject a network sender for ST_KICK avatar kicks.
+func (s *Scene) SetKickSender(fn func(roomID, target string) error) {
+	if s != nil {
+		s.sendKickIfAvailable = fn
+	}
+}
+
+// SendAvatarAction applies an action locally and transmits AV_ACT to the room.
+func (s *Scene) SendAvatarAction(act string) {
+	if s == nil {
+		return
+	}
+	s.ApplyAvatarAction(s.currentUserName, act, -1)
+	if s.sendAvatarActionIfAvailable != nil {
+		_ = s.sendAvatarActionIfAvailable(act)
+	}
+}
+
+// SendFriendRequest sends a friend invitation to target avatar.
+func (s *Scene) SendFriendRequest(target string) {
+	if s == nil || target == "" {
+		return
+	}
+	if s.sendFriendRequestIfAvailable != nil {
+		_ = s.sendFriendRequestIfAvailable(target)
+	}
+	if s.hudManager != nil {
+		s.hudManager.OpenGeneralAlert("Friend Request", fmt.Sprintf("Friend request sent to %s!", target))
 	}
 }
 
@@ -591,6 +691,25 @@ func (s *Scene) UpsertAvatarAtGrid(name, def, mission string, gender, dir, row, 
 	}
 
 	square := s.isoScene.GetSquareByRowCol(row, col)
+	if square == nil && s.isoScene != nil {
+		if grid := s.isoScene.GetGrid(); grid != nil {
+			for dr := -1; dr <= 1 && square == nil; dr++ {
+				for dc := -1; dc <= 1 && square == nil; dc++ {
+					if dr != 0 || dc != 0 {
+						square = s.isoScene.GetSquareByRowCol(row+dr, col+dc)
+					}
+				}
+			}
+			if square == nil {
+				for _, sq := range grid.GetWalkableSquares() {
+					if sq != nil {
+						square = sq
+						break
+					}
+				}
+			}
+		}
+	}
 	if square == nil {
 		return
 	}
@@ -796,6 +915,7 @@ func (s *Scene) LoadPossessionsFromGateway(screenName, secret, gatewayURL string
 	s.userCredentials.screenName = screenName
 	s.userCredentials.secret = secret
 	s.userCredentials.gatewayURL = gatewayURL
+	s.RefreshMessengerData()
 
 	log.Printf("Studio: LoadPossessionsFromGateway called for user=%s, gateway=%s", screenName, gatewayURL)
 
@@ -919,6 +1039,8 @@ func New(dataDir string, studio *studios.Studio) (*Scene, error) {
 
 	// Pass floor shape asset and position to pattern manager for floor pattern rendering
 	scene.setupFloorShapeForPatterns()
+	// Wire Shockwave console handlers
+	scene.setupConsoleHandlers()
 
 	// Initialize HUD manager (required by InfoStand, chat, and other UI systems)
 	scene.hudManager = NewHUDManager(scene.tm)
@@ -931,6 +1053,13 @@ func New(dataDir string, studio *studios.Studio) (*Scene, error) {
 			func() string { return scene.userCredentials.screenName },
 			func() string { return scene.userCredentials.gatewayURL },
 		)
+		scene.hudManager.SetEnterStudio(func(targetStudioID string) {
+			log.Printf("StudioScene: navigator requested room transition to %s", targetStudioID)
+			scene.targetStudioID = targetStudioID
+			if scene.hudManager != nil && scene.hudManager.GetWindowManager() != nil {
+				scene.hudManager.GetWindowManager().CloseAllWindows()
+			}
+		})
 		// Wire catalogue gateway providers and post-purchase hook
 		if scene.hudManager.catalogueManager != nil {
 			scene.hudManager.catalogueManager.SetGatewayProviders(
@@ -1820,7 +1949,24 @@ func (s *Scene) Update() error {
 					} else {
 						s.chatManager.speechMode = SpeechModeSpeak
 					}
-					s.chatManager.EmitChatBubble(ev.message, av)
+					s.chatManager.EmitChatBubble(ev.message, av, ev.speechMode)
+					// Trigger emotes and speaking animation
+					if av.Engine != nil {
+						if strings.Contains(ev.message, ":)") || strings.Contains(ev.message, ":D") || strings.Contains(ev.message, ":-)") {
+							av.Engine.StartEmote("sml")
+						} else if strings.Contains(ev.message, ":(") || strings.Contains(ev.message, ":-(") {
+							av.Engine.StartEmote("sad")
+						} else if strings.Contains(ev.message, ":o") || strings.Contains(ev.message, ":O") || strings.Contains(ev.message, ":-o") {
+							av.Engine.StartEmote("srp")
+						} else if strings.Contains(ev.message, ">:(") || strings.Contains(ev.message, ":mad:") {
+							av.Engine.StartEmote("agr")
+						}
+						chatDur := time.Duration(len(ev.message)) * 120 * time.Millisecond
+						if chatDur < 1500*time.Millisecond {
+							chatDur = 1500 * time.Millisecond
+						}
+						av.Engine.StartChattingWithDuration(chatDur, 1.0)
+					}
 					// Restore previous mode
 					s.chatManager.speechMode = prevMode
 				} else {
@@ -1888,6 +2034,11 @@ func (s *Scene) Update() error {
 			}
 			s.lastF9Press = time.Now()
 		}
+	}
+
+	// Toggle developer debug UI with F10
+	if inpututil.IsKeyJustPressed(ebiten.KeyF10) {
+		s.showDebugUI = !s.showDebugUI
 	}
 
 	// Touch/click lighting toggle button (for mobile or mouse)
@@ -1987,6 +2138,7 @@ func (s *Scene) Update() error {
 								for _, sq := range path {
 									pts = append(pts, [2]int{sq.GetRow(), sq.GetCol()})
 								}
+								s.manualSit = false
 								// Defer actual network send to net layer via studio Scene callback
 								if s.sendMovePathIfAvailable != nil {
 									log.Printf("Studio click: sending AV_GSP with %d points for room %s", len(pts), s.studio.StudioID)
@@ -2041,7 +2193,7 @@ func (s *Scene) Update() error {
 				if hit, ok := s.placement.HitTestAt(mx, my); ok {
 					furnitureClicked = true
 
-					// Check for DRINK_DISPENSER action first (single click)
+					// Check for DRINK_DISPENSER or seat action (single click)
 					if s.catalog != nil {
 						if ci := s.catalog.GetItemByID(strings.TrimSpace(hit.ProdID)); ci != nil {
 							log.Printf("Clicked furniture %s with action: %s", hit.ProdID, ci.Action)
@@ -2051,8 +2203,14 @@ func (s *Scene) Update() error {
 							} else if ci.Action == "STEREO" {
 								// Move adjacent to the stereo and, upon arrival, send CD_R with PosID
 								s.startStereoApproach(hit)
+							} else if s.isSeatableFurniture(*hit) {
+								s.startSeatApproach(hit)
 							}
+						} else if s.isSeatableFurniture(*hit) {
+							s.startSeatApproach(hit)
 						}
+					} else if s.isSeatableFurniture(*hit) {
+						s.startSeatApproach(hit)
 					}
 
 					// Also show info stand for the furniture
@@ -2127,6 +2285,17 @@ func (s *Scene) Update() error {
 						target.State = 0
 						target.Animate = false
 						// Keep last shown oneshot for a short time; frame will reset to 0 after window
+					}
+					// Synchronize toggled state across the room
+					if s.sendRotateIfAvailable != nil && s.studio != nil {
+						y := target.GridY / 10
+						ho := target.ServerHO
+						sendRow := target.Row
+						sendCol := target.Col
+						if target.Width == 2 && target.Depth == 2 {
+							sendCol = target.Col + 1
+						}
+						_ = s.sendRotateIfAvailable(s.studio.StudioID, target.PosID, sendRow, sendCol, y, target.Dir, target.State, ho)
 					}
 				}
 			}
@@ -2368,6 +2537,7 @@ func (s *Scene) Update() error {
 				s.hudManager.OpenNavigatorWindow()
 			case "cc.bottombtn.mms":
 				if s.hudManager != nil {
+					s.RefreshMessengerData()
 					// Open/toggle Messenger window
 					s.hudManager.OpenMessenger()
 					// Populate My Info contents
@@ -2393,8 +2563,8 @@ func (s *Scene) Update() error {
 							buf = eng.GetBuffer()
 						}
 					}
-					// Placeholder counts until wired to backend
-					s.hudManager.UpdateMessengerMyInfo(name, mission, 1, 0, buf)
+					// Real message and request counts start at 0 until events arrive
+					s.hudManager.UpdateMessengerMyInfo(name, mission, 0, 0, buf)
 				}
 			case "cc.bottombtn.bag":
 				// Toggle backpack
@@ -2453,6 +2623,14 @@ func (s *Scene) Update() error {
 				} else {
 					log.Printf("Studio: cannot fetch denizen balance - credentials not available")
 				}
+			case "cc.bottombtn.help":
+				if s.hudManager != nil {
+					s.hudManager.OpenHelpWindow()
+				}
+			case "cc.bottombtn.jukebox":
+				if s.hudManager != nil {
+					s.hudManager.OpenJukeboxWindow()
+				}
 			default:
 				// Other buttons clicked
 			}
@@ -2473,6 +2651,89 @@ func (s *Scene) Update() error {
 			if s.chatManager.ShouldSendMessage() {
 				message := strings.TrimSpace(s.chatManager.GetInput())
 				if message != "" && s.playerAvatar != nil {
+					lower := strings.ToLower(message)
+					if strings.HasPrefix(lower, ":whisper ") || strings.HasPrefix(lower, "/whisper ") || strings.HasPrefix(lower, ":w ") || strings.HasPrefix(lower, "/w ") {
+						parts := strings.SplitN(message, " ", 3)
+						if len(parts) >= 3 {
+							targetUser := strings.TrimSpace(parts[1])
+							whisperText := strings.TrimSpace(parts[2])
+							if targetUser != "" && whisperText != "" {
+								if s.sendWhisperIfAvailable != nil && s.studio != nil {
+									_ = s.sendWhisperIfAvailable(s.studio.StudioID, targetUser, whisperText)
+								}
+								s.chatManager.ClearInput()
+								return nil
+							}
+						}
+					}
+					if lower == ":dance" || lower == ":dnc" || lower == "/dance" {
+						if s.playerAvatar.Engine != nil && s.playerAvatar.Engine.IsDancing {
+							s.SendAvatarAction("")
+						} else {
+							s.SendAvatarAction("dnc")
+						}
+						s.chatManager.ClearInput()
+						return nil
+					} else if lower == ":wave" || lower == "/wave" {
+						s.SendAvatarAction("wav")
+						s.chatManager.ClearInput()
+						return nil
+					} else if lower == ":drink" || lower == "/drink" {
+						s.SendAvatarAction("drk")
+						s.chatManager.ClearInput()
+						return nil
+					} else if lower == ":sit" || lower == "/sit" {
+						s.manualSit = true
+						if s.playerAvatar.Engine != nil {
+							s.playerAvatar.Engine.SetBodyAction("sit")
+						}
+						s.SendAvatarAction("sit")
+						s.chatManager.ClearInput()
+						return nil
+					} else if lower == ":stand" || lower == "/stand" {
+						s.manualSit = false
+						if s.playerAvatar.Engine != nil {
+							s.playerAvatar.Engine.SetBodyAction("std")
+						}
+						s.SendAvatarAction("std")
+						s.chatManager.ClearInput()
+						return nil
+					} else if lower == ":cheer" || lower == "/cheer" || lower == ":thumbsup" || lower == "/thumbsup" || lower == ":vote" || lower == ":thumbup" {
+						if s.sendThumbIfAvailable != nil {
+							_ = s.sendThumbIfAvailable(true)
+						}
+						s.SendAvatarAction("wav")
+						s.chatManager.ClearInput()
+						return nil
+					} else if lower == ":thumbsdown" || lower == "/thumbsdown" || lower == ":boo" || lower == ":thumbdown" {
+						if s.sendThumbIfAvailable != nil {
+							_ = s.sendThumbIfAvailable(false)
+						}
+						s.SendAvatarAction("sad")
+						s.chatManager.ClearInput()
+						return nil
+					} else if lower == ":kiss" || lower == "/kiss" || lower == ":blow" {
+						s.SendAvatarAction("wav")
+						s.chatManager.ClearInput()
+						return nil
+					} else if lower == ":smile" || lower == "/smile" || lower == ":sml" {
+						s.SendAvatarAction("sml")
+						s.chatManager.ClearInput()
+						return nil
+					} else if lower == ":sad" || lower == "/sad" {
+						s.SendAvatarAction("sad")
+						s.chatManager.ClearInput()
+						return nil
+					} else if lower == ":angry" || lower == "/angry" || lower == ":mad" || lower == ":agr" {
+						s.SendAvatarAction("agr")
+						s.chatManager.ClearInput()
+						return nil
+					} else if lower == ":shock" || lower == "/shock" || lower == ":srp" {
+						s.SendAvatarAction("srp")
+						s.chatManager.ClearInput()
+						return nil
+					}
+
 					// Get current speech mode (1=speak, 2=shout)
 					speechMode := 1
 					if s.chatManager.GetSpeechMode() == SpeechModeShout {
@@ -2557,6 +2818,35 @@ func (s *Scene) ApplyAvatarAction(name, act string, dir int) {
 			}
 			// Do NOT force-drink; we want the same random drk cycle as coke. Start fresh wait window.
 			s.lastMicDrinkTime = time.Now()
+		}
+	case "wav":
+		if av.Engine != nil {
+			av.Engine.SetBodyAction("wav")
+		}
+	case "sml":
+		if av.Engine != nil {
+			av.Engine.StartEmote("sml")
+		}
+	case "sad":
+		if av.Engine != nil {
+			av.Engine.StartEmote("sad")
+		}
+	case "srp":
+		if av.Engine != nil {
+			av.Engine.StartEmote("srp")
+		}
+	case "agr":
+		if av.Engine != nil {
+			av.Engine.StartEmote("agr")
+		}
+	case "sit":
+		if av.Engine.GetBodyAction() != "wlk" {
+			av.Engine.SetBodyAction("sit")
+		}
+	case "std":
+		av.Engine.SetDance(false)
+		if av.Engine.GetBodyAction() != "wlk" {
+			av.Engine.SetBodyAction("std")
 		}
 	case "":
 		// Stop all actions
@@ -2754,9 +3044,8 @@ func (s *Scene) Draw(screen *ebiten.Image) {
 		s.backpackManager.DrawHoldingPreview(screen, ghostDrawn)
 	}
 
-	// Draw on-screen lighting toggle button (small utility control)
-	// Always visible to give mobile users access; harmless on desktop
-	if s.lightBtnBg != nil {
+	// Draw on-screen lighting toggle button (developer debug control)
+	if s.showDebugUI && s.lightBtnBg != nil {
 		op := &ebiten.DrawImageOptions{}
 		op.GeoM.Translate(float64(s.lightBtnRect[0]), float64(s.lightBtnRect[1]))
 		// Semi-transparent background
@@ -2790,8 +3079,8 @@ func (s *Scene) Draw(screen *ebiten.Image) {
 	// Pattern console (always draw last)
 	s.patternConsole.Draw(screen)
 
-	// Draw FPS counter in top-left corner (very last so it's always visible)
-	if s.fpsCounter != nil {
+	// Draw FPS counter in top-left corner (only when debug UI is enabled)
+	if s.showDebugUI && s.fpsCounter != nil {
 		s.fpsCounter.Draw(screen)
 	}
 }
@@ -3344,6 +3633,53 @@ func (s *Scene) allowsItemsOnTop(pf PlacedFurni) bool {
 	return ci.ItemsAllowedOnTop
 }
 
+// checkSeatableAt reports whether a tile has seatable furniture (placed or public studio) and its direction.
+func (s *Scene) checkSeatableAt(row, col int) (bool, int) {
+	// 1. Placed furniture in user studios
+	var topSeatLevel int = -1
+	seatableHere := false
+	seatDir := -1
+	for _, pf := range s.placedFurni {
+		if s.isSeatableFurniture(pf) {
+			if s.placement != nil {
+				covered := s.placement.coverageSquares(pf.Row, pf.Col, pf.Width, pf.Depth, pf.Dir)
+				for _, sq := range covered {
+					if sq != nil && sq.GetRow() == row && sq.GetCol() == col {
+						if pf.GridY > topSeatLevel {
+							seatableHere = true
+							topSeatLevel = pf.GridY
+							seatDir = pf.Dir
+						}
+						break
+					}
+				}
+			}
+		}
+	}
+	if seatableHere {
+		return true, seatDir
+	}
+
+	// 2. Public room chairs from Studio XML (e.g. london_chair, cafe chair, across ALL public layouts)
+	if s.studioXML != nil && s.isoScene != nil {
+		grid := s.isoScene.GetGrid()
+		if grid != nil {
+			for _, f := range s.studioXML.Furniture.Items {
+				t := strings.ToLower(f.Type)
+				base := strings.ToLower(f.ImageBase)
+				if t == "chair" || t == "sofa" || t == "stool" || strings.Contains(base, "chair") || strings.Contains(base, "sofa") || strings.Contains(base, "stool") || strings.Contains(base, "bench") {
+					fRow := f.GridX
+					fCol := (grid.Cols + 1) - f.GridZ
+					if fRow == row && fCol == col {
+						return true, f.Dir
+					}
+				}
+			}
+		}
+	}
+	return false, -1
+}
+
 // updateSeatingState checks if the player avatar is on a seatable furniture and applies sit/stand.
 func (s *Scene) updateSeatingState() {
 	if s.playerAvatar == nil || s.playerAvatar.Square == nil {
@@ -3359,33 +3695,7 @@ func (s *Scene) updateSeatingState() {
 	row := s.playerAvatar.Square.GetRow()
 	col := s.playerAvatar.Square.GetCol()
 
-	// Determine if any placed furniture covers this square and is seatable
-	// Find the topmost seatable furniture at this position and capture its direction
-	seatableHere := false
-	seatDir := -1
-	var topSeatLevel int = -1
-	for _, pf := range s.placedFurni {
-		// Compute coverage based on dir (use same logic as placement)
-		covered := s.placement.coverageSquares(pf.Row, pf.Col, pf.Width, pf.Depth, pf.Dir)
-		for _, sq := range covered {
-			if sq != nil && sq.GetRow() == row && sq.GetCol() == col {
-				// Lookup catalog type to decide seatability
-				if s.catalog != nil {
-					if ci := s.catalog.GetItemByID(pf.ProdID); ci != nil {
-						if ci.Type == "Chair" || ci.Type == "Sofa" || ci.Type == "Stool" || ci.Type == "carfront" {
-							// Only use the topmost seatable furniture
-							if pf.GridY > topSeatLevel {
-								seatableHere = true
-								topSeatLevel = pf.GridY
-								seatDir = pf.Dir
-							}
-							break
-						}
-					}
-				}
-			}
-		}
-	}
+	seatableHere, seatDir := s.checkSeatableAt(row, col)
 
 	if seatableHere {
 		// Apply sit state and align direction with seat direction
@@ -3401,8 +3711,8 @@ func (s *Scene) updateSeatingState() {
 			}
 		}
 	} else {
-		// Return to std when not on a seat
-		if s.playerAvatar.Engine.GetBodyAction() == "sit" {
+		// Return to std when not on a seat and not manually sitting
+		if !s.manualSit && s.playerAvatar.Engine.GetBodyAction() == "sit" {
 			s.playerAvatar.Engine.SetBodyAction("std")
 		}
 	}
@@ -3423,28 +3733,7 @@ func (s *Scene) updateSeatingForAvatar(avatar *isoengine.IsoAvatar) {
 	row := avatar.Square.GetRow()
 	col := avatar.Square.GetCol()
 
-	seatableHere := false
-	seatDir := -1
-	var topSeatLevel int = -1
-	for _, pf := range s.placedFurni {
-		covered := s.placement.coverageSquares(pf.Row, pf.Col, pf.Width, pf.Depth, pf.Dir)
-		for _, sq := range covered {
-			if sq != nil && sq.GetRow() == row && sq.GetCol() == col {
-				if s.catalog != nil {
-					if ci := s.catalog.GetItemByID(pf.ProdID); ci != nil {
-						if ci.Type == "Chair" || ci.Type == "Sofa" || ci.Type == "Stool" || ci.Type == "carfront" {
-							if pf.GridY > topSeatLevel {
-								seatableHere = true
-								topSeatLevel = pf.GridY
-								seatDir = pf.Dir
-							}
-							break
-						}
-					}
-				}
-			}
-		}
-	}
+	seatableHere, seatDir := s.checkSeatableAt(row, col)
 
 	if seatableHere {
 		if avatar.Engine.GetBodyAction() != "sit" {
@@ -3456,10 +3745,6 @@ func (s *Scene) updateSeatingForAvatar(avatar *isoengine.IsoAvatar) {
 			if seatDir >= 0 && avatar.Engine.GetDirection() != seatDir {
 				avatar.Engine.SetDirection(seatDir)
 			}
-		}
-	} else {
-		if avatar.Engine.GetBodyAction() == "sit" {
-			avatar.Engine.SetBodyAction("std")
 		}
 	}
 }
@@ -3593,7 +3878,7 @@ func (s *Scene) drawPublicStaticItems(screen *ebiten.Image) {
 		}
 		opts := &ebiten.DrawImageOptions{}
 		opts.GeoM.Translate(x, y)
-		if it.Ink == 36 { // additive glow
+		if it.Ink == 33 || it.Ink == 36 { // additive glow / lighten
 			opts.CompositeMode = ebiten.CompositeModeLighter
 		}
 		screen.DrawImage(asset, opts)
@@ -3610,8 +3895,8 @@ func (s *Scene) InvalidateElementSorting() {
 
 // drawElement draws a single room element
 func (s *Scene) drawElement(screen *ebiten.Image, element studioroom.RoomElement) {
-	// Skip non-visual elements
-	if element.Media != "bitmap" {
+	// Skip non-visual elements and inactive stage/room elements
+	if element.Media != "bitmap" || element.Active == 0 {
 		return
 	}
 
@@ -3654,8 +3939,9 @@ func (s *Scene) drawElement(screen *ebiten.Image, element studioroom.RoomElement
 	opts := &ebiten.DrawImageOptions{}
 	opts.GeoM.Translate(x, y)
 
-	// For hiliter, use additive blending so it "glows" like Lingo ink 36
-	if element.Type == "hiliter" {
+	// For hiliter and additive light inks (Director ink 33 lighten, ink 36 additive glow),
+	// use additive blending so black backgrounds don't occlude the scene
+	if element.Type == "hiliter" || element.Ink == 33 || element.Ink == 36 {
 		opts.CompositeMode = ebiten.CompositeModeLighter
 	}
 
@@ -4043,6 +4329,34 @@ func (s *Scene) GetStudioList() *studios.StudioList {
 // GetCatalog returns the catalog (for returning to entry scene)
 func (s *Scene) GetCatalog() *catalog.Catalog {
 	return s.catalog
+}
+
+// GetStudioByID returns the studio definition with the given ID
+func (s *Scene) GetStudioByID(studioID string) *studios.Studio {
+	if s == nil || s.studioList == nil {
+		return nil
+	}
+	for _, st := range s.studioList.Studios {
+		if st.StudioID == studioID {
+			return &st
+		}
+	}
+	return nil
+}
+
+// ShouldChangeStudio returns target studioID if a room change was requested via navigator
+func (s *Scene) ShouldChangeStudio() string {
+	if s == nil {
+		return ""
+	}
+	return s.targetStudioID
+}
+
+// ClearTargetStudio clears the target studio ID after transition
+func (s *Scene) ClearTargetStudio() {
+	if s != nil {
+		s.targetStudioID = ""
+	}
 }
 
 // handleLightingTouchToggle processes mouse/touch input for the on-screen lighting button.
@@ -4655,6 +4969,10 @@ func (s *Scene) kickAvatarByName(screenName string) {
 		s.MarkKicked()
 		return
 	}
+	// Authoritatively notify server of host kick over network
+	if s.sendKickIfAvailable != nil && s.studio != nil {
+		_ = s.sendKickIfAvailable(s.studio.StudioID, screenName)
+	}
 	// Find and remove the avatar from the avatars slice
 	idx := -1
 	for i := range s.avatars {
@@ -4675,7 +4993,7 @@ func (s *Scene) kickAvatarByName(screenName string) {
 		if s.chatManager != nil && s.playerAvatar != nil {
 			msg := screenName + " was kicked by the room owner."
 			// Emit as a normal chat bubble near the player
-			s.chatManager.EmitChatBubble(msg, s.playerAvatar)
+			s.chatManager.EmitChatBubble(msg, s.playerAvatar, 1)
 		}
 	}
 }
@@ -4777,6 +5095,79 @@ func (s *Scene) startDrinkDispenserApproach(pf *PlacedFurni) {
 	log.Printf("DrinkApproach: armed AV_DC trigger for [%d,%d] (anchor [%d,%d] dir=%d)", tr, tc, anchorR, anchorC, pf.Dir)
 }
 
+// startSeatApproach moves the player avatar to a seatable furniture item and sits down.
+func (s *Scene) startSeatApproach(pf *PlacedFurni) {
+	if s == nil || s.isoScene == nil || s.playerAvatar == nil || pf == nil || s.placement == nil {
+		return
+	}
+	grid := s.isoScene.GetGrid()
+	if grid == nil {
+		return
+	}
+	covered := s.placement.coverageSquares(pf.Row, pf.Col, pf.Width, pf.Depth, pf.Dir)
+	var target *isoengine.IsoSquare
+	if len(covered) == 1 {
+		target = covered[0]
+	} else if len(covered) > 1 {
+		curSq := s.playerAvatar.GetNextCommittedSquare()
+		curR, curC := 0, 0
+		if curSq != nil {
+			curR, curC = curSq.GetRow(), curSq.GetCol()
+		}
+		minDist := 999999
+		for _, sq := range covered {
+			if sq != nil && sq.IsWalkable() {
+				dr := sq.GetRow() - curR
+				dc := sq.GetCol() - curC
+				dist := dr*dr + dc*dc
+				if dist < minDist {
+					minDist = dist
+					target = sq
+				}
+			}
+		}
+		if target == nil {
+			target = covered[0]
+		}
+	} else {
+		target = grid.GetSquareByRowCol(pf.Row, pf.Col)
+	}
+
+	if target == nil {
+		return
+	}
+
+	// If already on target square, sit down immediately
+	if s.playerAvatar.Square != nil && s.playerAvatar.Square.GetRow() == target.GetRow() && s.playerAvatar.Square.GetCol() == target.GetCol() {
+		if s.playerAvatar.Engine.GetBodyAction() != "sit" {
+			s.playerAvatar.Engine.SetBodyAction("sit")
+			s.playerAvatar.Engine.SetDirection(pf.Dir)
+			s.SendAvatarAction("sit")
+		}
+		return
+	}
+
+	start := s.playerAvatar.GetNextCommittedSquare()
+	path := isoengine.FindPath(start, target, grid)
+	if len(path) == 0 {
+		log.Printf("SeatApproach: target [%d,%d] unreachable from [%d,%d]", target.GetRow(), target.GetCol(), start.GetRow(), start.GetCol())
+		return
+	}
+
+	s.manualSit = false
+	if s.sendMovePathIfAvailable != nil {
+		pts := make([][2]int, 0, len(path))
+		for _, sq := range path {
+			pts = append(pts, [2]int{sq.GetRow(), sq.GetCol()})
+		}
+		s.sendMovePathIfAvailable(s.studio.StudioID, pts)
+	} else {
+		s.playerAvatar.Engine.StartWalking()
+		s.playerAvatar.MoveToSquare(target, grid)
+		s.playerHasMoved = true
+	}
+}
+
 // startStereoApproach computes the adjacent walk tile and moves the player there;
 // upon arrival it sends CD_R with the furniture PosID.
 func (s *Scene) startStereoApproach(pf *PlacedFurni) {
@@ -4860,4 +5251,352 @@ func (s *Scene) startStereoApproach(pf *PlacedFurni) {
 // InfoStand returns the InfoStand overlay pointer
 func (s *Scene) InfoStand() *InfoStand {
 	return s.infoStand
+}
+
+
+func (s *Scene) setupConsoleHandlers() {
+	if s.hudManager == nil || s.hudManager.GetWindowManager() == nil {
+		return
+	}
+	wm := s.hudManager.GetWindowManager()
+	wm.SetConsoleHandlers(ui.ConsoleHandlers{
+		GetFriends: func() []ui.FriendListItem {
+			s.messengerMu.RLock()
+			defer s.messengerMu.RUnlock()
+			return s.messengerFriends
+		},
+		GetRequests: func() []string {
+			s.messengerMu.RLock()
+			defer s.messengerMu.RUnlock()
+			return s.messengerRequests
+		},
+		GetMessages: func() []ui.ConsoleMessage {
+			s.messengerMu.RLock()
+			defer s.messengerMu.RUnlock()
+			return s.messengerMessages
+		},
+		SendMessage: func(to, message string) error {
+			go s.sendMessengerMessage(to, message)
+			return nil
+		},
+		AcceptRequest: func(from string) error {
+			go s.acceptFriendRequest(from)
+			return nil
+		},
+		RejectRequest: func(from string) error {
+			go s.rejectFriendRequest(from)
+			return nil
+		},
+		RemoveFriend: func(target string) error {
+			go s.removeFriend(target)
+			return nil
+		},
+		MarkMessageRead: func(id int) error {
+			s.messengerMu.Lock()
+			newMsgs := make([]ui.ConsoleMessage, 0, len(s.messengerMessages))
+			for _, m := range s.messengerMessages {
+				if m.ID != id {
+					newMsgs = append(newMsgs, m)
+				}
+			}
+			s.messengerMessages = newMsgs
+			s.messengerMu.Unlock()
+			return nil
+		},
+		GetMyInfo: func() (string, string, *ebiten.Image) {
+			name := s.currentUserName
+			mission := ""
+			if s.playerAvatar != nil {
+				mission = s.playerAvatar.GetMission()
+			}
+			var buf *ebiten.Image
+			if s.playerAvatar != nil && s.playerAvatar.Engine != nil {
+				if eng, err := avatarengine.NewAvatarEngine("", 100, true, s.dataDir); err == nil && eng != nil {
+					for k, v := range s.playerAvatar.Engine.Attributes {
+						eng.Attributes[k] = v
+					}
+					eng.SetDirection(2)
+					eng.SetBodyAction("std")
+					eng.SetFaceAction("std")
+					eng.EyeAction = "std"
+					eng.IsDancing = false
+					eng.IsEmoting = false
+					_ = eng.Draw()
+					buf = eng.GetBuffer()
+				}
+			}
+			return name, mission, buf
+		},
+	})
+}
+
+func (s *Scene) getBaseURL() string {
+	u := s.userCredentials.gatewayURL
+	if idx := strings.Index(u, "/sf/gateway"); idx != -1 {
+		return u[:idx]
+	}
+	return ""
+}
+
+func (s *Scene) RefreshMessengerData() {
+	user := s.userCredentials.screenName
+	if user == "" {
+		user = s.currentUserName
+	}
+	if user == "" {
+		return
+	}
+	sec := s.userCredentials.secret
+
+	go func() {
+		client := &http.Client{Timeout: 10 * time.Second}
+		baseURL := s.getBaseURL()
+
+		// 1. Fetch Friends
+		friendsURL := fmt.Sprintf("%s/api/messenger/friends?user=%s&sid=%s", baseURL, url.QueryEscape(user), url.QueryEscape(sec))
+		resp, err := client.Get(friendsURL)
+		if err == nil && resp.StatusCode == http.StatusOK {
+			var res struct {
+				Success bool `json:"success"`
+				Friends []struct {
+					ScreenName string `json:"screen_name"`
+					Gender     int    `json:"gender"`
+					Mission    string `json:"mission"`
+					Figure     string `json:"figure"`
+					Online     bool   `json:"online"`
+					LastAccess string `json:"last_access"`
+				} `json:"friends"`
+			}
+			if err := json.NewDecoder(resp.Body).Decode(&res); err == nil && res.Success {
+				items := make([]ui.FriendListItem, 0, len(res.Friends))
+				for _, f := range res.Friends {
+					items = append(items, ui.FriendListItem{
+						Username:   f.ScreenName,
+						Online:     f.Online,
+						Motto:      f.Mission,
+						LastAccess: f.LastAccess,
+					})
+				}
+				s.messengerMu.Lock()
+				s.messengerFriends = items
+				s.messengerMu.Unlock()
+			}
+			resp.Body.Close()
+		}
+
+		// 2. Fetch Pending Requests
+		reqURL := fmt.Sprintf("%s/api/messenger/requests?user=%s&sid=%s", baseURL, url.QueryEscape(user), url.QueryEscape(sec))
+		respReq, err := client.Get(reqURL)
+		if err == nil && respReq.StatusCode == http.StatusOK {
+			var resReq struct {
+				Success  bool     `json:"success"`
+				Requests []string `json:"requests"`
+			}
+			if err := json.NewDecoder(respReq.Body).Decode(&resReq); err == nil && resReq.Success {
+				s.messengerMu.Lock()
+				s.messengerRequests = resReq.Requests
+				s.messengerMu.Unlock()
+			}
+			respReq.Body.Close()
+		}
+
+		// 3. Fetch Unread Messages
+		msgURL := fmt.Sprintf("%s/api/messenger/messages?user=%s&unread=true&sid=%s", baseURL, url.QueryEscape(user), url.QueryEscape(sec))
+		respMsg, err := client.Get(msgURL)
+		if err == nil && respMsg.StatusCode == http.StatusOK {
+			var resMsg struct {
+				Success  bool `json:"success"`
+				Messages []struct {
+					ID         int    `json:"id"`
+					SenderName string `json:"sender_name"`
+					Message    string `json:"message"`
+					SentAt     string `json:"sent_at"`
+				} `json:"messages"`
+			}
+			if err := json.NewDecoder(respMsg.Body).Decode(&resMsg); err == nil && resMsg.Success {
+				msgs := make([]ui.ConsoleMessage, 0, len(resMsg.Messages))
+				for _, m := range resMsg.Messages {
+					msgs = append(msgs, ui.ConsoleMessage{
+						ID:        m.ID,
+						Sender:    m.SenderName,
+						Message:   m.Message,
+						Timestamp: m.SentAt,
+					})
+				}
+				s.messengerMu.Lock()
+				s.messengerMessages = msgs
+				s.messengerMu.Unlock()
+			}
+			respMsg.Body.Close()
+		}
+
+		// Update UI if console_myinfo is currently open
+		if s.hudManager != nil && s.hudManager.GetWindowManager() != nil {
+			if w := s.hudManager.GetWindowManager().GetWindow("console_myinfo"); w != nil {
+				s.messengerMu.RLock()
+				reqCnt := len(s.messengerRequests)
+				msgCnt := len(s.messengerMessages)
+				s.messengerMu.RUnlock()
+				for i := range w.Definition.Elements {
+					el := &w.Definition.Elements[i]
+					switch el.ID {
+					case "console_myinfo_messages_link":
+						el.Key = fmt.Sprintf("%d new message(s)", msgCnt)
+					case "console_myinfo_requests_link":
+						el.Key = fmt.Sprintf("%d Friends Request(s)", reqCnt)
+					}
+				}
+			}
+		}
+	}()
+}
+
+func (s *Scene) sendMessengerMessage(to, message string) {
+	baseURL := s.getBaseURL()
+	user := s.currentUserName
+	sec := s.userCredentials.secret
+
+	vals := url.Values{
+		"user":    {user},
+		"to":      {to},
+		"message": {message},
+		"sid":     {sec},
+	}
+	client := &http.Client{Timeout: 10 * time.Second}
+	_, _ = client.PostForm(baseURL+"/api/messenger/send", vals)
+
+	if s.sendMessengerMessageIfAvailable != nil {
+		_ = s.sendMessengerMessageIfAvailable(to, message)
+	}
+}
+
+func (s *Scene) acceptFriendRequest(from string) {
+	baseURL := s.getBaseURL()
+	user := s.currentUserName
+	sec := s.userCredentials.secret
+
+	vals := url.Values{
+		"user": {user},
+		"from": {from},
+		"sid":  {sec},
+	}
+	client := &http.Client{Timeout: 10 * time.Second}
+	_, _ = client.PostForm(baseURL+"/api/messenger/accept", vals)
+
+	if s.sendFriendAcceptIfAvailable != nil {
+		_ = s.sendFriendAcceptIfAvailable(from)
+	}
+
+	s.messengerMu.Lock()
+	newReqs := make([]string, 0, len(s.messengerRequests))
+	for _, r := range s.messengerRequests {
+		if !strings.EqualFold(r, from) {
+			newReqs = append(newReqs, r)
+		}
+	}
+	s.messengerRequests = newReqs
+	s.messengerMu.Unlock()
+
+	s.RefreshMessengerData()
+}
+
+func (s *Scene) rejectFriendRequest(from string) {
+	baseURL := s.getBaseURL()
+	user := s.currentUserName
+	sec := s.userCredentials.secret
+
+	vals := url.Values{
+		"user": {user},
+		"from": {from},
+		"sid":  {sec},
+	}
+	client := &http.Client{Timeout: 10 * time.Second}
+	_, _ = client.PostForm(baseURL+"/api/messenger/reject", vals)
+
+	if s.sendFriendRejectIfAvailable != nil {
+		_ = s.sendFriendRejectIfAvailable(from)
+	}
+
+	s.messengerMu.Lock()
+	newReqs := make([]string, 0, len(s.messengerRequests))
+	for _, r := range s.messengerRequests {
+		if !strings.EqualFold(r, from) {
+			newReqs = append(newReqs, r)
+		}
+	}
+	s.messengerRequests = newReqs
+	s.messengerMu.Unlock()
+}
+
+func (s *Scene) removeFriend(target string) {
+	baseURL := s.getBaseURL()
+	user := s.currentUserName
+	sec := s.userCredentials.secret
+
+	vals := url.Values{
+		"user":   {user},
+		"friend": {target},
+		"sid":    {sec},
+	}
+	client := &http.Client{Timeout: 10 * time.Second}
+	_, _ = client.PostForm(baseURL+"/api/messenger/friend/remove", vals)
+
+	s.messengerMu.Lock()
+	newFriends := make([]ui.FriendListItem, 0, len(s.messengerFriends))
+	for _, f := range s.messengerFriends {
+		if !strings.EqualFold(f.Username, target) {
+			newFriends = append(newFriends, f)
+		}
+	}
+	s.messengerFriends = newFriends
+	s.messengerMu.Unlock()
+}
+
+func (s *Scene) HandleIncomingFriendRequest(from string) {
+	s.messengerMu.Lock()
+	s.messengerRequests = append(s.messengerRequests, from)
+	reqCnt := len(s.messengerRequests)
+	s.messengerMu.Unlock()
+
+	if s.hudManager != nil && s.hudManager.GetWindowManager() != nil {
+		if w := s.hudManager.GetWindowManager().GetWindow("console_myinfo"); w != nil {
+			for i := range w.Definition.Elements {
+				if w.Definition.Elements[i].ID == "console_myinfo_requests_link" {
+					w.Definition.Elements[i].Key = fmt.Sprintf("%d Friends Request(s)", reqCnt)
+				}
+			}
+		}
+	}
+}
+
+func (s *Scene) HandleFriendAccepted(from string) {
+	s.messengerMu.Lock()
+	s.messengerFriends = append(s.messengerFriends, ui.FriendListItem{
+		Username: from,
+		Online:   true,
+	})
+	s.messengerMu.Unlock()
+	s.RefreshMessengerData()
+}
+
+func (s *Scene) HandleIncomingMessengerMessage(from, msg string) {
+	s.messengerMu.Lock()
+	s.messengerMessages = append(s.messengerMessages, ui.ConsoleMessage{
+		ID:        int(time.Now().UnixNano()),
+		Sender:    from,
+		Message:   msg,
+		Timestamp: time.Now().Format("15:04"),
+	})
+	msgCnt := len(s.messengerMessages)
+	s.messengerMu.Unlock()
+
+	if s.hudManager != nil && s.hudManager.GetWindowManager() != nil {
+		if w := s.hudManager.GetWindowManager().GetWindow("console_myinfo"); w != nil {
+			for i := range w.Definition.Elements {
+				if w.Definition.Elements[i].ID == "console_myinfo_messages_link" {
+					w.Definition.Elements[i].Key = fmt.Sprintf("%d new message(s)", msgCnt)
+				}
+			}
+		}
+	}
 }

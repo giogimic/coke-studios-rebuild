@@ -21,6 +21,28 @@ import (
 )
 
 // WindowManager replicates Lingo's ElementManager for window management
+
+// ConsoleMessage represents a single received instant message in the Shockwave console
+type ConsoleMessage struct {
+	ID        int
+	Sender    string
+	Message   string
+	Timestamp string
+}
+
+// ConsoleHandlers holds callbacks for authentic Shockwave console interactions
+type ConsoleHandlers struct {
+	GetFriends      func() []FriendListItem
+	GetRequests     func() []string
+	GetMessages     func() []ConsoleMessage
+	SendMessage     func(to, message string) error
+	AcceptRequest   func(from string) error
+	RejectRequest   func(from string) error
+	RemoveFriend    func(target string) error
+	MarkMessageRead func(id int) error
+	GetMyInfo       func() (name, mission string, avatarBuf *ebiten.Image)
+}
+
 type WindowManager struct {
 	openWindows []*Window // Ordered list of open windows (back to front)
 	baseZ       int       // Base Z value for window layering (1000000 in Lingo)
@@ -32,6 +54,11 @@ type WindowManager struct {
 
 	// Scene state hints for style selection
 	entryOpen bool
+
+	// Console state
+	consoleHandlers       ConsoleHandlers
+	selectedConsoleFriend string
+	consoleMessagePage    int
 }
 
 // Window represents a single UI window with Lingo-style properties
@@ -147,6 +174,237 @@ func NewWindowManager(fontManager *FontManager) *WindowManager {
 		baseZ:       1000000, // Match Lingo's base Z value
 		fontManager: fontManager,
 	}
+}
+
+
+// SetConsoleHandlers registers interaction callbacks for the Shockwave messenger console
+func (wm *WindowManager) SetConsoleHandlers(h ConsoleHandlers) {
+	wm.consoleHandlers = h
+}
+
+// GetConsoleHandlers returns the current console callbacks
+func (wm *WindowManager) GetConsoleHandlers() *ConsoleHandlers {
+	return &wm.consoleHandlers
+}
+
+// OpenConsoleWindow loads and transitions to one of the 6 authentic Shockwave console windows
+func (wm *WindowManager) OpenConsoleWindow(name string, prevRect [4]int) *Window {
+	messengerDir := filepath.Join("Lingo", "cc_messenger[1]")
+	filename := ""
+	switch name {
+	case "console_myinfo":
+		filename = "10_console_myinfo.window.txt"
+	case "console_getmessage":
+		filename = "11_console_getmessage.window.txt"
+	case "console_getrequest":
+		filename = "12_console_getrequest.window.txt"
+	case "console_friends":
+		filename = "13_console_friends.window.txt"
+	case "console_compose":
+		filename = "14_console_compose.window.txt"
+	case "console_removefriend":
+		filename = "15_console_removefriend.window.txt"
+	default:
+		return nil
+	}
+
+	defPath := filepath.Join(messengerDir, filename)
+	def, err := window.ParseFile(defPath)
+	if err != nil {
+		log.Printf("WindowManager: failed to parse console window %s: %v", filename, err)
+		return nil
+	}
+
+	assets := lingoassets.LoadAssetsForDefinition(def, messengerDir)
+	extra := lingoassets.LoadAssetsByNames([]string{
+		"mmsSHELL1", "mmsSHELL2", "mmsSHELL3_b1dn", "mmsSHELL3_b2dn",
+		"MMS_INT_WIN_TOP_LEFT", "MMS_INT_WIN_TOP_MIDDLE", "MMS_INT_WIN_TOP_RIGHT",
+		"MMS_INT_WIN_MIDDLE_LEFT", "MMS_INT_WIN_MIDDLE", "MMS_INT_WIN_MIDDLE_RIGHT",
+		"MMS_INT_WIN_BOTTOM_LEFT", "MMS_INT_WIN_BOTTOM_MIDDLE", "MMS_INT_WIN_BOTTOM_RIGHT",
+		"MMS_INT_CLOSEBUTTON",
+		"button.d6.left.active", "button.d6.middle.active", "button.d6.right.active",
+		"button.d6.left.pressed", "button.d6.middle.pressed", "button.d6.right.pressed",
+		"button.d7.left.active", "button.d7.middle.active", "button.d7.right.active",
+		"button.d7.left.pressed", "button.d7.middle.pressed", "button.d7.right.pressed",
+	}, messengerDir)
+	for k, v := range extra {
+		assets[k] = v
+	}
+
+	// Close any active console window
+	for _, w := range wm.openWindows {
+		if strings.HasPrefix(w.Name, "console_") {
+			wm.CloseWindow(w.Name)
+			break
+		}
+	}
+
+	newW := wm.openWindowWithStyle(name, def, assets, nil, "")
+	if prevRect[2] > prevRect[0] && prevRect[3] > prevRect[1] {
+		newW.Rect = prevRect
+	} else {
+		newW.Rect = def.Rect
+	}
+	if newW.TempVars == nil {
+		newW.TempVars = map[string]interface{}{}
+	}
+	newW.TempVars["customDragRects"] = [][4]int{{0, 0, def.Rect[2] - def.Rect[0], def.Rect[3] - def.Rect[1]}}
+
+	// Window-specific initialization
+	switch name {
+	case "console_myinfo":
+		if wm.consoleHandlers.GetMyInfo != nil {
+			myUser, myMotto, avatarBuf := wm.consoleHandlers.GetMyInfo()
+			msgCnt := 0
+			if wm.consoleHandlers.GetMessages != nil {
+				msgCnt = len(wm.consoleHandlers.GetMessages())
+			}
+			reqCnt := 0
+			if wm.consoleHandlers.GetRequests != nil {
+				reqCnt = len(wm.consoleHandlers.GetRequests())
+			}
+			for i := range newW.Definition.Elements {
+				el := &newW.Definition.Elements[i]
+				switch el.ID {
+				case "console_myinfo_name":
+					el.Key = myUser
+				case "console_myinfo_mission_field":
+					el.Key = myMotto
+				case "console_myinfo_messages_link":
+					el.Key = fmt.Sprintf("%d new message(s)", msgCnt)
+				case "console_myinfo_requests_link":
+					el.Key = fmt.Sprintf("%d Friends Request(s)", reqCnt)
+				}
+			}
+			if avatarBuf != nil {
+				target := ebiten.NewImage(77, 86)
+				op := &ebiten.DrawImageOptions{}
+				srcW := avatarBuf.Bounds().Dx()
+				srcH := avatarBuf.Bounds().Dy()
+				dx := float64((77 - srcW) / 2)
+				if dx < 0 {
+					dx = 0
+				}
+				dy := float64(86 - srcH)
+				op.GeoM.Translate(dx, dy)
+				target.DrawImage(avatarBuf, op)
+				newW.Assets["console_myhead_image"] = target
+			}
+		}
+
+	case "console_friends":
+		var friends []FriendListItem
+		if wm.consoleHandlers.GetFriends != nil {
+			friends = wm.consoleHandlers.GetFriends()
+		}
+		if list := newW.Lists["console_friends_friendlist"]; list != nil {
+			list.FriendItems = friends
+			list.UpdateContent()
+		}
+		newW.FriendClick = func(username string) {
+			wm.selectedConsoleFriend = username
+			var motto, last string
+			for _, f := range friends {
+				if f.Username == username {
+					motto = f.Motto
+					last = f.LastAccess
+					break
+				}
+			}
+			for i := range newW.Definition.Elements {
+				el := &newW.Definition.Elements[i]
+				switch el.ID {
+				case "console_friend_sanfo_name_text":
+					el.Key = username
+				case "console_friend_mission":
+					el.Key = motto
+				case "console_friend_messages":
+					if last != "" {
+						el.Key = "Last Access: " + last
+					} else {
+						el.Key = "Online Now"
+					}
+				}
+			}
+		}
+		if len(friends) > 0 {
+			firstUser := friends[0].Username
+			if wm.selectedConsoleFriend != "" {
+				for _, f := range friends {
+					if f.Username == wm.selectedConsoleFriend {
+						firstUser = wm.selectedConsoleFriend
+						break
+					}
+				}
+			}
+			newW.FriendClick(firstUser)
+		}
+
+	case "console_compose":
+		target := wm.selectedConsoleFriend
+		for i := range newW.Definition.Elements {
+			el := &newW.Definition.Elements[i]
+			switch el.ID {
+			case "console_compose_recipients":
+				el.Key = target
+			case "console_compose_message_field":
+				el.Key = ""
+			case "console_compose_lenght_text":
+				el.Key = "0/120"
+			}
+		}
+
+	case "console_removefriend":
+		target := wm.selectedConsoleFriend
+		for i := range newW.Definition.Elements {
+			el := &newW.Definition.Elements[i]
+			if el.ID == "console_removefriend_name" {
+				el.Key = target
+			}
+		}
+
+	case "console_getrequest":
+		var reqs []string
+		if wm.consoleHandlers.GetRequests != nil {
+			reqs = wm.consoleHandlers.GetRequests()
+		}
+		target := ""
+		if len(reqs) > 0 {
+			target = reqs[0]
+		}
+		for i := range newW.Definition.Elements {
+			el := &newW.Definition.Elements[i]
+			if el.ID == "console_getrequest_sanfo_name_text" {
+				el.Key = target
+			}
+		}
+
+	case "console_getmessage":
+		var msgs []ConsoleMessage
+		if wm.consoleHandlers.GetMessages != nil {
+			msgs = wm.consoleHandlers.GetMessages()
+		}
+		if wm.consoleMessagePage >= len(msgs) {
+			wm.consoleMessagePage = 0
+		}
+		var curMsg ConsoleMessage
+		if len(msgs) > 0 {
+			curMsg = msgs[wm.consoleMessagePage]
+		}
+		for i := range newW.Definition.Elements {
+			el := &newW.Definition.Elements[i]
+			switch el.ID {
+			case "console_getmessage_sender":
+				el.Key = curMsg.Sender
+			case "console_getmessage_field":
+				el.Key = curMsg.Message
+			case "console_getmessage_date":
+				el.Key = curMsg.Timestamp
+			}
+		}
+	}
+
+	return newW
 }
 
 // OpenWindow opens a new window or brings existing window to front
@@ -996,129 +1254,203 @@ func (w *Window) handleInput(wm *WindowManager) error {
 		}
 	}
 
-	// Messenger shell tab clicks (console windows)
-	if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) && strings.HasPrefix(w.Name, "console_") {
-		// Helper to test click within a content element rect by ID
-		isClickInElement := func(id string) bool {
-			for _, el := range w.Definition.Elements {
-				if el.ID == id {
-					x := int(w.StageOffsetX) + w.Rect[0] + el.LocH
-					y := int(w.StageOffsetY) + w.Rect[1] + el.LocV
-					mx, my := ebiten.CursorPosition()
-					if mx >= x && mx < x+el.Width && my >= y && my < y+el.Height {
-						return true
+	// Authentic Shockwave console windows interaction & text composition
+	if strings.HasPrefix(w.Name, "console_") {
+		// Text input handling for Compose window message field
+		if w.Name == "console_compose" {
+			for i := range w.Definition.Elements {
+				if w.Definition.Elements[i].ID == "console_compose_message_field" {
+					el := &w.Definition.Elements[i]
+					for _, r := range ebiten.AppendInputChars(nil) {
+						if r >= 32 && r <= 126 && len(el.Key) < 120 {
+							el.Key += string(r)
+						}
 					}
-				}
-			}
-			return false
-		}
-
-		// Switch to friends from myinfo when clicking the Friends tab/button region
-		if w.Name == "console_myinfo" && isClickInElement("console.myfriends.button") {
-			// Open console_friends preserving position
-			messengerDir := filepath.Join("Lingo", "cc_messenger[1]")
-			defPath := filepath.Join(messengerDir, "13_console_friends.window.txt")
-			def, err := window.ParseFile(defPath)
-			if err == nil {
-				assets := lingoassets.LoadAssetsForDefinition(def, messengerDir)
-				// Merge required shell and button assets
-				extra := lingoassets.LoadAssetsByNames([]string{
-					"mmsSHELL1", "mmsSHELL2", "mmsSHELL3_b1dn", "mmsSHELL3_b2dn",
-					"MMS_INT_WIN_TOP_LEFT", "MMS_INT_WIN_TOP_MIDDLE", "MMS_INT_WIN_TOP_RIGHT",
-					"MMS_INT_WIN_MIDDLE_LEFT", "MMS_INT_WIN_MIDDLE", "MMS_INT_WIN_MIDDLE_RIGHT",
-					"MMS_INT_WIN_BOTTOM_LEFT", "MMS_INT_WIN_BOTTOM_MIDDLE", "MMS_INT_WIN_BOTTOM_RIGHT",
-					"MMS_INT_CLOSEBUTTON",
-					"button.d6.left.active", "button.d6.middle.active", "button.d6.right.active",
-					"button.d6.left.pressed", "button.d6.middle.pressed", "button.d6.right.pressed",
-					"button.d7.left.active", "button.d7.middle.active", "button.d7.right.active",
-					"button.d7.left.pressed", "button.d7.middle.pressed", "button.d7.right.pressed",
-				}, messengerDir)
-				for k, v := range extra {
-					assets[k] = v
-				}
-				// Close current and open new at same position/style
-				rect := w.Rect
-				style := w.WindowStyle
-				tm := w.Renderer.tm
-				wm.CloseWindow(w.Name)
-				newW := wm.openWindowWithStyle("console_friends", def, assets, tm, style)
-				newW.Rect = rect
-				// Allow drag by content area
-				if newW.TempVars == nil {
-					newW.TempVars = map[string]interface{}{}
-				}
-				newW.TempVars["customDragRects"] = [][4]int{{0, 0, def.Rect[2] - def.Rect[0], def.Rect[3] - def.Rect[1]}}
-				// Default friend click behavior populates detail fields
-				newW.FriendClick = func(username string) {
-					list := newW.Lists["console_friends_friendlist"]
-					if list == nil {
-						return
+					if inpututil.IsKeyJustPressed(ebiten.KeyBackspace) {
+						if len(el.Key) > 0 {
+							el.Key = el.Key[:len(el.Key)-1]
+						}
 					}
-					var motto, last string
-					for _, f := range list.FriendItems {
-						if f.Username == username {
-							motto = f.Motto
-							last = f.LastAccess
+					// Update length text indicator (0/120)
+					for j := range w.Definition.Elements {
+						if w.Definition.Elements[j].ID == "console_compose_lenght_text" {
+							w.Definition.Elements[j].Key = fmt.Sprintf("%d/120", len(el.Key))
 							break
 						}
 					}
-					// Update detail fields
-					for i := range newW.Definition.Elements {
-						el := &newW.Definition.Elements[i]
-						switch el.ID {
-						case "console_friend_sanfo_name_text":
-							el.Key = username
-						case "console_friend_mission":
-							el.Key = motto
-						case "console_friend_messages":
-							el.Key = "Last Access: " + last
-						}
-					}
+					break
 				}
-				// Seed with placeholder data if empty so UI is testable
-				if l := newW.Lists["console_friends_friendlist"]; l != nil && len(l.FriendItems) == 0 {
-					l.FriendItems = []FriendListItem{
-						{Username: "Adam", Online: true, MessageCnt: 1, Motto: "hehe", LastAccess: "9/2/2025 7:42AM"},
-						{Username: "Bella", Online: false, MessageCnt: 0, Motto: "Live loud", LastAccess: "8/28/2025 3:10PM"},
-					}
-					l.UpdateContent()
-				}
-				return nil
 			}
 		}
 
-		// Switch back to myinfo from friends when clicking the My Info tab/button region
-		if w.Name == "console_friends" && isClickInElement("console.myinfo.button") {
-			messengerDir := filepath.Join("Lingo", "cc_messenger[1]")
-			defPath := filepath.Join(messengerDir, "10_console_myinfo.window.txt")
-			def, err := window.ParseFile(defPath)
-			if err == nil {
-				assets := lingoassets.LoadAssetsForDefinition(def, messengerDir)
-				extra := lingoassets.LoadAssetsByNames([]string{
-					"mmsSHELL1", "mmsSHELL2", "mmsSHELL3_b1dn", "mmsSHELL3_b2dn",
-					"MMS_INT_WIN_TOP_LEFT", "MMS_INT_WIN_TOP_MIDDLE", "MMS_INT_WIN_TOP_RIGHT",
-					"MMS_INT_WIN_MIDDLE_LEFT", "MMS_INT_WIN_MIDDLE", "MMS_INT_WIN_MIDDLE_RIGHT",
-					"MMS_INT_WIN_BOTTOM_LEFT", "MMS_INT_WIN_BOTTOM_MIDDLE", "MMS_INT_WIN_BOTTOM_RIGHT",
-					"MMS_INT_CLOSEBUTTON",
-					"button.d6.left.active", "button.d6.middle.active", "button.d6.right.active",
-					"button.d6.left.pressed", "button.d6.middle.pressed", "button.d6.right.pressed",
-					"button.d7.left.active", "button.d7.middle.active", "button.d7.right.active",
-					"button.d7.left.pressed", "button.d7.middle.pressed", "button.d7.right.pressed",
-				}, messengerDir)
-				for k, v := range extra {
-					assets[k] = v
+		if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) {
+			isClickInElement := func(id string) bool {
+				for _, el := range w.Definition.Elements {
+					if el.ID == id {
+						x := int(w.StageOffsetX) + w.Rect[0] + el.LocH
+						y := int(w.StageOffsetY) + w.Rect[1] + el.LocV
+						mx, my := ebiten.CursorPosition()
+						if mx >= x && mx < x+el.Width && my >= y && my < y+el.Height {
+							return true
+						}
+					}
 				}
-				rect := w.Rect
-				style := w.WindowStyle
-				tm := w.Renderer.tm
+				return false
+			}
+
+			// Close button
+			if isClickInElement("close") {
 				wm.CloseWindow(w.Name)
-				newW := wm.openWindowWithStyle("console_myinfo", def, assets, tm, style)
-				newW.Rect = rect
-				if newW.TempVars == nil {
-					newW.TempVars = map[string]interface{}{}
-				}
-				newW.TempVars["customDragRects"] = [][4]int{{0, 0, def.Rect[2] - def.Rect[0], def.Rect[3] - def.Rect[1]}}
 				return nil
+			}
+
+			// Switch to My Info tab
+			if isClickInElement("console.myinfo.button") {
+				wm.OpenConsoleWindow("console_myinfo", w.Rect)
+				return nil
+			}
+
+			// Switch to Friends tab
+			if isClickInElement("console.myfriends.button") {
+				wm.OpenConsoleWindow("console_friends", w.Rect)
+				return nil
+			}
+
+			// Window-specific buttons
+			switch w.Name {
+			case "console_myinfo":
+				if isClickInElement("console_myinfo_requests_link") {
+					if reqs := wm.consoleHandlers.GetRequests; reqs != nil && len(reqs()) > 0 {
+						wm.OpenConsoleWindow("console_getrequest", w.Rect)
+						return nil
+					}
+				}
+				if isClickInElement("console_myinfo_messages_link") {
+					if msgs := wm.consoleHandlers.GetMessages; msgs != nil && len(msgs()) > 0 {
+						wm.consoleMessagePage = 0
+						wm.OpenConsoleWindow("console_getmessage", w.Rect)
+						return nil
+					}
+				}
+
+			case "console_friends":
+				if isClickInElement("messenger_friends_compose_button") {
+					if wm.selectedConsoleFriend != "" {
+						wm.OpenConsoleWindow("console_compose", w.Rect)
+						return nil
+					}
+				}
+				if isClickInElement("messenger_friends_remove_button") {
+					if wm.selectedConsoleFriend != "" {
+						wm.OpenConsoleWindow("console_removefriend", w.Rect)
+						return nil
+					}
+				}
+
+			case "console_compose":
+				if isClickInElement("console_compose_cancel") {
+					wm.OpenConsoleWindow("console_friends", w.Rect)
+					return nil
+				}
+				if isClickInElement("console_compose_send") {
+					to := ""
+					msg := ""
+					for _, el := range w.Definition.Elements {
+						if el.ID == "console_compose_recipients" {
+							to = el.Key
+						}
+						if el.ID == "console_compose_message_field" {
+							msg = el.Key
+						}
+					}
+					if to != "" && msg != "" && wm.consoleHandlers.SendMessage != nil {
+						_ = wm.consoleHandlers.SendMessage(to, msg)
+					}
+					wm.OpenConsoleWindow("console_friends", w.Rect)
+					return nil
+				}
+
+			case "console_removefriend":
+				if isClickInElement("console_getfriendrequest_cancel") {
+					wm.OpenConsoleWindow("console_friends", w.Rect)
+					return nil
+				}
+				if isClickInElement("console_friendrequest_remove") {
+					target := ""
+					for _, el := range w.Definition.Elements {
+						if el.ID == "console_removefriend_name" {
+							target = el.Key
+						}
+					}
+					if target != "" && wm.consoleHandlers.RemoveFriend != nil {
+						_ = wm.consoleHandlers.RemoveFriend(target)
+						wm.selectedConsoleFriend = ""
+					}
+					wm.OpenConsoleWindow("console_friends", w.Rect)
+					return nil
+				}
+
+			case "console_getrequest":
+				if isClickInElement("console_friendrequest_accept") {
+					from := ""
+					for _, el := range w.Definition.Elements {
+						if el.ID == "console_getrequest_sanfo_name_text" {
+							from = el.Key
+						}
+					}
+					if from != "" && wm.consoleHandlers.AcceptRequest != nil {
+						_ = wm.consoleHandlers.AcceptRequest(from)
+					}
+					wm.OpenConsoleWindow("console_friends", w.Rect)
+					return nil
+				}
+				if isClickInElement("console_getfriendrequest_reject") {
+					from := ""
+					for _, el := range w.Definition.Elements {
+						if el.ID == "console_getrequest_sanfo_name_text" {
+							from = el.Key
+						}
+					}
+					if from != "" && wm.consoleHandlers.RejectRequest != nil {
+						_ = wm.consoleHandlers.RejectRequest(from)
+					}
+					wm.OpenConsoleWindow("console_myinfo", w.Rect)
+					return nil
+				}
+
+			case "console_getmessage":
+				if isClickInElement("console_getmessage_reply") {
+					sender := ""
+					for _, el := range w.Definition.Elements {
+						if el.ID == "console_getmessage_sender" {
+							sender = el.Key
+						}
+					}
+					if sender != "" {
+						wm.selectedConsoleFriend = sender
+						wm.OpenConsoleWindow("console_compose", w.Rect)
+						return nil
+					}
+				}
+				if isClickInElement("nextmessage") {
+					if msgs := wm.consoleHandlers.GetMessages; msgs != nil {
+						list := msgs()
+						if len(list) > 0 && wm.consoleMessagePage < len(list) {
+							curID := list[wm.consoleMessagePage].ID
+							if wm.consoleHandlers.MarkMessageRead != nil {
+								_ = wm.consoleHandlers.MarkMessageRead(curID)
+							}
+							if wm.consoleMessagePage+1 < len(list) {
+								wm.consoleMessagePage++
+								wm.OpenConsoleWindow("console_getmessage", w.Rect)
+								return nil
+							}
+						}
+					}
+					wm.consoleMessagePage = 0
+					wm.OpenConsoleWindow("console_myinfo", w.Rect)
+					return nil
+				}
 			}
 		}
 	}

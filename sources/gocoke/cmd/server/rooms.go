@@ -45,7 +45,7 @@ func NewRoom(id, name string, layout int) *Room {
 	case 4:
 		entX, entZ = 4, 8
 	case 5:
-		entX, entZ = 5, 12
+		entX, entZ = 12, 5
 	}
 	return &Room{
 		ID:             id,
@@ -312,6 +312,35 @@ var HistoricalPublicStudios = map[string]struct {
 	"tokyo":            {Name: "Tokyo I", Layout: 5},
 }
 
+// isItemSolid reports whether a catalogue item acts as a path-blocking obstacle.
+// In Coke Studios, chairs, sofas, stools, rugs, mats, wallpaper, and wall items (posters) are walkable.
+func (s *Server) isItemSolid(catalogID int) bool {
+	if catalogID <= 2 {
+		return false
+	}
+	item, err := s.GetCatalogItem(catalogID)
+	if err != nil || item == nil {
+		return true
+	}
+	t := strings.ToLower(item.Type)
+	name := strings.ToLower(item.Name)
+	base := strings.ToLower(item.ImageBase)
+
+	// Seatable furniture items are walkable so avatars can sit on them
+	if t == "chair" || t == "sofa" || t == "stool" || strings.Contains(name, "chair") || strings.Contains(name, "sofa") || strings.Contains(name, "stool") || strings.Contains(name, "couch") || strings.Contains(name, "bench") {
+		return false
+	}
+	// Rugs and mats are floor coverings and walkable
+	if t == "rug" || strings.Contains(name, "rug") || strings.Contains(name, "mat") || strings.Contains(base, "rug") {
+		return false
+	}
+	// Posters and wall-mounted items do not block the floor grid
+	if t == "poster" || t == "wall" || strings.Contains(name, "poster") {
+		return false
+	}
+	return true
+}
+
 func (s *Server) GetRoom(roomID string) (*Room, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -345,7 +374,9 @@ func (s *Server) GetRoom(roomID string) (*Room, error) {
 
 			furniList, _ := s.store.GetRoomFurniture(rm.ID)
 			for _, pf := range furniList {
-				rm.SetFurnitureSolid(pf.PosID, pf.X, pf.Z, true)
+				if s.isItemSolid(pf.CatalogItemID) {
+					rm.SetFurnitureSolid(pf.PosID, pf.X, pf.Z, true)
+				}
 			}
 
 			s.Rooms[st.ID] = rm

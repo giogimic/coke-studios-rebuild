@@ -354,3 +354,75 @@ func TestRoomAliases(t *testing.T) {
 	}
 }
 
+func TestMessengerAPIsAndNoAdamFallback(t *testing.T) {
+	store, err := OpenStore(":memory:")
+	if err != nil {
+		t.Fatalf("Failed to create test store: %v", err)
+	}
+	defer store.Close()
+
+	srv := NewServer(".", "127.0.0.1", "8080", store)
+
+	_, _ = store.GetOrCreateDenizen("Alice", "1", "avatarA", "Alice motto")
+	_, _ = store.GetOrCreateDenizen("Bob", "2", "avatarB", "Bob motto")
+
+	// 1. Verify unauthenticated call to /api/messenger/friends returns 401 (NO Adam fallback)
+	reqNoAuth, _ := http.NewRequest("GET", "/api/messenger/friends", nil)
+	wNoAuth := httptest.NewRecorder()
+	srv.handleMessengerFriends(wNoAuth, reqNoAuth)
+	if wNoAuth.Code != http.StatusUnauthorized {
+		t.Fatalf("Expected 401 Unauthorized for empty user/auth, got %d", wNoAuth.Code)
+	}
+
+	// 2. Verify unauthenticated call to /api/messenger/messages returns 401
+	reqMsgsNoAuth, _ := http.NewRequest("GET", "/api/messenger/messages", nil)
+	wMsgsNoAuth := httptest.NewRecorder()
+	srv.handleMessengerMessages(wMsgsNoAuth, reqMsgsNoAuth)
+	if wMsgsNoAuth.Code != http.StatusUnauthorized {
+		t.Fatalf("Expected 401 Unauthorized for empty user/auth on messages, got %d", wMsgsNoAuth.Code)
+	}
+
+	// 3. Alice sends friend request to Bob
+	if err := store.AddFriendRequest("Alice", "Bob"); err != nil {
+		t.Fatalf("Failed to add friend request: %v", err)
+	}
+
+	// 4. Query /api/messenger/requests for Bob
+	reqRequests, _ := http.NewRequest("GET", "/api/messenger/requests?user=Bob", nil)
+	wRequests := httptest.NewRecorder()
+	srv.handleMessengerRequests(wRequests, reqRequests)
+	if wRequests.Code != http.StatusOK {
+		t.Fatalf("Expected 200 OK from /api/messenger/requests, got %d", wRequests.Code)
+	}
+	var reqsResp struct {
+		Success  bool     `json:"success"`
+		Requests []string `json:"requests"`
+	}
+	if err := json.Unmarshal(wRequests.Body.Bytes(), &reqsResp); err != nil || !reqsResp.Success || len(reqsResp.Requests) != 1 || reqsResp.Requests[0] != "Alice" {
+		t.Fatalf("Expected Bob to have 1 pending request from Alice, got: %v", reqsResp)
+	}
+
+	// 5. Bob accepts friend request via /api/messenger/accept
+	reqAccept, _ := http.NewRequest("POST", "/api/messenger/accept?user=Bob&from=Alice", nil)
+	wAccept := httptest.NewRecorder()
+	srv.handleMessengerAcceptHTTP(wAccept, reqAccept)
+	if wAccept.Code != http.StatusOK {
+		t.Fatalf("Expected 200 OK from /api/messenger/accept, got %d", wAccept.Code)
+	}
+
+	// 6. Query /api/messenger/friends for Bob
+	reqFriends, _ := http.NewRequest("GET", "/api/messenger/friends?user=Bob", nil)
+	wFriends := httptest.NewRecorder()
+	srv.handleMessengerFriends(wFriends, reqFriends)
+	if wFriends.Code != http.StatusOK {
+		t.Fatalf("Expected 200 OK from /api/messenger/friends, got %d", wFriends.Code)
+	}
+	var friendsResp struct {
+		Success bool           `json:"success"`
+		Friends []FriendRecord `json:"friends"`
+	}
+	if err := json.Unmarshal(wFriends.Body.Bytes(), &friendsResp); err != nil || !friendsResp.Success || len(friendsResp.Friends) != 1 || friendsResp.Friends[0].ScreenName != "Alice" {
+		t.Fatalf("Expected Bob to have Alice as accepted friend, got: %v", friendsResp)
+	}
+}
+

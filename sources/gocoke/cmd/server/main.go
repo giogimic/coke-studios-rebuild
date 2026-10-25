@@ -317,7 +317,13 @@ func (s *Server) handleRegisterDenizen(w http.ResponseWriter, r *http.Request) {
 	studio, _ := s.store.CreateStudio(studioID, d.ID, cleanName, fmt.Sprintf("%s's Studio", cleanName), req.StudioType, layout)
 	if studio != nil {
 		s.mu.Lock()
-		s.Rooms[studio.ID] = NewRoom(studio.ID, studio.Name, studio.Layout)
+		rm := NewRoom(studio.ID, studio.Name, studio.Layout)
+		rm.OwnerName = studio.OwnerName
+		rm.Wallpaper = studio.Wallpaper
+		rm.Floor = studio.Floor
+		rm.Doorbell = studio.Doorbell
+		rm.LoadPathMap(s.webRoot)
+		s.Rooms[studio.ID] = rm
 		s.mu.Unlock()
 	}
 
@@ -514,9 +520,10 @@ func (s *Server) handleLoginDenizen(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) handleRedeemCap(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
+	authD, _ := s.authenticatedDenizen(r)
 	user := q.Get("user")
-	if user == "" {
-		user = "Adam"
+	if user == "" && authD != nil {
+		user = authD.ScreenName
 	}
 	pin := q.Get("pin")
 	if pin == "" && r.Method == http.MethodPost {
@@ -525,6 +532,12 @@ func (s *Server) handleRedeemCap(w http.ResponseWriter, r *http.Request) {
 		if u := r.FormValue("user"); u != "" {
 			user = u
 		}
+	}
+	if user == "" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "Authentication required"})
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -1497,7 +1510,7 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		denizen, err := s.authenticateRealtime(sn, sec)
 		if err != nil {
 			// Compatibility check: prototype accounts with empty password
-			if strings.HasPrefix(sec, sn+"_") || strings.EqualFold(sn, "Adam") {
+			if strings.HasPrefix(sec, sn+"_") {
 				if d, findErr := s.store.GetDenizenByName(sn); findErr == nil && d != nil && d.PasswordHash == "" {
 					denizen = d
 					err = nil
@@ -1571,21 +1584,45 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 
 	if strings.Contains(xml, "<CH ") {
 		sm := extractAttr(xml, "sm")
+		to := extractAttr(xml, "to")
 		if sm == "" || sm == "speak" {
 			sm = "1"
 		} else if sm == "shout" {
 			sm = "2"
 		} else if sm == "sing" {
 			sm = "3"
+		} else if sm == "whisper" || sm == "0" {
+			sm = "0"
 		}
 		mHex := extractAttr(xml, "m")
 		roomID := player.RoomID
 		if roomID != "" && mHex != "" {
 			room := s.GetOrCreateRoom(roomID)
-			decoded, _ := hex.DecodeString(mHex)
-			plainMsg := cleanProfanity(string(decoded))
+			decoded, err := hex.DecodeString(mHex)
+			plainMsg := ""
+			if err == nil && len(decoded) > 0 {
+				plainMsg = cleanProfanity(string(decoded))
+			} else {
+				plainMsg = cleanProfanity(mHex)
+			}
 
-			if sm == "2" || sm == "3" {
+			if sm == "0" && to != "" {
+				// Authoritative whisper mode: delivery is restricted to speaker and target
+				cleanHex := hex.EncodeToString([]byte(plainMsg))
+				whisperXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CH av=\"%s\" to=\"%s\" sm=\"0\" m=\"%s\"/></Room.Action>",
+					room.ID, player.ScreenName, to, cleanHex)
+				_ = player.Send(whisperXML)
+
+				room.mu.RLock()
+				for _, other := range room.Players {
+					if strings.EqualFold(other.ScreenName, to) {
+						_ = other.Send(whisperXML)
+						break
+					}
+				}
+				room.mu.RUnlock()
+				log.Printf("[WHISPER] [%s] %s -> %s: %s", roomID, player.ScreenName, to, plainMsg)
+			} else if sm == "2" || sm == "3" {
 				cleanHex := hex.EncodeToString([]byte(plainMsg))
 				chatXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CH av=\"%s\" sm=\"%s\" m=\"%s\"/></Room.Action>",
 					room.ID, player.ScreenName, sm, cleanHex)
@@ -1659,13 +1696,17 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 	}
 
 	// --- Interactive Furniture & Vending Machine Drinks ---
-	if strings.Contains(xml, "<DRK_REQ") || strings.Contains(xml, "coke_machine") {
+	if strings.Contains(xml, "<DRK_REQ") || strings.Contains(xml, "coke_machine") || strings.Contains(xml, "<AV_DC") {
 		roomID := player.RoomID
 		if roomID != "" {
 			room := s.GetOrCreateRoom(roomID)
 			count, awarded, _ := s.store.RecordDailyCokeDrink(player.ScreenName)
-			drinkXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV_DC av=\"%s\" act=\"drk\" item=\"coke_can\"/></Room.Action>",
-				room.ID, player.ScreenName)
+			ptsAttr := ""
+			if awarded {
+				ptsAttr = " pts=\"10\""
+			}
+			drinkXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV_DC av=\"%s\" act=\"drk\" item=\"coke_can\"%s/></Room.Action>",
+				room.ID, player.ScreenName, ptsAttr)
 			room.Broadcast(drinkXML, "")
 			if awarded {
 				log.Printf("[WS] Player %s received a Coke drink #%d today in %s (+10 dB)", player.ScreenName, count, roomID)
@@ -1680,7 +1721,7 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 	if strings.Contains(xml, "<AV_ACT") {
 		act := extractAttr(xml, "act")
 		roomID := player.RoomID
-		if roomID != "" && act != "" {
+		if roomID != "" {
 			player.Action = act
 			room := s.GetOrCreateRoom(roomID)
 			actXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV_DC av=\"%s\" act=\"%s\"/></Room.Action>",
@@ -1717,7 +1758,9 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 					log.Printf("[WS] Player %s unauthorized or failed to place %s in %s: %v", player.ScreenName, posID, rm.ID, err)
 					return
 				}
-				rm.SetFurnitureSolid(posID, x, z, true)
+				if s.isItemSolid(cid) {
+					rm.SetFurnitureSolid(posID, x, z, true)
+				}
 
 				posXML := fmt.Sprintf("<POS id=\"%s\" cid=\"%d\" x=\"%d\" y=\"%d\" z=\"%d\" ho=\"%d\" d=\"%d\" st=\"%d\" iaot=\"false\"/>",
 					posID, cid, x, y, z, ho, d, st)
@@ -1744,6 +1787,67 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 				rmXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><POS_RM id=\"%s\"/></Room.Action>", rm.ID, posID)
 				rm.Broadcast(rmXML, "")
 				log.Printf("[WS] Player %s picked up furniture %s from %s", player.ScreenName, posID, roomID)
+			}
+		}
+		return
+	}
+
+	// In-place furniture rotation or state toggle (lamps, TVs, jukeboxes, chairs)
+	if strings.Contains(xml, "<POS ") && !strings.Contains(xml, "<POS_STD") && !strings.Contains(xml, "<POS_BKPK") && !strings.Contains(xml, "<POS_RM") && !strings.Contains(xml, "<POS_MINT") {
+		posID := extractAttr(xml, "id")
+		stStr := extractAttr(xml, "st")
+		st, _ := strconv.Atoi(stStr)
+		dStr := extractAttr(xml, "d")
+		d, _ := strconv.Atoi(dStr)
+		hoStr := extractAttr(xml, "ho")
+		ho, _ := strconv.Atoi(hoStr)
+		xStr := extractAttr(xml, "x")
+		x, _ := strconv.Atoi(xStr)
+		yStr := extractAttr(xml, "y")
+		y, _ := strconv.Atoi(yStr)
+		zStr := extractAttr(xml, "z")
+		z, _ := strconv.Atoi(zStr)
+
+		roomID := player.RoomID
+		if roomID != "" && posID != "" {
+			rm, err := s.GetRoom(roomID)
+			if err == nil && rm != nil {
+				// Authoritatively check room permissions if custom private studio
+				if rm.OwnerName != "" && !strings.EqualFold(rm.OwnerName, player.ScreenName) && !strings.EqualFold(rm.OwnerName, "Coke Studios") {
+					log.Printf("[WS] Player %s unauthorized to modify furniture %s in %s (owner: %s)", player.ScreenName, posID, rm.ID, rm.OwnerName)
+					return
+				}
+
+				cid := 0
+				furniList, _ := s.store.GetRoomFurniture(rm.ID)
+				for _, pf := range furniList {
+					if pf.PosID == posID {
+						cid = pf.CatalogItemID
+						if x == 0 && z == 0 {
+							x = pf.X
+							z = pf.Z
+							y = pf.Y
+						}
+						break
+					}
+				}
+
+				if err := s.store.UpdatePlacedFurniture(rm.ID, posID, x, y, z, d, st, ho); err != nil {
+					log.Printf("[WS] Failed to update furniture %s in %s: %v", posID, rm.ID, err)
+					return
+				}
+
+				// Update collision solidity
+				rm.RemoveFurnitureSolid(posID)
+				if s.isItemSolid(cid) {
+					rm.SetFurnitureSolid(posID, x, z, true)
+				}
+
+				posXML := fmt.Sprintf("<POS id=\"%s\" cid=\"%d\" x=\"%d\" y=\"%d\" z=\"%d\" ho=\"%d\" d=\"%d\" st=\"%d\" iaot=\"false\"/>",
+					posID, cid, x, y, z, ho, d, st)
+				actionXML := fmt.Sprintf("<Room.Action roomID=\"%s\">%s</Room.Action>", rm.ID, posXML)
+				rm.Broadcast(actionXML, "")
+				log.Printf("[WS] Player %s rotated/toggled furniture %s (cid: %d) dir=%d st=%d at (%d,%d,%d) in %s", player.ScreenName, posID, cid, d, st, x, y, z, roomID)
 			}
 		}
 		return
@@ -2090,9 +2194,15 @@ func (s *Server) notifyFriendEvent(u1, u2, status string) {
 
 func (s *Server) handleMessengerFriends(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	authD, _ := s.authenticatedDenizen(r)
 	user := r.URL.Query().Get("user")
+	if user == "" && authD != nil {
+		user = authD.ScreenName
+	}
 	if user == "" {
-		user = "Adam"
+		w.WriteHeader(http.StatusUnauthorized)
+		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "Authentication required"})
+		return
 	}
 	friends, err := s.store.GetFriends(user)
 	if err != nil {
@@ -2159,7 +2269,9 @@ func (s *Server) handleMessengerMessages(w http.ResponseWriter, r *http.Request)
 		user = authD.ScreenName
 	}
 	if user == "" {
-		user = "Adam"
+		w.WriteHeader(http.StatusUnauthorized)
+		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "Authentication required"})
+		return
 	}
 	if authD != nil && !strings.EqualFold(authD.ScreenName, user) {
 		w.WriteHeader(http.StatusForbidden)
@@ -2199,6 +2311,78 @@ func (s *Server) handleMessengerAddFriend(w http.ResponseWriter, r *http.Request
 	}
 	s.notifyFriendEvent(user, friend, "accepted")
 	json.NewEncoder(w).Encode(map[string]any{"success": true})
+}
+
+
+func (s *Server) handleMessengerRequests(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	authD, _ := s.authenticatedDenizen(r)
+	user := r.URL.Query().Get("user")
+	if user == "" && authD != nil {
+		user = authD.ScreenName
+	}
+	if user == "" {
+		w.WriteHeader(http.StatusUnauthorized)
+		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "Authentication required"})
+		return
+	}
+	requests, err := s.store.GetPendingFriendRequests(user)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	_ = json.NewEncoder(w).Encode(map[string]any{"success": true, "requests": requests})
+}
+
+func (s *Server) handleMessengerAcceptHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	authD, _ := s.authenticatedDenizen(r)
+	user := r.FormValue("user")
+	if user == "" && authD != nil {
+		user = authD.ScreenName
+	}
+	from := r.FormValue("from")
+	if from == "" {
+		from = r.URL.Query().Get("from")
+	}
+	if user == "" || from == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "missing user or from"})
+		return
+	}
+	if err := s.store.AcceptFriendRequest(user, from); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	s.notifyFriendEvent(user, from, "accepted")
+	_ = json.NewEncoder(w).Encode(map[string]any{"success": true})
+}
+
+func (s *Server) handleMessengerRejectHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	authD, _ := s.authenticatedDenizen(r)
+	user := r.FormValue("user")
+	if user == "" && authD != nil {
+		user = authD.ScreenName
+	}
+	from := r.FormValue("from")
+	if from == "" {
+		from = r.URL.Query().Get("from")
+	}
+	if user == "" || from == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "missing user or from"})
+		return
+	}
+	if err := s.store.RejectFriendRequest(from, user); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	s.notifyFriendEvent(user, from, "rejected")
+	_ = json.NewEncoder(w).Encode(map[string]any{"success": true})
 }
 
 func (s *Server) handleMessengerRemoveFriend(w http.ResponseWriter, r *http.Request) {
@@ -2762,21 +2946,60 @@ func (s *Server) handleTop40(w http.ResponseWriter, r *http.Request) {
 func (s *Server) handleVegoSanMove(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	user := r.URL.Query().Get("user")
-	if user == "" {
-		user = "Adam"
-	}
 	move := r.URL.Query().Get("move")
-	if move == "" && r.Method == http.MethodPost {
-		_ = r.ParseForm()
-		move = r.FormValue("move")
-		if u := r.FormValue("user"); u != "" {
-			user = u
+
+	if r.Method == http.MethodPost {
+		var reqBody struct {
+			User       string `json:"user"`
+			Player     string `json:"player"`
+			Move       string `json:"move"`
+			PlayerMove string `json:"playerMove"`
+		}
+		bodyBytes, _ := io.ReadAll(r.Body)
+		if len(bodyBytes) > 0 {
+			if err := json.Unmarshal(bodyBytes, &reqBody); err == nil {
+				if reqBody.User != "" {
+					user = reqBody.User
+				} else if reqBody.Player != "" {
+					user = reqBody.Player
+				}
+				if reqBody.Move != "" {
+					move = reqBody.Move
+				} else if reqBody.PlayerMove != "" {
+					move = reqBody.PlayerMove
+				}
+			}
+		}
+		if user == "" || move == "" {
+			_ = r.ParseForm()
+			if u := r.FormValue("user"); u != "" {
+				user = u
+			}
+			if m := r.FormValue("move"); m != "" {
+				move = m
+			}
+			if pm := r.FormValue("playerMove"); pm != "" {
+				move = pm
+			}
 		}
 	}
+
+	if user == "" {
+		if denizen, err := s.authenticatedDenizen(r); err == nil && denizen != nil {
+			user = denizen.ScreenName
+		}
+	}
+
+	if user == "" {
+		http.Error(w, `{"status":"error","message":"authentication required"}`, http.StatusUnauthorized)
+		return
+	}
+
 	res, err := s.store.ProcessVegoSanMove(user, move)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf(`{"status":"error","message":%q}`, err.Error()), http.StatusBadRequest)
 		return
 	}
 	_ = json.NewEncoder(w).Encode(res)
