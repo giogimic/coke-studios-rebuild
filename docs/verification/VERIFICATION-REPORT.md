@@ -1,3 +1,5 @@
+> Superseded as a completion verdict by [the 2026-10-25 studio repair review](STUDIO-REPAIR-2026-10-25.md). Its browser checks do not establish actual Go rendering or historical parity. The older report follows for traceability.
+
 # Coke Music / Coke Studios — Verification & Release Evidence
 
 **Date:** 2026-10-24  

@@ -32,7 +32,7 @@ import (
 	"gocoke/internal/client/net/gateway"
 	"gocoke/internal/client/patterns"
 	"gocoke/internal/client/ui"
-)
+	)
 
 // Scene represents a studio room scene
 type Scene struct {
@@ -71,7 +71,9 @@ type Scene struct {
 	nowPlayingActive bool
 
 	// Permissions
-	currentUserName string // local player's screen name (for ownership checks and InfoStand)
+	currentUserName    string // local player's screen name (for ownership checks and InfoStand)
+	currentUserDef     string
+	currentUserMission string
 
 	// Credentials for gateway calls
 	userCredentials struct {
@@ -564,6 +566,35 @@ func (s *Scene) SetCurrentUserName(name string) {
 	if s.infoStand != nil {
 		s.infoStand.SetCurrentPlayerName(s.currentUserName)
 	}
+	// If an avatar already exists with this name, bind it as playerAvatar
+	if s.playerAvatar == nil && s.avatarsByName != nil && s.currentUserName != "" {
+		if av, ok := s.avatarsByName[s.currentUserName]; ok && av != nil {
+			s.playerAvatar = av
+		}
+	}
+}
+
+// SetUserProfile sets the local player's figure definition and mission statement
+func (s *Scene) SetUserProfile(def, mission string) {
+	if s != nil {
+		s.currentUserDef = def
+		s.currentUserMission = mission
+		if s.playerAvatar != nil {
+			if mission != "" {
+				s.playerAvatar.SetMission(mission)
+			}
+			if def != "" && s.playerAvatar.Engine != nil {
+				if eng, err := avatarengine.NewAvatarEngine(def, 100, false, s.dataDir); err == nil && eng != nil {
+					for k, v := range eng.Attributes {
+						s.playerAvatar.Engine.Attributes[k] = v
+					}
+					_ = s.playerAvatar.Engine.Draw()
+				}
+			}
+		} else if s.dataDir != "" {
+			_ = s.initTestAvatar(s.dataDir)
+		}
+	}
 }
 
 // GetTradeManager returns the trade manager for setting up network callbacks
@@ -757,6 +788,7 @@ func (s *Scene) UpsertAvatarAtGrid(name, def, mission string, gender, dir, row, 
 	// Create new engine from definition
 	eng, err := avatarengine.NewAvatarEngine(def, 100, false, s.dataDir)
 	if err != nil || eng == nil {
+		log.Printf("Studio: avatar %q could not load: %v", name, err)
 		return
 	}
 	eng.SetDirection(engDir)
@@ -1052,6 +1084,7 @@ func New(dataDir string, studio *studios.Studio) (*Scene, error) {
 		scene.hudManager.SetNavigatorProviders(
 			func() string { return scene.userCredentials.screenName },
 			func() string { return scene.userCredentials.gatewayURL },
+			func() string { return scene.userCredentials.secret },
 		)
 		scene.hudManager.SetEnterStudio(func(targetStudioID string) {
 			log.Printf("StudioScene: navigator requested room transition to %s", targetStudioID)
@@ -1113,6 +1146,7 @@ func New(dataDir string, studio *studios.Studio) (*Scene, error) {
 	scene.infoStand.SetCurrentPlayerName(scene.currentUserName)
 	// Permissions bridge
 	scene.infoStand.IsRoomOwner = scene.IsRoomOwner
+	scene.infoStand.ResolveFurniture = scene.findPlacedFurniByID
 
 	// Wire furniture rotate handler
 	scene.infoStand.OnRotateFurni = scene.rotatePlacedFurni
@@ -1252,9 +1286,8 @@ func New(dataDir string, studio *studios.Studio) (*Scene, error) {
 		}
 	}
 
-	// Disable test avatar now that realtime wiring is active
-	// (Leave stub here for offline testing if needed.)
-	// if err := scene.initTestAvatar(dataDir); err != nil { }
+	// Initialize local avatar using session credentials or defaults
+	_ = scene.initTestAvatar(dataDir)
 
 	// Apply default room patterns (floor and walls) so the room has a style if no server POS arrives
 	scene.applyDefaultPatterns()
@@ -1403,11 +1436,10 @@ func (s *Scene) initIsoEngine(dataDir string) error {
 
 	s.isoScene.Init()
 
-
-		// Load room background image (Studio XML preferred; fallback to PathMap)
-		if err := s.loadStudioBackground(); err != nil {
-			log.Printf("Studio: background load: %v", err)
-		}
+	// Load room background image (Studio XML preferred; fallback to PathMap)
+	if err := s.loadStudioBackground(); err != nil {
+		log.Printf("Studio: background load: %v", err)
+	}
 
 	// Apply PathMap data to the iso scene
 	err = isoengine.ApplyPathMapToScene(s.isoScene, pathMapXML)
@@ -1467,7 +1499,6 @@ func (s *Scene) loadStudioBackground() error {
 	return fmt.Errorf("background not found")
 }
 
-
 // SetDepthBoostSlicePerPos sets a per-slice depth boost for a specific position id
 func (s *Scene) SetDepthBoostSlicePerPos(posID string, slice string, amount int) string {
 	posID = strings.TrimSpace(posID)
@@ -1503,7 +1534,6 @@ func (s *Scene) ClearDepthBoostSlicePerPos(posID string) {
 func (s *Scene) applySofaSliceBoosts(pf PlacedFurni) {
 	// Check if this is a sofa
 	isSofa := false
-
 
 	if s.catalog != nil {
 		if ci := s.catalog.GetItemByID(pf.ProdID); ci != nil && strings.EqualFold(ci.Type, "sofa") {
@@ -1689,7 +1719,9 @@ func (s *Scene) loadRoomAssets(dataDir string) error {
 	// For public rooms, include StaticItems from Studio XML that are not already in the .room file
 	if s.studio != nil && s.studio.Layout == 5 && s.studioXML != nil {
 		for _, it := range s.studioXML.StaticItems.Items {
-			if it.Member == "" { continue }
+			if it.Member == "" {
+				continue
+			}
 			if !roomMembers[it.Member] {
 				assetsToLoad[it.Member] = true
 			}
@@ -1710,7 +1742,9 @@ func (s *Scene) loadRoomAssets(dataDir string) error {
 		}
 		log.Printf("London: Studio XML Furniture count = %d (grid cols=%d)", len(s.studioXML.Furniture.Items), cols)
 		addIfExists := func(name string) {
-			if name == "" { return }
+			if name == "" {
+				return
+			}
 			if p, ok := mm.PathFor(name); ok {
 				assetsToLoad[name] = true
 				log.Printf("London: will load furniture member %q -> %s", name, p)
@@ -1732,7 +1766,9 @@ func (s *Scene) loadRoomAssets(dataDir string) error {
 		}
 		for _, f := range s.studioXML.Furniture.Items {
 			base := strings.TrimSpace(f.ImageBase)
-			if base == "" { continue }
+			if base == "" {
+				continue
+			}
 			serverX, serverZ := f.GridX, f.GridZ
 			clientRow := serverX
 			clientCol := (cols + 1) - serverZ
@@ -2114,6 +2150,12 @@ func (s *Scene) Update() error {
 			log.Printf("Studio click: mouseDown at (%d,%d) allow=%t holding=%t tradeOpen=%t walkable=%t",
 				mx, my, allowStudioClick, holdingActive, s.tradeManager != nil && s.tradeManager.IsOpen(), isWalk)
 		}
+		if allowStudioClick && !holdingActive && inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+			x, y := ebiten.CursorPosition()
+			if s.handlePublicDJClick(x, y) {
+				return nil
+			}
+		}
 		// Block movement when a window is under mouse cursor
 		canMoveClick := allowStudioClick
 		if canMoveClick && !holdingActive && ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
@@ -2143,13 +2185,11 @@ func (s *Scene) Update() error {
 								if s.sendMovePathIfAvailable != nil {
 									log.Printf("Studio click: sending AV_GSP with %d points for room %s", len(pts), s.studio.StudioID)
 									s.sendMovePathIfAvailable(s.studio.StudioID, pts)
-								} else {
-									// Fallback: no network sender wired; perform local move for interactivity
-									log.Printf("Studio click: no sender wired; moving locally as fallback")
-									s.playerAvatar.Engine.StartWalking()
-									s.playerAvatar.MoveToSquare(targetSquare, s.isoScene.GetGrid())
-									s.playerHasMoved = true
 								}
+								// Local client prediction: walk immediately for snappy local control
+								s.playerAvatar.Engine.StartWalking()
+								s.playerAvatar.MoveToSquare(targetSquare, s.isoScene.GetGrid())
+								s.playerHasMoved = true
 							}
 							// If sender exists, only stop if not already moving
 							// If already moving, MoveToSquare will queue as pending
@@ -2246,7 +2286,7 @@ func (s *Scene) Update() error {
 						s.infoStand.nowPlayingActive = true
 						// Clear target contexts so draw uses custom title/body/icon
 						s.infoStand.selectedAvatar = nil
-						s.infoStand.selectedFurni = nil
+						s.infoStand.selectedFurniID = ""
 						s.infoStand.previewAvatar = nil
 						s.infoStand.visible = true
 						// Rebuild vote buttons based on nowPlayingPlayer vs current user
@@ -2912,19 +2952,17 @@ func (s *Scene) Draw(screen *ebiten.Image) {
 	// Determine if any avatar is on the door tile (controls door layering)
 	doorOccupied := s.anyAvatarOnDoorTile()
 
-
-		// Draw room background image (behind everything)
-		if s.backgroundImg != nil {
-			op := &ebiten.DrawImageOptions{}
-			op.GeoM.Translate(float64(s.bgPos[0]), float64(s.bgPos[1]))
-			screen.DrawImage(s.backgroundImg, op)
-		}
+	// Draw room background image (behind everything)
+	if s.backgroundImg != nil {
+		op := &ebiten.DrawImageOptions{}
+		op.GeoM.Translate(float64(s.bgPos[0]), float64(s.bgPos[1]))
+		screen.DrawImage(s.backgroundImg, op)
+	}
 
 	// 1) Draw low-Z room elements first (Z < 1000)
 	s.drawRoomElementsBelow(screen, 1000)
 
 	if doorOccupied {
-
 
 		// 3a) Avatar is in doorway: draw door avatars first
 		s.drawAvatarsOnDoorTiles(screen)
@@ -2959,13 +2997,11 @@ func (s *Scene) Draw(screen *ebiten.Image) {
 	// 6) Draw high-Z room elements (e.g., windows)
 	s.drawRoomElementsAbove(screen, 1000)
 
-		// Draw tile hiliter overlay for public rooms (above room elems, below furniture/avatars)
-		s.drawPublicHiliter(screen)
+	// Draw tile hiliter overlay for public rooms (above room elems, below furniture/avatars)
+	s.drawPublicHiliter(screen)
 
-
-			// Draw static furniture-like items from Studio XML for public rooms
-			s.drawPublicStaticItems(screen)
-
+	// Draw static furniture-like items from Studio XML for public rooms
+	s.drawPublicStaticItems(screen)
 
 	// Draw furniture and avatars (non-door) combined with simple row/col depth
 	ghostDrawn := false
@@ -3178,7 +3214,9 @@ func (s *Scene) drawFurnitureAndAvatarsSimple(screen *ebiten.Image) bool {
 					y := float64(anchor.Y) - float64(offY)
 					z := simpleDepth(row, col, 0)
 					// Slightly raise later slices over earlier ones to preserve intra-item order
-					if o == "b" { z += 1 }
+					if o == "b" {
+						z += 1
+					}
 					draws = append(draws, layerDraw{img: img, x: x, y: y, depth: z, order: o, flipH: flipH})
 				}
 			}
@@ -3848,7 +3886,6 @@ func (s *Scene) drawPublicHiliter(screen *ebiten.Image) {
 	screen.DrawImage(asset, opts)
 }
 
-
 // drawPublicStaticItems draws StaticItems from Studio XML that are not in the .room file
 // These include bartable/djtable pieces in London
 func (s *Scene) drawPublicStaticItems(screen *ebiten.Image) {
@@ -3884,7 +3921,6 @@ func (s *Scene) drawPublicStaticItems(screen *ebiten.Image) {
 		screen.DrawImage(asset, opts)
 	}
 }
-
 
 // InvalidateElementSorting forces re-sorting of room elements on next draw
 // Call this when room elements are added, removed, or their Z-order changes
@@ -4246,10 +4282,21 @@ func getKeysFromMap(m map[string]bool) []string {
 	return keys
 }
 
-// initTestAvatar initializes a test avatar for development
+// initTestAvatar initializes a test avatar for development or initial spawn
 func (s *Scene) initTestAvatar(dataDir string) error {
-	// Lingo-style avatar string with color information
+	pName := s.currentUserName
+	if pName == "" {
+		pName = "Guest"
+	}
+	pMission := "Welcome to Coke Studios!"
+	if s.currentUserMission != "" {
+		pMission = s.currentUserMission
+	}
+
 	completeAvatarString := "hr=002/238,238,238&hd=001/255,224,196&ey=003/245,226,203&fc=002/255,224,196&bd=001/255,224,196&lh=001/255,224,196&rh=001/255,224,196&ch=002/204,153,102&ls=002/204,153,102&rs=002/204,153,102&lg=008/115,142,191&sh=009/238,238,238"
+	if s.currentUserDef != "" {
+		completeAvatarString = s.currentUserDef
+	}
 
 	engine, err := avatarengine.NewAvatarEngine(completeAvatarString, 100, false, dataDir)
 	if err != nil {
@@ -4292,8 +4339,12 @@ func (s *Scene) initTestAvatar(dataDir string) error {
 		return fmt.Errorf("no walkable squares found for avatar placement (door at XML[%d,%d] -> Grid[%d,%d])", door.Row, door.Col, mappedRow, mappedCol)
 	}
 
-	s.playerAvatar = isoengine.NewIsoAvatar(engine, startSquare, "Adam", "hehe", false)
+	s.playerAvatar = isoengine.NewIsoAvatar(engine, startSquare, pName, pMission, false)
 	s.avatars = append(s.avatars, s.playerAvatar)
+	if s.avatarsByName == nil {
+		s.avatarsByName = make(map[string]*isoengine.IsoAvatar)
+	}
+	s.avatarsByName[pName] = s.playerAvatar
 
 	// Face West per avatarengine mapping (0=E,1=SE,2=S,3=SW,4=W,5=NW,6=N,7=NE)
 	s.playerAvatar.Engine.SetDirection(4) // West facing
@@ -5252,7 +5303,6 @@ func (s *Scene) startStereoApproach(pf *PlacedFurni) {
 func (s *Scene) InfoStand() *InfoStand {
 	return s.infoStand
 }
-
 
 func (s *Scene) setupConsoleHandlers() {
 	if s.hudManager == nil || s.hudManager.GetWindowManager() == nil {

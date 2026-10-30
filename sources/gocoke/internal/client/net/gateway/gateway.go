@@ -540,3 +540,37 @@ func extractPropString(attrs map[string]any, key string, possMap map[string]any)
 	}
 	return ""
 }
+
+
+// CreateStudio calls FlashStudioManager.createStudio via AMF remoting.
+func CreateStudio(httpClient *http.Client, url, screenName, secret, studioName, desc string, layout, location int) (map[string]any, error) {
+	params := []any{screenName, secret, studioName, desc, float64(layout), float64(location)}
+	v, err := postAMFOne(httpClient, url, "com.studiocom.sanfrancisco.studio.FlashStudioManager.createStudio", params)
+	if err != nil {
+		return nil, err
+	}
+	if m, ok := v.(map[string]any); ok {
+		return m, nil
+	}
+	return nil, errors.New("unexpected response type for createStudio")
+}
+
+// ModifyStudio calls FlashStudioManager.modifyStudio via AMF remoting.
+func ModifyStudio(httpClient *http.Client, url, screenName, secret, studioID, studioName, desc string) (map[string]any, error) {
+	params := []any{screenName, secret, studioID, studioName, desc}
+	v, err := postAMFOne(httpClient, url, "com.studiocom.sanfrancisco.studio.FlashStudioManager.modifyStudio", params)
+	if err != nil {
+		return nil, err
+	}
+	if m, ok := v.(map[string]any); ok {
+		return m, nil
+	}
+	return nil, errors.New("unexpected response type for modifyStudio")
+}
+
+// DeleteStudio calls FlashStudioManager.deleteStudio via AMF remoting.
+func DeleteStudio(httpClient *http.Client, url, screenName, secret, studioID string) error {
+	params := []any{screenName, secret, studioID}
+	_, err := postAMFOne(httpClient, url, "com.studiocom.sanfrancisco.studio.FlashStudioManager.deleteStudio", params)
+	return err
+}

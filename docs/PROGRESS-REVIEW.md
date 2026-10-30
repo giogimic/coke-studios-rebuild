@@ -71,3 +71,7 @@ Do not add more portal tabs, invented reward loops, or deployment complexity whi
 - Marked the older research summary as a lead inventory whose implementation claims require the new review.
 
 These are direction and documentation corrections. The runtime issues in the table remain implementation work; no entry is marked fixed merely because it now has a plan.
+
+## Current repair review — 2026-10-25
+
+See [studio repair review](verification/STUDIO-REPAIR-2026-10-25.md) for current defects, fixes, verification and remaining work. The 2026-10-24 code line references above are historical. Later all-passed summaries did not establish a complete player journey; the current [parity register](PARITY.md) supersedes those claims.

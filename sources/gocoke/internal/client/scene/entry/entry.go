@@ -21,8 +21,8 @@ import (
 	"gocoke/internal/client/avatarengine"
 	"gocoke/internal/client/env"
 	"gocoke/internal/client/net/gateway"
-	studioscene "gocoke/internal/client/scene/studio"
 	"gocoke/internal/client/ui"
+	"gocoke/internal/client/ui/navigator"
 
 	"context"
 	"gocoke/internal/client/net/realtime"
@@ -329,9 +329,15 @@ func (s *Scene) Update() error {
 						w.TempVars = map[string]interface{}{}
 					}
 					w.TempVars["customDragRects"] = [][4]int{{0, 0, def.Rect[2] - def.Rect[0], def.Rect[3] - def.Rect[1]}}
-					// Populate basic fields in entry (match studio test user)
-					name := "Adam"
-					mission := "hehe"
+					// Populate basic fields in entry
+					name, _ := session.GetCredentials()
+					if name == "" {
+						name = "Guest"
+					}
+					_, mission, _ := session.GetUserProfile()
+					if mission == "" {
+						mission = "Welcome to Coke Studios!"
+					}
 					// Update text fields by element IDs
 					for i := range w.Definition.Elements {
 						el := &w.Definition.Elements[i]
@@ -1263,19 +1269,11 @@ func (s *Scene) setupNavigatorCallbacks(window *ui.Window) {
 								switch x := ly.(type) {
 								case float64:
 									lt := int(x)
-									if lt == 2 {
-										lt = 4
-									} else if lt == 4 {
-										lt = 2
-									}
+
 									layout = lt
 								case int:
 									lt := x
-									if lt == 2 {
-										lt = 4
-									} else if lt == 4 {
-										lt = 2
-									}
+
 									layout = lt
 								}
 							}
@@ -1334,19 +1332,11 @@ func (s *Scene) setupNavigatorCallbacks(window *ui.Window) {
 									switch x := ly.(type) {
 									case float64:
 										lt := int(x)
-										if lt == 2 {
-											lt = 4
-										} else if lt == 4 {
-											lt = 2
-										}
+
 										layout = lt
 									case int:
 										lt := x
-										if lt == 2 {
-											lt = 4
-										} else if lt == 4 {
-											lt = 2
-										}
+
 										layout = lt
 									}
 								}
@@ -1469,12 +1459,25 @@ func (s *Scene) createPrivateButtonCallback(buttonID string) func() {
 		log.Printf("Entry: private navigation button clicked: %s", buttonID)
 
 		switch buttonID {
-		case "nav_priv_popular":
-			log.Printf("Entry: TODO - show popular private studios")
-		case "nav_priv_own":
-			log.Printf("Entry: TODO - show user's own studios")
+		case "nav_priv_popular", "nav_priv_own":
+			w := s.windowManager.GetWindow("nav_private_start")
+			if w != nil && w.ButtonClick != nil {
+				w.ButtonClick(buttonID)
+			}
 		case "nav_priv_create_own":
-			log.Printf("Entry: TODO - create new private studio")
+			w := s.windowManager.GetWindow("nav_private_start")
+			if w == nil {
+				w = s.windowManager.GetWindow("nav_private_info")
+			}
+			if w != nil {
+				navigator.OpenCreateStudioDialog(s.windowManager, s.tm, w, navigator.Options{
+					EnterStudio:   s.enterStudio,
+					GetScreenName: func() string { sn, _ := session.GetCredentials(); return sn },
+					GetGatewayURL: session.GetGatewayURL,
+					GetSecret:     func() string { _, sec := session.GetCredentials(); return sec },
+					StudioList:    s.studioList,
+				})
+			}
 		case "nav_go_search_button":
 			log.Printf("Entry: TODO - perform search")
 		default:
@@ -1971,23 +1974,7 @@ func (s *Scene) enterStudio(studioID string) {
 			log.Printf("Entry: getGameServerByStudioID failed: %v", err)
 		}
 
-		// Build studio scene and inject real placements from possession list
-		scene, err := studioscene.New(s.dataDir, studio)
-		if err != nil {
-			log.Printf("Entry: failed to create studio scene: %v", err)
-			return
-		}
-		// Fetch possessions using current user (Adam) and Secret: rely on client.main cached globals via log output; for now, skip without session bridge
-		// As a minimal step, we will not fetch here due to lack of session wiring; pending a small session package.
-		// TODO: Wire screenName and secret from login cache to here and apply placed furniture where placedIn==studioID.
-		// Proceed to scene transition now so user can enter actual layout (furniture injection to follow next step).
-
-		// Inject navigator studio list for in-studio navigator
-		scene.SetStudioList(s.studioList)
-		// Inject catalog for furniture attributes
-		scene.SetCatalog(s.catalog)
-		// Transition
-		// The scene manager is owned by main; we can signal via internal plumbing. For now, store selected and rely on existing transition flow.
+		// Main creates and installs the scene once; room snapshots wait in its inbox.
 		s.enterStudioID = studioID
 		return
 	} else { // Public room ($SYSTEM$)
@@ -2069,16 +2056,7 @@ func (s *Scene) enterStudio(studioID string) {
 			log.Printf("Entry: getGameServerByStudioID failed: %v", err)
 		}
 
-		// Transition to studio scene (public room uses layout 5 -> small grid 30x30)
-		scene, err := studioscene.New(s.dataDir, studio)
-		if err != nil {
-			log.Printf("Entry: failed to create public studio scene: %v", err)
-			return
-		}
-		// Inject navigator studio list and catalog
-		scene.SetStudioList(s.studioList)
-		scene.SetCatalog(s.catalog)
-		// Signal to main to switch scenes
+		// Main constructs and installs the requested room once.
 		s.enterStudioID = studioID
 		return
 	}
@@ -2092,4 +2070,10 @@ func (s *Scene) GetCatalog() *catalog.Catalog {
 // SetCatalog allows boot to inject the catalog into entry
 func (s *Scene) SetCatalog(c *catalog.Catalog) {
 	s.catalog = c
+}
+
+// RequestInitialStudio follows the same authenticated entry path as the navigator.
+func (s *Scene) RequestInitialStudio(roomID string) {
+ if s.GetStudioByID(roomID) == nil { log.Printf("Entry: requested launch room %q is unavailable", roomID); return }
+ go s.enterStudio(roomID)
 }

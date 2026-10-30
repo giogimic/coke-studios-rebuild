@@ -93,11 +93,11 @@ test.describe('Task 6: Music, performance and reward loop', () => {
     await pageDJ.waitForTimeout(300);
 
     // 4. DJ starts performance
-    await pageDJ.evaluate(({ edl }) => {
+    await pageDJ.evaluate(({ cdId }) => {
       (window as any).testWS.send(
-        new TextEncoder().encode(`<Room.Action roomID="VIS$0"><CD_P s="${edl}" title="Summer Anthem"/></Room.Action>\0`)
+        new TextEncoder().encode(`<Room.Action roomID="VIS$0"><CD_P cdId="${cdId}"/></Room.Action>\0`)
       );
-    }, { edl: testEDL });
+    }, { cdId: burnData.possession_id });
     await pageFan.waitForTimeout(300);
 
     // Fan should receive CD_P broadcast with track title and duration

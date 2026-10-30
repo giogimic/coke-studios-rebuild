@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -201,7 +202,15 @@ func TestMessageHandling(t *testing.T) {
 	p.RoomID = "VIS$0"
 
 	// Test DJ Performance and Voting Loop
-	cdpXML := `<Room.Action roomID="VIS$0"><CD_P s="^50,rockOne_guitar00{2,0{4,4{^" title="Rock Beats"/></Room.Action>`
+	songID, err := srv.store.SaveSong("Adam", "Rock Beats", "^50,rockOne_guitar00{2,0{4,4{^")
+	if err != nil {
+		t.Fatal(err)
+	}
+	cdID, err := srv.store.AddBackpackItem("Adam", 89, map[string]any{"songId": songID})
+	if err != nil {
+		t.Fatal(err)
+	}
+	cdpXML := fmt.Sprintf(`<Room.Action roomID="VIS$0"><CD_P cdId="%d"/></Room.Action>`, cdID)
 	srv.handlePlayerMessage(p, cdpXML)
 	if rm.Performance == nil || rm.Performance.DJ != "Adam" {
 		t.Errorf("expected performance active for DJ Adam, got: %v", rm.Performance)
@@ -511,7 +520,6 @@ func TestSoundLibraryResolver(t *testing.T) {
 		t.Fatalf("expected audio/mpeg for mp3, got %s", ct)
 	}
 }
-
 
 func TestDailyCokeDrinksAndCap(t *testing.T) {
 	srv := NewServer("./web", "127.0.0.1", "8080", nil)

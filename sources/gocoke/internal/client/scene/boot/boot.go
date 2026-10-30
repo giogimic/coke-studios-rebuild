@@ -497,19 +497,11 @@ func (s *Scene) fetchPrivateStudios() ([]studios.Studio, error) {
 			switch t := v.(type) {
 			case float64:
 				lt := int(t)
-				if lt == 2 {
-					lt = 4
-				} else if lt == 4 {
-					lt = 2
-				}
+
 				st.Layout = lt
 			case int:
 				lt := t
-				if lt == 2 {
-					lt = 4
-				} else if lt == 4 {
-					lt = 2
-				}
+
 				st.Layout = lt
 			}
 		}

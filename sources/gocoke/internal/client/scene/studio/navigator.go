@@ -15,6 +15,7 @@ import (
 	textmgr "gocoke/internal/client/assets/text"
 	"gocoke/internal/client/net/gateway"
 	"gocoke/internal/client/ui"
+	uinavigator "gocoke/internal/client/ui/navigator"
 )
 
 // NavigatorManager handles all navigator window functionality for the studio scene
@@ -26,6 +27,7 @@ type NavigatorManager struct {
 	// Providers for current user and gateway
 	getScreenName func() string
 	getGatewayURL func() string
+	enterStudio   func(studioID string)
 }
 
 // NewNavigatorManager creates a new navigator manager
@@ -34,6 +36,11 @@ func NewNavigatorManager(windowManager *ui.WindowManager, tm *textmgr.Manager) *
 		windowManager: windowManager,
 		tm:            tm,
 	}
+}
+
+// SetEnterStudio sets the callback for entering a studio
+func (n *NavigatorManager) SetEnterStudio(fn func(studioID string)) {
+	n.enterStudio = fn
 }
 
 // SetProviders sets callbacks to retrieve screen name and gateway URL
@@ -303,6 +310,14 @@ func (n *NavigatorManager) setupNavigatorCallbacks(window *ui.Window) {
 						}
 					}
 				}()
+		case "nav_priv_create_own":
+			uinavigator.OpenCreateStudioDialog(n.windowManager, n.tm, window, uinavigator.Options{
+				StudioMode:    true,
+				EnterStudio:   n.enterStudio,
+				GetScreenName: n.getScreenName,
+				GetGatewayURL: n.getGatewayURL,
+				StudioList:    n.studioList,
+			})
 		case "nav_priv_own":
 			// Show my Studios: fetch by owner and populate tab 2 list
 			var sn, url string

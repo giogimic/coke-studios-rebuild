@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-25",
+  "base_commit": "e73eb35d3a0dfb53d5ab81121b09577ff96bd5c1",
+  "source_state": "uncommitted studio repair changes",
+  "go": "go version go1.26.5 windows/amd64",
+  "build_command": "tools/build-go.ps1",
+  "tests": "go test ./... -count=1",
+  "render_capture": "blocked by Windows access permissions; no screenshot produced",
+  "artifacts": [
+    {
+      "path": "sources/gocoke/web/main.wasm",
+      "bytes": 54321480,
+      "sha256": "611f26eede409768bf737be4921890c78aa33b8d2a4013012008435f0c13ffda"
+    },
+    {
+      "path": "sources/gocoke/web/wasm_exec.js",
+      "bytes": 16992,
+      "sha256": "0c949f4996f9a89698e4b5c586de32249c3b69b7baadb64d220073cc04acba14"
+    },
+    {
+      "path": "tools/bin/coke-server.exe",
+      "bytes": 11965440,
+      "sha256": "cbfd48a4b32e7cf348c71bdcace76f56f68274aaa216948ff0b0802d57a3954b"
+    },
+    {
+      "path": "tools/bin/coke-server-linux",
+      "bytes": 11862178,
+      "sha256": "e24bcaf747ff64dd4b68cd3253844e0f12b5d3debee6b04dcef3b5ec069694f5"
+    }
+  ]
+}

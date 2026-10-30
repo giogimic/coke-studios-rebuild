@@ -1670,7 +1670,16 @@ func (s *Store) CreateStudio(studioID, ownerID, ownerName, studioName, roomType 
 	defer s.mu.Unlock()
 
 	if studioID == "" {
-		studioID = fmt.Sprintf("studio_%s", strings.ToLower(strings.TrimSpace(ownerName)))
+		baseID := fmt.Sprintf("studio_%s", strings.ToLower(strings.TrimSpace(ownerName)))
+		var exists int
+		_ = s.db.QueryRow("SELECT COUNT(*) FROM studios WHERE id = ?", baseID).Scan(&exists)
+		if exists == 0 {
+			studioID = baseID
+		} else {
+			var count int
+			_ = s.db.QueryRow("SELECT COUNT(*) FROM studios WHERE LOWER(owner_name) = LOWER(?)", strings.TrimSpace(ownerName)).Scan(&count)
+			studioID = fmt.Sprintf("%s_%d", baseID, count+1)
+		}
 	}
 	if studioName == "" {
 		studioName = fmt.Sprintf("%s's Studio", ownerName)
@@ -1707,6 +1716,32 @@ func (s *Store) CreateStudio(studioID, ownerID, ownerName, studioName, roomType 
 		RoomType:  roomType,
 		IsPublic:  false,
 	}, nil
+}
+
+func (s *Store) ModifyStudio(studioID, ownerName, studioName, description string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	var err error
+	if ownerName != "" {
+		_, err = s.db.Exec("UPDATE studios SET name = ? WHERE id = ? AND LOWER(owner_name) = LOWER(?)", studioName, studioID, ownerName)
+	} else {
+		_, err = s.db.Exec("UPDATE studios SET name = ? WHERE id = ?", studioName, studioID)
+	}
+	return err
+}
+
+func (s *Store) DeleteStudio(studioID, ownerName string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	// Return any placed furniture to backpack
+	_, _ = s.db.Exec("UPDATE backpack_items SET studio_id = '', placed = 0, x = 0, y = 0, z = 0 WHERE studio_id = ?", studioID)
+	var err error
+	if ownerName != "" {
+		_, err = s.db.Exec("DELETE FROM studios WHERE id = ? AND LOWER(owner_name) = LOWER(?)", studioID, ownerName)
+	} else {
+		_, err = s.db.Exec("DELETE FROM studios WHERE id = ?", studioID)
+	}
+	return err
 }
 
 

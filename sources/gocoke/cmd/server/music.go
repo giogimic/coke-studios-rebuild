@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"html"
 	"log"
 	"strconv"
 	"strings"
@@ -31,21 +32,21 @@ type SongComposition struct {
 
 // ActivePerformance represents an authoritative live DJ performance in a room.
 type ActivePerformance struct {
-	mu             sync.Mutex
-	RoomID         string
-	DJ             string
-	Artist         string
-	SongTitle      string
-	EDL            string
-	StartedAt      time.Time
-	Duration       time.Duration
-	Cheers         int
-	Boos           int
-	Voters         map[string]int // screenName -> +1 (cheer) or -1 (boo)
-	Settled        bool
-	SettledAt      time.Time
-	AwardedDB      int
-	cancelCh       chan struct{}
+	mu        sync.Mutex
+	RoomID    string
+	DJ        string
+	Artist    string
+	SongTitle string
+	EDL       string
+	StartedAt time.Time
+	Duration  time.Duration
+	Cheers    int
+	Boos      int
+	Voters    map[string]int // screenName -> +1 (cheer) or -1 (boo)
+	Settled   bool
+	SettledAt time.Time
+	AwardedDB int
+	cancelCh  chan struct{}
 }
 
 // ParseEDLDuration calculates the exact duration of a Coke Studios EDL sequence.
@@ -149,13 +150,15 @@ func (s *Server) StartPerformance(room *Room, dj, artist, title, edl string) (*A
 
 	room.mu.Lock()
 	if room.Performance != nil && !room.Performance.Done {
-		close(room.Performance.cancelCh)
+		room.mu.Unlock()
+		return nil, fmt.Errorf("a song is already playing")
 	}
 
 	duration := ParseEDLDuration(cleanEDL)
 
 	session := &PerformanceSession{
 		DJ:        dj,
+		Artist:    artist,
 		SongTitle: title,
 		EDL:       cleanEDL,
 		StartedAt: time.Now(),
@@ -170,7 +173,7 @@ func (s *Server) StartPerformance(room *Room, dj, artist, title, edl string) (*A
 
 	// Broadcast song start to all room occupants
 	cdpXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_P av=\"%s\" a=\"%s\" sn=\"%s\" title=\"%s\" s=\"%s\" catId=\"89\" dur=\"%d\"/></Room.Action>",
-		room.ID, dj, dj, title, title, cleanEDL, int(duration.Seconds()))
+		room.ID, html.EscapeString(dj), html.EscapeString(artist), html.EscapeString(title), html.EscapeString(title), html.EscapeString(cleanEDL), int(duration.Seconds()))
 	room.Broadcast(cdpXML, "")
 	log.Printf("[MUSIC] DJ %s started track %q in %s (Duration: %v)", dj, title, room.ID, duration)
 
@@ -301,6 +304,7 @@ func (s *Server) SettlePerformance(room *Room) (int, error) {
 	prsXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_PRS av=\"%s\" tur=\"%d\" tdr=\"%d\" tu=\"%d\" td=\"%d\" db=\"%d\"/></Room.Action>",
 		room.ID, dj, cheers, boos, cheers, boos, rewardDB)
 	room.Broadcast(prsXML, "")
+	room.Broadcast(fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_E/></Room.Action>", room.ID), "")
 
 	return rewardDB, nil
 }

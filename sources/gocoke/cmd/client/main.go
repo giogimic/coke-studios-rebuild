@@ -86,7 +86,19 @@ func main() {
 				secret = lr.Secret
 				// Store in session for scenes
 				session.SetCredentials(screenName, secret)
+				session.SetUserProfile(lr.AvatarDefinition, lr.MissionStatement, lr.Gender)
 			}
+		}
+	} else if screenName != "" {
+		// Attempt session resolution using screenName
+		lr, err := auth.FetchLoginDenizen(httpClient, *host, screenName)
+		if err == nil && lr.ErrorCode == 0 {
+			screenName = lr.ScreenName
+			secret = lr.Secret
+			session.SetCredentials(screenName, secret)
+			session.SetUserProfile(lr.AvatarDefinition, lr.MissionStatement, lr.Gender)
+		} else {
+			session.SetCredentials(screenName, "")
 		}
 	}
 
@@ -97,7 +109,7 @@ func main() {
 	ebiten.SetTPS(120)
 
 	sm := &scene.Manager{}
-	g := &game{sm: sm, dataDir: *dataDir, httpClient: httpClient}
+	g := &game{sm: sm, dataDir: *dataDir, httpClient: httpClient, launchRoom: env.LaunchRoom()}
 	// Boot scene shows LOADER_TITLE/LOADING from Text_English.txt and calls getTip
 	gatewayURL := fmt.Sprintf("%s%s", *host, *gatewayPath)
 	session.SetGatewayURL(gatewayURL)
@@ -110,6 +122,7 @@ func main() {
 }
 
 type game struct {
+	launchRoom string
 	sm         *scene.Manager
 	dataDir    string
 	httpClient *http.Client
@@ -125,6 +138,10 @@ func (g *game) Update() error {
 			entry := entryscene.New(g.dataDir, bootScene.GetFeatureSet(), bootScene.GetStudioList())
 			entry.SetCatalog(bootScene.GetCatalog())
 			g.sm.Set(entry)
+			if g.launchRoom != "" {
+				entry.RequestInitialStudio(g.launchRoom)
+				g.launchRoom = ""
+			}
 		}
 	} else if entryScene, ok := g.sm.Current().(*entryscene.Scene); ok {
 		if studioID := entryScene.ShouldEnterStudio(); studioID != "" {
@@ -139,15 +156,24 @@ func (g *game) Update() error {
 					// Inject catalog from entry and pass StudioList so navigator in studio has data
 					studioScene.SetCatalog(entryScene.GetCatalog())
 					studioScene.SetStudioList(entryScene.GetStudioList())
-					// Register as active scene for realtime updates
+					// Register as active scene for realtime updates BEFORE room entry packets arrive
 					studioscene.SetActiveScene(studioScene)
 					// Inject current user name from session to enable local click movement
 					if sn, sec := session.GetCredentials(); strings.TrimSpace(sn) != "" {
 						studioScene.SetCurrentUserName(sn)
+						def, mission, _ := session.GetUserProfile()
+						studioScene.SetUserProfile(def, mission)
 						// Load user's possessions from gateway
 						studioScene.LoadPossessionsFromGateway(sn, sec, session.GetGatewayURL())
 					}
 					g.sm.Set(studioScene)
+
+					// Trigger authoritative room entry once active scene is ready to receive presence/furni
+					if rc := session.GetRealtimeClient(); rc != nil && session.IsRealtimeReady() {
+						if err := rc.EnterRoom(studioID); err != nil {
+							log.Printf("Realtime enter room failed during entry transition: %v", err)
+						}
+					}
 				}
 			} else {
 				log.Printf("Studio %s not found", studioID)
@@ -165,11 +191,6 @@ func (g *game) Update() error {
 			studioScene.ClearTargetStudio()
 			studio := studioScene.GetStudioByID(targetStudioID)
 			if studio != nil {
-				if rc := session.GetRealtimeClient(); rc != nil && session.IsRealtimeReady() {
-					if err := rc.EnterRoom(targetStudioID); err != nil {
-						log.Printf("Realtime enter room failed during room transition: %v", err)
-					}
-				}
 				newScene, err := studioscene.New(g.dataDir, studio)
 				if err != nil {
 					log.Printf("Failed to create studio scene: %v", err)
@@ -179,9 +200,17 @@ func (g *game) Update() error {
 					studioscene.SetActiveScene(newScene)
 					if sn, sec := session.GetCredentials(); strings.TrimSpace(sn) != "" {
 						newScene.SetCurrentUserName(sn)
+						def, mission, _ := session.GetUserProfile()
+						newScene.SetUserProfile(def, mission)
 						newScene.LoadPossessionsFromGateway(sn, sec, session.GetGatewayURL())
 					}
 					g.sm.Set(newScene)
+
+					if rc := session.GetRealtimeClient(); rc != nil && session.IsRealtimeReady() {
+						if err := rc.EnterRoom(targetStudioID); err != nil {
+							log.Printf("Realtime enter room failed during room transition: %v", err)
+						}
+					}
 					return nil
 				}
 			} else {
@@ -192,6 +221,7 @@ func (g *game) Update() error {
 		// Transition from studio back to boot (which will load entry/nav exactly as initial flow)
 		if studioScene.ShouldExit() {
 			log.Println("Studio requested exit, restarting boot -> entry flow...")
+			studioscene.SetActiveScene(nil)
 			// Use lobby variant: shorter status list and persistent tip
 			g.sm.Set(bootscene.NewLobby(g.dataDir, g.httpClient, g.gatewayURL))
 		}
@@ -320,7 +350,9 @@ func (g *game) Update() error {
 		// Inject private whisper sender once per scene instance
 		studioScene.SetWhisperSender(func(roomID, target, message string) error {
 			if rc := session.GetRealtimeClient(); rc != nil {
-				if sender, ok := any(rc).(interface{ SendWhisper(string, string, string) error }); ok {
+				if sender, ok := any(rc).(interface {
+					SendWhisper(string, string, string) error
+				}); ok {
 					return sender.SendWhisper(roomID, target, message)
 				}
 			}
@@ -460,6 +492,11 @@ func (g *game) Update() error {
 		}
 	}
 
+	if rc := session.GetRealtimeClient(); rc != nil {
+		if flusher, ok := any(rc).(interface{ FlushRoomMessages() }); ok {
+			flusher.FlushRoomMessages()
+		}
+	}
 	return g.sm.Update()
 }
 

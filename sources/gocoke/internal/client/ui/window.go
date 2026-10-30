@@ -8,6 +8,7 @@ import (
 	"image/color"
 	"log"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	lingoassets "gocoke/internal/client/assets/lingo"
@@ -1225,7 +1226,7 @@ func (w *Window) handleInput(wm *WindowManager) error {
 	// Handle private navigation button clicks (check BEFORE tab clicks to prevent interference)
 	buttonClicked := false
 	if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) {
-		privateButtons := []string{"nav_priv_popular", "nav_priv_own", "nav_priv_create_own", "nav_go_search_button"}
+		privateButtons := []string{"nav_priv_popular", "nav_priv_own", "nav_priv_create_own", "nav_go_search_button", "nav_modify_button"}
 		for _, buttonID := range privateButtons {
 			if button := w.Interactive[buttonID]; button != nil {
 				// Check if click is within button bounds
@@ -1249,6 +1250,112 @@ func (w *Window) handleInput(wm *WindowManager) error {
 					}
 
 					break
+				}
+			}
+		}
+	}
+
+	// Authentic Shockwave studio creation window interaction & text input
+	if w.Name == "nav_createroom" {
+		if w.TempVars == nil {
+			w.TempVars = make(map[string]any)
+		}
+		activeField, _ := w.TempVars["active_field"].(string)
+		if activeField == "" {
+			activeField = "nav_create_roomnamefield"
+			w.TempVars["active_field"] = activeField
+		}
+		for i := range w.Definition.Elements {
+			if w.Definition.Elements[i].ID == activeField {
+				el := &w.Definition.Elements[i]
+				maxLen := 25
+				if activeField == "nav_create_roomdescfield" {
+					maxLen = 60
+				}
+				for _, r := range ebiten.AppendInputChars(nil) {
+					if r >= 32 && r <= 126 && len(el.Key) < maxLen {
+						el.Key += string(r)
+					}
+				}
+				if inpututil.IsKeyJustPressed(ebiten.KeyBackspace) {
+					if len(el.Key) > 0 {
+						el.Key = el.Key[:len(el.Key)-1]
+					}
+				}
+				break
+			}
+		}
+
+		if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) {
+			for i := range w.Definition.Elements {
+				el := &w.Definition.Elements[i]
+				x := int(offsetX) + el.LocH
+				y := int(offsetY) + el.LocV
+				if mouseX >= x && mouseX < x+el.Width && mouseY >= y && mouseY < y+el.Height {
+					// Field focus
+					if el.ID == "nav_create_roomnamefield" || el.ID == "nav_create_roomdescfield" {
+						w.TempVars["active_field"] = el.ID
+						break
+					}
+					// Layout radio buttons
+					if strings.HasPrefix(el.ID, "nav_createstudio_radio_") {
+						numStr := strings.TrimPrefix(el.ID, "nav_createstudio_radio_")
+						layoutNum, _ := strconv.Atoi(numStr)
+						w.TempVars["selected_layout"] = layoutNum
+						for j := range w.Definition.Elements {
+							other := &w.Definition.Elements[j]
+							if strings.HasPrefix(other.ID, "nav_createstudio_radio_") {
+								if other.ID == el.ID {
+									other.Member = "cc.radiobutton.active.on"
+								} else {
+									other.Member = "cc.radiobutton.active.off"
+								}
+							}
+						}
+						break
+					}
+					// Location radio buttons
+					if strings.HasPrefix(el.ID, "nav_studiolocation_radio_") {
+						numStr := strings.TrimPrefix(el.ID, "nav_studiolocation_radio_")
+						locNum, _ := strconv.Atoi(numStr)
+						w.TempVars["selected_location"] = locNum
+						for j := range w.Definition.Elements {
+							other := &w.Definition.Elements[j]
+							if strings.HasPrefix(other.ID, "nav_studiolocation_radio_") {
+								if other.ID == el.ID {
+									other.Member = "cc.radiobutton.active.on"
+								} else {
+									other.Member = "cc.radiobutton.active.off"
+								}
+							}
+						}
+						break
+					}
+					// OK or Cancel buttons
+					if el.ID == "nav_createstudio_ok" || el.ID == "nav_createstudio_cancel" {
+						if w.ButtonClick != nil {
+							w.ButtonClick(el.ID)
+						}
+						break
+					}
+				}
+			}
+		}
+	}
+
+	if w.Name == "nav_roomready" {
+		if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) {
+			for i := range w.Definition.Elements {
+				el := &w.Definition.Elements[i]
+				x := int(offsetX) + el.LocH
+				y := int(offsetY) + el.LocV
+				if mouseX >= x && mouseX < x+el.Width && mouseY >= y && mouseY < y+el.Height {
+					if el.ID == "nav_gotoyourstudio" {
+						if w.ButtonClick != nil {
+							w.ButtonClick(el.ID)
+						}
+						break
+					}
 				}
 			}
 		}
@@ -1459,7 +1566,7 @@ func (w *Window) handleInput(wm *WindowManager) error {
 	if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) && w.ButtonClick != nil {
 		for id, ie := range w.Interactive {
 			// Limit to known simple IDs to avoid overlap with navigator internals
-			if !(strings.HasPrefix(id, "catalog_") || strings.HasPrefix(id, "cat_") || strings.HasPrefix(id, "buy_") || id == "wall_ok" || id == "floor_ok" || id == "open_ranklist" || id == "purchase_decision_ok" || id == "sanfo_decision_cancel") {
+			if !(strings.HasPrefix(id, "catalog_") || strings.HasPrefix(id, "cat_") || strings.HasPrefix(id, "buy_") || id == "wall_ok" || id == "floor_ok" || id == "open_ranklist" || id == "purchase_decision_ok" || id == "sanfo_decision_cancel" || strings.HasPrefix(id, "nav_create") || strings.HasPrefix(id, "nav_studio") || id == "nav_gotoyourstudio" || strings.HasPrefix(id, "nav_delete") || strings.HasPrefix(id, "nav_modify")) {
 				continue
 			}
 			x := int(offsetX) + ie.Rect[0]

@@ -10,7 +10,7 @@ Recreate the historical game as faithfully as the surviving evidence allows, wit
 
 ## Current truth
 
-There is useful Go client code, recovered artwork/audio/scripts, and a locally developed Go server with storage and protocol handlers. The project is an incomplete recreation. The current portal defaults to CokePhase JavaScript; several server operations use demo behavior. The server unit suite passed during the 2026-10-24 review, but end-to-end historical parity has not been established.
+There is useful Go client code, recovered artwork/audio/scripts, and a locally developed Go server with storage and protocol handlers. The project is an incomplete recreation. The current player route launches Go WASM, but the website preview, room assets, protocol handlers and minigame presentation still contain disconnected or provisional implementations. See [the 2026-10-25 repair review](verification/STUDIO-REPAIR-2026-10-25.md). The server unit suite passed during the 2026-10-24 review, but end-to-end historical parity has not been established.
 
 The previous Bible mixed historical research, proposed architecture, invented implementation values, and completion claims. It is preserved verbatim in [history/BIBLE-before-realignment-2026-10-24.md](history/BIBLE-before-realignment-2026-10-24.md). Its later reconstruction research remains a useful lead inventory. Its formulas, dates, rule descriptions, and "verified" assertions require source checking; they are not normative specifications.
 
@@ -49,6 +49,10 @@ Evidence priority:
 4. Community preservation/rebuilds as corroboration and implementation references.
 
 A code comment, the old Bible, or a fan remake alone cannot prove an original rule. Each parity record needs a reference identifier, exact path/capture, version, observed behavior, implementation owner, and verification result. Conflicting evidence stays visible.
+
+## Website modernization clarification — 2026-10-25
+
+The user explicitly requests a similar but modern website alongside faithful Coke Music gameplay. Responsive layout, accessibility and browser integration may be modernized while preserving evidenced navigation/content and the connected account-to-world journey. This does not authorize substitute gameplay or claims of original parity for a redesigned screen.
 
 ## Product shape
 

@@ -9,6 +9,7 @@ import (
 	"fmt"
 	clientcrypto "gocoke/internal/client/crypto"
 	studioscene "gocoke/internal/client/scene/studio"
+	"html"
 	"log"
 	"strconv"
 	"strings"
@@ -59,7 +60,10 @@ type Client struct {
 	roomID string
 
 	// Buffer POS packets until studio scene is active
-	pendingPOS []posPayload
+	pendingPOS   []posPayload
+	roomInbox      roomInbox
+	dispatchPacket func([]byte)
+	handlePacket   func([]byte) any
 
 	// Movement send throttling
 	lastMoveSend    time.Time
@@ -136,24 +140,8 @@ func (c *Client) Connect(ctx context.Context, host string, port string) error {
 	})
 	ws.Set("onopen", c.onOpenRef)
 
-	// Message handler: each WS message is one XML packet (NUL has been stripped server-side)
-	c.onMsgRef = js.FuncOf(func(this js.Value, args []js.Value) any {
-		defer func() {
-			if r := recover(); r != nil {
-				if c.logger != nil {
-					c.logger.Printf("Realtime onmessage recovered from panic: %v", r)
-				}
-			}
-		}()
-		if len(args) < 1 {
-			return nil
-		}
-		ev := args[0]
-		data := ev.Get("data")
-		// Convert ArrayBuffer → Uint8Array → Go []byte
-		uint8 := js.Global().Get("Uint8Array").New(data)
-		b := make([]byte, uint8.Get("length").Int())
-		js.CopyBytesToGo(b, uint8)
+	// Internal packet dispatcher: parses and applies XML packets directly without deferral checks.
+	c.dispatchPacket = func(b []byte) {
 		// Detect cross-domain policy and flush any queued outbound messages
 		if !c.policySeen {
 			if containsSubstr(b, []byte("<cross-domain-policy")) {
@@ -211,6 +199,7 @@ func (c *Client) Connect(ctx context.Context, host string, port string) error {
 					actionXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV_EN/></Room.Action>", target)
 					_ = c.sendFramed(actionXML)
 					c.mu.Lock()
+					c.roomID = target
 					c.navStep = 0
 					c.navAwait = 0
 					c.navTarget = ""
@@ -239,95 +228,27 @@ func (c *Client) Connect(ctx context.Context, host string, port string) error {
 			c.mu.Unlock()
 		}
 
-		// If this is an AV payload, parse and enqueue all <AV .../> entries
+		// Decode the same escaped profile used for initial spawn and late joins.
 		if containsSubstr(b, []byte("<Room.Action")) && containsSubstr(b, []byte("<AV ")) {
-			// Local helpers operating on a segment slice
-			parseAttrIntIn := func(seg []byte, attr string) (int, bool) {
-				key := []byte(attr + "=\"")
-				for i := 0; i+len(key) <= len(seg); i++ {
-					// Ensure attribute name starts at a boundary (start, space, or '<')
-					if !(i == 0 || seg[i-1] == ' ' || seg[i-1] == '<') {
+			avatars, err := DecodeAvatarPackets(b)
+			if err != nil {
+				if c.logger != nil {
+					c.logger.Printf("Realtime invalid avatar packet: %v", err)
+				}
+			} else if sc := studioscene.GetActiveScene(); sc != nil {
+				for _, av := range avatars {
+					if strings.TrimSpace(av.Name) == "" {
 						continue
 					}
-					if string(seg[i:i+len(key)]) == string(key) {
-						j := i + len(key)
-						start := j
-						for j < len(seg) && seg[j] != '"' {
-							j++
-						}
-						if j > start {
-							if n, err := strconv.Atoi(string(seg[start:j])); err == nil {
-								return n, true
-							}
-						}
-						break
+					if av.X != nil && av.Z != nil {
+						row, col := c.mapServerToClient(*av.X, *av.Z)
+						sc.EnqueueAV(av.Name, av.Definition, av.Mission, av.Gender, av.Direction, row, col, false)
+					} else if strings.HasPrefix(av.Action, "dnc") || av.Action == "spk" || av.Action == "" || av.Action == "drk" || av.Action == "mcp" {
+						sc.EnqueueAVAction(av.Name, av.Action, av.Direction)
 					}
 				}
-				return 0, false
-			}
-			parseAttrStrIn := func(seg []byte, attr string) string {
-				key := []byte(attr + "=\"")
-				for i := 0; i+len(key) <= len(seg); i++ {
-					// Ensure attribute name starts at a boundary (start, space, or '<')
-					if !(i == 0 || seg[i-1] == ' ' || seg[i-1] == '<') {
-						continue
-					}
-					if string(seg[i:i+len(key)]) == string(key) {
-						j := i + len(key)
-						start := j
-						for j < len(seg) && seg[j] != '"' {
-							j++
-						}
-						if j > start {
-							return string(seg[start:j])
-						}
-						break
-					}
-				}
-				return ""
-			}
-			// Scan the payload for each <AV ...> start tag (exclude <AV_MV>)
-			for i := 0; i+4 < len(b); {
-				if b[i] == '<' && b[i+1] == 'A' && b[i+2] == 'V' && b[i+3] == ' ' {
-					// Find end of the start tag
-					j := i
-					for j < len(b) && b[j] != '>' {
-						j++
-					}
-					if j >= len(b) {
-						break
-					}
-					seg := b[i:j]
-					serverX, okX := parseAttrIntIn(seg, "x")
-					serverZ, okZ := parseAttrIntIn(seg, "z")
-					name := parseAttrStrIn(seg, "av")
-					dir, _ := parseAttrIntIn(seg, "d")
-					gender, _ := parseAttrIntIn(seg, "g")
-					mission := parseAttrStrIn(seg, "m")
-					def := parseAttrStrIn(seg, "def")
-					act := parseAttrStrIn(seg, "act")
-					if okX && okZ && strings.TrimSpace(name) != "" {
-						cx, cy := c.mapServerToClient(serverX, serverZ)
-						if sc := studioscene.GetActiveScene(); sc != nil {
-							if c.logger != nil {
-								c.logger.Printf("Realtime AV parsed: name=%q server(x,z)=(%d,%d) -> client(row,col)=(%d,%d)", name, serverX, serverZ, cy, cx)
-							}
-							// Swap to match engine expectations: row=cx, col=cy
-							sc.EnqueueAV(name, def, mission, gender, dir, cx, cy, false)
-						}
-					} else if strings.TrimSpace(name) != "" && (strings.HasPrefix(act, "dnc") || act == "spk" || act == "" || act == "drk" || act == "mcp") {
-						// Dance or speaking action with optional direction
-						if sc := studioscene.GetActiveScene(); sc != nil {
-							sc.EnqueueAVAction(name, act, dir)
-						}
-					}
-					i = j + 1
-					continue
-				}
-				i++
 			}
 		}
-
 		// If this is a furniture POS payload, parse and enqueue placement
 		if containsSubstr(b, []byte("<POS ")) {
 			// Extract all <POS ...> start tags and enqueue each
@@ -584,7 +505,8 @@ func (c *Client) Connect(ctx context.Context, host string, port string) error {
 				c.logger.Printf("Realtime IN CD_P: av=%q artist=%q song=%q edlLen=%d", avatar, artist, songName, len(edl))
 			}
 			if sc := studioscene.GetActiveScene(); sc != nil {
-				sc.HandleCDPlay(avatar, artist, songName, edl)
+				offsetMS, _ := parseXMLAttrInt(b, "offset")
+				sc.HandleCDPlayAt(avatar, artist, songName, edl, time.Duration(offsetMS)*time.Millisecond)
 				// Record player avatar for self-button hiding BEFORE showing
 				if sc.InfoStand() != nil {
 					sc.InfoStand().SetNowPlayingPlayer(avatar)
@@ -709,6 +631,11 @@ func (c *Client) Connect(ctx context.Context, host string, port string) error {
 				}
 			}
 		}
+		if containsSubstr(b, []byte("<Alert ")) {
+			if sc := studioscene.GetActiveScene(); sc != nil {
+				sc.ShowServerAlert(parseXMLAttrString(b, "msg"))
+			}
+		}
 		// If this is a CD request accepted (CD_RA), open choose song window
 		if containsSubstr(b, []byte("<Room.Action")) && containsSubstr(b, []byte("<CD_RA")) {
 			if c.logger != nil {
@@ -804,7 +731,41 @@ func (c *Client) Connect(ctx context.Context, host string, port string) error {
 		if c.logger != nil {
 			c.logger.Printf("Realtime IN: %s", string(b))
 		}
+	}
+
+	// Message handler: wraps dispatchPacket with panic recovery and room action deferral for loading scenes.
+	c.handlePacket = func(b []byte) any {
+		defer func() {
+			if r := recover(); r != nil {
+				if c.logger != nil {
+					c.logger.Printf("Realtime onmessage recovered from panic: %v", r)
+				}
+			}
+		}()
+		if containsSubstr(b, []byte("<Room.Action")) {
+			room := parseXMLAttrString(b, "roomID")
+			active := ""
+			if sc := studioscene.GetActiveScene(); sc != nil && sc.GetStudio() != nil {
+				active = sc.GetStudio().StudioID
+			}
+			if room != "" && c.roomInbox.deferPacket(room, active, b) {
+				return nil
+			}
+		}
+		c.dispatchPacket(b)
 		return nil
+	}
+	c.onMsgRef = js.FuncOf(func(this js.Value, args []js.Value) any {
+		if len(args) < 1 {
+			return nil
+		}
+		ev := args[0]
+		data := ev.Get("data")
+		// Convert ArrayBuffer → Uint8Array → Go []byte
+		uint8 := js.Global().Get("Uint8Array").New(data)
+		b := make([]byte, uint8.Get("length").Int())
+		js.CopyBytesToGo(b, uint8)
+		return c.handlePacket(b)
 	})
 	ws.Set("onmessage", c.onMsgRef)
 
@@ -900,6 +861,7 @@ func (c *Client) BeginEnterStudioFromLobby(targetRoomID string) error {
 		c.mu.Unlock()
 		return fmt.Errorf("navigation already in progress")
 	}
+	c.roomInbox.begin(targetRoomID)
 	c.navTarget = targetRoomID
 	c.navStep = 1
 	c.mu.Unlock()
@@ -908,7 +870,13 @@ func (c *Client) BeginEnterStudioFromLobby(targetRoomID string) error {
 	c.mu.Lock()
 	c.navAwait = exitID
 	c.mu.Unlock()
-	exitXML := fmt.Sprintf("<Room.Exit msgID=\"%d\" roomID=\"$LOBBY$\"/>", exitID)
+	c.mu.Lock()
+	previousRoom := c.roomID
+	c.mu.Unlock()
+	if previousRoom == "" {
+		previousRoom = "$LOBBY$"
+	}
+	exitXML := fmt.Sprintf("<Room.Exit msgID=\"%d\" roomID=\"%s\"/>", exitID, previousRoom)
 	return c.SendXML(exitXML)
 }
 
@@ -934,15 +902,6 @@ func (c *Client) SendXML(xml string) error {
 	}
 	sum := clientcrypto.Sha1(xml + tripStr + c.secret)
 	framed := sum + " " + tripStr + " " + xml + "\x00"
-	if c.logger != nil && strings.Contains(xml, "<System.Login") {
-		// Debug: show hash and trip used for login
-		secretPreview := c.secret
-		if len(secretPreview) > 16 {
-			secretPreview = secretPreview[:16] + "..."
-		}
-		c.logger.Printf("Realtime OUT LOGIN: sha1=%s trip=[%s] tripLen=%d xmlLen=%d secretLen=%d secret=%q", sum, tripStr, len(tripStr), len(xml), len(c.secret), secretPreview)
-		c.logger.Printf("Realtime OUT LOGIN: hashInput=%q", xml+tripStr+c.secret)
-	}
 	c.trip++
 
 	// Send as binary Frame
@@ -965,14 +924,6 @@ func (c *Client) sendFramed(xml string) error {
 	}
 	sum := clientcrypto.Sha1(xml + tripStr + c.secret)
 	framed := sum + " " + tripStr + " " + xml + "\x00"
-	if c.logger != nil && strings.Contains(xml, "<System.Login") {
-		secretPreview := c.secret
-		if len(secretPreview) > 16 {
-			secretPreview = secretPreview[:16] + "..."
-		}
-		c.logger.Printf("Realtime OUT LOGIN (sendFramed): sha1=%s trip=[%s] tripLen=%d xmlLen=%d secretLen=%d secret=%q", sum, tripStr, len(tripStr), len(xml), len(c.secret), secretPreview)
-		c.logger.Printf("Realtime OUT LOGIN (sendFramed): hashInput=%q", xml+tripStr+c.secret)
-	}
 	c.trip++
 	b := []byte(framed)
 	uint8 := js.Global().Get("Uint8Array").New(len(b))
@@ -1105,7 +1056,7 @@ func parseXMLAttrString(b []byte, attr string) string {
 				j++
 			}
 			if j > start {
-				return string(b[start:j])
+				return html.UnescapeString(string(b[start:j]))
 			}
 			break
 		}
@@ -1737,8 +1688,6 @@ func (c *Client) SendFriendRequest(roomID string, targetName string) error {
 
 	}
 
-
-
 	var b strings.Builder
 
 	b.Grow(80)
@@ -1753,8 +1702,6 @@ func (c *Client) SendFriendRequest(roomID string, targetName string) error {
 
 	b.WriteString("\"/></Room.Action>")
 
-
-
 	if c.logger != nil {
 
 		c.logger.Printf("Realtime OUT MMS_REQ: room=%s to=%s", roomID, targetName)
@@ -1764,8 +1711,6 @@ func (c *Client) SendFriendRequest(roomID string, targetName string) error {
 	return c.SendXML(b.String())
 
 }
-
-
 
 // SendTradeStart sends a Room.Action TD_ST packet to initiate a trade with another player.
 func (c *Client) SendTradeStart(roomID string, targetName string) error {
@@ -1901,4 +1846,18 @@ func (c *Client) SendFriendReject(fromUser string) error {
 	}
 	xml := fmt.Sprintf("<Room.Action roomID=\"%s\"><MMS_REJ from=\"%s\"/></Room.Action>", roomID, fromUser)
 	return c.SendXML(xml)
+}
+
+// FlushRoomMessages delivers snapshots once the game loop installs their scene,
+// even when no further socket packet arrives. Drained packets are dispatched directly
+// without re-entering the inbox deferral filter.
+func (c *Client) FlushRoomMessages() {
+	if c.dispatchPacket == nil {
+		return
+	}
+	if sc := studioscene.GetActiveScene(); sc != nil && sc.GetStudio() != nil {
+		for _, packet := range c.roomInbox.drain(sc.GetStudio().StudioID) {
+			c.dispatchPacket(packet)
+		}
+	}
 }

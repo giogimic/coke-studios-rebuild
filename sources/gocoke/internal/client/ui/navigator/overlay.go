@@ -23,6 +23,7 @@ type Options struct {
 	EnterStudio    func(studioID string)     // called when Go! is pressed (optional in studio)
 	GetScreenName  func() string             // provider used for private nav buttons (optional)
 	GetGatewayURL  func() string             // provider used for private nav buttons (optional)
+	GetSecret      func() string             // provider used for private nav buttons (optional)
 	StudioList     *studios.StudioList       // list for populating public/private tabs
 }
 
@@ -198,14 +199,14 @@ func setupNavigatorCallbacks(wm *ui.WindowManager, tm *textmgr.Manager, window *
 							if ow, ok := m["ownername"]; ok { if x, ok2 := ow.(string); ok2 { owner = x } }
 							if uc, ok := m["currentoccupancy"]; ok { switch x := uc.(type) { case float64: userCount = int(x); case int: userCount = x } }
 							if capv, ok := m["maxoccupancy"]; ok { switch x := capv.(type) { case float64: capacity = int(x); case int: capacity = x } }
-							if ly, ok := m["layout"]; ok { switch x := ly.(type) { case float64: lt := int(x); if lt == 2 { lt = 4 } else if lt == 4 { lt = 2 }; layout = lt; case int: lt := x; if lt == 2 { lt = 4 } else if lt == 4 { lt = 2 }; layout = lt } }
+							if ly, ok := m["layout"]; ok { switch x := ly.(type) { case float64: lt := int(x);  layout = lt; case int: lt := x;  layout = lt } }
 							if loc, ok := m["location"]; ok { switch x := loc.(type) { case float64: location = int(x); case int: location = x } }
 							if studioID == "" { if sID, ok := m["studioID"]; ok { if x, ok2 := sID.(string); ok2 { studioID = x } } }
 							if name == "" { if nm, ok := m["Name"]; ok { if x, ok2 := nm.(string); ok2 { name = x } } }
 							if owner == "" { if ow, ok := m["ownerName"]; ok { if x, ok2 := ow.(string); ok2 { owner = x } } }
 							if userCount == 0 { if uc, ok := m["currentOccupancy"]; ok { switch x := uc.(type) { case float64: userCount = int(x); case int: userCount = x } } }
 							if capacity == 0 { if capv, ok := m["maxOccupancy"]; ok { switch x := capv.(type) { case float64: capacity = int(x); case int: capacity = x } } }
-							if layout == 0 { if ly, ok := m["Layout"]; ok { switch x := ly.(type) { case float64: lt := int(x); if lt == 2 { lt = 4 } else if lt == 4 { lt = 2 }; layout = lt; case int: lt := x; if lt == 2 { lt = 4 } else if lt == 4 { lt = 2 }; layout = lt } } }
+							if layout == 0 { if ly, ok := m["Layout"]; ok { switch x := ly.(type) { case float64: lt := int(x);  layout = lt; case int: lt := x;  layout = lt } } }
 							if location == 0 { if loc, ok := m["Location"]; ok { switch x := loc.(type) { case float64: location = int(x); case int: location = x } } }
 							if studioID != "" && name != "" {
 								items = append(items, ui.RoomListItem{StudioID: studioID, Name: name, UserCount: userCount, Capacity: capacity})
@@ -242,7 +243,7 @@ func setupNavigatorCallbacks(wm *ui.WindowManager, tm *textmgr.Manager, window *
 				}
 			}()
 		case "nav_priv_create_own":
-			log.Printf("Navigator(shared): TODO - create new private studio")
+			OpenCreateStudioDialog(wm, tm, window, opts)
 		case "nav_go_search_button":
 			log.Printf("Navigator(shared): TODO - perform search")
 		}
@@ -607,5 +608,159 @@ func updateModifyButton(w *ui.Window, studio *studios.Studio, opts Options) {
 		el.LocV = -1000
 		el.Width = 0
 		el.Height = 0
+	}
+}
+
+
+// OpenCreateStudioDialog opens the 69_nav_createroom dialog
+func OpenCreateStudioDialog(wm *ui.WindowManager, tm *textmgr.Manager, current *ui.Window, opts Options) {
+	if wm == nil || current == nil {
+		return
+	}
+	navPath := filepath.Join("Lingo", "cc_navigator[1]", "69_nav_createroom.window.txt")
+	def, err := window.ParseFile(navPath)
+	if err != nil {
+		log.Printf("Navigator(shared): failed to load %s: %v", navPath, err)
+		return
+	}
+	navDir := filepath.Join("Lingo", "cc_navigator[1]")
+	ifaceDir := filepath.Join("Lingo", "cc_interface[1]")
+	assets := lingoassets.LoadAssetsForDefinition(def, navDir, ifaceDir)
+
+	extraAssets := []string{
+		"cc.radiobutton.active.on", "cc.radiobutton.active.off", "cc.studiocreation.layouts",
+		"button.b1.left.active", "button.b1.middle.active", "button.b1.right.active",
+		"button.b1.left.pressed", "button.b1.middle.pressed", "button.b1.right.pressed",
+	}
+	for k, v := range lingoassets.LoadAssetsByNames(extraAssets, ifaceDir) {
+		assets[k] = v
+	}
+
+	sn := ""
+	if opts.GetScreenName != nil {
+		sn = strings.TrimSpace(opts.GetScreenName())
+	}
+	if sn == "" {
+		sn = "My"
+	}
+	defaultName := fmt.Sprintf("%s's Studio", sn)
+
+	for i := range def.Elements {
+		if def.Elements[i].ID == "nav_create_roomnamefield" {
+			def.Elements[i].Key = defaultName
+		}
+	}
+
+	newW := wm.TransitionWindow(current, "nav_createroom", def, assets, tm)
+	if newW == nil {
+		return
+	}
+	if opts.StudioMode {
+		newW.CloseButtonOffsetX = current.CloseButtonOffsetX
+	}
+	if newW.TempVars == nil {
+		newW.TempVars = make(map[string]any)
+	}
+	newW.TempVars["active_field"] = "nav_create_roomnamefield"
+	newW.TempVars["selected_layout"] = 1
+	newW.TempVars["selected_location"] = 1
+
+	newW.ButtonClick = func(elementID string) {
+		switch elementID {
+		case "nav_createstudio_cancel":
+			handleTabTransition(wm, tm, newW, 2, 2, opts)
+		case "nav_createstudio_ok":
+			studioName := defaultName
+			description := ""
+			for _, el := range newW.Definition.Elements {
+				if el.ID == "nav_create_roomnamefield" && strings.TrimSpace(el.Key) != "" {
+					studioName = strings.TrimSpace(el.Key)
+				}
+				if el.ID == "nav_create_roomdescfield" {
+					description = strings.TrimSpace(el.Key)
+				}
+			}
+			layout := 1
+			if l, ok := newW.TempVars["selected_layout"].(int); ok && l > 0 {
+				layout = l
+			}
+			location := 1
+			if loc, ok := newW.TempVars["selected_location"].(int); ok && loc > 0 {
+				location = loc
+			}
+
+			url := ""
+			if opts.GetGatewayURL != nil {
+				url = opts.GetGatewayURL()
+			}
+			secret := ""
+			if opts.GetSecret != nil {
+				secret = opts.GetSecret()
+			}
+
+			httpClient := &http.Client{Timeout: 10 * time.Second}
+			go func() {
+				res, err := gateway.CreateStudio(httpClient, url, sn, secret, studioName, description, layout, location)
+				if err != nil {
+					log.Printf("CreateStudio failed via AMF: %v", err)
+					return
+				}
+				createdID, _ := res["studioId"].(string)
+				if createdID == "" {
+					createdID, _ = res["studioID"].(string)
+				}
+				createdName, _ := res["name"].(string)
+				if createdName == "" {
+					createdName = studioName
+				}
+
+				newStudio := studios.Studio{
+					StudioID:  createdID,
+					Name:      createdName,
+					Owner:     sn,
+					Layout:    layout,
+					Location:  location,
+					UserCount: 1,
+					Capacity:  25,
+				}
+				if opts.StudioList != nil {
+					opts.StudioList.Studios = append(opts.StudioList.Studios, newStudio)
+				}
+
+				readyPath := filepath.Join("Lingo", "cc_navigator[1]", "71_nav_roomready.window.txt")
+				readyDef, err := window.ParseFile(readyPath)
+				if err != nil {
+					log.Printf("Failed to load nav_roomready: %v", err)
+					if opts.EnterStudio != nil {
+						opts.EnterStudio(createdID)
+					}
+					return
+				}
+				readyAssets := lingoassets.LoadAssetsForDefinition(readyDef, navDir, ifaceDir)
+				for k, v := range lingoassets.LoadAssetsByNames(extraAssets, ifaceDir) {
+					readyAssets[k] = v
+				}
+				for i := range readyDef.Elements {
+					if readyDef.Elements[i].ID == "nav_createdstudio_name" {
+						readyDef.Elements[i].Key = createdName
+					}
+				}
+
+				readyW := wm.TransitionWindow(newW, "nav_roomready", readyDef, readyAssets, tm)
+				if readyW != nil {
+					if opts.StudioMode {
+						readyW.CloseButtonOffsetX = newW.CloseButtonOffsetX
+					}
+					readyW.ButtonClick = func(elemID string) {
+						if elemID == "nav_gotoyourstudio" {
+							wm.CloseWindow("nav_roomready")
+							if opts.EnterStudio != nil {
+								opts.EnterStudio(createdID)
+							}
+						}
+					}
+				}
+			}()
+		}
 	}
 }

@@ -49,10 +49,11 @@ type InfoStand struct {
 	previewAvatar *avatarengine.AvatarEngine
 
 	// Furniture context
-	selectedFurni *PlacedFurni
-	furniPreview  *ebiten.Image
-	furniTitle    string
-	furniBody     string
+	selectedFurniID  string
+	ResolveFurniture func(posID string) *PlacedFurni
+	furniPreview     *ebiten.Image
+	furniTitle       string
+	furniBody        string
 
 	// Action callbacks (provided by scene)
 	OnRotateFurni func(*PlacedFurni)
@@ -148,6 +149,7 @@ func (i *InfoStand) loadAssets() {
 func (i *InfoStand) Clear() {
 	i.visible = false
 	i.selectedAvatar = nil
+	i.selectedFurniID = ""
 	i.buttons = nil
 	i.nowPlayingActive = false
 }
@@ -155,7 +157,7 @@ func (i *InfoStand) Clear() {
 // ShowForAvatar populates the InfoStand for the given avatar.
 func (i *InfoStand) ShowForAvatar(av *isoengine.IsoAvatar) {
 	i.selectedAvatar = av
-	i.selectedFurni = nil
+	i.selectedFurniID = ""
 	i.previewAvatar = nil
 	// Disable now playing mode when explicitly showing an avatar (retain custom text for restore)
 	i.nowPlayingActive = false
@@ -335,16 +337,16 @@ func (i *InfoStand) onButtonClick(id string) {
 			}
 		}
 	case "Rotate":
-		if i.selectedFurni != nil && i.OnRotateFurni != nil {
-			i.OnRotateFurni(i.selectedFurni)
+		if pf := i.resolveSelectedFurniture(); pf != nil && i.OnRotateFurni != nil {
+			i.OnRotateFurni(pf)
 		}
 	case "Move":
-		if i.selectedFurni != nil && i.OnMoveFurni != nil {
-			i.OnMoveFurni(i.selectedFurni)
+		if pf := i.resolveSelectedFurniture(); pf != nil && i.OnMoveFurni != nil {
+			i.OnMoveFurni(pf)
 		}
 	case "Pick up":
-		if i.selectedFurni != nil && i.OnPickupFurni != nil {
-			i.OnPickupFurni(i.selectedFurni)
+		if pf := i.resolveSelectedFurniture(); pf != nil && i.OnPickupFurni != nil {
+			i.OnPickupFurni(pf)
 		}
 	case "Kick", "Kick Out":
 		if i.selectedAvatar != nil && i.OnKick != nil {
@@ -387,6 +389,9 @@ func (i *InfoStand) onButtonClick(id string) {
 
 // Draw renders the InfoStand overlay.
 func (i *InfoStand) Draw(screen *ebiten.Image) {
+	if i.selectedFurniID != "" && i.resolveSelectedFurniture() == nil {
+		return
+	}
 	if !i.visible {
 		return
 	}
@@ -429,7 +434,7 @@ func (i *InfoStand) Draw(screen *ebiten.Image) {
 		}
 	}
 	// Furniture preview
-	if !i.nowPlayingActive && i.previewAvatar == nil && i.selectedFurni != nil {
+	if !i.nowPlayingActive && i.previewAvatar == nil && i.selectedFurniID != "" {
 		i.RenderFurniPreview(screen)
 	}
 
@@ -468,7 +473,7 @@ func (i *InfoStand) drawDescription(screen *ebiten.Image) {
 			}
 			body += "Carrying: Coke Bottle"
 		}
-	} else if i.selectedFurni != nil {
+	} else if i.selectedFurniID != "" {
 		title = i.furniTitle
 		body = i.furniBody
 	}

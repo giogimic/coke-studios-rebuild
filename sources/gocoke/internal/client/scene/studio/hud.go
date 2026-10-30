@@ -52,6 +52,7 @@ type HUDManager struct {
 	studioList    *studios.StudioList
 	getScreenName func() string
 	getGatewayURL func() string
+	getSecret     func() string
 	enterStudio   func(studioID string)
 
 	// Messenger toggle state
@@ -1031,6 +1032,7 @@ func (h *HUDManager) OpenNavigatorWindow() {
 		EnterStudio:   h.enterStudio,
 		GetScreenName: h.getScreenName,
 		GetGatewayURL: h.getGatewayURL,
+		GetSecret:     h.getSecret,
 		StudioList:    h.studioList,
 	})
 }
@@ -1041,9 +1043,10 @@ func (h *HUDManager) SetStudioList(list *studios.StudioList) {
 }
 
 // SetNavigatorProviders allows the scene to provide screen name and gateway URL providers for private nav actions
-func (h *HUDManager) SetNavigatorProviders(screenNameProvider func() string, gatewayURLProvider func() string) {
+func (h *HUDManager) SetNavigatorProviders(screenNameProvider func() string, gatewayURLProvider func() string, secretProvider func() string) {
 	h.getScreenName = screenNameProvider
 	h.getGatewayURL = gatewayURLProvider
+	h.getSecret = secretProvider
 }
 
 // SetEnterStudio sets the callback for entering a studio from the in-studio navigator

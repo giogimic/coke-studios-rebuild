@@ -14,6 +14,7 @@ func (s *Server) Handler() http.Handler {
 
 	// 0. Denizen Registration & Legacy Login APIs
 	mux.HandleFunc("/api/denizen/register", s.handleRegisterDenizen)
+	mux.HandleFunc("/api/denizen/login", s.handleLoginAPI)
 	mux.HandleFunc("/sf/ssldocs/registerDenizen.jsp", s.handleRegisterDenizen)
 	mux.HandleFunc("/login/Login", s.handleLegacyLogin)
 	mux.HandleFunc("/login/LoginPerson", s.handleLegacyLogin)
@@ -53,8 +54,9 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/api/postcard/send", s.handlePostcard)
 	mux.HandleFunc("/postcardpreview.jsp", s.handlePostcardPreview)
 
-	// 7. Studio Decor API
+	// 7. Studio Decor & Creation APIs
 	mux.HandleFunc("/api/studio/decor", s.handleStudioDecor)
+	mux.HandleFunc("/api/studio/create", s.handleCreateStudio)
 
 	// 8. In-Game CD Burning API
 	mux.HandleFunc("/api/mixer/burn", s.handleMixerBurn)
@@ -167,6 +169,7 @@ func (s *Server) Handler() http.Handler {
 			filepath.Join(portalDir, "assets", sub),
 			filepath.Join(cokephaseDir, "assets", sub),
 			filepath.Join(gocokeWebDir, "assets", sub),
+			filepath.Join(avatarDir, sub),
 		}
 		for _, cand := range candidates {
 			if fi, err := os.Stat(cand); err == nil && !fi.IsDir() {

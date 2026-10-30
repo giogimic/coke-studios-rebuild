@@ -43,8 +43,10 @@ type StereoPlayer struct {
 func NewStereoPlayer() *StereoPlayer {
 	// Use a common WebAudio-friendly sample rate.
 	const sampleRate = 48000
+	audioContext := audio.CurrentContext()
+	if audioContext == nil { audioContext = audio.NewContext(sampleRate) }
 	sp := &StereoPlayer{
-		ctx:          audio.NewContext(sampleRate),
+		ctx:          audioContext,
 		assetToBeats: make(map[string]int),
 		assetToPath:  make(map[string]string),
 		pcmByAsset:   make(map[string][]byte),
@@ -162,7 +164,10 @@ type cdTrack struct {
 }
 
 // PlayEDL parses the legacy EDL string (s attr) and plays it.
-func (sp *StereoPlayer) PlayEDL(artist, songName, edl string) {
+func (sp *StereoPlayer) PlayEDL(artist, songName, edl string) { sp.PlayEDLAt(artist, songName, edl, 0) }
+
+func (sp *StereoPlayer) PlayEDLAt(artist, songName, edl string, offset time.Duration) {
+	receivedAt := time.Now()
 	sp.PrepareNewSong(true)
 	sp.mu.Lock()
 	// Cancel any existing playback
@@ -205,6 +210,9 @@ func (sp *StereoPlayer) PlayEDL(artist, songName, edl string) {
 			_ = mixer.Close()
 			return
 		case <-time.After(startDelay):
+		}
+		if offset > 0 {
+			_, _ = mixer.Seek(int64(sp.msToBytes(int((offset+time.Since(receivedAt)).Milliseconds()))), io.SeekStart)
 		}
 		p, err := audio.NewPlayer(sp.ctx, mixer)
 		if err != nil {
@@ -414,7 +422,9 @@ func (sp *StereoPlayer) parseEDL(s string) []cdTrack {
 // Scene integration
 
 // HandleCDPlay is invoked when a realtime CD_P message is received.
-func (s *Scene) HandleCDPlay(avatar, artist, songName, edl string) {
+func (s *Scene) HandleCDPlay(avatar, artist, songName, edl string) { s.HandleCDPlayAt(avatar, artist, songName, edl, 0) }
+
+func (s *Scene) HandleCDPlayAt(avatar, artist, songName, edl string, offset time.Duration) {
 	if s == nil {
 		return
 	}
@@ -423,7 +433,7 @@ func (s *Scene) HandleCDPlay(avatar, artist, songName, edl string) {
 		s.stereo = NewStereoPlayer()
 	}
 	log.Printf("Studio: CD_P by %s: '%s' from %s", avatar, songName, artist)
-	s.stereo.PlayEDL(artist, songName, edl)
+	s.stereo.PlayEDLAt(artist, songName, edl, offset)
 }
 
 // ShowNowPlayingInfo displays the voting infostand while a track is playing

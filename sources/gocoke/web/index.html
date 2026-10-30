@@ -10,6 +10,7 @@
       html, body {
         margin: 0;
         padding: 0;
+        width: 100%;
         height: 100%;
         background: #000;
         color: #fff;
@@ -17,14 +18,20 @@
         overscroll-behavior: none;
         -webkit-user-select: none;
         user-select: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
       }
       canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
+        width: 760px;
+        height: 520px;
+        max-width: 100vw;
+        max-height: 100vh;
+        aspect-ratio: 760 / 520;
         display: block;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
       }
       #fsBtn {
         position: fixed;
@@ -86,11 +93,7 @@
       window.sw1 = sw1 || "";
       window.sw2 = sw2 || "";
 
-      console.log('[GoCoke] Session configured:', {
-        screenName: (() => { try { return atob(sw1); } catch (_) { return sw1; } })(),
-        sw1: window.sw1,
-        sw2: window.sw2
-      });
+
       
       const go = new Go();
 
@@ -115,7 +118,7 @@
         try {
           let wasmModule;
           const subEl = document.getElementById("engineSub");
-          if (subEl) subEl.textContent = "Loading 1:1 isometric engine (main.wasm)...";
+          if (subEl) subEl.textContent = "Loading Coke Studios...";
 
           if (WebAssembly.instantiateStreaming) {
             try {

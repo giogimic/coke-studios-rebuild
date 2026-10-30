@@ -14,6 +14,9 @@ var (
 	rtReady    bool
 	rtHost     string
 	rtPort     string
+	avatarDef  string
+	mission    string
+	gender     string
 )
 
 func SetCredentials(sn, sec string) {
@@ -29,6 +32,23 @@ func GetCredentials() (string, string) {
 	sec := secret
 	mu.RUnlock()
 	return sn, sec
+}
+
+func SetUserProfile(def, m, g string) {
+	mu.Lock()
+	avatarDef = def
+	mission = m
+	gender = g
+	mu.Unlock()
+}
+
+func GetUserProfile() (string, string, string) {
+	mu.RLock()
+	d := avatarDef
+	m := mission
+	g := gender
+	mu.RUnlock()
+	return d, m, g
 }
 
 func SetGatewayURL(u string) {

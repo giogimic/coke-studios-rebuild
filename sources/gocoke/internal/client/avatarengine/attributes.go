@@ -2,6 +2,7 @@ package avatarengine
 
 import (
 	"fmt"
+	"gocoke/internal/avatar"
 	"image/color"
 	"log"
 	"strconv"
@@ -52,7 +53,7 @@ func ParseAttributeString(s string) (map[string]BodyPartAppearance, error) {
 	}
 
 	// Lingo uses '&' as the delimiter, but Go's test string uses '&amp;'
-	s = strings.ReplaceAll(s, "&amp;", "&")
+	s = avatar.NormalizeDefinition(s)
 
 	pairs := strings.Split(s, "&")
 	for _, pair := range pairs {

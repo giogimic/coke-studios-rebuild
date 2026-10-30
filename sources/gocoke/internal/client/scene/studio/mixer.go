@@ -1,6 +1,7 @@
 package studio
 
 import (
+	"fmt"
 	"io"
 	"sort"
 )
@@ -86,6 +87,9 @@ func (m *streamMixer) Read(p []byte) (int, error) {
 	if m.pos >= m.totalBytes {
 		return 0, io.EOF
 	}
+	if remaining := m.totalBytes - m.pos; len(p) > remaining {
+		p = p[:remaining]
+	}
 	// Zero fill the buffer
 	for i := range p {
 		p[i] = 0
@@ -117,7 +121,7 @@ func (m *streamMixer) Read(p []byte) (int, error) {
 			offset := ovStart - start
 			// Set source position relative to loopStart
 			m.srcPCM[ev.asset].pos = alignToFrameBytes(ovStart - loopStart)
-			_ = m.srcPCM[ev.asset].readInto(p, offset)
+			_ = m.srcPCM[ev.asset].readInto(p[:ovEnd-start], offset)
 		}
 	}
 	m.pos += len(p)
@@ -176,3 +180,23 @@ func (sp *StereoPlayer) buildStreamMixer(tracks []cdTrack) (*streamMixer, error)
 	return m, nil
 }
 
+// Seek sets the streaming position without replaying earlier audio.
+func (m *streamMixer) Seek(offset int64, whence int) (int64, error) {
+	switch whence {
+	case io.SeekStart:
+	case io.SeekCurrent:
+		offset += int64(m.pos)
+	case io.SeekEnd:
+		offset += int64(m.totalBytes)
+	default:
+		return 0, fmt.Errorf("invalid seek origin")
+	}
+	if offset < 0 {
+		return 0, fmt.Errorf("negative audio position")
+	}
+	if offset > int64(m.totalBytes) {
+		offset = int64(m.totalBytes)
+	}
+	m.pos = alignToFrameBytes(int(offset))
+	return int64(m.pos), nil
+}

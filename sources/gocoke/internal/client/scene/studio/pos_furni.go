@@ -131,6 +131,13 @@ func (ph *PlacementHelper) PlaceFromServer(posID, prodID string, serverX, server
 		dir = 2
 	}
 
+	// Outbound placement and rotation add one column for a 2x2 item in every
+	// orientation. Invert that once, for both snapshots and updates; rotating
+	// must not shift the saved row or make later owner moves invisible.
+	if width == 2 && depth == 2 {
+		clientCol--
+	}
+
 	// Trust server-provided coordinates for placed furniture; do not apply hover-time
 	// origin heuristics (rugs/2x2 center) that are intended for manual placement.
 
@@ -166,13 +173,8 @@ func (ph *PlacementHelper) PlaceFromServer(posID, prodID string, serverX, server
 
 				ex.ProdID = strings.TrimSpace(prodID)
 				ex.Base = base
-				// On rotation updates for multi-tile items (e.g., 2x2), preserve stored origin so anchor remains stable server-side
-				if width == 2 && depth == 2 {
-					// keep ex.Row, ex.Col unchanged
-				} else {
-					ex.Row = clientRow
-					ex.Col = clientCol
-				}
+				ex.Row = clientRow
+				ex.Col = clientCol
 				ex.Width = width
 				ex.Depth = depth
 				ex.Dir = dir
@@ -412,22 +414,6 @@ func (ph *PlacementHelper) PlaceFromServer(posID, prodID string, serverX, server
 	}
 	pFHeight := ci.Height
 	pf.Height = pFHeight
-	// Align 2x2 origin with manual placement. For dir 2/6 shift col left by 1.
-	// For dir 0/4, shift both row and col up/left by 1 to maintain top-left anchor.
-	if pf.Width == 2 && pf.Depth == 2 {
-		if pf.Dir == 0 || pf.Dir == 4 {
-			if pf.Row > 0 {
-				pf.Row = pf.Row - 1
-			}
-			if pf.Col > 0 {
-				pf.Col = pf.Col - 2
-			}
-		} else {
-			if pf.Col > 0 {
-				pf.Col = pf.Col - 1
-			}
-		}
-	}
 	if computedHO > 0 {
 		pf.ServerHO = computedHO
 	}

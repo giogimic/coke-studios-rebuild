@@ -264,3 +264,62 @@ func TestTwoPlayersHaveIsolatedState(t *testing.T) {
 		t.Errorf("Alice and Bob must not share the same session token!")
 	}
 }
+
+func TestJSONLoginAPI(t *testing.T) {
+	srv := NewServer("./web", "127.0.0.1", "8080", nil)
+	handler := srv.Handler()
+
+	_, err := srv.store.RegisterDenizen("UserTestJSON", "passSecret123", "1", "hr=001&hd=002", "Rockstar")
+	if err != nil {
+		t.Fatalf("failed to register: %v", err)
+	}
+
+	// 1. Valid login via /api/denizen/login
+	loginPayload := `{"screenName":"UserTestJSON","password":"passSecret123"}`
+	req := httptest.NewRequest("POST", "/api/denizen/login", strings.NewReader(loginPayload))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	handler.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected 200 OK, got: %d (%s)", w.Code, w.Body.String())
+	}
+	var res map[string]any
+	if err := json.Unmarshal(w.Body.Bytes(), &res); err != nil {
+		t.Fatalf("failed to parse JSON response: %v", err)
+	}
+	if res["status"] != "success" || res["screenName"] != "UserTestJSON" {
+		t.Fatalf("unexpected login response: %+v", res)
+	}
+	if res["secret"] == nil || res["secret"] == "" {
+		t.Fatalf("expected non-empty secret token in response")
+	}
+
+	// 2. Invalid password via /api/denizen/login
+	badPayload := `{"screenName":"UserTestJSON","password":"WrongPassword"}`
+	reqBad := httptest.NewRequest("POST", "/api/denizen/login", strings.NewReader(badPayload))
+	reqBad.Header.Set("Content-Type", "application/json")
+	wBad := httptest.NewRecorder()
+	handler.ServeHTTP(wBad, reqBad)
+
+	if wBad.Code != http.StatusUnauthorized {
+		t.Fatalf("expected 401 Unauthorized, got: %d", wBad.Code)
+	}
+
+	// 3. /sf/ssldocs/loginDenizen.jsp with format=json
+	reqJSP := httptest.NewRequest("POST", "/sf/ssldocs/loginDenizen.jsp?format=json", strings.NewReader("username=UserTestJSON&password=passSecret123"))
+	reqJSP.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	wJSP := httptest.NewRecorder()
+	handler.ServeHTTP(wJSP, reqJSP)
+
+	if wJSP.Code != http.StatusOK {
+		t.Fatalf("expected 200 OK, got: %d", wJSP.Code)
+	}
+	var jspRes map[string]any
+	if err := json.Unmarshal(wJSP.Body.Bytes(), &jspRes); err != nil {
+		t.Fatalf("failed to parse JSON from JSP: %v", err)
+	}
+	if jspRes["status"] != "success" || jspRes["screenName"] != "UserTestJSON" {
+		t.Fatalf("unexpected JSP response: %+v", jspRes)
+	}
+}

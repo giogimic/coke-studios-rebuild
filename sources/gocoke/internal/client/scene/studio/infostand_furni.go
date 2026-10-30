@@ -18,7 +18,7 @@ func (i *InfoStand) ShowForFurni(pf *PlacedFurni) {
 	// Clear avatar context and set furniture context
 	i.selectedAvatar = nil
 	i.previewAvatar = nil
-	i.selectedFurni = pf
+	i.selectedFurniID = strings.TrimSpace(pf.PosID)
 	// Disable now playing mode when explicitly showing a furni (but keep stored custom title/body)
 	i.nowPlayingActive = false
 	i.visible = true
@@ -40,6 +40,30 @@ func (i *InfoStand) ShowForFurni(pf *PlacedFurni) {
 
 	// Build default button set for furniture (placeholder actions)
 	i.rebuildButtonsForFurni()
+}
+
+// Resolve at action time: the room's furniture slice can move or compact between
+// selection and click. A pointer saved into that slice can target a different item.
+func (i *InfoStand) resolveSelectedFurniture() *PlacedFurni {
+	if i.selectedFurniID != "" && i.ResolveFurniture != nil {
+		if pf := i.ResolveFurniture(i.selectedFurniID); pf != nil {
+			return pf
+		}
+	}
+	i.Clear()
+	return nil
+}
+
+func (s *Scene) findPlacedFurniByID(posID string) *PlacedFurni {
+	if s == nil || strings.TrimSpace(posID) == "" {
+		return nil
+	}
+	for idx := range s.placedFurni {
+		if strings.TrimSpace(s.placedFurni[idx].PosID) == strings.TrimSpace(posID) {
+			return &s.placedFurni[idx]
+		}
+	}
+	return nil
 }
 
 // resolveFurnitureImagePath tries to find a path for a furniture preview based on base name

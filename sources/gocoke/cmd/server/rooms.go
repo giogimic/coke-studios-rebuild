@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
+	"html"
 	"log"
 	"os"
 	"path/filepath"
@@ -276,9 +277,9 @@ var HistoricalPublicStudios = map[string]struct {
 	"$SYSTEM$44": {Name: "Audition red", Layout: 5},
 
 	// Web / Vis aliases
-	"VIS$0": {Name: "Central Park Studio", Layout: 5},
-	"VIS$1": {Name: "San Francisco Studio", Layout: 3},
-	"VIS$2": {Name: "London Studio", Layout: 5},
+	"VIS$0":                {Name: "Central Park Studio", Layout: 5},
+	"VIS$1":                {Name: "San Francisco Studio", Layout: 3},
+	"VIS$2":                {Name: "London Studio", Layout: 5},
 	"studio_model_a":       {Name: "San Francisco Studio", Layout: 3},
 	"studio_model_b":       {Name: "Central Park Studio", Layout: 5},
 	"studio_model_c":       {Name: "London Studio", Layout: 5},
@@ -417,11 +418,10 @@ func (s *Server) removePlayerFromRoom(player *Player, roomID string) {
 }
 
 func (s *Server) enterPlayerRoom(player *Player, roomID string, msgID string) error {
-	if player.RoomID != "" && player.RoomID != roomID {
-		s.removePlayerFromRoom(player, player.RoomID)
-	}
-
 	if roomID == "$LOBBY$" {
+		if player.RoomID != "" && player.RoomID != roomID {
+			s.removePlayerFromRoom(player, player.RoomID)
+		}
 		player.RoomID = "$LOBBY$"
 		_ = player.Send(fmt.Sprintf("<Accepted msgID=\"%s\"/>", msgID))
 		return nil
@@ -433,6 +433,11 @@ func (s *Server) enterPlayerRoom(player *Player, roomID string, msgID string) er
 		_ = player.Send(fmt.Sprintf("<Room.NotFound roomID=\"%s\" msgID=\"%s\"/>", roomID, msgID))
 		_ = player.Send("<Alert msg=\"The requested studio was not found.\"/>")
 		return err
+	}
+
+	// A rejected destination must leave the current room and its observers intact.
+	if player.RoomID != "" && player.RoomID != roomID {
+		s.removePlayerFromRoom(player, player.RoomID)
 	}
 
 	player.RoomID = rm.ID
@@ -449,14 +454,23 @@ func (s *Server) enterPlayerRoom(player *Player, roomID string, msgID string) er
 		rm.ID, rm.Wallpaper, rm.Floor, rm.Doorbell)
 	_ = player.Send(decorXML)
 
-	rm.mu.RLock()
+	rm.mu.Lock()
+	var currentOccupants []*Player
 	for _, other := range rm.Players {
 		if other.ID != player.ID && other.ScreenName != "" {
-			avXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV av=\"%s\" x=\"%d\" z=\"%d\" d=\"%d\" g=\"%d\" m=\"%s\" def=\"%s\" act=\"%s\"/></Room.Action>",
-				rm.ID, other.ScreenName, other.X, other.Z, other.Dir, other.Gender, other.Mission, other.Definition, other.Action)
-			_ = player.Send(avXML)
+			currentOccupants = append(currentOccupants, other)
 		}
 	}
+	rm.Players[player.ID] = player
+	perf := rm.Performance
+	rm.mu.Unlock()
+
+	for _, other := range currentOccupants {
+		_ = player.Send(avatarPresenceXML(rm.ID, other))
+	}
+
+	// Authoritative spawn: Broadcast entrant's presence to all room occupants (and back to entrant for placement confirmation)
+	s.spawnAvatarInRoom(player, player.Definition)
 
 	if s.store != nil {
 		furniList, _ := s.store.GetRoomFurniture(rm.ID)
@@ -467,24 +481,19 @@ func (s *Server) enterPlayerRoom(player *Player, roomID string, msgID string) er
 		}
 	}
 
-	if rm.Performance != nil && !rm.Performance.Done {
-		elapsed := time.Since(rm.Performance.StartedAt)
-		if elapsed < rm.Performance.Duration {
+	if perf != nil && !perf.Done {
+		elapsed := time.Since(perf.StartedAt)
+		if elapsed < perf.Duration {
 			offsetMS := int(elapsed.Milliseconds())
-			durSec := int(rm.Performance.Duration.Seconds())
-			cdpXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_P av=\"%s\" s=\"%s\" title=\"%s\" dur=\"%d\" offset=\"%d\"/></Room.Action>",
-				rm.ID, rm.Performance.DJ, rm.Performance.EDL, rm.Performance.SongTitle, durSec, offsetMS)
+			durSec := int(perf.Duration.Seconds())
+			cdpXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_P av=\"%s\" a=\"%s\" s=\"%s\" sn=\"%s\" dur=\"%d\" offset=\"%d\"/></Room.Action>",
+				rm.ID, html.EscapeString(perf.DJ), html.EscapeString(perf.Artist), html.EscapeString(perf.EDL), html.EscapeString(perf.SongTitle), durSec, offsetMS)
 			_ = player.Send(cdpXML)
 			meterXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><CD_VR tu=\"%d\" td=\"%d\"/></Room.Action>",
-				rm.ID, rm.Performance.Cheers, rm.Performance.Boos)
+				rm.ID, perf.Cheers, perf.Boos)
 			_ = player.Send(meterXML)
 		}
 	}
-	rm.mu.RUnlock()
-
-	rm.mu.Lock()
-	rm.Players[player.ID] = player
-	rm.mu.Unlock()
 
 	log.Printf("[ROOM] Player %s entered %s at (%d, %d)", player.ScreenName, rm.ID, rm.EntranceX, rm.EntranceZ)
 	return nil
@@ -499,21 +508,23 @@ func (s *Server) exitPlayerRoom(player *Player, roomID string, msgID string) {
 	log.Printf("[ROOM] Player %s exited to lobby (msgID: %s)", player.ScreenName, msgID)
 }
 
-func (s *Server) spawnAvatarInRoom(player *Player, def string) {
+func (s *Server) spawnAvatarInRoom(player *Player, _ string) {
 	if player.RoomID == "" || player.RoomID == "$LOBBY$" {
 		return
-	}
-	if def != "" {
-		player.Definition = def
 	}
 	rm, err := s.GetRoom(player.RoomID)
 	if err != nil {
 		return
 	}
-	avXML := fmt.Sprintf("<Room.Action roomID=\"%s\"><AV av=\"%s\" x=\"%d\" z=\"%d\" d=\"%d\" g=\"%d\" m=\"%s\" def=\"%s\" act=\"%s\"/></Room.Action>",
-		rm.ID, player.ScreenName, player.X, player.Z, player.Dir, player.Gender, player.Mission, player.Definition, player.Action)
-	rm.Broadcast(avXML, "")
+	rm.Broadcast(avatarPresenceXML(rm.ID, player), "")
 	log.Printf("[ROOM] Player %s spawned in %s (%d, %d)", player.ScreenName, rm.ID, player.X, player.Z)
+}
+
+// Initial spawn and late-join snapshots carry the same authenticated profile.
+func avatarPresenceXML(roomID string, player *Player) string {
+	return fmt.Sprintf("<Room.Action roomID=\"%s\"><AV av=\"%s\" x=\"%d\" z=\"%d\" d=\"%d\" g=\"%d\" m=\"%s\" def=\"%s\" act=\"%s\"/></Room.Action>",
+		html.EscapeString(roomID), html.EscapeString(player.ScreenName), player.X, player.Z,
+		player.Dir, player.Gender, html.EscapeString(player.Mission), html.EscapeString(player.Definition), html.EscapeString(player.Action))
 }
 
 func (s *Server) movePlayerInRoom(player *Player, pts [][2]int) error {

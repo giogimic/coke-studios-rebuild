@@ -9,6 +9,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"gocoke/internal/avatar"
 	"html"
 	"io"
 	"log"
@@ -45,6 +46,7 @@ type PacketWriter interface {
 
 type Player struct {
 	ID            string
+	DenizenID     string
 	ScreenName    string
 	Authenticated bool
 	RoomID        string
@@ -70,6 +72,7 @@ func (p *Player) Send(msg string) error {
 }
 
 type PerformanceSession struct {
+	Artist    string
 	DJ        string
 	SongTitle string
 	EDL       string
@@ -81,8 +84,6 @@ type PerformanceSession struct {
 	Done      bool
 	cancelCh  chan struct{}
 }
-
-
 
 type Server struct {
 	mu           sync.RWMutex
@@ -289,7 +290,7 @@ func (s *Server) handleRegisterDenizen(w http.ResponseWriter, r *http.Request) {
 		req.StudioType = "studio_model_c"
 	}
 
-	d, err := s.store.RegisterDenizen(cleanName, cleanPass, genderStr, req.AvatarDef, req.Mission)
+	d, err := s.store.RegisterDenizen(cleanName, cleanPass, genderStr, avatar.NormalizeDefinition(req.AvatarDef), req.Mission)
 	if err != nil {
 		if errors.Is(err, ErrDenizenExists) {
 			w.WriteHeader(http.StatusBadRequest)
@@ -365,8 +366,8 @@ func (s *Server) handleRegisterDenizen(w http.ResponseWriter, r *http.Request) {
 		"sw1":        sw1,
 		"sw2":        sw2,
 		"secret":     sw2,
-		"gameUrl":    fmt.Sprintf("/game/?user=%s&sw1=%s&sw2=%s", url.QueryEscape(cleanName), url.QueryEscape(sw1), url.QueryEscape(sw2)),
-		"launchUrl":  fmt.Sprintf("/game/?user=%s&sw1=%s&sw2=%s", url.QueryEscape(cleanName), url.QueryEscape(sw1), url.QueryEscape(sw2)),
+		"gameUrl":    fmt.Sprintf("/game/?user=%s&sw1=%s&sw2=%s&room=%s", url.QueryEscape(cleanName), url.QueryEscape(sw1), url.QueryEscape(sw2), url.QueryEscape(studioID)),
+		"launchUrl":  fmt.Sprintf("/game/?user=%s&sw1=%s&sw2=%s&room=%s", url.QueryEscape(cleanName), url.QueryEscape(sw1), url.QueryEscape(sw2), url.QueryEscape(studioID)),
 	})
 }
 
@@ -407,8 +408,133 @@ func (s *Server) handleLegacyLogin(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "showStore=yes\n")
 }
 
+func (s *Server) handleLoginAPI(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	var user, pass string
+	if r.Method == http.MethodPost {
+		ct := r.Header.Get("Content-Type")
+		if strings.Contains(ct, "application/json") {
+			var req struct {
+				ScreenName string `json:"screenName"`
+				User       string `json:"user"`
+				Username   string `json:"username"`
+				Password   string `json:"password"`
+				Pass       string `json:"pass"`
+			}
+			_ = json.NewDecoder(r.Body).Decode(&req)
+			user = req.ScreenName
+			if user == "" {
+				user = req.User
+			}
+			if user == "" {
+				user = req.Username
+			}
+			pass = req.Password
+			if pass == "" {
+				pass = req.Pass
+			}
+		} else {
+			_ = r.ParseForm()
+			user = r.FormValue("screenName")
+			if user == "" {
+				user = r.FormValue("user")
+			}
+			if user == "" {
+				user = r.FormValue("username")
+			}
+			pass = r.FormValue("password")
+			if pass == "" {
+				pass = r.FormValue("pass")
+			}
+		}
+	} else {
+		q := r.URL.Query()
+		user = q.Get("screenName")
+		if user == "" {
+			user = q.Get("user")
+		}
+		if user == "" {
+			user = q.Get("username")
+		}
+		pass = q.Get("password")
+		if pass == "" {
+			pass = q.Get("pass")
+		}
+	}
+
+	user = strings.TrimSpace(user)
+	pass = strings.TrimSpace(pass)
+	if user == "" || pass == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(map[string]any{
+			"status":  "error",
+			"success": false,
+			"message": "Screen name and password are required",
+		})
+		return
+	}
+
+	denizen, err := s.store.VerifyCredentials(user, pass)
+	if err != nil || denizen == nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		_ = json.NewEncoder(w).Encode(map[string]any{
+			"status":  "error",
+			"success": false,
+			"message": "Invalid screen name or password",
+		})
+		return
+	}
+
+	sess, err := s.store.CreateSession(denizen.ID, denizen.ScreenName, defaultSessionTTL)
+	token := denizen.Secret
+	if err == nil && sess != nil {
+		token = sess.Token
+	}
+
+	sw1 := base64.StdEncoding.EncodeToString([]byte(denizen.ScreenName))
+	sw2 := token
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "coke_session",
+		Value:    sw2,
+		Path:     "/",
+		Expires:  time.Now().Add(defaultSessionTTL),
+		HttpOnly: true,
+	})
+
+	_ = json.NewEncoder(w).Encode(map[string]any{
+		"status":     "success",
+		"success":    true,
+		"screenName": denizen.ScreenName,
+		"gender":     denizen.Gender,
+		"avatarDef":  denizen.AvatarDef,
+		"mission":    denizen.Mission,
+		"decibels":   denizen.Decibels,
+		"vcoins":     denizen.VCoins,
+		"secret":     sw2,
+		"token":      sw2,
+		"sw1":        sw1,
+		"sw2":        sw2,
+		"gameUrl":    fmt.Sprintf("/game/?user=%s&sw1=%s&sw2=%s", url.QueryEscape(denizen.ScreenName), url.QueryEscape(sw1), url.QueryEscape(sw2)),
+		"launchUrl":  fmt.Sprintf("/game/?user=%s&sw1=%s&sw2=%s", url.QueryEscape(denizen.ScreenName), url.QueryEscape(sw1), url.QueryEscape(sw2)),
+	})
+}
+
 func (s *Server) handleLoginDenizen(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		_ = r.ParseForm()
+	}
 	q := r.URL.Query()
+	isJSON := strings.Contains(r.Header.Get("Accept"), "application/json") || q.Get("format") == "json" || r.FormValue("format") == "json"
 	var denizen *DenizenRecord
 	var err error
 
@@ -419,6 +545,12 @@ func (s *Server) handleLoginDenizen(w http.ResponseWriter, r *http.Request) {
 		if sessErr == nil && sess != nil {
 			if time.Now().After(sess.ExpiresAt) {
 				_ = s.store.DeleteSession(token)
+				if isJSON {
+					w.Header().Set("Content-Type", "application/json")
+					w.WriteHeader(http.StatusUnauthorized)
+					_ = json.NewEncoder(w).Encode(map[string]any{"status": "error", "success": false, "message": "Authentication failed: session has expired"})
+					return
+				}
 				w.Header().Set("Content-Type", "text/xml;charset=UTF-8")
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte(`<?xml version="1.0" encoding="UTF-8"?>
@@ -438,10 +570,31 @@ func (s *Server) handleLoginDenizen(w http.ResponseWriter, r *http.Request) {
 	// 2. Try username & password
 	if denizen == nil {
 		user := q.Get("user")
-		if user == "" { user = q.Get("screenName") }
-		if user == "" { user = q.Get("username") }
+		if user == "" {
+			user = q.Get("screenName")
+		}
+		if user == "" {
+			user = q.Get("username")
+		}
+		if user == "" && r.Method == http.MethodPost {
+			user = r.FormValue("screenName")
+			if user == "" {
+				user = r.FormValue("user")
+			}
+			if user == "" {
+				user = r.FormValue("username")
+			}
+		}
 		pass := q.Get("password")
-		if pass == "" { pass = q.Get("pass") }
+		if pass == "" {
+			pass = q.Get("pass")
+		}
+		if pass == "" && r.Method == http.MethodPost {
+			pass = r.FormValue("password")
+			if pass == "" {
+				pass = r.FormValue("pass")
+			}
+		}
 		if user != "" && pass != "" {
 			denizen, err = s.store.VerifyCredentials(user, pass)
 		}
@@ -450,15 +603,30 @@ func (s *Server) handleLoginDenizen(w http.ResponseWriter, r *http.Request) {
 	// 3. Fallback for test fixtures / prototype accounts without password
 	if denizen == nil {
 		user := q.Get("user")
-		if user == "" { user = q.Get("screenName") }
-		if user == "" { user = q.Get("username") }
+		if user == "" {
+			user = q.Get("screenName")
+		}
+		if user == "" {
+			user = q.Get("username")
+		}
+		if user == "" && r.Method == http.MethodPost {
+			user = r.FormValue("screenName")
+			if user == "" {
+				user = r.FormValue("user")
+			}
+			if user == "" {
+				user = r.FormValue("username")
+			}
+		}
 		if enc := q.Get("sw1"); enc != "" {
 			if dec, decErr := base64.StdEncoding.DecodeString(enc); decErr == nil && len(dec) > 0 {
 				user = string(dec)
 			}
 		}
 		sid := q.Get("sid")
-		if sid == "" { sid = q.Get("sidempty") }
+		if sid == "" {
+			sid = q.Get("sidempty")
+		}
 		if sid != "" {
 			parts := strings.Split(sid, "_")
 			if len(parts) > 0 && parts[0] != "" {
@@ -474,9 +642,14 @@ func (s *Server) handleLoginDenizen(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	w.Header().Set("Content-Type", "text/xml;charset=UTF-8")
-
 	if denizen == nil {
+		if isJSON {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnauthorized)
+			_ = json.NewEncoder(w).Encode(map[string]any{"status": "error", "success": false, "message": "Authentication failed: invalid credentials or session"})
+			return
+		}
+		w.Header().Set("Content-Type", "text/xml;charset=UTF-8")
 		xmlErr := `<?xml version="1.0" encoding="UTF-8"?>
 <LoginResult>
   <ErrorCode>1</ErrorCode>
@@ -492,6 +665,36 @@ func (s *Server) handleLoginDenizen(w http.ResponseWriter, r *http.Request) {
 	sessionToken := denizen.Secret
 	if err == nil && sess != nil {
 		sessionToken = sess.Token
+	}
+
+	sw1 := base64.StdEncoding.EncodeToString([]byte(denizen.ScreenName))
+
+	if isJSON {
+		w.Header().Set("Content-Type", "application/json")
+		http.SetCookie(w, &http.Cookie{
+			Name:     "coke_session",
+			Value:    sessionToken,
+			Path:     "/",
+			Expires:  time.Now().Add(defaultSessionTTL),
+			HttpOnly: true,
+		})
+		_ = json.NewEncoder(w).Encode(map[string]any{
+			"status":     "success",
+			"success":    true,
+			"screenName": denizen.ScreenName,
+			"gender":     denizen.Gender,
+			"avatarDef":  denizen.AvatarDef,
+			"mission":    denizen.Mission,
+			"decibels":   denizen.Decibels,
+			"vcoins":     denizen.VCoins,
+			"secret":     sessionToken,
+			"token":      sessionToken,
+			"sw1":        sw1,
+			"sw2":        sessionToken,
+			"gameUrl":    fmt.Sprintf("/game/?user=%s&sw1=%s&sw2=%s", url.QueryEscape(denizen.ScreenName), url.QueryEscape(sw1), url.QueryEscape(sessionToken)),
+			"launchUrl":  fmt.Sprintf("/game/?user=%s&sw1=%s&sw2=%s", url.QueryEscape(denizen.ScreenName), url.QueryEscape(sw1), url.QueryEscape(sessionToken)),
+		})
+		return
 	}
 
 	xmlDef := strings.ReplaceAll(denizen.AvatarDef, "&", "&amp;")
@@ -513,6 +716,7 @@ func (s *Server) handleLoginDenizen(w http.ResponseWriter, r *http.Request) {
   <Secret>%s</Secret>
 </LoginResult>`, gStr, xmlDef, denizen.ScreenName, denizen.Mission, denizen.LastSeenIn, sessionToken)
 
+	w.Header().Set("Content-Type", "text/xml;charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(xmlReply))
 	log.Printf("[HTTP] LoginDenizen authenticated: %s (Gender: %s, dB: %d)", denizen.ScreenName, gStr, denizen.Decibels)
@@ -689,7 +893,7 @@ func (s *Server) handleUpdateDenizen(w http.ResponseWriter, r *http.Request) {
 		mission = authD.Mission
 	}
 
-	updated, err := s.store.UpdateDenizenProfile(authD.ScreenName, gender, avatarDef, mission)
+	updated, err := s.store.UpdateDenizenProfile(authD.ScreenName, gender, avatar.NormalizeDefinition(avatarDef), mission)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
@@ -1073,26 +1277,41 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 			"balance":     float64(newDB),
 		}
 
-	case strings.Contains(target, "getAllPrivateStudios") || strings.Contains(target, "getMyStudios") || strings.Contains(target, "getFeaturedStudios"):
+	case strings.Contains(target, "getByOwnerName") || strings.Contains(target, "getAllPrivateStudios") || strings.Contains(target, "getMyStudios") || strings.Contains(target, "getFeaturedStudios"):
 		studios, err := s.store.GetStudios()
-		var resList []any
+		ownerFilter := ""
+		if strings.Contains(target, "getByOwnerName") {
+			if params, ok := bodyVal.([]any); ok && len(params) > 0 {
+				ownerFilter, _ = params[0].(string)
+			}
+		}
+		resList := make([]any, 0)
 		if err == nil && len(studios) > 0 {
 			for _, st := range studios {
+				if strings.Contains(target, "getByOwnerName") && !strings.EqualFold(st.OwnerName, strings.TrimSpace(ownerFilter)) {
+					continue
+				}
 				userCount := float64(0)
 				if rm := s.GetOrCreateRoom(st.ID); rm != nil {
+					rm.mu.RLock()
 					userCount = float64(len(rm.Players))
+					rm.mu.RUnlock()
 				}
 				resList = append(resList, map[string]any{
-					"studioId":  st.ID,
-					"name":      st.Name,
-					"layout":    float64(st.Layout),
-					"owner":     st.OwnerName,
-					"userCount": userCount,
-					"maxUsers":  float64(25),
-					"type":      st.RoomType,
-					"wallpaper": float64(st.Wallpaper),
-					"floor":     float64(st.Floor),
-					"doorbell":  float64(st.Doorbell),
+					"studioId":         st.ID,
+					"studioid":         st.ID,
+					"ownername":        st.OwnerName,
+					"currentoccupancy": userCount,
+					"maxoccupancy":     float64(25),
+					"name":             st.Name,
+					"layout":           float64(st.Layout),
+					"owner":            st.OwnerName,
+					"userCount":        userCount,
+					"maxUsers":         float64(25),
+					"type":             st.RoomType,
+					"wallpaper":        float64(st.Wallpaper),
+					"floor":            float64(st.Floor),
+					"doorbell":         float64(st.Doorbell),
 				})
 			}
 		}
@@ -1354,6 +1573,138 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 		}
 		responseValue = true
 
+	// --- Studio Creation, Modification, and Deletion AMF Endpoints ---
+	case strings.Contains(target, "createStudio"):
+		d := s.resolveAMFDenizen(r, bodyVal)
+		if d == nil {
+			responseValue = map[string]any{"__amf_error_type": "SecurityException", "__amf_error_message": "Unauthorized"}
+			break
+		}
+		studioName := fmt.Sprintf("%s's Studio", d.ScreenName)
+		description := ""
+		layout := 1
+		location := 1
+		if arr, ok := bodyVal.([]any); ok {
+			if len(arr) > 2 {
+				if s, ok := arr[2].(string); ok && strings.TrimSpace(s) != "" {
+					studioName = strings.TrimSpace(s)
+				}
+			}
+			if len(arr) > 3 {
+				if s, ok := arr[3].(string); ok {
+					description = strings.TrimSpace(s)
+				}
+			}
+			if len(arr) > 4 {
+				switch v := arr[4].(type) {
+				case float64:
+					layout = int(v)
+				case int:
+					layout = v
+				}
+			}
+			if len(arr) > 5 {
+				switch v := arr[5].(type) {
+				case float64:
+					location = int(v)
+				case int:
+					location = v
+				}
+			}
+		}
+		roomTypeMap := map[int]string{
+			1: "studio_model_a",
+			2: "studio_model_b",
+			3: "studio_model_c",
+			4: "studio_model_d",
+			7: "studio_model_a",
+			8: "studio_model_b",
+			9: "studio_model_c",
+		}
+		roomType := roomTypeMap[layout]
+		if roomType == "" {
+			roomType = "studio_model_a"
+		}
+		studio, err := s.store.CreateStudio("", d.ID, d.ScreenName, studioName, roomType, layout)
+		if err != nil {
+			responseValue = map[string]any{"__amf_error_type": "StudioException", "__amf_error_message": err.Error()}
+			break
+		}
+		s.mu.Lock()
+		rm := NewRoom(studio.ID, studio.Name, studio.Layout)
+		rm.OwnerName = studio.OwnerName
+		rm.Wallpaper = studio.Wallpaper
+		rm.Floor = studio.Floor
+		rm.Doorbell = studio.Doorbell
+		rm.LoadPathMap(s.webRoot)
+		s.Rooms[studio.ID] = rm
+		s.mu.Unlock()
+		log.Printf("[AMF] Created studio %s (%q) for %s (layout=%d, location=%d, desc=%q)", studio.ID, studio.Name, d.ScreenName, layout, location, description)
+		responseValue = map[string]any{
+			"studioId": studio.ID,
+			"studioID": studio.ID,
+			"name":     studio.Name,
+			"layout":   float64(studio.Layout),
+			"location": float64(location),
+			"owner":    studio.OwnerName,
+		}
+
+	case strings.Contains(target, "modifyStudio"):
+		d := s.resolveAMFDenizen(r, bodyVal)
+		if d == nil {
+			responseValue = map[string]any{"__amf_error_type": "SecurityException", "__amf_error_message": "Unauthorized"}
+			break
+		}
+		studioID := ""
+		newName := ""
+		desc := ""
+		if arr, ok := bodyVal.([]any); ok {
+			if len(arr) > 2 {
+				studioID, _ = arr[2].(string)
+			}
+			if len(arr) > 3 {
+				newName, _ = arr[3].(string)
+			}
+			if len(arr) > 4 {
+				desc, _ = arr[4].(string)
+			}
+		}
+		if studioID != "" && newName != "" {
+			_ = s.store.ModifyStudio(studioID, d.ScreenName, newName, desc)
+			s.mu.Lock()
+			if rm, ok := s.Rooms[studioID]; ok {
+				rm.Name = newName
+			}
+			s.mu.Unlock()
+			responseValue = map[string]any{
+				"studioId":    studioID,
+				"name":        newName,
+				"description": desc,
+			}
+		} else {
+			responseValue = map[string]any{"__amf_error_type": "StudioException", "__amf_error_message": "Invalid parameters"}
+		}
+
+	case strings.Contains(target, "deleteStudio"):
+		d := s.resolveAMFDenizen(r, bodyVal)
+		if d == nil {
+			responseValue = map[string]any{"__amf_error_type": "SecurityException", "__amf_error_message": "Unauthorized"}
+			break
+		}
+		studioID := ""
+		if arr, ok := bodyVal.([]any); ok && len(arr) > 2 {
+			studioID, _ = arr[2].(string)
+		}
+		if studioID != "" {
+			_ = s.store.DeleteStudio(studioID, d.ScreenName)
+			s.mu.Lock()
+			delete(s.Rooms, studioID)
+			s.mu.Unlock()
+			responseValue = float64(0)
+		} else {
+			responseValue = map[string]any{"__amf_error_type": "StudioException", "__amf_error_message": "Invalid studio ID"}
+		}
+
 	default:
 		log.Printf("[AMF] Default handler for: %s", target)
 		responseValue = true
@@ -1505,8 +1856,6 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 			sec = key
 		}
 
-		def := extractAttr(xml, "def")
-
 		denizen, err := s.authenticateRealtime(sn, sec)
 		if err != nil {
 			// Compatibility check: prototype accounts with empty password
@@ -1525,13 +1874,10 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		}
 
 		player.ScreenName = denizen.ScreenName
-		player.ID = denizen.ID
+		player.DenizenID = denizen.ID
 		player.Gender = denizen.Gender
 		player.Mission = denizen.Mission
 		player.Definition = denizen.AvatarDef
-		if def != "" {
-			player.Definition = def
-		}
 		player.Authenticated = true
 
 		log.Printf("[WS] Player Realtime Login: %s (msgID: %s)", player.ScreenName, msgID)
@@ -1547,6 +1893,11 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 	if strings.Contains(xml, "<Room.Enter") {
 		msgID := extractAttr(xml, "msgID")
 		roomID := extractAttr(xml, "roomID")
+		if player.Definition == "" && strings.Contains(xml, "<AV_EN") {
+			if def := extractAttr(xml, "def"); def != "" {
+				player.Definition = avatar.NormalizeDefinition(def)
+			}
+		}
 		log.Printf("[WS] Player %s entering room %s (msgID: %s)", player.ScreenName, roomID, msgID)
 		_ = s.enterPlayerRoom(player, roomID, msgID)
 		return
@@ -1561,6 +1912,9 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 
 	if strings.Contains(xml, "<AV_EN") {
 		def := extractAttr(xml, "def")
+		if player.Definition == "" && def != "" {
+			player.Definition = avatar.NormalizeDefinition(def)
+		}
 		s.spawnAvatarInRoom(player, def)
 		return
 	}
@@ -1631,11 +1985,17 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 				room.mu.RLock()
 				for _, other := range room.Players {
 					dx := player.X - other.X
-					if dx < 0 { dx = -dx }
+					if dx < 0 {
+						dx = -dx
+					}
 					dz := player.Z - other.Z
-					if dz < 0 { dz = -dz }
+					if dz < 0 {
+						dz = -dz
+					}
 					dist := dx
-					if dz > dist { dist = dz }
+					if dz > dist {
+						dist = dz
+					}
 
 					var msgForOther string
 					if dist <= 4 {
@@ -1658,19 +2018,15 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 	}
 
 	// --- DJ Performance & Cheer/Boo Voting System ---
-	if strings.Contains(xml, "<CD_P") {
-		// Player triggered CD playback or DJ booth performance
-		sEDL := extractAttr(xml, "s")
-		title := extractAttr(xml, "title")
-		if title == "" {
-			title = "My Mix"
+	if strings.Contains(xml, "<CD_R ") {
+		if err := s.requestCDPlayer(player, extractAttr(xml, "cdPlId")); err != nil {
+			_ = player.Send(fmt.Sprintf("<Alert msg=\"%s\"/>", html.EscapeString(err.Error())))
 		}
-		if sEDL != "" {
-			roomID := player.RoomID
-			if roomID != "" {
-				room := s.GetOrCreateRoom(roomID)
-				s.startPerformance(room, player.ScreenName, title, sEDL)
-			}
+		return
+	}
+	if strings.Contains(xml, "<CD_P ") {
+		if err := s.playOwnedCD(player, extractAttr(xml, "cdId")); err != nil {
+			_ = player.Send(fmt.Sprintf("<Alert msg=\"%s\"/>", html.EscapeString(err.Error())))
 		}
 		return
 	}
@@ -2313,7 +2669,6 @@ func (s *Server) handleMessengerAddFriend(w http.ResponseWriter, r *http.Request
 	json.NewEncoder(w).Encode(map[string]any{"success": true})
 }
 
-
 func (s *Server) handleMessengerRequests(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	authD, _ := s.authenticatedDenizen(r)
@@ -2704,6 +3059,93 @@ func (s *Server) handleStudioDecor(w http.ResponseWriter, r *http.Request) {
 		"wallpaper": wp,
 		"floor":     fl,
 		"doorbell":  db,
+	})
+}
+
+type CreateStudioRequest struct {
+	StudioName string `json:"studioName"`
+	RoomType   string `json:"roomType"`
+}
+
+func (s *Server) handleCreateStudio(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	authD, _ := s.authenticatedDenizen(r)
+	if authD == nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "Authentication required"})
+		return
+	}
+
+	var req CreateStudioRequest
+	if r.Method == http.MethodPost {
+		ct := r.Header.Get("Content-Type")
+		if strings.Contains(ct, "application/json") {
+			_ = json.NewDecoder(r.Body).Decode(&req)
+		} else {
+			_ = r.ParseForm()
+			req.StudioName = r.FormValue("studioName")
+			req.RoomType = r.FormValue("roomType")
+		}
+	} else {
+		req.StudioName = r.URL.Query().Get("studioName")
+		req.RoomType = r.URL.Query().Get("roomType")
+	}
+
+	if req.StudioName == "" {
+		req.StudioName = fmt.Sprintf("%s's Studio", authD.ScreenName)
+	}
+	if req.RoomType == "" {
+		req.RoomType = "studio_model_c"
+	}
+
+	layoutMap := map[string]int{
+		"studio_model_a":       1,
+		"studio_model_b":       2,
+		"studio_model_c":       3,
+		"studio_model_d":       4,
+		"studio_model_rooftop": 5,
+	}
+	layout := layoutMap[req.RoomType]
+	if layout == 0 {
+		layout = 3
+	}
+
+	studio, err := s.store.CreateStudio("", authD.ID, authD.ScreenName, req.StudioName, req.RoomType, layout)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+
+	s.mu.Lock()
+	rm := NewRoom(studio.ID, studio.Name, studio.Layout)
+	rm.OwnerName = studio.OwnerName
+	rm.Wallpaper = studio.Wallpaper
+	rm.Floor = studio.Floor
+	rm.Doorbell = studio.Doorbell
+	rm.LoadPathMap(s.webRoot)
+	s.Rooms[studio.ID] = rm
+	s.mu.Unlock()
+
+	log.Printf("[STUDIO] Created private studio %s for %s (layout=%d, roomType=%s)", studio.ID, authD.ScreenName, layout, req.RoomType)
+
+	_ = json.NewEncoder(w).Encode(map[string]any{
+		"status":    "ok",
+		"success":   true,
+		"studioId":  studio.ID,
+		"studioID":  studio.ID,
+		"name":      studio.Name,
+		"layout":    studio.Layout,
+		"roomType":  studio.RoomType,
+		"ownerName": studio.OwnerName,
 	})
 }
 

@@ -32,10 +32,10 @@ try {
     $env:GOOS = "js"
     $env:GOARCH = "wasm"
     go build -trimpath -ldflags "-s -w" -o "$webDir\main.wasm" ./cmd/client
+    if ($LASTEXITCODE -ne 0) { throw "Go WASM compilation failed; build aborted." }
     $size = (Get-Item "$webDir\main.wasm").Length
     if ($size -ge 104857600) {
-        Write-Warning "    main.wasm ($size bytes) exceeds GitHub's 100 MB limit. Restoring optimized 53MB release binary."
-        git checkout "$webDir\main.wasm"
+        throw "main.wasm ($size bytes) exceeds the distribution limit. The new binary was retained; no old binary was substituted."
     } else {
         Write-Host "    Successfully built $webDir\main.wasm ($size bytes)"
     }
@@ -49,6 +49,7 @@ try {
     $env:GOOS = "linux"
     $env:GOARCH = "amd64"
     go build -trimpath -ldflags "-s -w" -o "$binDir\coke-server-linux" ./cmd/server
+    if ($LASTEXITCODE -ne 0) { throw "Linux server compilation failed." }
     Write-Host "    Successfully built $binDir\coke-server-linux (Debian/Linux x64)"
 } finally {
     Pop-Location
@@ -60,6 +61,7 @@ try {
     $env:GOOS = "windows"
     $env:GOARCH = "amd64"
     go build -trimpath -ldflags "-s -w" -o "$binDir\coke-server.exe" ./cmd/server
+    if ($LASTEXITCODE -ne 0) { throw "Windows server compilation failed." }
     Write-Host "    Successfully built $binDir\coke-server.exe (Windows x64)"
 } finally {
     Pop-Location
