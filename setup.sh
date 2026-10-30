@@ -59,10 +59,21 @@ DB_USER="$(clean_val "${DB_USER:-coke}")"
 DB_PASS="$(clean_val "${DB_PASS:-coke_secret}")"
 DB_ROOT_PASSWORD="$(clean_val "${DB_ROOT_PASSWORD:-coke_root_secret}")"
 
+# Check for update argument in any position (--update, -update, update, -- update, -u)
+IS_UPDATE=0
+for arg in "$@"; do
+    case "$arg" in
+        --update|-update|update|-u)
+            IS_UPDATE=1
+            break
+            ;;
+    esac
+done
+
 echo "===================================================================="
 echo "    COKE STUDIOS & COKE MUSIC 1:1 REBUILD - DEBIAN DOCKER SETUP"
 echo "===================================================================="
-echo " Mode: $( [ "${1:-}" = "--update" ] || [ "${1:-}" = "update" ] && echo "UPDATE & REBUILD" || echo "FRESH LAUNCH" )"
+echo " Mode: $( [ ${IS_UPDATE} -eq 1 ] && echo "UPDATE & REBUILD" || echo "FRESH LAUNCH" )"
 echo " Database:     MariaDB 11 (Scalable Docker Cluster)"
 echo " Workspace:    ${SCRIPT_DIR}"
 echo "===================================================================="
@@ -108,11 +119,6 @@ check_docker() {
 check_docker
 
 # Interactive Port Configuration (asks user for ports and checks for conflicts)
-IS_UPDATE=0
-if [ "${1:-}" = "--update" ] || [ "${1:-}" = "update" ]; then
-    IS_UPDATE=1
-fi
-
 if [ ${IS_UPDATE} -eq 0 ]; then
     if [ -t 0 ]; then
         echo ""
@@ -202,7 +208,7 @@ sed -i -e 's/\r$//' .env 2>/dev/null || true
 chmod +x start.sh stop.sh tools/bin/* 2>/dev/null || true
 
 # Handle --update / update argument
-if [ "${1:-}" = "--update" ] || [ "${1:-}" = "update" ]; then
+if [ ${IS_UPDATE} -eq 1 ]; then
     echo ""
     echo "[*] STEP 1/4: Pulling latest changes from Git repository..."
     if [ -d .git ]; then

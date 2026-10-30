@@ -5,8 +5,19 @@
 # Scalable Database: MariaDB 11
 # ==============================================================================
 param (
-    [switch]$Update
+    [switch]$Update,
+    [Parameter(ValueFromRemainingArguments = $true)]
+    [string[]]$RemainingArgs
 )
+
+if (-not $Update -and $RemainingArgs) {
+    foreach ($arg in $RemainingArgs) {
+        if ($arg -match '(?i)^(--|-)?update$') {
+            $Update = $true
+            break
+        }
+    }
+}
 
 $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
