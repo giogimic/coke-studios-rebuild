@@ -27,12 +27,26 @@ func LaunchRoom() string {
 		return ""
 	}
 	search := loc.Get("search").String()
-	if len(search) == 0 {
-		return ""
+	if len(search) > 1 {
+		if query, err := url.ParseQuery(search[1:]); err == nil {
+			if r := query.Get("room"); r != "" {
+				return r
+			}
+			if s := query.Get("studio"); s != "" {
+				return s
+			}
+		}
 	}
-	query, err := url.ParseQuery(search[1:])
-	if err != nil {
-		return ""
+	hash := loc.Get("hash").String()
+	if len(hash) > 1 {
+		if query, err := url.ParseQuery(hash[1:]); err == nil {
+			if r := query.Get("room"); r != "" {
+				return r
+			}
+			if s := query.Get("studio"); s != "" {
+				return s
+			}
+		}
 	}
-	return query.Get("room")
+	return ""
 }

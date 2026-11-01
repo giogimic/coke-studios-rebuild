@@ -642,6 +642,7 @@
 
     <div id="loggedInButtons" style="width: 100%; display: none;">
       <button class="coke-btn coke-btn-gold" onclick="switchSection('cokestudios')">Enter Coke Studios &raquo;</button>
+      <button class="coke-btn coke-btn-gold" style="margin-top: 4px;" onclick="goToMyStudio()">My Studio &raquo;</button>
       <button class="coke-btn" onclick="openWardrobeModal()">Change My Look</button>
       <button class="coke-btn coke-btn-silver" onclick="openPopoutGame()">Pop-out (760&times;520)</button>
       <button class="coke-btn coke-btn-silver" onclick="logout()">Sign Out</button>
@@ -1455,6 +1456,15 @@
 
     const navItem = document.querySelector(`.nav-${secId}`);
     if (navItem) navItem.classList.add('active');
+  }
+
+  function goToMyStudio() {
+    const user = localStorage.getItem('coke_user');
+    if (!user) {
+      switchSection('cokestudios');
+      return;
+    }
+    loadRoom('studio_' + user.toLowerCase());
   }
 
   // Room loading in Coke Studios

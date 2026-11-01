@@ -365,7 +365,13 @@ func (s *Server) GetRoom(roomID string) (*Room, error) {
 
 	if s.store != nil {
 		st, err := s.store.GetStudio(roomID)
-		if err == nil && st != nil {
+		if (err != nil || st == nil) && strings.HasPrefix(roomID, "studio_") {
+			ownerCandidate := strings.TrimPrefix(roomID, "studio_")
+			if d, findErr := s.store.GetDenizenByName(ownerCandidate); findErr == nil && d != nil {
+				st, _ = s.store.CreateStudio(roomID, d.ID, d.ScreenName, fmt.Sprintf("%s's Studio", d.ScreenName), "studio_model_c", 3)
+			}
+		}
+		if st != nil {
 			rm := NewRoom(st.ID, st.Name, st.Layout)
 			rm.OwnerName = st.OwnerName
 			rm.Wallpaper = st.Wallpaper

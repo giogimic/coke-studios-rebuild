@@ -450,6 +450,13 @@ func (a *IsoAvatar) GetScreenName() string {
 	return a.screenName
 }
 
+// SetScreenName sets the avatar's display name
+func (a *IsoAvatar) SetScreenName(name string) {
+	if a != nil {
+		a.screenName = name
+	}
+}
+
 // GetMission returns the avatar's mission/status string
 func (a *IsoAvatar) GetMission() string {
 	return a.mission

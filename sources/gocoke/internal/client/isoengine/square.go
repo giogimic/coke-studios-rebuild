@@ -35,6 +35,7 @@ type IsoSquare struct {
 	// Pathfinding properties
 	Weight         int // 0 = walkable, 10 = blocked, other values for different costs
 	OriginalWeight int // Original weight from PathMap data, used to restore when furniture is removed
+	Pointers       [][2]int // Connections across stairs or transitions [mappedRow, mappedCol]
 
 	// Dynamic occupancy
 	OccupiedByAvatar bool // If true, this square is temporarily blocked by an avatar
@@ -201,7 +202,12 @@ func (s *IsoSquare) GetViewPoints() SquareCorners { return s.ViewPoints }
 
 // IsWalkable returns true if this square can be walked on
 // Walkable if base weight allows it AND the square is not occupied by an avatar
-func (s *IsoSquare) IsWalkable() bool { return s.Weight == 0 && !s.OccupiedByAvatar }
+func (s *IsoSquare) IsWalkable() bool {
+	if s.Weight == 255 || s.Weight == 200 {
+		return false
+	}
+	return !s.OccupiedByAvatar
+}
 
 // SetWeight sets the pathfinding weight for this square
 // Matches PathMap node weight system

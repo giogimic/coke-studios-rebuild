@@ -618,7 +618,26 @@ func (g *IsoGrid) getNeighbors(square *IsoSquare) []*IsoSquare {
 
 	// Lingo also adds pointer nodes from the map (teleporters, etc.)
 	// This would be handled by checking square.p (pointer list) in the map data
-	// TODO: Add pointer node support when map data is fully loaded
+	// Traverses pointer nodes from the map (teleporters, stairs, etc.)
+	// This matches Lingo's getSuccessors() checking oMapNode.p
+	for _, ptr := range square.Pointers {
+		pRow, pCol := ptr[0], ptr[1]
+		if g.ValidateCoordinates(pRow, pCol) {
+			ptrSquare := g.GetSquareByRowCol(pRow, pCol)
+			if ptrSquare != nil {
+				alreadyIn := false
+				for _, existing := range neighbors {
+					if existing == ptrSquare {
+						alreadyIn = true
+						break
+					}
+				}
+				if !alreadyIn {
+					neighbors = append(neighbors, ptrSquare)
+				}
+			}
+		}
+	}
 
 	return neighbors
 }

@@ -859,19 +859,53 @@ func (s *Server) handleUpdateDenizen(w http.ResponseWriter, r *http.Request) {
 	mission := r.URL.Query().Get("mission")
 
 	if r.Method == http.MethodPost {
-		_ = r.ParseForm()
-		if u := r.FormValue("user"); u != "" {
-			user = u
+		ct := r.Header.Get("Content-Type")
+		if strings.Contains(ct, "application/json") {
+			var body struct {
+				ScreenName string `json:"screenName"`
+				User       string `json:"user"`
+				Gender     any    `json:"gender"`
+				AvatarDef  string `json:"avatarDef"`
+				Mission    string `json:"mission"`
+			}
+			if err := json.NewDecoder(r.Body).Decode(&body); err == nil {
+				if body.ScreenName != "" {
+					user = body.ScreenName
+				} else if body.User != "" {
+					user = body.User
+				}
+				if body.AvatarDef != "" {
+					avatarDef = body.AvatarDef
+				}
+				if body.Mission != "" {
+					mission = body.Mission
+				}
+				if body.Gender != nil {
+					genderStr = fmt.Sprintf("%v", body.Gender)
+				}
+			}
+		} else {
+			_ = r.ParseForm()
+			if u := r.FormValue("user"); u != "" {
+				user = u
+			}
+			if u := r.FormValue("screenName"); u != "" {
+				user = u
+			}
+			if g := r.FormValue("gender"); g != "" {
+				genderStr = g
+			}
+			if ad := r.FormValue("avatarDef"); ad != "" {
+				avatarDef = ad
+			}
+			if m := r.FormValue("mission"); m != "" {
+				mission = m
+			}
 		}
-		if g := r.FormValue("gender"); g != "" {
-			genderStr = g
-		}
-		if ad := r.FormValue("avatarDef"); ad != "" {
-			avatarDef = ad
-		}
-		if m := r.FormValue("mission"); m != "" {
-			mission = m
-		}
+	}
+
+	if user == "" {
+		user = authD.ScreenName
 	}
 
 	if user != "" && !strings.EqualFold(user, authD.ScreenName) {

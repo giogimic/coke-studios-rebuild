@@ -567,7 +567,14 @@ func (s *Scene) SetCurrentUserName(name string) {
 		s.infoStand.SetCurrentPlayerName(s.currentUserName)
 	}
 	// If an avatar already exists with this name, bind it as playerAvatar
-	if s.playerAvatar == nil && s.avatarsByName != nil && s.currentUserName != "" {
+	// If an avatar named Guest was created, re-key it to the authenticated name
+	if s.playerAvatar != nil && (s.playerAvatar.GetScreenName() == "Guest" || s.playerAvatar.GetScreenName() == "") && s.currentUserName != "" {
+		if s.avatarsByName != nil {
+			delete(s.avatarsByName, s.playerAvatar.GetScreenName())
+			s.avatarsByName[s.currentUserName] = s.playerAvatar
+		}
+		s.playerAvatar.SetScreenName(s.currentUserName)
+	} else if s.playerAvatar == nil && s.avatarsByName != nil && s.currentUserName != "" {
 		if av, ok := s.avatarsByName[s.currentUserName]; ok && av != nil {
 			s.playerAvatar = av
 		}
@@ -585,10 +592,12 @@ func (s *Scene) SetUserProfile(def, mission string) {
 			}
 			if def != "" && s.playerAvatar.Engine != nil {
 				if eng, err := avatarengine.NewAvatarEngine(def, 100, false, s.dataDir); err == nil && eng != nil {
-					for k, v := range eng.Attributes {
+					s.playerAvatar.Engine.Attributes = make(map[string]avatarengine.BodyPartAppearance, len(eng.Attributes))
+				for k, v := range eng.Attributes {
 						s.playerAvatar.Engine.Attributes[k] = v
 					}
 					_ = s.playerAvatar.Engine.Draw()
+					_ = s.playerAvatar.Engine.DrawShadow()
 				}
 			}
 		} else if s.dataDir != "" {
@@ -748,13 +757,32 @@ func (s *Scene) UpsertAvatarAtGrid(name, def, mission string, gender, dir, row, 
 	// Use server-provided direction directly
 	engDir := dir
 
-	if av, ok := s.avatarsByName[name]; ok && av != nil && av.Engine != nil {
+	var av *isoengine.IsoAvatar
+	if existing, ok := s.avatarsByName[name]; ok && existing != nil {
+		av = existing
+	} else if strings.EqualFold(strings.TrimSpace(name), strings.TrimSpace(s.currentUserName)) && s.playerAvatar != nil && (s.playerAvatar.GetScreenName() == "Guest" || s.playerAvatar.GetScreenName() == "") {
+		av = s.playerAvatar
+		delete(s.avatarsByName, s.playerAvatar.GetScreenName())
+		av.SetScreenName(name)
+		s.avatarsByName[name] = av
+	} else {
+		for k, existing := range s.avatarsByName {
+			if strings.EqualFold(k, name) {
+				av = existing
+				break
+			}
+		}
+	}
+
+	if av != nil && av.Engine != nil {
 		// Update engine attributes from definition by building a temp engine
 		if def != "" {
 			if eng, err := avatarengine.NewAvatarEngine(def, 100, false, s.dataDir); err == nil && eng != nil {
 				for k, v := range eng.Attributes {
 					av.Engine.Attributes[k] = v
 				}
+				_ = av.Engine.Draw()
+				_ = av.Engine.DrawShadow()
 			}
 		}
 		av.Engine.SetDirection(engDir)
@@ -805,6 +833,18 @@ func (s *Scene) UpsertAvatarAtGrid(name, def, mission string, gender, dir, row, 
 	if s.studio != nil && s.studio.Owner == "$SYSTEM$" {
 		avatar.SetSpeedScale(0.5)
 		eng.WalkAnimScale = 1.3 * 0.8
+	}
+
+	if strings.EqualFold(strings.TrimSpace(name), strings.TrimSpace(s.currentUserName)) {
+		newAvs := make([]*isoengine.IsoAvatar, 0, len(s.avatars))
+		for _, ex := range s.avatars {
+			if ex.GetScreenName() != "Guest" && ex.GetScreenName() != "" {
+				newAvs = append(newAvs, ex)
+			}
+		}
+		s.avatars = newAvs
+		delete(s.avatarsByName, "Guest")
+		delete(s.avatarsByName, "")
 	}
 
 	s.avatars = append(s.avatars, avatar)

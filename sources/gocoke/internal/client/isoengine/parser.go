@@ -201,7 +201,14 @@ type PathMapXML struct {
 type PathNode struct {
 	Row    int `xml:"r,attr"`
 	Col    int `xml:"c,attr"`
-	Weight int `xml:"w,attr"` // 0 = walkable, 10 = blocked
+	Weight   int           `xml:"w,attr"` // 0 = walkable, 10 = blocked
+	Pointers []PointerNode `xml:"PointerNode"`
+}
+
+// PointerNode represents a connected jump tile (such as stairs) in the PathMap
+type PointerNode struct {
+	Row int `xml:"r,attr"`
+	Col int `xml:"c,attr"`
 }
 
 // ParseStudioXML parses a studio XML file
@@ -319,8 +326,8 @@ func ApplyPathMapToScene(scene *IsoScene, pathMap *PathMapXML) error {
 	// First, mark all squares as blocked (weight 10)
 	for row := 1; row <= grid.Rows; row++ {
 		for col := 1; col <= grid.Cols; col++ {
-			scene.SetSquareWeight(row, col, 10)         // Blocked
-			scene.SetSquareOriginalWeight(row, col, 10) // Store as original weight too
+			scene.SetSquareWeight(row, col, 255)         // Blocked
+			scene.SetSquareOriginalWeight(row, col, 255) // Store as original weight too
 		}
 	}
 
@@ -337,6 +344,16 @@ func ApplyPathMapToScene(scene *IsoScene, pathMap *PathMapXML) error {
 
 		scene.SetSquareWeight(mappedRow, mappedCol, node.Weight)
 		scene.SetSquareOriginalWeight(mappedRow, mappedCol, node.Weight)
+
+		sq := grid.GetSquareByRowCol(mappedRow, mappedCol)
+		if sq != nil && len(node.Pointers) > 0 {
+			sq.Pointers = make([][2]int, 0, len(node.Pointers))
+			for _, p := range node.Pointers {
+				pRow := p.Col
+				pCol := pathMap.Cols - p.Row + 1
+				sq.Pointers = append(sq.Pointers, [2]int{pRow, pCol})
+			}
+		}
 
 		if node.Weight == 0 {
 			walkableCount++

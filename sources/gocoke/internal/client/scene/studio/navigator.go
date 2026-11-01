@@ -27,6 +27,7 @@ type NavigatorManager struct {
 	// Providers for current user and gateway
 	getScreenName func() string
 	getGatewayURL func() string
+	getSecret     func() string
 	enterStudio   func(studioID string)
 }
 
@@ -44,9 +45,10 @@ func (n *NavigatorManager) SetEnterStudio(fn func(studioID string)) {
 }
 
 // SetProviders sets callbacks to retrieve screen name and gateway URL
-func (n *NavigatorManager) SetProviders(screenNameProvider func() string, gatewayURLProvider func() string) {
+func (n *NavigatorManager) SetProviders(screenNameProvider func() string, gatewayURLProvider func() string, secretProvider func() string) {
 	n.getScreenName = screenNameProvider
 	n.getGatewayURL = gatewayURLProvider
+	n.getSecret = secretProvider
 }
 
 // SetStudioList allows passing the studio list so the navigator can populate lists
@@ -316,6 +318,7 @@ func (n *NavigatorManager) setupNavigatorCallbacks(window *ui.Window) {
 				EnterStudio:   n.enterStudio,
 				GetScreenName: n.getScreenName,
 				GetGatewayURL: n.getGatewayURL,
+				GetSecret:     n.getSecret,
 				StudioList:    n.studioList,
 			})
 		case "nav_priv_own":
