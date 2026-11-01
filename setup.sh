@@ -209,6 +209,59 @@ chmod +x start.sh stop.sh tools/bin/* 2>/dev/null || true
 
 # Handle --update / update argument
 if [ ${IS_UPDATE} -eq 1 ]; then
+    WIPE_CACHE=0
+    WIPE_DB=0
+
+    # Parse CLI flags if passed
+    for arg in "$@"; do
+        case "$arg" in
+            --wipe-cache)
+                WIPE_CACHE=1
+                ;;
+            --wipe-db|--reset-db)
+                WIPE_DB=1
+                ;;
+            --wipe-all|--reset-all)
+                WIPE_CACHE=1
+                WIPE_DB=1
+                ;;
+        esac
+    done
+
+    # Interactive prompt if running in a terminal
+    if [ -t 0 ] || [ -e /dev/tty ]; then
+        TTY_IN="/dev/tty"
+        [ -e /dev/tty ] || TTY_IN="/dev/stdin"
+        echo ""
+        echo "--------------------------------------------------------------------"
+        echo "                       UPDATE CLEANUP OPTIONS"
+        echo "--------------------------------------------------------------------"
+        if [ ${WIPE_CACHE} -eq 0 ]; then
+            read -r -p "  Wipe build and Docker image cache? [y/N]: " REPLY_CACHE < "${TTY_IN}" || REPLY_CACHE="n"
+            case "${REPLY_CACHE}" in
+                [yY]|[yY][eE][sS])
+                    WIPE_CACHE=1
+                    ;;
+                *)
+                    WIPE_CACHE=0
+                    ;;
+            esac
+        fi
+
+        if [ ${WIPE_DB} -eq 0 ]; then
+            read -r -p "  Wipe database (MariaDB volume & local coke.db)? [y/N]: " REPLY_DB < "${TTY_IN}" || REPLY_DB="n"
+            case "${REPLY_DB}" in
+                [yY]|[yY][eE][sS])
+                    WIPE_DB=1
+                    ;;
+                *)
+                    WIPE_DB=0
+                    ;;
+            esac
+        fi
+        echo "--------------------------------------------------------------------"
+    fi
+
     echo ""
     echo "[*] STEP 1/4: Pulling latest changes from Git repository..."
     if [ -d .git ]; then
@@ -218,13 +271,28 @@ if [ ${IS_UPDATE} -eq 1 ]; then
     fi
 
     echo ""
-    echo "[*] STEP 2/4: Rebuilding Docker images..."
-    ${DOCKER_COMPOSE} build --pull
+    if [ ${WIPE_CACHE} -eq 1 ]; then
+        echo "[*] STEP 2/4: Rebuilding Docker images (CACHE WIPED)..."
+        docker builder prune -f 2>/dev/null || true
+        ${DOCKER_COMPOSE} build --no-cache --pull
+    else
+        echo "[*] STEP 2/4: Rebuilding Docker images..."
+        ${DOCKER_COMPOSE} build --pull
+    fi
 
     echo ""
-    echo "[*] STEP 3/4: Restarting containers with MariaDB persistence..."
-    ${DOCKER_COMPOSE} down --remove-orphans || true
-    ${DOCKER_COMPOSE} up -d
+    if [ ${WIPE_DB} -eq 1 ]; then
+        echo "[*] STEP 3/4: Wiping database and restarting fresh containers..."
+        ${DOCKER_COMPOSE} down -v --remove-orphans || true
+        docker volume rm coke_mariadb_data 2>/dev/null || true
+        rm -f coke.db sources/gocoke/coke.db tools/bin/coke.db data/coke.db 2>/dev/null || true
+        ${DOCKER_COMPOSE} up -d
+        echo "[*] Database wiped. Fresh tables will be created on startup."
+    else
+        echo "[*] STEP 3/4: Restarting containers with MariaDB persistence preserved..."
+        ${DOCKER_COMPOSE} down --remove-orphans || true
+        ${DOCKER_COMPOSE} up -d
+    fi
 
     echo ""
     echo "[*] STEP 4/4: Applying database schema migrations..."

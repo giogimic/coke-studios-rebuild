@@ -1,4 +1,4 @@
-# ==============================================================================
+﻿# ==============================================================================
 # Coke Studios 1:1 Complete Rebuild - Windows Docker Setup & Auto-Updater
 # Target OS: Windows (Compatibility) / Docker Desktop
 # Default Launch Port: 24902
@@ -6,15 +6,27 @@
 # ==============================================================================
 param (
     [switch]$Update,
+    [switch]$WipeCache,
+    [switch]$WipeDb,
+    [switch]$WipeAll,
     [Parameter(ValueFromRemainingArguments = $true)]
     [string[]]$RemainingArgs
 )
 
-if (-not $Update -and $RemainingArgs) {
+if ($RemainingArgs) {
     foreach ($arg in $RemainingArgs) {
         if ($arg -match '(?i)^(--|-)?update$') {
             $Update = $true
-            break
+        }
+        if ($arg -match '(?i)^(--|-)?wipe-cache$') {
+            $WipeCache = $true
+        }
+        if ($arg -match '(?i)^(--|-)?(wipe-db|reset-db)$') {
+            $WipeDb = $true
+        }
+        if ($arg -match '(?i)^(--|-)?(wipe-all|reset-all)$') {
+            $WipeCache = $true
+            $WipeDb = $true
         }
     }
 }
@@ -175,15 +187,42 @@ DATABASE_URL=coke:coke_secret@tcp(mariadb:3306)/coke_studios?parseTime=true
 "@ | Out-File -FilePath ".env" -Encoding utf8
 
 if ($Update) {
+    if (-not $WipeCache -and -not $WipeDb -and -not $WipeAll) {
+        if ([Environment]::UserInteractive -and -not [Console]::IsInputRedirected) {
+            Write-Host "`n--------------------------------------------------------------------" -ForegroundColor Gray
+            Write-Host "                       UPDATE CLEANUP OPTIONS" -ForegroundColor Cyan
+            Write-Host "--------------------------------------------------------------------" -ForegroundColor Gray
+            $ansCache = Read-Host "  Wipe build and Docker image cache? [y/N]"
+            if ($ansCache -match '^(y|yes)$') { $WipeCache = $true }
+
+            $ansDb = Read-Host "  Wipe database (MariaDB volume & local coke.db)? [y/N]"
+            if ($ansDb -match '^(y|yes)$') { $WipeDb = $true }
+            Write-Host "--------------------------------------------------------------------" -ForegroundColor Gray
+        }
+    }
+
     Write-Host "[*] STEP 1/4: Pulling latest changes from Git..." -ForegroundColor Cyan
     if (Test-Path ".git") {
         git pull origin master
     }
     Write-Host "[*] STEP 2/4: Rebuilding Docker images..." -ForegroundColor Cyan
-    docker compose build --pull
+    if ($WipeCache -or $WipeAll) {
+        Write-Host "    [!] Rebuilding with NO CACHE as requested..." -ForegroundColor Yellow
+        docker compose build --no-cache --pull
+    } else {
+        docker compose build --pull
+    }
     Write-Host "[*] STEP 3/4: Restarting containers..." -ForegroundColor Cyan
-    docker compose down
-    docker compose up -d
+    if ($WipeDb -or $WipeAll) {
+        Write-Host "    [!] Wiping database volume and local databases as requested..." -ForegroundColor Yellow
+        docker compose down -v
+        Remove-Item -Path "coke.db","sources/gocoke/coke.db","tools/bin/coke.db","data/coke.db" -Force -ErrorAction SilentlyContinue
+        docker compose up -d
+        Write-Host "    [*] Database wiped. Fresh tables initialized." -ForegroundColor Green
+    } else {
+        docker compose down
+        docker compose up -d
+    }
     Write-Host "[*] STEP 4/4: Database migrations applied automatically." -ForegroundColor Cyan
 } else {
     Write-Host "[*] Launching MariaDB & Coke Studios via Docker Compose..." -ForegroundColor Cyan
