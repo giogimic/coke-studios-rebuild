@@ -716,6 +716,7 @@
           <span style="color: #665544; font-size: 8px; margin-left: 6px;">Powered by TSW</span>
         </div>
         <div style="display: flex; gap: 6px;">
+          <a href="/game/" target="_blank" class="coke-btn coke-btn-silver" style="width: auto; padding: 2px 8px; margin: 0; font-size: 8px; text-decoration: none; display: inline-flex; align-items: center;">↗ Fullscreen Tab</a>
           <button class="coke-btn coke-btn-gold" style="width: auto; padding: 2px 8px; margin: 0; font-size: 8px;" onclick="openPopoutGame()">⛶ Pop-out Window (760&times;520)</button>
           <button class="coke-btn coke-btn-silver" style="width: auto; padding: 2px 8px; margin: 0; font-size: 8px;" onclick="reloadGameFrame()">↻ Restart Stage</button>
         </div>
@@ -1234,21 +1235,23 @@
 
   // Multiply tinting helper on HTML5 canvas (Mirrors Go's Ebitengine ColorM.Scale)
   function drawTinted(targetCtx, img, x, y, r, g, b) {
-    if (!img || !img.complete || img.naturalWidth === 0) return;
-    const w = img.naturalWidth || img.width;
-    const h = img.naturalHeight || img.height;
-    const off = document.createElement('canvas');
-    off.width = w;
-    off.height = h;
-    const octx = off.getContext('2d');
-    octx.drawImage(img, 0, 0);
-    octx.globalCompositeOperation = 'multiply';
-    octx.fillStyle = `rgb(${r},${g},${b})`;
-    octx.fillRect(0, 0, w, h);
-    octx.globalCompositeOperation = 'destination-in';
-    octx.drawImage(img, 0, 0);
+    if (!img || !img.complete || !img.naturalWidth || !img.naturalHeight) return;
+    try {
+      const w = img.naturalWidth || img.width;
+      const h = img.naturalHeight || img.height;
+      const off = document.createElement('canvas');
+      off.width = w;
+      off.height = h;
+      const octx = off.getContext('2d');
+      octx.drawImage(img, 0, 0);
+      octx.globalCompositeOperation = 'multiply';
+      octx.fillStyle = `rgb(${r},${g},${b})`;
+      octx.fillRect(0, 0, w, h);
+      octx.globalCompositeOperation = 'destination-in';
+      octx.drawImage(img, 0, 0);
 
-    targetCtx.drawImage(off, x, y);
+      targetCtx.drawImage(off, x, y);
+    } catch (_) {}
   }
 
   // Render isometric avatar onto a canvas
@@ -1297,16 +1300,20 @@
     // 6. Head
     const headImg = getCachedImg(`/assets/avatar/head/se/${av.skinIdx + 1}.png`);
     if (headImg && headImg.complete && headImg.naturalWidth > 0) {
-      ctx.drawImage(headImg, offsetX + 10, offsetY);
+      try { ctx.drawImage(headImg, offsetX + 10, offsetY); } catch (_) {}
     } else {
       drawTinted(ctx, getCachedImg('/assets/avatar/head/se/1.png'), offsetX + 10, offsetY, sr, sg, sb);
     }
 
     // 7. Face (Mouth) & Eyes
     const faceImg = getCachedImg(`/assets/avatar/faces/se/${av.face}.png`);
-    if (faceImg && faceImg.complete) ctx.drawImage(faceImg, offsetX + 22, offsetY + 22);
+    if (faceImg && faceImg.complete && faceImg.naturalWidth > 0) {
+      try { ctx.drawImage(faceImg, offsetX + 22, offsetY + 22); } catch (_) {}
+    }
     const eyesImg = getCachedImg(`/assets/avatar/eyes/se/${av.eyes}.png`);
-    if (eyesImg && eyesImg.complete) ctx.drawImage(eyesImg, offsetX + 20, offsetY + 18);
+    if (eyesImg && eyesImg.complete && eyesImg.naturalWidth > 0) {
+      try { ctx.drawImage(eyesImg, offsetX + 20, offsetY + 18); } catch (_) {}
+    }
 
     // 8. Hair
     const hairImg = getCachedImg(`/assets/avatar/hair/${av.hair}/se.png`);
@@ -1397,7 +1404,8 @@
     if (secId === 'cokestudios') {
       pageContainer.classList.add('game-mode');
       const iframe = document.getElementById('gameIframe');
-      if (iframe && (iframe.src === 'about:blank' || !iframe.src || iframe.src.endsWith('about:blank'))) {
+      const user = localStorage.getItem('coke_user');
+      if (iframe && (!iframe.src || iframe.src === 'about:blank' || iframe.src.endsWith('about:blank') || (user && !iframe.src.includes('user=')))) {
         reloadGameFrame();
       }
     } else {
@@ -1694,20 +1702,6 @@
     }
   }
 
-        if (data.avatarDef) deserializeFigureDef(data.avatarDef);
-        closeLoginModal();
-        updateAuthUI();
-        reloadGameFrame('$SYSTEM$1');
-      } else {
-        errEl.textContent = data.message || 'Invalid credentials.';
-        errEl.style.display = 'block';
-      }
-    } catch (err) {
-      errEl.textContent = 'Connection error: ' + err.message;
-      errEl.style.display = 'block';
-    }
-  }
-
   // Registration 5-Step Wizard
   function openRegModal() {
     wizStep = 1;
@@ -1786,7 +1780,7 @@
         })
       });
       const data = await resp.json();
-      if (data.status === 'ok' || data.success) {
+      if (data.status === 'ok' || data.status === 'success' || data.success) {
         localStorage.setItem('coke_user', name);
         localStorage.setItem('coke_session', data.secret || data.sessionToken);
         localStorage.setItem('coke_avatarDef', figureDef);
@@ -1995,6 +1989,18 @@
 
     updateAuthUI();
     fetchProfile();
+
+    // Check URL hash or query parameters (e.g. #cokestudios, ?tab=cokestudios)
+    const hash = (window.location.hash || '').replace('#', '').toLowerCase();
+    const urlParams = new URLSearchParams(window.location.search);
+    const secParam = (urlParams.get('sec') || urlParams.get('tab') || urlParams.get('section') || '').toLowerCase();
+    if (hash === 'cokestudios' || secParam === 'cokestudios' || hash === 'game' || secParam === 'game') {
+      switchSection('cokestudios');
+    } else if (hash && document.getElementById('sec-' + hash)) {
+      switchSection(hash);
+    } else if (secParam && document.getElementById('sec-' + secParam)) {
+      switchSection(secParam);
+    }
 
     // Idle animation for badge avatar: gentle blinking every 3-5 seconds
     setInterval(() => {

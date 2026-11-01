@@ -118,22 +118,52 @@
         try {
           let wasmModule;
           const subEl = document.getElementById("engineSub");
-          if (subEl) subEl.textContent = "Loading Coke Studios...";
+          if (subEl) subEl.textContent = "Connecting to Coke Studios server...";
 
-          if (WebAssembly.instantiateStreaming) {
-            try {
-              wasmModule = await WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject);
-            } catch (streamErr) {
-              console.warn("instantiateStreaming failed, falling back to arrayBuffer:", streamErr);
-              const resp = await fetch("main.wasm");
-              const bytes = await resp.arrayBuffer();
-              wasmModule = await WebAssembly.instantiate(bytes, go.importObject);
-            }
-          } else {
-            const resp = await fetch("main.wasm");
-            const bytes = await resp.arrayBuffer();
-            wasmModule = await WebAssembly.instantiate(bytes, go.importObject);
+          const response = await fetch("main.wasm");
+          if (!response.ok) {
+            throw new Error(`Failed to download main.wasm: HTTP ${response.status} ${response.statusText}`);
           }
+
+          const contentLength = response.headers.get("content-length");
+          const totalBytes = contentLength ? parseInt(contentLength, 10) : 54386249;
+
+          let bytes;
+          if (response.body && response.body.getReader) {
+            const reader = response.body.getReader();
+            let receivedBytes = 0;
+            const chunks = [];
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              chunks.push(value);
+              receivedBytes += value.length;
+              if (totalBytes > 0) {
+                const percent = Math.min(100, Math.round((receivedBytes / totalBytes) * 100));
+                const mbLoaded = (receivedBytes / (1024 * 1024)).toFixed(1);
+                const mbTotal = (totalBytes / (1024 * 1024)).toFixed(1);
+                if (subEl) {
+                  subEl.innerHTML = `<div style="margin-bottom:6px;">Downloading Coke Studios Client...</div>` +
+                    `<div style="font-size:12px;color:#e0c8b0;margin-bottom:6px;">${mbLoaded} MB / ${mbTotal} MB (${percent}%)</div>` +
+                    `<div style="width:220px;height:10px;background:#331111;margin:0 auto;border:1px solid #772222;border-radius:4px;overflow:hidden;">` +
+                    `<div style="width:${percent}%;height:100%;background:linear-gradient(90deg, #ff3333, #ffcc00);"></div></div>`;
+                }
+              }
+            }
+            const allChunks = new Uint8Array(receivedBytes);
+            let position = 0;
+            for (const chunk of chunks) {
+              allChunks.set(chunk, position);
+              position += chunk.length;
+            }
+            bytes = allChunks.buffer;
+          } else {
+            if (subEl) subEl.textContent = "Downloading WebAssembly Client...";
+            bytes = await response.arrayBuffer();
+          }
+
+          if (subEl) subEl.textContent = "Starting Coke Studios Engine...";
+          wasmModule = await WebAssembly.instantiate(bytes, go.importObject);
 
           if (statusEl.parentNode) statusEl.parentNode.removeChild(statusEl);
           await go.run(wasmModule.instance);
