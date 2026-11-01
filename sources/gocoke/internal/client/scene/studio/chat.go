@@ -132,12 +132,15 @@ func (cm *ChatManager) HandleInput(mouseX, mouseY int, mouseClicked bool, offset
 	cfY := int(offsetY) + cm.fieldRect[1]
 	cfW := cm.fieldRect[2]
 	cfH := cm.fieldRect[3]
-	inChat := mouseX >= cfX && mouseX < cfX+cfW && mouseY >= cfY && mouseY < cfY+cfH
+	padY := 8
+	inChat := mouseX >= cfX && mouseX < cfX+cfW && mouseY >= cfY-padY && mouseY < cfY+cfH+padY
 
-	if mouseClicked && inChat {
+	mouseReleased := inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft)
+
+	if (mouseClicked || mouseReleased) && inChat {
 		cm.focused = true
 	}
-	if mouseClicked && !inChat && !isMouseOverWindow {
+	if (mouseClicked || mouseReleased) && !inChat && !isMouseOverWindow {
 		cm.focused = false
 	}
 
@@ -219,16 +222,11 @@ func (cm *ChatManager) HandleSpeechSwitch(mouseX, mouseY int, mouseClicked, mous
 	sh := cm.speechSwitchRect[3]
 	inside := mouseX >= sx && mouseX < sx+sw && mouseY >= sy && mouseY < sy+sh
 
-	if mouseClicked && inside {
-		cm.speechMouseDown = true
-	}
-	if mouseReleased {
-		if cm.speechMouseDown && inside {
-			if cm.speechMode == SpeechModeSpeak {
-				cm.speechMode = SpeechModeShout
-			} else if cm.speechMode == SpeechModeShout {
-				cm.speechMode = SpeechModeSpeak
-			}
+	if (mouseClicked || mouseReleased) && inside {
+		if cm.speechMode == SpeechModeSpeak {
+			cm.speechMode = SpeechModeShout
+		} else if cm.speechMode == SpeechModeShout {
+			cm.speechMode = SpeechModeSpeak
 		}
 		cm.speechMouseDown = false
 	}

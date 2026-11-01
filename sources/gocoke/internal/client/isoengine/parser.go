@@ -199,8 +199,8 @@ type PathMapXML struct {
 
 // PathNode represents a walkable/blocked tile in the PathMap
 type PathNode struct {
-	Row    int `xml:"r,attr"`
-	Col    int `xml:"c,attr"`
+	Row      int           `xml:"r,attr"`
+	Col      int           `xml:"c,attr"`
 	Weight   int           `xml:"w,attr"` // 0 = walkable, 10 = blocked
 	Pointers []PointerNode `xml:"PointerNode"`
 }
@@ -338,9 +338,9 @@ func ApplyPathMapToScene(scene *IsoScene, pathMap *PathMapXML) error {
 		// PathMap shows walkable tiles at high row numbers (5-14)
 		// If they should appear at the top of the screen, we might need to flip
 
-		// FIXED: Grid needs to be rotated 270 degrees total - swap row/col and flip col
-		mappedRow := node.Col                    // PathMap col becomes grid row
-		mappedCol := pathMap.Cols - node.Row + 1 // PathMap row becomes flipped grid col
+		// 1:1 Direct mapping matches Lingo 11_Map.ls: oNode = me.getNode(iRow, iCol)
+		mappedRow := node.Row
+		mappedCol := node.Col
 
 		scene.SetSquareWeight(mappedRow, mappedCol, node.Weight)
 		scene.SetSquareOriginalWeight(mappedRow, mappedCol, node.Weight)
@@ -349,17 +349,16 @@ func ApplyPathMapToScene(scene *IsoScene, pathMap *PathMapXML) error {
 		if sq != nil && len(node.Pointers) > 0 {
 			sq.Pointers = make([][2]int, 0, len(node.Pointers))
 			for _, p := range node.Pointers {
-				pRow := p.Col
-				pCol := pathMap.Cols - p.Row + 1
+				pRow := p.Row
+				pCol := p.Col
 				sq.Pointers = append(sq.Pointers, [2]int{pRow, pCol})
 			}
 		}
 
 		if node.Weight == 0 {
 			walkableCount++
-			// Debug: Log first few walkable tiles
 			if walkableCount <= 5 {
-				log.Printf("PathMap: Node r=%d c=%d -> Grid[%d,%d] (270° rotated: col->row, flipped row->col)",
+				log.Printf("PathMap: Node r=%d c=%d -> Grid[%d,%d] (1:1 Director parity)",
 					node.Row, node.Col, mappedRow, mappedCol)
 			}
 		}

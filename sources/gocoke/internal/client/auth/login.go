@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
+	"html"
 	"io"
 	"net/http"
 	"net/url"
@@ -84,14 +85,14 @@ func parseLoginResultLenient(s string) (LoginResult, error) {
 	if !strings.Contains(s, "<LoginResult>") {
 		return out, fmt.Errorf("no LoginResult root")
 	}
-	out.ErrorMessage = between(s, "ErrorMessage")
-	out.Gender = between(s, "Gender")
-	out.AvatarDefinition = between(s, "AvatarDefinition")
-	out.ScreenName = between(s, "ScreenName")
-	out.MissionStatement = between(s, "MissionStatement")
-	out.LastSeenIn = between(s, "LastSeenIn")
-	out.Banned = between(s, "Banned")
-	out.Secret = between(s, "Secret")
+	out.ErrorMessage = html.UnescapeString(between(s, "ErrorMessage"))
+	out.Gender = strings.TrimSpace(between(s, "Gender"))
+	out.AvatarDefinition = html.UnescapeString(between(s, "AvatarDefinition"))
+	out.ScreenName = html.UnescapeString(between(s, "ScreenName"))
+	out.MissionStatement = html.UnescapeString(between(s, "MissionStatement"))
+	out.LastSeenIn = html.UnescapeString(between(s, "LastSeenIn"))
+	out.Banned = strings.TrimSpace(between(s, "Banned"))
+	out.Secret = strings.TrimSpace(between(s, "Secret"))
 	if ec := between(s, "ErrorCode"); ec != "" {
 		// tolerate parse failure silently; leave zero
 		if n, err := atoiSafe(ec); err == nil {

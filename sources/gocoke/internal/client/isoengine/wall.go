@@ -120,12 +120,8 @@ func (w *WallSystem) Init(studioXML *StudioXML) error {
 // createWallTile creates a wall tile from XML data
 // Matches Lingo Wall.drawWallTile() behavior
 func (w *WallSystem) createWallTile(xmlTile WallTile) error {
-	// CRITICAL: Apply the same 270° coordinate transformation used for PathMap
-	// Studio XML coordinates are in the same system as PathMap and need transformation
-	// Original: PathMap col becomes grid row, PathMap row becomes flipped grid col
-	gridCols := w.scene.GetGrid().Cols
-	mappedRow := xmlTile.Col                // XML col becomes grid row
-	mappedCol := gridCols - xmlTile.Row + 1 // XML row becomes flipped grid col
+	mappedRow := xmlTile.Row
+	mappedCol := xmlTile.Col
 
 	// Get the square for this wall tile position (using transformed coordinates)
 	square := w.scene.GetSquareByRowCol(mappedRow, mappedCol)
@@ -686,10 +682,8 @@ func (w *WallSystem) applyZShiftOffset(tile *WallTileSprite) {
 func (w *WallSystem) createDoorMask(door Door) error {
 	w.debugLog(fmt.Sprintf("createDoorMask() creating door mask at XML[%d,%d]", door.Row, door.Col))
 
-	// Apply the same 270° coordinate transformation used for walls
-	gridCols := w.scene.GetGrid().Cols
-	mappedRow := door.Col                // XML col becomes grid row
-	mappedCol := gridCols - door.Row + 1 // XML row becomes flipped grid col
+	mappedRow := door.Row
+	mappedCol := door.Col
 
 	// Get the square for this door position (using transformed coordinates)
 	square := w.scene.GetSquareByRowCol(mappedRow, mappedCol)

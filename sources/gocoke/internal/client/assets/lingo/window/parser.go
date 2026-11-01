@@ -51,7 +51,7 @@ type Definition struct {
 var (
 	reMember = regexp.MustCompile(`#member:\s*"([^"]+)"`)
 	reMedia  = regexp.MustCompile(`#media:\s*#([a-zA-Z]+)`) // bitmap, field
-	reIntKV  = regexp.MustCompile(`#(locH|locV|width|height|ink|blend|fontSize|editable|autoTab|wordWrap):\s*([0-9]+)`)
+	reIntKV  = regexp.MustCompile(`(?i)#(locH|locV|width|height|ink|blend|fontSize|editable|autoTab|wordWrap):\s*([0-9]+)`)
 	reID     = regexp.MustCompile(`#id:\s*"([^"]+)"`)
 	reType   = regexp.MustCompile(`#type:\s*"([^"]+)"`)
 	reFont   = regexp.MustCompile(`#font:\s*"([^"]+)"`)
@@ -183,10 +183,10 @@ func parseElement(line string) Element {
 	}
 	for _, m := range reIntKV.FindAllStringSubmatch(line, -1) {
 		v, _ := strconv.Atoi(m[2])
-		switch m[1] {
-		case "locH":
+		switch strings.ToLower(m[1]) {
+		case "loch":
 			el.LocH = v
-		case "locV":
+		case "locv":
 			el.LocV = v
 		case "width":
 			el.Width = v
@@ -196,13 +196,13 @@ func parseElement(line string) Element {
 			el.Ink = v
 		case "blend":
 			el.Blend = v
-		case "fontSize":
+		case "fontsize":
 			el.FontSize = v
 		case "editable":
 			el.Editable = v
-		case "autoTab":
+		case "autotab":
 			el.AutoTab = v
-		case "wordWrap":
+		case "wordwrap":
 			el.WordWrap = v
 		}
 	}

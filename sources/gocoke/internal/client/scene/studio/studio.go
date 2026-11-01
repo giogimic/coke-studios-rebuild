@@ -32,7 +32,7 @@ import (
 	"gocoke/internal/client/net/gateway"
 	"gocoke/internal/client/patterns"
 	"gocoke/internal/client/ui"
-	)
+)
 
 // Scene represents a studio room scene
 type Scene struct {
@@ -591,13 +591,17 @@ func (s *Scene) SetUserProfile(def, mission string) {
 				s.playerAvatar.SetMission(mission)
 			}
 			if def != "" && s.playerAvatar.Engine != nil {
-				if eng, err := avatarengine.NewAvatarEngine(def, 100, false, s.dataDir); err == nil && eng != nil {
+				eng, err := avatarengine.NewAvatarEngine(def, 100, false, s.dataDir)
+				if err != nil {
+					log.Printf("Studio: failed to update player avatar engine with def %q: %v", def, err)
+				} else if eng != nil {
 					s.playerAvatar.Engine.Attributes = make(map[string]avatarengine.BodyPartAppearance, len(eng.Attributes))
-				for k, v := range eng.Attributes {
+					for k, v := range eng.Attributes {
 						s.playerAvatar.Engine.Attributes[k] = v
 					}
 					_ = s.playerAvatar.Engine.Draw()
 					_ = s.playerAvatar.Engine.DrawShadow()
+					log.Printf("Studio: updated player avatar engine successfully with def %s", def)
 				}
 			}
 		} else if s.dataDir != "" {
@@ -1084,14 +1088,14 @@ func New(dataDir string, studio *studios.Studio) (*Scene, error) {
 		depthBoostsBySlicePerPos: make(map[string]map[string]int),
 	}
 
-	// Initialize isometric engine
-	if err := scene.initIsoEngine(dataDir); err != nil {
-		return nil, fmt.Errorf("failed to initialize iso engine: %w", err)
-	}
-
 	// Load room definition based on studio layout (legacy support)
 	if err := scene.loadRoomDefinition(dataDir); err != nil {
 		return nil, fmt.Errorf("failed to load room definition: %w", err)
+	}
+
+	// Initialize isometric engine
+	if err := scene.initIsoEngine(dataDir); err != nil {
+		return nil, fmt.Errorf("failed to initialize iso engine: %w", err)
 	}
 
 	// Load member registry for registration points
@@ -1472,7 +1476,13 @@ func (s *Scene) initIsoEngine(dataDir string) error {
 	s.isoScene.SetLayout(isoLayout)
 
 	// Override the grid offsets with the actual Studio XML offsets
-	s.isoScene.SetCustomOffsets(studioXML.XOff, studioXML.YOff)
+	gridXOff := studioXML.XOff
+	gridYOff := studioXML.YOff
+	if s.studio == nil || s.studio.Layout != 5 {
+		gridXOff += s.roomRect[0]
+		gridYOff += s.roomRect[1]
+	}
+	s.isoScene.SetCustomOffsets(gridXOff, gridYOff)
 
 	s.isoScene.Init()
 
@@ -3992,9 +4002,18 @@ func (s *Scene) drawElement(screen *ebiten.Image, element studioroom.RoomElement
 		return
 	}
 
+	// Skip duplicate room background if s.backgroundImg is already drawn
+	if s.backgroundImg != nil && (element.ID == "floor" || (s.studioXML != nil && element.Member == s.studioXML.Background.Member)) {
+		return
+	}
+
 	// Calculate position with registration point offset
 	x := float64(element.LocH)
 	y := float64(element.LocV)
+	if s.studio == nil || s.studio.Layout != 5 {
+		x += float64(s.roomRect[0])
+		y += float64(s.roomRect[1])
+	}
 
 	// For hiliter, use grid-snapped positioning from iso engine
 	if element.Type == "hiliter" && s.showHiliter {
@@ -4066,6 +4085,10 @@ func (s *Scene) setupFloorShapeForPatterns() {
 	// Calculate position with registration point offset (same as drawElement)
 	x := float64(floorShapeElement.LocH)
 	y := float64(floorShapeElement.LocV)
+	if s.studio == nil || s.studio.Layout != 5 {
+		x += float64(s.roomRect[0])
+		y += float64(s.roomRect[1])
+	}
 
 	// Apply registration point offset if available
 	if regPointFound, hasRegPoint := s.memberReg.GetRegistrationPoint(floorShapeElement.Member); hasRegPoint {
@@ -4223,10 +4246,7 @@ func (s *Scene) isAvatarOnDoorTile(avatar *isoengine.IsoAvatar) bool {
 	if door.Row == 0 && door.Col == 0 {
 		return false
 	}
-	// Transform Studio XML coords -> grid coords (same mapping used during placement)
-	mappedRow := door.Col
-	mappedCol := grid.Cols - door.Row + 1
-	return avatar.Square.GetRow() == mappedRow && avatar.Square.GetCol() == mappedCol
+	return avatar.Square.GetRow() == door.Row && avatar.Square.GetCol() == door.Col
 }
 
 // drawDebugInfo draws debug information
@@ -4346,10 +4366,8 @@ func (s *Scene) initTestAvatar(dataDir string) error {
 	// Place avatar on the door floor tile (studiofloor_door_1) facing west
 	grid := s.isoScene.GetGrid()
 	door := s.studioXML.Door
-	// Transform Studio XML coords -> grid coords (same as walls/PathMap):
-	// mappedRow = XML col, mappedCol = grid.Cols - XML row + 1
-	mappedRow := door.Col
-	mappedCol := grid.Cols - door.Row + 1
+	mappedRow := door.Row
+	mappedCol := door.Col
 
 	startSquare := s.isoScene.GetSquareByRowCol(mappedRow, mappedCol)
 	// Place exactly on the door tile even if it's not walkable

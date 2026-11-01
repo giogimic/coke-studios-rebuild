@@ -8,6 +8,8 @@ import (
 	"net/url"
 	"runtime/debug"
 	"syscall/js"
+
+	"gocoke/internal/client/session"
 )
 
 func init() {
@@ -75,6 +77,16 @@ func readJSGlobals(sw1, sw2 *string) {
 				*sw2 = storedSession.String()
 				log.Printf("Using SW2 from localStorage coke_session")
 			}
+		}
+		storedAvatar := ls.Call("getItem", "coke_avatarDef")
+		if storedAvatar.Truthy() && storedAvatar.Type() == js.TypeString && storedAvatar.String() != "" {
+			storedMission := ls.Call("getItem", "coke_mission")
+			missionStr := ""
+			if storedMission.Truthy() && storedMission.Type() == js.TypeString {
+				missionStr = storedMission.String()
+			}
+			session.SetUserProfile(storedAvatar.String(), missionStr, "")
+			log.Printf("Using initial avatarDef from localStorage: %s", storedAvatar.String())
 		}
 	}
 }

@@ -498,10 +498,8 @@ func (g *IsoGrid) drawTileCoords(screen *ebiten.Image) {
 			text.Draw(screen, client, face, int(center.X)-10, int(center.Y)-2, pink)
 
 			// Server-mapped coords (reverse of ApplyPathMap mapping used):
-			// ApplyPathMap: mappedRow = node.Col; mappedCol = pathMap.Cols - node.Row + 1
-			// Invert mapping for display: serverRow = g.Cols - col + 1; serverCol = row
-			serverRow := g.Cols - col + 1
-			serverCol := row
+			serverRow := row
+			serverCol := col
 			server := fmt.Sprintf("%d,%d", serverRow, serverCol)
 			text.Draw(screen, server, face, int(center.X)-10, int(center.Y)+8, yellow)
 		}

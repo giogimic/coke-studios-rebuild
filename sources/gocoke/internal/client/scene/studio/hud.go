@@ -2,6 +2,7 @@ package studio
 
 import (
 	"fmt"
+	"log"
 	"image/color"
 	"path/filepath"
 	"strconv"
@@ -202,39 +203,12 @@ func (h *HUDManager) Initialize() error {
 		h.catalogueManager.SetPurchaseHandler(h.purchaseHandler, h.GetBalance)
 	}
 
-	// Discover reference X for nav and mms to place jukebox between them
-	var navX, navY, mmsX int
-	for _, el := range h.windowDef.Elements {
-		if el.ID == "cc.bottombtn.navi" {
-			navX = el.LocH
-			navY = el.LocV
-		}
-		if el.ID == "cc.bottombtn.mms" {
-			mmsX = el.LocH
-		}
-	}
-	midX := navX + (mmsX-navX)/2
-	if midX == 0 {
-		midX = 491 // fallback based on original layout
-	}
-	// Fine-tune alignment constants
-	navShiftLeft := 24     // pixels
-	jukeboxShiftDown := 0  // pixels
-	jukeboxShiftLeft := 12 // pixels
-
-	// Create interactive elements for the bottom buttons, with jukebox repositioned
+	// Create interactive elements for the bottom buttons directly from window definition
 	for _, el := range h.windowDef.Elements {
 		if el.Media == "bitmap" && strings.ToLower(el.Type) == "image" {
 			if strings.HasPrefix(el.ID, "cc.bottombtn.") {
 				ie := h.elementRenderer.CreateInteractiveElement(el)
 				if ie != nil {
-					if el.ID == "cc.bottombtn.jukebox" {
-						ie.Rect[0] = midX - jukeboxShiftLeft
-						ie.Rect[1] = navY + jukeboxShiftDown
-					}
-					if el.ID == "cc.bottombtn.navi" {
-						ie.Rect[0] = navX - navShiftLeft
-					}
 					h.buttons[el.ID] = ie
 				}
 			}
@@ -880,6 +854,7 @@ func (h *HUDManager) HandleInput() (string, error) {
 	mouseX, mouseY := ebiten.CursorPosition()
 	mousePressed := ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft)
 	mouseClicked := inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft)
+	mouseReleased := inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft)
 
 	// Window rect gives absolute position on stage, apply HUD offsets
 	offsetX := float64(h.windowDef.Rect[0] + h.offsetX)
@@ -895,8 +870,14 @@ func (h *HUDManager) HandleInput() (string, error) {
 		if btn.State == ui.ButtonRollover {
 			h.rolloverText = h.getRolloverLabelFor(id)
 		}
-		if mouseClicked && btn.State == ui.ButtonPressed {
+		bx := int(offsetX) + btn.Rect[0]
+		by := int(offsetY) + btn.Rect[1]
+		bw := btn.Rect[2]
+		bh := btn.Rect[3]
+		mouseInside := mouseX >= bx && mouseX < bx+bw && mouseY >= by && mouseY < by+bh
+		if (mouseClicked || mouseReleased) && mouseInside {
 			clickedButton = id
+			log.Printf("HUDManager: button click: %s (pos=[%d, %d, %d, %d], mouse=[%d, %d])", id, bx, by, bw, bh, mouseX, mouseY)
 		}
 	}
 
