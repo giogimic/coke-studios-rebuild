@@ -158,13 +158,15 @@ func (g *game) Update() error {
 					studioScene.SetStudioList(entryScene.GetStudioList())
 					// Register as active scene for realtime updates BEFORE room entry packets arrive
 					studioscene.SetActiveScene(studioScene)
-					// Inject current user name from session to enable local click movement
-					if sn, sec := session.GetCredentials(); strings.TrimSpace(sn) != "" {
+					// Inject current user name and profile from session to enable local click movement and custom look
+					sn, sec := session.GetCredentials()
+					if strings.TrimSpace(sn) != "" {
 						studioScene.SetCurrentUserName(sn)
-						def, mission, _ := session.GetUserProfile()
-						studioScene.SetUserProfile(def, mission)
-						// Load user's possessions from gateway
 						studioScene.LoadPossessionsFromGateway(sn, sec, session.GetGatewayURL())
+					}
+					def, mission, _ := session.GetUserProfile()
+					if strings.TrimSpace(def) != "" {
+						studioScene.SetUserProfile(def, mission)
 					}
 					g.sm.Set(studioScene)
 
@@ -198,11 +200,14 @@ func (g *game) Update() error {
 					newScene.SetCatalog(studioScene.GetCatalog())
 					newScene.SetStudioList(studioScene.GetStudioList())
 					studioscene.SetActiveScene(newScene)
-					if sn, sec := session.GetCredentials(); strings.TrimSpace(sn) != "" {
+					sn, sec := session.GetCredentials()
+					if strings.TrimSpace(sn) != "" {
 						newScene.SetCurrentUserName(sn)
-						def, mission, _ := session.GetUserProfile()
-						newScene.SetUserProfile(def, mission)
 						newScene.LoadPossessionsFromGateway(sn, sec, session.GetGatewayURL())
+					}
+					def, mission, _ := session.GetUserProfile()
+					if strings.TrimSpace(def) != "" {
+						newScene.SetUserProfile(def, mission)
 					}
 					g.sm.Set(newScene)
 

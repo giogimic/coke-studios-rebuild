@@ -186,10 +186,17 @@ func (g *IsoGrid) GetSquareByScreenPoint(screenX, screenY int) *IsoSquare {
 // GetSquareByXZ returns the square at the given grid coordinates
 // Matches Lingo IsoGrid.getSquareByXZ() behavior
 func (g *IsoGrid) GetSquareByXZ(gridX, gridZ float64) *IsoSquare {
-	// Convert grid coordinates to row/col
-	col := int(gridX/float64(g.SqSize)) + 1  // 1-based indexing
-	row := int(-gridZ/float64(g.SqSize)) + 1 // 1-based indexing, Z is negative
-
+	if gridX < 0 || gridX > float64(g.GridWidth) {
+		return nil
+	}
+	if gridZ > 0 || gridZ < -float64(g.GridDepth) {
+		return nil
+	}
+	col := int(math.Ceil(math.Abs(gridX) / float64(g.SqSize)))
+	row := int(math.Ceil(math.Abs(gridZ) / float64(g.SqSize)))
+	if col <= 0 || row <= 0 || col > g.Cols || row > g.Rows {
+		return nil
+	}
 	return g.GetSquareByRowCol(row, col)
 }
 

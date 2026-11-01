@@ -853,7 +853,7 @@ func (h *HUDManager) HandleInput() (string, error) {
 
 	mouseX, mouseY := ebiten.CursorPosition()
 	mousePressed := ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft)
-	mouseClicked := inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft)
+	_ = inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft)
 	mouseReleased := inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft)
 
 	// Window rect gives absolute position on stage, apply HUD offsets
@@ -875,7 +875,7 @@ func (h *HUDManager) HandleInput() (string, error) {
 		bw := btn.Rect[2]
 		bh := btn.Rect[3]
 		mouseInside := mouseX >= bx && mouseX < bx+bw && mouseY >= by && mouseY < by+bh
-		if (mouseClicked || mouseReleased) && mouseInside {
+		if mouseReleased && mouseInside {
 			clickedButton = id
 			log.Printf("HUDManager: button click: %s (pos=[%d, %d, %d, %d], mouse=[%d, %d])", id, bx, by, bw, bh, mouseX, mouseY)
 		}

@@ -106,9 +106,9 @@ func TestMoveRejectsBlockedDestination(t *testing.T) {
 	if player.RoomID != "test_studio_layout1" {
 		t.Fatalf("expected player in test_studio_layout1, got %q", player.RoomID)
 	}
-	// Alice is at evidenced entrance (4, 8)
-	if player.X != 4 || player.Z != 8 {
-		t.Fatalf("expected entrance (4, 8), got (%d, %d)", player.X, player.Z)
+	// Alice is at evidenced entrance (Col=8, Row=4 in Studio A MapXml)
+	if player.X != 8 || player.Z != 4 {
+		t.Fatalf("expected entrance (8, 4), got (%d, %d)", player.X, player.Z)
 	}
 
 	// Attempt move to blocked destination (0, 0)
@@ -116,8 +116,8 @@ func TestMoveRejectsBlockedDestination(t *testing.T) {
 	if player.X == 0 && player.Z == 0 {
 		t.Fatalf("server accepted move to blocked tile (0, 0)!")
 	}
-	if player.X != 4 || player.Z != 8 {
-		t.Fatalf("player position corrupted, expected (4, 8), got (%d, %d)", player.X, player.Z)
+	if player.X != 8 || player.Z != 4 {
+		t.Fatalf("player position corrupted, expected (8, 4), got (%d, %d)", player.X, player.Z)
 	}
 
 	// Move to valid walkable tile (6, 7)

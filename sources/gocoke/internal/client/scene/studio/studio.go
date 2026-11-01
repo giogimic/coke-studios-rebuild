@@ -590,17 +590,29 @@ func (s *Scene) SetUserProfile(def, mission string) {
 			if mission != "" {
 				s.playerAvatar.SetMission(mission)
 			}
-			if def != "" && s.playerAvatar.Engine != nil {
+			if s.currentUserName != "" {
+				s.playerAvatar.SetScreenName(s.currentUserName)
+			}
+			if def != "" {
 				eng, err := avatarengine.NewAvatarEngine(def, 100, false, s.dataDir)
 				if err != nil {
 					log.Printf("Studio: failed to update player avatar engine with def %q: %v", def, err)
 				} else if eng != nil {
-					s.playerAvatar.Engine.Attributes = make(map[string]avatarengine.BodyPartAppearance, len(eng.Attributes))
-					for k, v := range eng.Attributes {
-						s.playerAvatar.Engine.Attributes[k] = v
+					if s.playerAvatar.Engine != nil {
+						eng.Direction = s.playerAvatar.Engine.Direction
+						eng.SetPosition(s.playerAvatar.Engine.GetPosition())
+						eng.BodyAction = s.playerAvatar.Engine.BodyAction
+						eng.FaceAction = s.playerAvatar.Engine.FaceAction
 					}
+					s.playerAvatar.Engine = eng
 					_ = s.playerAvatar.Engine.Draw()
 					_ = s.playerAvatar.Engine.DrawShadow()
+					if s.currentUserName != "" {
+						if s.avatarsByName == nil {
+							s.avatarsByName = make(map[string]*isoengine.IsoAvatar)
+						}
+						s.avatarsByName[s.currentUserName] = s.playerAvatar
+					}
 					log.Printf("Studio: updated player avatar engine successfully with def %s", def)
 				}
 			}
@@ -779,12 +791,13 @@ func (s *Scene) UpsertAvatarAtGrid(name, def, mission string, gender, dir, row, 
 	}
 
 	if av != nil && av.Engine != nil {
-		// Update engine attributes from definition by building a temp engine
+		// Update engine attributes from definition by rebuilding the avatar engine
 		if def != "" {
 			if eng, err := avatarengine.NewAvatarEngine(def, 100, false, s.dataDir); err == nil && eng != nil {
-				for k, v := range eng.Attributes {
-					av.Engine.Attributes[k] = v
-				}
+				eng.Direction = engDir
+				eng.BodyAction = av.Engine.BodyAction
+				eng.FaceAction = av.Engine.FaceAction
+				av.Engine = eng
 				_ = av.Engine.Draw()
 				_ = av.Engine.DrawShadow()
 			}
@@ -792,10 +805,13 @@ func (s *Scene) UpsertAvatarAtGrid(name, def, mission string, gender, dir, row, 
 		av.Engine.SetDirection(engDir)
 		av.SetMission(mission)
 		// Snap to target square
-		av.Square = square
-		center := square.GetViewCenter()
-		av.SetScreenPos(center)
-		av.SetTargetScreenPos(center)
+		if square != nil {
+			av.Square = square
+			center := square.GetViewCenter()
+			av.SetScreenPos(center)
+			av.SetTargetScreenPos(center)
+			av.Engine.SetPosition(center)
+		}
 		// Public rooms: scale movement speed and animation speed to match 50% size
 		if s.studio != nil && s.studio.Owner == "$SYSTEM$" {
 			// Movement speed scale ~0.5 (from 84px/s to ~42px/s)
@@ -1475,12 +1491,12 @@ func (s *Scene) initIsoEngine(dataDir string) error {
 	isoLayout := isoengine.ConvertStudioLayoutToIsoLayout(s.studio.Layout)
 	s.isoScene.SetLayout(isoLayout)
 
-	// Override the grid offsets with the actual Studio XML offsets
+	// Override the grid offsets with the actual PathMap / Studio XML offsets
 	gridXOff := studioXML.XOff
 	gridYOff := studioXML.YOff
-	if s.studio == nil || s.studio.Layout != 5 {
-		gridXOff += s.roomRect[0]
-		gridYOff += s.roomRect[1]
+	if pathMapXML != nil && pathMapXML.X != 0 {
+		gridXOff = pathMapXML.X
+		gridYOff = pathMapXML.Y
 	}
 	s.isoScene.SetCustomOffsets(gridXOff, gridYOff)
 
@@ -2208,7 +2224,7 @@ func (s *Scene) Update() error {
 		}
 		// Block movement when a window is under mouse cursor
 		canMoveClick := allowStudioClick
-		if canMoveClick && !holdingActive && ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
+		if canMoveClick && !holdingActive && inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 			if s.isoScene.IsMouseOverWalkableTile() {
 				if targetSquare := s.isoScene.GetMouseSquare(); targetSquare != nil {
 					// If clicking the tile we're already on, do nothing (do not start walking)

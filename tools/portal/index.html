@@ -1221,13 +1221,19 @@
     let entry = imgCache[src];
     if (!entry) {
       const img = new Image();
-      entry = { img: img, loaded: false };
+      entry = { img: img, loaded: false, failed: false };
       img.onload = () => {
         entry.loaded = true;
         if (onLoaded) onLoaded();
       };
+      img.onerror = () => {
+        entry.loaded = true;
+        entry.failed = true;
+      };
       img.src = src;
       imgCache[src] = entry;
+    } else if (entry.failed) {
+      return null;
     } else if (onLoaded && !entry.loaded && !entry.img.complete) {
       const prev = entry.img.onload;
       entry.img.onload = () => {

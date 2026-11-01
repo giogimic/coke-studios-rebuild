@@ -35,18 +35,19 @@ type Room struct {
 
 func NewRoom(id, name string, layout int) *Room {
 	isRed := strings.Contains(strings.ToLower(id), "red") || strings.Contains(strings.ToLower(name), "red")
-	entX, entZ := 4, 8
+	// Canonical entrance coordinates (x=Col, z=Row) matching Node w="10" in authentic PathMapXMLs:
+	entX, entZ := 8, 4
 	switch layout {
 	case 1:
-		entX, entZ = 4, 8
+		entX, entZ = 8, 4
 	case 2:
-		entX, entZ = 4, 10
+		entX, entZ = 10, 4
 	case 3:
-		entX, entZ = 8, 10
+		entX, entZ = 10, 8
 	case 4:
-		entX, entZ = 4, 8
+		entX, entZ = 8, 4
 	case 5:
-		entX, entZ = 12, 5
+		entX, entZ = 11, 2
 	}
 	return &Room{
 		ID:             id,
@@ -190,6 +191,10 @@ func (r *Room) LoadPathMap(webRoot string) {
 				if n.Weight != 255 {
 					walkable[[2]int{n.Col, n.Row}] = true
 					walkable[[2]int{n.Row, n.Col}] = true
+				}
+				if n.Weight == 10 {
+					r.EntranceX = n.Col
+					r.EntranceZ = n.Row
 				}
 			}
 		}

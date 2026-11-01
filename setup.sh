@@ -304,7 +304,8 @@ if [ ${IS_UPDATE} -eq 1 ]; then
 else
     echo ""
     echo "[*] Launching MariaDB & Coke Studios via Docker Compose..."
-    ${DOCKER_COMPOSE} up -d --build
+    ${DOCKER_COMPOSE} build --pull --progress=plain
+    ${DOCKER_COMPOSE} up -d
 fi
 
 # Wait for service health check

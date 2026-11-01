@@ -261,10 +261,9 @@ func (s *Scene) Update() error {
 	mousePressed := ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft)
 	mouseClicked := inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft)
 
-	// Calculate offset for centered display (must match Draw method calculation exactly)
-	// Use the screen dimensions stored from Draw method to ensure perfect coordinate alignment
-	offsetX := float64(s.currentScreenW-760) / 2
-	offsetY := float64(s.currentScreenH-520) / 2
+	// Fixed Director 10.0 stage coordinate origin (760x520)
+	offsetX := 0.0
+	offsetY := 0.0
 
 	// Ensure interactive elements are properly initialized before handling input
 	s.ensureInteractiveElementsReady()
@@ -415,10 +414,9 @@ func (s *Scene) Draw(screen *ebiten.Image) {
 	s.currentScreenW = screenW
 	s.currentScreenH = screenH
 
-	// For now, center the background without scaling to maintain pixel-perfect rendering
-	// TODO: Add proper scaling options later
-	offsetX := float64(screenW-760) / 2
-	offsetY := float64(screenH-520) / 2
+	// Fixed Director 10.0 stage coordinate origin (760x520)
+	offsetX := 0.0
+	offsetY := 0.0
 
 	// Draw entry background elements using exact coordinates from window definition
 	s.drawElementsFromDefinition(screen, offsetX, offsetY)

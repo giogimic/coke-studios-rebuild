@@ -1064,142 +1064,16 @@ func parseXMLAttrString(b []byte, attr string) string {
 	return ""
 }
 
-// mapServerToClient maps server (x,z) to client (x,y) grid coordinates
-func (c *Client) mapServerToClient(serverX, serverZ int) (clientX, clientY int) {
-	// Public rooms: layout 5 uses a 30x30 grid with a 270° rotation mapping
-	// Observed mapping (from London PathMap and server telemetry):
-	//   clientRow = serverX
-	//   clientCol = 31 - serverZ   (since grid is 30 cols)
-	if c.layout == 5 {
-		clientX = serverX
-		clientY = 31 - serverZ
-		return
-	}
-	// Layout 3: direct table for Studio type C (server uses z,x in 9..14)
-	if c.layout == 3 {
-		switch serverZ {
-		case 9:
-			switch serverX {
-			case 9:
-				return 9, 7
-			case 10:
-				return 10, 7
-			case 11:
-				return 11, 7
-			case 12:
-				return 12, 7
-			case 13:
-				return 13, 7
-			case 14:
-				return 14, 7
-			}
-		case 10:
-			switch serverX {
-			case 9:
-				return 9, 6
-			case 10:
-				return 10, 6
-			case 11:
-				return 11, 6
-			case 12:
-				return 12, 6
-			case 13:
-				return 13, 6
-			case 14:
-				return 14, 6
-			}
-		case 11:
-			switch serverX {
-			case 9:
-				return 9, 5
-			case 10:
-				return 10, 5
-			case 11:
-				return 11, 5
-			case 12:
-				return 12, 5
-			case 13:
-				return 13, 5
-			case 14:
-				return 14, 5
-			}
-		case 12:
-			switch serverX {
-			case 9:
-				return 9, 4
-			case 10:
-				return 10, 4
-			case 11:
-				return 11, 4
-			case 12:
-				return 12, 4
-			case 13:
-				return 13, 4
-			case 14:
-				return 14, 4
-			}
-		case 13:
-			switch serverX {
-			case 9:
-				return 9, 3
-			case 10:
-				return 10, 3
-			case 11:
-				return 11, 3
-			case 12:
-				return 12, 3
-			case 13:
-				return 13, 3
-			case 14:
-				return 14, 3
-			}
-		case 14:
-			switch serverX {
-			case 9:
-				return 9, 2
-			case 10:
-				return 10, 2
-			case 11:
-				return 11, 2
-			case 12:
-				return 12, 2
-			case 13:
-				return 13, 2
-			case 14:
-				return 14, 2
-			}
-		}
-	}
-	// Fallback heuristic (legacy 15x15-like): clientRow=serverX, clientCol=16-serverZ
-	clientX = serverX
-	clientY = 16 - serverZ
-	return
+// mapServerToClient maps server (x,z) to client (row,col) grid coordinates.
+// In Director Lingo, packet x is col, packet z is row.
+func (c *Client) mapServerToClient(serverX, serverZ int) (row, col int) {
+	return serverZ, serverX
 }
 
-// mapClientToServer maps client grid (row,col) to server (x,z) for layout C.
-// For layout 3 (Studio type C), inverse of mapServerToClient:
-//
-//	client (x=row, y=col) -> server (x=clientX, z=16-clientY)
-//
-// This matches the direct table where serverZ 9..14 map to clientY 7..2.
+// mapClientToServer maps client grid (row,col) to server (x,z) coordinates.
+// In Director Lingo, packet x is col, packet z is row.
 func (c *Client) mapClientToServer(clientRow, clientCol int) (serverX, serverZ int) {
-	if c.layout == 5 {
-		// Inverse of layout 5 mapping
-		serverX = clientRow
-		serverZ = 31 - clientCol
-		return
-	}
-	if c.layout == 3 {
-		// From the observed mapping table: clientY = 16 - serverZ
-		// and clientX == serverX for the walkable band 9..14
-		serverX = clientRow
-		serverZ = 16 - clientCol
-		return
-	}
-	// Fallback heuristic mirrors inverse of fallback mapping
-	serverX = clientRow
-	serverZ = 16 - clientCol
-	return
+	return clientCol, clientRow
 }
 
 // SendChat sends a Room.Action CH packet with a chat message

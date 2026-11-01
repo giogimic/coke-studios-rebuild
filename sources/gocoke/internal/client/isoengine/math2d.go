@@ -14,7 +14,7 @@ type Vector3D struct {
 }
 
 // Math2d handles 2D/3D coordinate transformations for the isometric engine
-// Replicates the Lingo Math2d.ls behavior with 1:1 parity
+// Replicates the Lingo Math2d.ls and 1_IsoScene.ls behavior with 1:1 parity
 type Math2d struct {
 	constants *IsoConstants
 }
@@ -27,65 +27,49 @@ func NewMath2d(constants *IsoConstants) *Math2d {
 }
 
 // ProjectToScreen converts 3D grid coordinates to 2D screen coordinates
-// Matches Lingo's isometric projection calculations exactly
+// Matches Lingo 1_IsoScene.ls calcViewX and calcViewY exactly:
+// on calcViewX me, o3dPoint: return integer(me.iXOff + ((o3dPoint.z * me.fSinY) + (o3dPoint.x * me.fCosY)))
+// on calcViewY me, o3dPoint: return integer(me.iYOff + ((o3dPoint.y * me.fCosX) - (((o3dPoint.z * me.fCosY) - (o3dPoint.x * me.fSinY)) / 2)))
 func (m *Math2d) ProjectToScreen(gridPoint Vector3D, xOff, yOff int) core.Point2D {
-	// Apply isometric transformation matrix
-	// This matches the Lingo calculation using sin/cos values
-
-	// Rotate around Y axis (45 degrees)
-	rotatedX := gridPoint.X*m.constants.CosY - gridPoint.Z*m.constants.SinY
-	rotatedZ := gridPoint.X*m.constants.SinY + gridPoint.Z*m.constants.CosY
-
-	// Rotate around X axis (30 degrees)
-	screenX := rotatedX
-	screenY := gridPoint.Y*m.constants.CosX - rotatedZ*m.constants.SinX
-
-	// Apply screen offsets
-	finalX := screenX + float64(xOff)
-	finalY := screenY + float64(yOff)
+	finalX := float64(xOff) + ((gridPoint.Z * m.constants.SinY) + (gridPoint.X * m.constants.CosY))
+	finalY := float64(yOff) + ((gridPoint.Y * m.constants.CosX) - (((gridPoint.Z * m.constants.CosY) - (gridPoint.X * m.constants.SinY)) / 2.0))
 
 	return core.Point2D{X: finalX, Y: finalY}
 }
 
 // ProjectToGrid converts 2D screen coordinates to 3D grid coordinates
-// Inverse of ProjectToScreen - matches Lingo's reverse calculation
+// Matches Lingo 1_IsoScene.ls calcViewToGridPoint exactly:
+// iViewX = oViewPoint.locH - me.iXOff
+// iViewY = oViewPoint.locV - me.iYOff
+// iZ = float(((iViewX / me.fCosY) - (iViewY / (me.fSinY * me.fSinX))) * (1 / ((me.fCosY / me.fSinY) + (me.fSinY / me.fCosY))))
+// iX = float(1 / me.fCosY * (iViewX - (iZ * me.fSinY)))
+// return vector(iX, 0, iZ)
 func (m *Math2d) ProjectToGrid(screenPoint core.Point2D, xOff, yOff int, height float64) Vector3D {
-	// Remove screen offsets
-	adjustedX := screenPoint.X - float64(xOff)
-	adjustedY := screenPoint.Y - float64(yOff)
+	iViewX := screenPoint.X - float64(xOff)
+	iViewY := (screenPoint.Y - float64(yOff)) - (height * m.constants.CosX)
 
-	// Reverse the X rotation (30 degrees)
-	// Assuming Y = height for the reverse calculation
-	rotatedZ := (height*m.constants.CosX - adjustedY) / m.constants.SinX
-	rotatedX := adjustedX
+	iZ := (((iViewX / m.constants.CosY) - (iViewY / (m.constants.SinY * m.constants.SinX))) * (1.0 / ((m.constants.CosY / m.constants.SinY) + (m.constants.SinY / m.constants.CosY))))
+	iX := (1.0 / m.constants.CosY * (iViewX - (iZ * m.constants.SinY)))
 
-	// Reverse the Y rotation (45 degrees)
-	gridX := rotatedX*m.constants.CosY + rotatedZ*m.constants.SinY
-	gridZ := -rotatedX*m.constants.SinY + rotatedZ*m.constants.CosY
-
-	return Vector3D{X: gridX, Y: height, Z: gridZ}
+	return Vector3D{X: iX, Y: height, Z: iZ}
 }
 
 // ScreenToGridCoordinates converts screen mouse coordinates to grid row/col
-// This is the key function for mouse-to-tile conversion
+// Matches Lingo 5_IsoGrid.ls getSquareByXZ behavior exactly:
+// iCol = ceil(abs(iX) / sqSize)
+// iRow = ceil(abs(iZ) / sqSize)
 func (m *Math2d) ScreenToGridCoordinates(screenX, screenY, xOff, yOff, sqSize int) (row, col int, valid bool) {
-	// Convert screen coordinates to grid space
 	gridPoint := m.ProjectToGrid(core.Point2D{X: float64(screenX), Y: float64(screenY)}, xOff, yOff, 0)
 
-	// Convert grid coordinates to row/col indices
-	// Lingo parity: use Ceil on magnitudes to avoid off-by-one at boundaries
-	col = int(math.Ceil(gridPoint.X / float64(sqSize)))
-	row = int(math.Ceil((-gridPoint.Z) / float64(sqSize)))
-	// Ensure 1-based indexing
-	if col < 1 {
-		col = 1
-	}
-	if row < 1 {
-		row = 1
+	// Lingo parity: X must be >= 0, Z must be <= 0
+	if gridPoint.X < 0 || gridPoint.Z > 0 {
+		return 0, 0, false
 	}
 
-	// Validate coordinates are within reasonable bounds
-	if row < 1 || col < 1 || row > 30 || col > 30 {
+	col = int(math.Ceil(gridPoint.X / float64(sqSize)))
+	row = int(math.Ceil(math.Abs(gridPoint.Z) / float64(sqSize)))
+
+	if col <= 0 || row <= 0 || row > 30 || col > 30 {
 		return 0, 0, false
 	}
 
@@ -95,51 +79,37 @@ func (m *Math2d) ScreenToGridCoordinates(screenX, screenY, xOff, yOff, sqSize in
 // GridToScreenCoordinates converts grid row/col to screen coordinates
 // Used for positioning elements at specific grid locations
 func (m *Math2d) GridToScreenCoordinates(row, col, xOff, yOff, sqSize int) core.Point2D {
-	// Convert row/col to grid coordinates (1-based to 0-based)
 	gridX := float64((col - 1) * sqSize)
-	gridZ := float64(-(row - 1) * sqSize) // Z is negative for rows
-	gridY := 0.0                          // Floor level
+	gridZ := float64(-(row - 1) * sqSize)
+	gridY := 0.0
 
-	// Project to screen coordinates
 	return m.ProjectToScreen(Vector3D{X: gridX, Y: gridY, Z: gridZ}, xOff, yOff)
 }
 
 // GetSquareCenter returns the center point of a grid square in screen coordinates
 // Matches Lingo IsoSquare.calcViewCenter() behavior
 func (m *Math2d) GetSquareCenter(row, col, xOff, yOff, sqSize int) core.Point2D {
-	// Get the base position
-	basePoint := m.GridToScreenCoordinates(row, col, xOff, yOff, sqSize)
+	minX := float64((col - 1) * sqSize)
+	minZ := -float64((row-1)*sqSize) - float64(sqSize)
+	centerX := minX + float64(sqSize)/2.0
+	centerZ := minZ + float64(sqSize)/2.0
 
-	// Add half square size to get center
-	// The isometric projection affects how we calculate the center
-	centerOffsetX := float64(sqSize) * m.constants.CosY / 2.0
-	centerOffsetY := float64(sqSize) * m.constants.SinX / 2.0
-
-	return core.Point2D{
-		X: basePoint.X + centerOffsetX,
-		Y: basePoint.Y + centerOffsetY,
-	}
+	return m.ProjectToScreen(Vector3D{X: centerX, Y: 0, Z: centerZ}, xOff, yOff)
 }
 
 // GetSquareCorners returns the four corner points of a grid square in screen coordinates
-// Matches Lingo IsoSquare corner calculations
+// Matches Lingo IsoSquare corner calculations (Quad tl, tr, br, bl)
 func (m *Math2d) GetSquareCorners(row, col, xOff, yOff, sqSize int) SquareCorners {
-	// Calculate the four corners of the square in grid space
-	gridX := float64((col - 1) * sqSize)
-	gridZ := float64(-(row - 1) * sqSize)
+	minX := float64((col - 1) * sqSize)
+	maxX := minX + float64(sqSize)
+	maxZ := -float64((row - 1) * sqSize)
+	minZ := maxZ - float64(sqSize)
 	gridY := 0.0
 
-	// Top-left corner
-	tl := m.ProjectToScreen(Vector3D{X: gridX, Y: gridY, Z: gridZ}, xOff, yOff)
-
-	// Top-right corner
-	tr := m.ProjectToScreen(Vector3D{X: gridX + float64(sqSize), Y: gridY, Z: gridZ}, xOff, yOff)
-
-	// Bottom-left corner
-	bl := m.ProjectToScreen(Vector3D{X: gridX, Y: gridY, Z: gridZ - float64(sqSize)}, xOff, yOff)
-
-	// Bottom-right corner
-	br := m.ProjectToScreen(Vector3D{X: gridX + float64(sqSize), Y: gridY, Z: gridZ - float64(sqSize)}, xOff, yOff)
+	tl := m.ProjectToScreen(Vector3D{X: minX, Y: gridY, Z: maxZ}, xOff, yOff)
+	tr := m.ProjectToScreen(Vector3D{X: maxX, Y: gridY, Z: maxZ}, xOff, yOff)
+	br := m.ProjectToScreen(Vector3D{X: maxX, Y: gridY, Z: minZ}, xOff, yOff)
+	bl := m.ProjectToScreen(Vector3D{X: minX, Y: gridY, Z: minZ}, xOff, yOff)
 
 	return SquareCorners{
 		TopLeft:     tl,
@@ -160,16 +130,13 @@ type SquareCorners struct {
 // IsPointInSquare checks if a screen point is within a grid square
 // Uses the four corner points to determine if point is inside the diamond shape
 func (m *Math2d) IsPointInSquare(point core.Point2D, corners SquareCorners) bool {
-	// For isometric squares, we need to check if the point is within the diamond shape
-	// This uses a point-in-polygon algorithm for the diamond formed by the four corners
-
-	// Create polygon points in order: TL -> TR -> BR -> BL -> TL
+	// Diamond formed by: TopLeft -> TopRight -> BottomRight -> BottomLeft -> TopLeft
 	polygon := []core.Point2D{
 		corners.TopLeft,
 		corners.TopRight,
 		corners.BottomRight,
 		corners.BottomLeft,
-		corners.TopLeft, // Close the polygon
+		corners.TopLeft,
 	}
 
 	return m.pointInPolygon(point, polygon)

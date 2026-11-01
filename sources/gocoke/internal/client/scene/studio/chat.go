@@ -222,7 +222,7 @@ func (cm *ChatManager) HandleSpeechSwitch(mouseX, mouseY int, mouseClicked, mous
 	sh := cm.speechSwitchRect[3]
 	inside := mouseX >= sx && mouseX < sx+sw && mouseY >= sy && mouseY < sy+sh
 
-	if (mouseClicked || mouseReleased) && inside {
+	if mouseReleased && inside {
 		if cm.speechMode == SpeechModeSpeak {
 			cm.speechMode = SpeechModeShout
 		} else if cm.speechMode == SpeechModeShout {
