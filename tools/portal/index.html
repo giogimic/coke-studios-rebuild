@@ -969,7 +969,7 @@
               <div class="swatches-row" id="skinSwatches"></div>
             </div>
             <div class="form-group">
-              <label>Face Style:</label>
+              <label>Face Style (1 - 7):</label>
               <div class="style-picker-row">
                 <button type="button" class="picker-btn" onclick="cycleFace(-1)">&laquo;</button>
                 <span class="picker-label" id="faceLabel">Face 1</span>
@@ -977,7 +977,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label>Eyes Style:</label>
+              <label>Eyes Style (1 - 10):</label>
               <div class="style-picker-row">
                 <button type="button" class="picker-btn" onclick="cycleEyes(-1)">&laquo;</button>
                 <span class="picker-label" id="eyesLabel">Eyes 1</span>
@@ -989,7 +989,7 @@
           <!-- Step 3: Hair Style & Color -->
           <div id="wiz-step-3" style="display: none;">
             <div class="form-group">
-              <label>Hair Style (1 - 21):</label>
+              <label>Hair Style (1 - 23):</label>
               <div class="style-picker-row">
                 <button type="button" class="picker-btn" onclick="cycleHair(-1)">&laquo;</button>
                 <span class="picker-label" id="hairStyleLabel">Style 1</span>
@@ -1005,7 +1005,7 @@
           <!-- Step 4: Clothing (Shirt, Pants, Shoes) -->
           <div id="wiz-step-4" style="display: none;">
             <div class="form-group">
-              <label>Shirt Style (1 - 28):</label>
+              <label>Shirt Style (1 - 19):</label>
               <div class="style-picker-row">
                 <button type="button" class="picker-btn" onclick="cycleShirt(-1)">&laquo;</button>
                 <span class="picker-label" id="shirtStyleLabel">Shirt 1</span>
@@ -1014,7 +1014,7 @@
               <div class="swatches-row" id="shirtSwatches"></div>
             </div>
             <div class="form-group">
-              <label>Pants Style (1 - 14):</label>
+              <label>Pants Style (1 - 9):</label>
               <div class="style-picker-row">
                 <button type="button" class="picker-btn" onclick="cyclePants(-1)">&laquo;</button>
                 <span class="picker-label" id="pantsStyleLabel">Pants 1</span>
@@ -1023,7 +1023,7 @@
               <div class="swatches-row" id="pantsSwatches"></div>
             </div>
             <div class="form-group">
-              <label>Shoes Style (1 - 11):</label>
+              <label>Shoes Style (1 - 8):</label>
               <div class="style-picker-row">
                 <button type="button" class="picker-btn" onclick="cycleShoes(-1)">&laquo;</button>
                 <span class="picker-label" id="shoesStyleLabel">Shoes 1</span>
@@ -1077,7 +1077,7 @@
             <input type="text" id="wardrobeMission" class="form-control" maxlength="60">
           </div>
           <div class="form-group">
-            <label>Hair Style:</label>
+            <label>Hair Style (1 - 23):</label>
             <div class="style-picker-row">
               <button type="button" class="picker-btn" onclick="cycleHair(-1, true)">&laquo;</button>
               <span class="picker-label" id="wHairStyleLabel">Style 1</span>
@@ -1086,7 +1086,7 @@
             <div class="swatches-row" id="wHairSwatches"></div>
           </div>
           <div class="form-group">
-            <label>Shirt Style:</label>
+            <label>Shirt Style (1 - 19):</label>
             <div class="style-picker-row">
               <button type="button" class="picker-btn" onclick="cycleShirt(-1, true)">&laquo;</button>
               <span class="picker-label" id="wShirtStyleLabel">Shirt 1</span>
@@ -1095,7 +1095,7 @@
             <div class="swatches-row" id="wShirtSwatches"></div>
           </div>
           <div class="form-group">
-            <label>Pants Style:</label>
+            <label>Pants Style (1 - 9):</label>
             <div class="style-picker-row">
               <button type="button" class="picker-btn" onclick="cyclePants(-1, true)">&laquo;</button>
               <span class="picker-label" id="wPantsStyleLabel">Pants 1</span>
@@ -1104,7 +1104,7 @@
             <div class="swatches-row" id="wPantsSwatches"></div>
           </div>
           <div class="form-group">
-            <label>Shoes Style:</label>
+            <label>Shoes Style (1 - 8):</label>
             <div class="style-picker-row">
               <button type="button" class="picker-btn" onclick="cycleShoes(-1, true)">&laquo;</button>
               <span class="picker-label" id="wShoesStyleLabel">Shoes 1</span>
@@ -1211,25 +1211,47 @@
 
   // Cached image assets for avatar rendering
   const imgCache = {};
-  function getCachedImg(src) {
-    if (!imgCache[src]) {
+  function getCachedImg(src, onLoaded) {
+    if (!src) return null;
+    let entry = imgCache[src];
+    if (!entry) {
       const img = new Image();
+      entry = { img: img, loaded: false };
+      img.onload = () => {
+        entry.loaded = true;
+        if (onLoaded) onLoaded();
+      };
       img.src = src;
-      imgCache[src] = img;
+      imgCache[src] = entry;
+    } else if (onLoaded && !entry.loaded && !entry.img.complete) {
+      const prev = entry.img.onload;
+      entry.img.onload = () => {
+        if (prev) prev();
+        onLoaded();
+      };
     }
-    return imgCache[src];
+    return entry.img;
   }
 
   // Preload essential sprite assets
   function preloadAvatarAssets() {
-    // Body & arms
     getCachedImg('/assets/avatar/body/male/body-se-stand.png');
     getCachedImg('/assets/avatar/body/female/body-se-stand.png');
     getCachedImg('/assets/avatar/body/shared/a/arm-1.png');
     getCachedImg('/assets/avatar/body/shared/b/arm-1.png');
-    // Default heads
     for (let i = 1; i <= 12; i++) {
       getCachedImg(`/assets/avatar/head/se/${i}.png`);
+    }
+    for (let i = 1; i <= 5; i++) {
+      getCachedImg(`/assets/avatar/hair/${i}/se.png`);
+      getCachedImg(`/assets/avatar/top/${i}/top-se-stand.png`);
+      getCachedImg(`/assets/avatar/top/${i}/arm-b-1.png`);
+      getCachedImg(`/assets/avatar/legs/${i}/legs-se-stand.png`);
+      getCachedImg(`/assets/avatar/shoes/${i}/stand-se-1.png`);
+    }
+    for (let i = 1; i <= 4; i++) {
+      getCachedImg(`/assets/avatar/faces/${i}/se.png`);
+      getCachedImg(`/assets/avatar/eyes/${i}/se.png`);
     }
   }
 
@@ -1272,58 +1294,62 @@
     const shoeCol = PALETTES.shoeColors[av.shoesColorIdx] || PALETTES.shoeColors[0];
     const [shr, shg, shb] = shoeCol.rgb.split(',').map(Number);
 
-    const offsetX = (canvas.width - 64) / 2;
-    const offsetY = canvas.height - 130;
+    // Each sprite in /assets/avatar/ is pre-aligned on a 77x110 canvas.
+    // Center the 77x110 bounding box within the target canvas.
+    const offsetX = Math.round((canvas.width - 77) / 2);
+    const offsetY = Math.round((canvas.height - 110) / 2);
 
-    // 1. Arm A (Back)
-    const armA = getCachedImg('/assets/avatar/body/shared/a/arm-1.png');
-    drawTinted(ctx, armA, offsetX + 18, offsetY + 34, sr, sg, sb);
-    const topArmA = getCachedImg(`/assets/avatar/top/${av.shirt}/arm-a-1.png`);
-    drawTinted(ctx, topArmA, offsetX + 18, offsetY + 34, cr, cg, cb);
+    const onReload = () => renderAvatarToCanvas(canvasId, av);
+
+    // 1. Arm A (Back arm)
+    const armA = getCachedImg('/assets/avatar/body/shared/a/arm-1.png', onReload);
+    drawTinted(ctx, armA, offsetX, offsetY, sr, sg, sb);
+    const topArmA = getCachedImg(`/assets/avatar/top/${av.shirt}/arm-a-1.png`, onReload);
+    drawTinted(ctx, topArmA, offsetX, offsetY, cr, cg, cb);
 
     // 2. Torso Body
-    const bodyImg = getCachedImg(`/assets/avatar/body/${av.gender}/body-se-stand.png`);
-    drawTinted(ctx, bodyImg, offsetX + 12, offsetY + 30, sr, sg, sb);
+    const bodyImg = getCachedImg(`/assets/avatar/body/${av.gender}/body-se-stand.png`, onReload);
+    drawTinted(ctx, bodyImg, offsetX, offsetY, sr, sg, sb);
 
-    // 3. Legs
-    const legsImg = getCachedImg(`/assets/avatar/legs/${av.pants}/legs-se-stand.png`);
-    drawTinted(ctx, legsImg, offsetX + 14, offsetY + 50, pr, pg, pb);
+    // 3. Shoes
+    const shoesImg = getCachedImg(`/assets/avatar/shoes/${av.shoes}/stand-se-1.png`, onReload);
+    drawTinted(ctx, shoesImg, offsetX, offsetY, shr, shg, shb);
 
-    // 4. Shoes
-    const shoesImg = getCachedImg(`/assets/avatar/shoes/${av.shoes}/stand-se-1.png`);
-    drawTinted(ctx, shoesImg, offsetX + 12, offsetY + 80, shr, shg, shb);
+    // 4. Legs / Pants
+    const legsImg = getCachedImg(`/assets/avatar/legs/${av.pants}/legs-se-stand.png`, onReload);
+    drawTinted(ctx, legsImg, offsetX, offsetY, pr, pg, pb);
 
-    // 5. Shirt
-    const topImg = getCachedImg(`/assets/avatar/top/${av.shirt}/top-se-stand.png`);
-    drawTinted(ctx, topImg, offsetX + 14, offsetY + 32, cr, cg, cb);
+    // 5. Shirt Top
+    const topImg = getCachedImg(`/assets/avatar/top/${av.shirt}/top-se-stand.png`, onReload);
+    drawTinted(ctx, topImg, offsetX, offsetY, cr, cg, cb);
 
-    // 6. Head
-    const headImg = getCachedImg(`/assets/avatar/head/se/${av.skinIdx + 1}.png`);
+    // 6. Arm B (Front arm)
+    const armB = getCachedImg('/assets/avatar/body/shared/b/arm-1.png', onReload);
+    drawTinted(ctx, armB, offsetX, offsetY, sr, sg, sb);
+    const topArmB = getCachedImg(`/assets/avatar/top/${av.shirt}/arm-b-1.png`, onReload);
+    drawTinted(ctx, topArmB, offsetX, offsetY, cr, cg, cb);
+
+    // 7. Head (skin tone indexed or tinted fallback)
+    const headImg = getCachedImg(`/assets/avatar/head/se/${av.skinIdx + 1}.png`, onReload);
     if (headImg && headImg.complete && headImg.naturalWidth > 0) {
-      try { ctx.drawImage(headImg, offsetX + 10, offsetY); } catch (_) {}
+      try { ctx.drawImage(headImg, offsetX, offsetY); } catch (_) {}
     } else {
-      drawTinted(ctx, getCachedImg('/assets/avatar/head/se/1.png'), offsetX + 10, offsetY, sr, sg, sb);
+      drawTinted(ctx, getCachedImg('/assets/avatar/head/se/1.png', onReload), offsetX, offsetY, sr, sg, sb);
     }
 
-    // 7. Face (Mouth) & Eyes
-    const faceImg = getCachedImg(`/assets/avatar/faces/se/${av.face}.png`);
+    // 8. Face (Mouth) & Eyes
+    const faceImg = getCachedImg(`/assets/avatar/faces/${av.face}/se.png`, onReload);
     if (faceImg && faceImg.complete && faceImg.naturalWidth > 0) {
-      try { ctx.drawImage(faceImg, offsetX + 22, offsetY + 22); } catch (_) {}
+      try { ctx.drawImage(faceImg, offsetX, offsetY); } catch (_) {}
     }
-    const eyesImg = getCachedImg(`/assets/avatar/eyes/se/${av.eyes}.png`);
+    const eyesImg = getCachedImg(`/assets/avatar/eyes/${av.eyes}/se.png`, onReload);
     if (eyesImg && eyesImg.complete && eyesImg.naturalWidth > 0) {
-      try { ctx.drawImage(eyesImg, offsetX + 20, offsetY + 18); } catch (_) {}
+      try { ctx.drawImage(eyesImg, offsetX, offsetY); } catch (_) {}
     }
 
-    // 8. Hair
-    const hairImg = getCachedImg(`/assets/avatar/hair/${av.hair}/se.png`);
-    drawTinted(ctx, hairImg, offsetX + 8, offsetY - 4, hr, hg, hb);
-
-    // 9. Arm B (Front)
-    const armB = getCachedImg('/assets/avatar/body/shared/b/arm-1.png');
-    drawTinted(ctx, armB, offsetX + 2, offsetY + 36, sr, sg, sb);
-    const topArmB = getCachedImg(`/assets/avatar/top/${av.shirt}/arm-b-1.png`);
-    drawTinted(ctx, topArmB, offsetX + 2, offsetY + 36, cr, cg, cb);
+    // 9. Hair
+    const hairImg = getCachedImg(`/assets/avatar/hair/${av.hair}/se.png`, onReload);
+    drawTinted(ctx, hairImg, offsetX, offsetY, hr, hg, hb);
   }
 
   // Construct standard Coke Music Director Lingo Figure String
@@ -1374,6 +1400,14 @@
       const [, rgb] = parts.hd.split('/');
       const idx = PALETTES.skins.findIndex(c => c.rgb === rgb);
       if (idx >= 0) currentAvatar.skinIdx = idx;
+    }
+    if (parts.fc) {
+      const [s] = parts.fc.split('/');
+      currentAvatar.face = parseInt(s, 10) || 1;
+    }
+    if (parts.ey) {
+      const [s] = parts.ey.split('/');
+      currentAvatar.eyes = parseInt(s, 10) || 1;
     }
     if (parts.ch) {
       const [s, rgb] = parts.ch.split('/');
@@ -1856,39 +1890,39 @@
   }
 
   function cycleFace(delta) {
-    wizAvatar.face = ((wizAvatar.face - 1 + delta + 4) % 4) + 1;
+    wizAvatar.face = ((wizAvatar.face - 1 + delta + 7) % 7) + 1;
     document.getElementById('faceLabel').textContent = `Face ${wizAvatar.face}`;
     renderAvatarToCanvas('regAvatarCanvas', wizAvatar);
   }
   function cycleEyes(delta) {
-    wizAvatar.eyes = ((wizAvatar.eyes - 1 + delta + 8) % 8) + 1;
+    wizAvatar.eyes = ((wizAvatar.eyes - 1 + delta + 10) % 10) + 1;
     document.getElementById('eyesLabel').textContent = `Eyes ${wizAvatar.eyes}`;
     renderAvatarToCanvas('regAvatarCanvas', wizAvatar);
   }
   function cycleHair(delta, isWardrobe) {
     const target = isWardrobe ? currentAvatar : wizAvatar;
-    target.hair = ((target.hair - 1 + delta + 21) % 21) + 1;
+    target.hair = ((target.hair - 1 + delta + 23) % 23) + 1;
     const label = document.getElementById(isWardrobe ? 'wHairStyleLabel' : 'hairStyleLabel');
     if (label) label.textContent = `Style ${target.hair}`;
     renderAvatarToCanvas(isWardrobe ? 'wardrobeAvatarCanvas' : 'regAvatarCanvas', target);
   }
   function cycleShirt(delta, isWardrobe) {
     const target = isWardrobe ? currentAvatar : wizAvatar;
-    target.shirt = ((target.shirt - 1 + delta + 28) % 28) + 1;
+    target.shirt = ((target.shirt - 1 + delta + 19) % 19) + 1;
     const label = document.getElementById(isWardrobe ? 'wShirtStyleLabel' : 'shirtStyleLabel');
     if (label) label.textContent = `Shirt ${target.shirt}`;
     renderAvatarToCanvas(isWardrobe ? 'wardrobeAvatarCanvas' : 'regAvatarCanvas', target);
   }
   function cyclePants(delta, isWardrobe) {
     const target = isWardrobe ? currentAvatar : wizAvatar;
-    target.pants = ((target.pants - 1 + delta + 14) % 14) + 1;
+    target.pants = ((target.pants - 1 + delta + 9) % 9) + 1;
     const label = document.getElementById(isWardrobe ? 'wPantsStyleLabel' : 'pantsStyleLabel');
     if (label) label.textContent = `Pants ${target.pants}`;
     renderAvatarToCanvas(isWardrobe ? 'wardrobeAvatarCanvas' : 'regAvatarCanvas', target);
   }
   function cycleShoes(delta, isWardrobe) {
     const target = isWardrobe ? currentAvatar : wizAvatar;
-    target.shoes = ((target.shoes - 1 + delta + 11) % 11) + 1;
+    target.shoes = ((target.shoes - 1 + delta + 8) % 8) + 1;
     const label = document.getElementById(isWardrobe ? 'wShoesStyleLabel' : 'shoesStyleLabel');
     if (label) label.textContent = `Shoes ${target.shoes}`;
     renderAvatarToCanvas(isWardrobe ? 'wardrobeAvatarCanvas' : 'regAvatarCanvas', target);
@@ -2001,17 +2035,6 @@
     } else if (secParam && document.getElementById('sec-' + secParam)) {
       switchSection(secParam);
     }
-
-    // Idle animation for badge avatar: gentle blinking every 3-5 seconds
-    setInterval(() => {
-      const blinkEyes = currentAvatar.eyes;
-      currentAvatar.eyes = 2; // closed eyes
-      renderAvatarToCanvas('badgeAvatarCanvas', currentAvatar);
-      setTimeout(() => {
-        currentAvatar.eyes = blinkEyes;
-        renderAvatarToCanvas('badgeAvatarCanvas', currentAvatar);
-      }, 150);
-    }, 4000);
   });
 </script>
 </body>

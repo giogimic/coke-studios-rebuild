@@ -165,11 +165,13 @@ func (s *Server) Handler() http.Handler {
 
 	mux.HandleFunc("/assets/", func(w http.ResponseWriter, r *http.Request) {
 		sub := strings.TrimPrefix(r.URL.Path, "/assets/")
+		avatarSub := strings.TrimPrefix(sub, "avatar/")
 		candidates := []string{
 			filepath.Join(portalDir, "assets", sub),
 			filepath.Join(cokephaseDir, "assets", sub),
 			filepath.Join(gocokeWebDir, "assets", sub),
 			filepath.Join(avatarDir, sub),
+			filepath.Join(avatarDir, avatarSub),
 		}
 		for _, cand := range candidates {
 			if fi, err := os.Stat(cand); err == nil && !fi.IsDir() {
