@@ -18,18 +18,12 @@
         overscroll-behavior: none;
         -webkit-user-select: none;
         user-select: none;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         overflow: hidden;
       }
       canvas {
-        width: 760px;
-        height: 520px;
-        max-width: 100vw;
-        max-height: 100vh;
-        aspect-ratio: 760 / 520;
-        display: block;
+        width: 100% !important;
+        height: 100% !important;
+        display: block !important;
         image-rendering: pixelated;
         image-rendering: crisp-edges;
       }
@@ -55,7 +49,6 @@
     </style>
   </head>
   <body>
-    <canvas id="canvas" width="760" height="520"></canvas>
     <button id="fsBtn" type="button" aria-label="Enter fullscreen">⛶ Fullscreen</button>
     <script src="wasm_exec.js"></script>
     <script>
@@ -217,95 +210,6 @@
         window.addEventListener('orientationchange', updateBtn);
         window.addEventListener('resize', updateBtn);
         updateBtn();
-      })();
-    </script>
-    <script>
-      (function () {
-        console.log('[touch-shim] enabled');
-        let activeTarget = null;
-        let lastPos = { x: 0, y: 0 };
-        let startTime = 0;
-        let moved = false;
-        const MOVE_TOLERANCE_PX = 6;
-
-        function synthesizeMouse(type, target, x, y) {
-          if (!target) return;
-          const ev = new MouseEvent(type, {
-            bubbles: true,
-            cancelable: true,
-            view: window,
-            clientX: x,
-            clientY: y,
-            screenX: x,
-            screenY: y,
-            button: 0,
-            buttons: type === 'mouseup' ? 0 : 1
-          });
-          target.dispatchEvent(ev);
-        }
-
-        function onTouchStart(e) {
-          if (e.touches.length !== 1) return;
-          if (e.cancelable) e.preventDefault();
-          const t = e.touches[0];
-          const x = t.clientX;
-          const y = t.clientY;
-          lastPos.x = x;
-          lastPos.y = y;
-          startTime = Date.now();
-          moved = false;
-          activeTarget = document.elementFromPoint(x, y) || e.target;
-          synthesizeMouse('mousemove', activeTarget, x, y);
-          synthesizeMouse('mousedown', activeTarget, x, y);
-        }
-
-        function onTouchMove(e) {
-          if (e.touches.length !== 1) return;
-          if (e.cancelable) e.preventDefault();
-          const t = e.touches[0];
-          const x = t.clientX;
-          const y = t.clientY;
-          if (Math.abs(x - lastPos.x) > MOVE_TOLERANCE_PX || Math.abs(y - lastPos.y) > MOVE_TOLERANCE_PX) {
-            moved = true;
-          }
-          lastPos.x = x;
-          lastPos.y = y;
-          const target = activeTarget || document.elementFromPoint(x, y) || e.target;
-          synthesizeMouse('mousemove', target, x, y);
-        }
-
-        function onTouchEnd(e) {
-          if (e.cancelable) e.preventDefault();
-          const x = lastPos.x;
-          const y = lastPos.y;
-          const target = activeTarget || document.elementFromPoint(x, y) || e.target;
-          synthesizeMouse('mouseup', target, x, y);
-          const shortTap = Date.now() - startTime < 500 && !moved;
-          if (shortTap) {
-            const clickEv = new MouseEvent('click', {
-              bubbles: true,
-              cancelable: true,
-              view: window,
-              clientX: x,
-              clientY: y,
-              screenX: x,
-              screenY: y,
-              button: 0
-            });
-            target && target.dispatchEvent(clickEv);
-          }
-          activeTarget = null;
-        }
-
-        function onTouchCancel(e) {
-          if (e.cancelable) e.preventDefault();
-          activeTarget = null;
-        }
-
-        window.addEventListener('touchstart', onTouchStart, { passive: false });
-        window.addEventListener('touchmove', onTouchMove, { passive: false });
-        window.addEventListener('touchend', onTouchEnd, { passive: false });
-        window.addEventListener('touchcancel', onTouchCancel, { passive: false });
       })();
     </script>
   </body>

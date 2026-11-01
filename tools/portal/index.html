@@ -374,6 +374,7 @@
       margin-bottom: 0;
       border-radius: 0;
     }
+    #sec-cokestudios #game-container-view,
     #page-container.game-mode #game-container-view {
       width: 760px;
       height: 520px;
@@ -381,9 +382,12 @@
       border-radius: 0;
       margin: 0;
     }
+    #sec-cokestudios #gameIframe,
     #page-container.game-mode #gameIframe {
       width: 760px;
       height: 520px;
+      display: block;
+      border: none;
     }
     .room-pills {
       display: flex;
@@ -723,7 +727,7 @@
       </div>
 
       <div id="game-container-view">
-        <iframe id="gameIframe" src="/game/"></iframe>
+        <iframe id="gameIframe" src="/game/" allow="autoplay; fullscreen" tabindex="0"></iframe>
       </div>
     </div>
 
