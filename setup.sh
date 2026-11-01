@@ -7,6 +7,10 @@
 # ==============================================================================
 set -euo pipefail
 
+# Force plain progress to prevent BuildKit vt100 terminal dimension panic in SSH sessions
+export BUILDKIT_PROGRESS=plain
+export DOCKER_BUILDKIT=1
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "${SCRIPT_DIR}"
 
@@ -274,10 +278,10 @@ if [ ${IS_UPDATE} -eq 1 ]; then
     if [ ${WIPE_CACHE} -eq 1 ]; then
         echo "[*] STEP 2/4: Rebuilding Docker images (CACHE WIPED)..."
         docker builder prune -f 2>/dev/null || true
-        ${DOCKER_COMPOSE} build --no-cache --pull
+        ${DOCKER_COMPOSE} build --no-cache --pull --progress=plain
     else
         echo "[*] STEP 2/4: Rebuilding Docker images..."
-        ${DOCKER_COMPOSE} build --pull
+        ${DOCKER_COMPOSE} build --pull --progress=plain
     fi
 
     echo ""
