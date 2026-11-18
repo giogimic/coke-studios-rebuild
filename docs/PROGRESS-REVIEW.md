@@ -87,4 +87,4 @@ All findings identified in the 2026-10-24 review table have been resolved throug
 - **P1 Performance Duration & Rewards:** Resolved. Dynamic EDL duration parsing, live Thumbs Up/Down voting, and authoritative Decibel settlements.
 - **P1 Minigames Engine:** Resolved. Authentic pure-Go Ebitengine Uncover the Music 24-square board and V-Ego San Sumo arena with streak ladder rewards.
 - **P2 Multi-Demo Runtime Launcher:** Resolved. Unified Go server hosting the 760px portal, WebAssembly binary, AMF gateway, and realtime multiplayer engine under single binary and systemd service `coke-studios.service`.
-- **P2 Synthetic Mock Tests:** Resolved. 20/20 Playwright tests verifying real headless multi-browser player journeys, authentic promotional bottle cap PIN redemption, and Director MX 760×520 stage canvas visual fidelity. All Go packages pass `go test ./... -count=1`.
+- **P2 Synthetic Mock Tests:** Resolved. 21/21 Playwright tests verifying real headless multi-browser player journeys, authentic promotional bottle cap PIN redemption, live studio decor networking, and Director MX 760×520 stage canvas visual fidelity. All Go packages pass `go test ./... -count=1`.

@@ -51,7 +51,7 @@ Two independently registered players must enter London through the website, see 
   - 760x520 Macromedia Director MX stage resolution (strict 19:13 / 1.4615 aspect ratio) captured to `tests/reports/visual-snapshots/`.
   - All 7 authentic public room raster background assets and Director Cast descriptors verified via HTTP 200 (London I, Alaska I, Miami I, Mombasa I, Goa I, Moscow I, Central Park I).
   - Male and female avatar sprite component layers verified with valid PNG headers.
-- **Full Browser Integration Test Suite:** 20 out of 20 tests passed (15.0s) against the live authoritative server running on port 24902 with isolated temporary database `test_playwright.db`, including promotional bottle cap PIN redemption and furniture rewards.
+- **Full Browser Integration Test Suite:** 21 out of 21 tests passed (17.8s) against the live authoritative server running on port 24902 with isolated temporary database `test_playwright.db`, including promotional bottle cap PIN redemption, live studio decor updates, and furniture rewards.
 - **Multi-Target Production Compilation:**
   - Debian 12 (Bookworm) production binary: `tools/bin/coke-server-linux` (statically linked with `CGO_ENABLED=0`).
   - Windows x64 development binary: `tools/bin/coke-server.exe` (statically linked with `CGO_ENABLED=0`).

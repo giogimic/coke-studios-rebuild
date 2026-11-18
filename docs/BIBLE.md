@@ -21,7 +21,7 @@ The project has achieved complete unbroken player-journey parity across all 7 ro
 - **Pure-Go Minigames:** Authentic Uncover the Music 24-square matching game (daily 300 dB cap, 60 dB victory bonus) and V-Ego San Sumo Dohyo arena (5 moves, 10s countdown, streak ladder rewards).
 - **Debian Linux First & Restart Durability:** Native Debian 12 Bookworm binary (`tools/bin/coke-server-linux`), Windows binary (`tools/bin/coke-server.exe`), systemd unit (`coke-studios.service`), turnkey automated deployment script (`tools/deploy-debian.sh`), POSIX graceful shutdown (`SIGTERM`/`SIGINT`), and zero-loss restart durability verified with MariaDB and SQLite.
 - **Promotional Bottle Cap Redemptions:** Authentic historical bottle cap PIN redemption via `/sf/ssldocs/redeemCap.jsp` crediting V-Coins and backpack furniture (e.g. Coke Neon Sign, item 52) with dynamic idempotent seeding endpoint `/api/caps/create`.
-- **Acceptance:** 100% of Go unit/integration test packages pass (190/190 tests), 6 server concurrency benchmarks pass (21.8M walkability ops/s, 384k broadcast ops/s, 33.5M catalogue lookups/s, 1,003 ACID tx/s), and 20 out of 20 Playwright browser tests pass against the live Go server.
+- **Acceptance:** 100% of Go unit/integration test packages pass (190/190 tests), 6 server concurrency benchmarks pass (21.8M walkability ops/s, 384k broadcast ops/s, 33.5M catalogue lookups/s, 1,003 ACID tx/s), and 21 out of 21 Playwright browser tests pass against the live Go server.
 
 ## Decisions and constraints
 
