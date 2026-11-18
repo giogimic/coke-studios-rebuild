@@ -59,6 +59,20 @@ To stop the server: `Stop-Local.cmd` or `.\Stop-Local.ps1`.
 docker compose up -d --build
 ```
 
+### Updating the Server (Zero Data Loss)
+To update an existing installation with the latest code without losing player databases, accounts, or possessions:
+```bash
+# Debian 12 Host (Native systemd)
+sudo ./tools/deploy-debian.sh --update    # Rebuilds and restarts service with safety rollback
+sudo ./tools/deploy-debian.sh --pull      # Pulls latest git commits before updating
+
+# Linux / Debian (Container environment)
+./setup.sh --update
+
+# Windows (Compatibility)
+.\setup.ps1 -Update
+```
+
 ### URLs
 - **Game Portal & Website:** [http://127.0.0.1:24902/](http://127.0.0.1:24902/)
 - **Go WebAssembly Client:** [http://127.0.0.1:24902/game/](http://127.0.0.1:24902/game/)

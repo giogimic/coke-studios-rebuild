@@ -4,12 +4,13 @@ FROM golang:1.24-bookworm AS builder
 WORKDIR /src
 COPY . .
 
-# Compile static Linux binary if not already pre-compiled
-RUN if [ ! -f /src/tools/bin/coke-server-linux ]; then \
-      echo "Building coke-server-linux inside container..." && \
-      cd /src/sources/gocoke && \
-      CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags "-s -w" -o /src/tools/bin/coke-server-linux ./cmd/server; \
-    fi
+# Always compile latest static Linux server and WebAssembly client from Go source
+RUN cp /usr/local/go/lib/wasm/wasm_exec.js /src/sources/gocoke/web/wasm_exec.js 2>/dev/null || true && \
+    cd /src/sources/gocoke && \
+    echo "Compiling authoritative Go server (coke-server-linux)..." && \
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags "-s -w" -o /src/tools/bin/coke-server-linux ./cmd/server && \
+    echo "Compiling Ebitengine WebAssembly client (main.wasm)..." && \
+    GOOS=js GOARCH=wasm go build -trimpath -ldflags "-s -w" -o /src/sources/gocoke/web/main.wasm ./cmd/client
 
 # Stage 2: Production Runtime (Debian 12 Bookworm Slim)
 FROM debian:bookworm-slim

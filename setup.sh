@@ -269,9 +269,17 @@ if [ ${IS_UPDATE} -eq 1 ]; then
     echo ""
     echo "[*] STEP 1/4: Pulling latest changes from Git repository..."
     if [ -d .git ]; then
+        echo "    Current commit: $(git rev-parse --short HEAD 2>/dev/null || echo 'unknown')"
         git pull origin master || git pull || echo "[WARN] Git pull skipped or encountered merge warnings."
+        echo "    Updated commit: $(git rev-parse --short HEAD 2>/dev/null || echo 'unknown')"
     else
         echo "[WARN] No .git directory found; skipping git pull."
+    fi
+
+    # If Go is installed on the host, compile binaries locally
+    if command -v go >/dev/null 2>&1; then
+        echo "[*] Compiling latest Go WebAssembly and static Linux binaries on host..."
+        chmod +x tools/build-go.sh && ./tools/build-go.sh || echo "[WARN] Local Go build skipped."
     fi
 
     echo ""
@@ -301,6 +309,17 @@ if [ ${IS_UPDATE} -eq 1 ]; then
     echo ""
     echo "[*] STEP 4/4: Applying database schema migrations..."
     # coke-server automatically runs idempotent migrations on startup
+
+    # If native Debian systemd service is active on host, synchronize /opt/coke-studios
+    if systemctl is-active --quiet coke-studios.service 2>/dev/null; then
+        echo "[*] Detected active native Debian systemd service (coke-studios.service)."
+        echo "    Synchronizing /opt/coke-studios with latest build..."
+        if [ "$(id -u)" -eq 0 ]; then
+            ./tools/deploy-debian.sh --update || echo "[WARN] Native deploy-debian update encountered warnings."
+        else
+            sudo ./tools/deploy-debian.sh --update || echo "[WARN] Native deploy-debian update encountered warnings."
+        fi
+    fi
 else
     echo ""
     echo "[*] Launching MariaDB & Coke Studios via Docker Compose..."

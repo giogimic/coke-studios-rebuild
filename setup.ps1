@@ -205,6 +205,11 @@ if ($Update) {
     if (Test-Path ".git") {
         git pull origin master
     }
+
+    if (Get-Command go -ErrorAction SilentlyContinue) {
+        Write-Host "[*] Compiling latest Go WebAssembly client and server binaries..." -ForegroundColor Cyan
+        & (Join-Path $ScriptDir 'tools\build-go.ps1')
+    }
     Write-Host "[*] STEP 2/4: Rebuilding Docker images..." -ForegroundColor Cyan
     if ($WipeCache -or $WipeAll) {
         Write-Host "    [!] Rebuilding with NO CACHE as requested..." -ForegroundColor Yellow

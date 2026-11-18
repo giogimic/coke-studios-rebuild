@@ -79,13 +79,22 @@ Environment=DATABASE_URL=coke:coke_secret@tcp(127.0.0.1:3306)/coke_studios?parse
 WantedBy=multi-user.target
 ```
 
-### Automated Turnkey Deployment
-You can run the automated deployment script to perform packages installation, MariaDB user creation, binary and asset synchronization, and systemd service installation in a single step:
+### Automated Turnkey Deployment & Updates
+You can run the automated deployment script to perform package installation, MariaDB user creation, binary and asset synchronization, and systemd service installation in a single step:
 
 ```bash
+# Fresh installation
 sudo chmod +x tools/deploy-debian.sh
 sudo ./tools/deploy-debian.sh
+
+# Update running server with latest code (zero data loss)
+sudo ./tools/deploy-debian.sh --update
+
+# Update running server and pull latest changes from git
+sudo ./tools/deploy-debian.sh --pull
 ```
+
+The updater gracefully stops the service (alerting connected players and draining active sockets), backs up the existing binary, recompiles the latest Go server and WebAssembly client, replaces files without `ETXTBSY` text file busy errors, restarts the service, and verifies health status. If a health check fails, it automatically rolls back to the previous stable binary.
 
 ### Manual Installation Steps
 ```bash
