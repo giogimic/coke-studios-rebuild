@@ -273,3 +273,10 @@ func (c *Client) SendDoorbellKnock(roomID string) error {
 	xml := fmt.Sprintf("<Room.Action roomID=\"%s\"><ST_KNOCK roomID=\"%s\"/></Room.Action>", roomID, roomID)
 	return c.SendXML(xml)
 }
+
+// SendStudioDecor sends an authoritative Room.Action ST_DECOR packet to update wallpaper, floor, and doorbell.
+func (c *Client) SendStudioDecor(wp, fl, db int) error {
+	roomID := "$LOBBY$"
+	xml := fmt.Sprintf("<Room.Action roomID=\"%s\"><ST_DECOR wp=\"%d\" fl=\"%d\" db=\"%d\"/></Room.Action>", roomID, wp, fl, db)
+	return c.SendXML(xml)
+}

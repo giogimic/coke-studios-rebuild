@@ -220,6 +220,17 @@ func (c *Client) Connect(ctx context.Context, host string, port string) error {
 					c.logger.Printf("Realtime ST_EN: layout=%d", lt)
 				}
 			}
+			// Apply initial room wallpaper and floor if present
+			if wp, ok := parseXMLAttrInt(b, "wp"); ok && wp > 0 {
+				if sc := studioscene.GetActiveScene(); sc != nil {
+					sc.ApplyWallpaperFromNetwork(wp, 1)
+				}
+			}
+			if fl, ok := parseXMLAttrInt(b, "fl"); ok && fl > 0 {
+				if sc := studioscene.GetActiveScene(); sc != nil {
+					sc.ApplyFloorFromNetwork(fl, 1)
+				}
+			}
 			// Remember current roomID if not already set
 			c.mu.Lock()
 			if c.roomID == "" && c.navTarget != "" {
@@ -661,6 +672,19 @@ func (c *Client) Connect(ctx context.Context, host string, port string) error {
 			cidStr := parseXMLAttrString(b, "cid")
 			if sc := studioscene.GetActiveScene(); sc != nil {
 				sc.HandlePlacementRejected(posID, cidStr)
+			}
+		}
+		// If this is a studio decor update (ST_DECOR)
+		if containsSubstr(b, []byte("<ST_DECOR")) {
+			if wp, ok := parseXMLAttrInt(b, "wp"); ok && wp > 0 {
+				if sc := studioscene.GetActiveScene(); sc != nil {
+					sc.ApplyWallpaperFromNetwork(wp, 1)
+				}
+			}
+			if fl, ok := parseXMLAttrInt(b, "fl"); ok && fl > 0 {
+				if sc := studioscene.GetActiveScene(); sc != nil {
+					sc.ApplyFloorFromNetwork(fl, 1)
+				}
 			}
 		}
 		// If this is a minted CD inventory item (POS_MINT)
@@ -1233,6 +1257,22 @@ func (c *Client) SendDoorbellKnock(roomID string) error {
 	xml := fmt.Sprintf("<Room.Action roomID=\"%s\"><ST_KNOCK roomID=\"%s\"/></Room.Action>", roomID, roomID)
 	if c.logger != nil {
 		c.logger.Printf("Realtime OUT ST_KNOCK: room=%s", roomID)
+	}
+	return c.SendXML(xml)
+}
+
+// SendStudioDecor sends an authoritative Room.Action ST_DECOR packet to update wallpaper, floor, and doorbell.
+func (c *Client) SendStudioDecor(wp, fl, db int) error {
+	c.mu.Lock()
+	roomID := c.roomID
+	c.mu.Unlock()
+	if strings.TrimSpace(roomID) == "" || roomID == "$LOBBY$" {
+		return fmt.Errorf("cannot update decor outside a studio")
+	}
+	xml := fmt.Sprintf("<Room.Action roomID=\"%s\"><ST_DECOR wp=\"%d\" fl=\"%d\" db=\"%d\"/></Room.Action>",
+		roomID, wp, fl, db)
+	if c.logger != nil {
+		c.logger.Printf("Realtime OUT ST_DECOR: room=%s wp=%d fl=%d db=%d", roomID, wp, fl, db)
 	}
 	return c.SendXML(xml)
 }
