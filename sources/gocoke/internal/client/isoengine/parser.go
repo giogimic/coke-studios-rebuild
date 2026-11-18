@@ -249,20 +249,47 @@ func ParsePathMapXML(filePath string) (*PathMapXML, error) {
 	return &pathMap, nil
 }
 
-// LoadStudioData loads both studio and PathMap data for a given studio layout
+// LoadStudioData loads both studio and PathMap data for a given studio layout (defaults to location 1)
 func LoadStudioData(dataDir string, layoutType int) (*StudioXML, *PathMapXML, error) {
-	// Public rooms (layout 5) use location-specific files (London)
+	return LoadStudioDataForStudio(dataDir, layoutType, 1)
+}
+
+// LoadStudioDataForStudio loads both studio and PathMap data for a given studio layout and location
+func LoadStudioDataForStudio(dataDir string, layoutType int, location int) (*StudioXML, *PathMapXML, error) {
+	// Public rooms (layout 5) use location-specific files
 	if layoutType == 5 {
-		studioPath := filepath.Join("Lingo", "london", "58_SceneXml.txt")
-		pathMapPath := filepath.Join("Lingo", "london", "59_MapXml.txt")
+		var studioPath, pathMapPath string
+		switch location {
+		case 10: // Alaska
+			studioPath = filepath.Join("Lingo", "alaska", "SceneXml.txt")
+			pathMapPath = filepath.Join("Lingo", "alaska", "MapXml.txt")
+		case 2: // Miami
+			studioPath = filepath.Join("Lingo", "miami", "SceneXml.txt")
+			pathMapPath = filepath.Join("Lingo", "miami", "MapXml.txt")
+		case 3: // Mombasa
+			studioPath = filepath.Join("Lingo", "mombasa", "SceneXml.txt")
+			pathMapPath = filepath.Join("Lingo", "mombasa", "MapXml.txt")
+		case 9: // Goa
+			studioPath = filepath.Join("Lingo", "goa", "SceneXml.txt")
+			pathMapPath = filepath.Join("Lingo", "goa", "MapXml.txt")
+		case 11: // Moscow
+			studioPath = filepath.Join("Lingo", "moscow", "SceneXml.txt")
+			pathMapPath = filepath.Join("Lingo", "moscow", "MapXml.txt")
+		case 14: // Central Park
+			studioPath = filepath.Join("Lingo", "centralpark", "SceneXml.txt")
+			pathMapPath = filepath.Join("Lingo", "centralpark", "MapXml.txt")
+		default: // London and fallback
+			studioPath = filepath.Join("Lingo", "london", "58_SceneXml.txt")
+			pathMapPath = filepath.Join("Lingo", "london", "59_MapXml.txt")
+		}
 
 		studio, err := ParseStudioXML(studioPath)
 		if err != nil {
-			return nil, nil, fmt.Errorf("failed to load public room studio data: %w", err)
+			return nil, nil, fmt.Errorf("failed to load public room studio data for loc %d: %w", location, err)
 		}
 		pathMap, err := ParsePathMapXML(pathMapPath)
 		if err != nil {
-			return nil, nil, fmt.Errorf("failed to load public room PathMap data: %w", err)
+			return nil, nil, fmt.Errorf("failed to load public room PathMap data for loc %d: %w", location, err)
 		}
 		return studio, pathMap, nil
 	}
@@ -273,6 +300,9 @@ func LoadStudioData(dataDir string, layoutType int) (*StudioXML, *PathMapXML, er
 		2: "139_Studio_B.txt",
 		3: "140_Studio_C.txt",
 		4: "141_Studio_D.txt",
+		6: "156_Studio_E.txt",
+		7: "162_Studio_F.txt",
+		8: "160_Studio_G.txt",
 	}
 
 	pathMapFileMap := map[int]string{
@@ -280,6 +310,9 @@ func LoadStudioData(dataDir string, layoutType int) (*StudioXML, *PathMapXML, er
 		2: "143_Studio_B_MapXml.txt",
 		3: "144_Studio_C_MapXml.txt",
 		4: "145_Studio_D_MapXml.txt",
+		6: "157_Studio_E_MapXml.txt",
+		7: "159_Studio_F_MapXml.txt",
+		8: "161_Studio_G_MapXml.txt",
 	}
 
 	studioFile, exists := studioFileMap[layoutType]

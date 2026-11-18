@@ -1,0 +1,33 @@
+<room>
+
+	<version>
+		1.0
+	</version>
+
+	<name>
+		"mombassa"
+	</name>
+
+	<elements>
+		[#member: "mombassa991278", #media: #bitmap, #locH: 380, #locV: 260, #ink: 0, #blend: 100, #width: 760, #height: 484, #id: "floor"]
+		[#member: "mom_kaide1", #media: #bitmap, #locH: 155, #locV: 348, #ink: 8, #blend: 100, #width: 87, #height: 47, #palette: "mombasan väkisinmakuu#211A6 Palette", #locZ: 21500]
+		[#member: "mom_kaide2", #media: #bitmap, #locH: 502, #locV: 377, #ink: 36, #blend: 100, #width: 356, #height: 187, #palette: "mombasan väkisinmakuu#211A6 Palette", #locZ: 60000]
+		[#member: "mom_speeka_anim0", #media: #bitmap, #locH: 630, #locV: 200, #ink: 36, #blend: 100, #width: 50, #height: 74, #palette: "Momba Speeka Palette", #locZ: 11950, #id: "speaker1", #Active: 0]
+		[#member: "mombah_exiter", #media: #bitmap, #locH: 176, #locV: 547, #ink: 36, #blend: 0, #width: 176, #height: 95, #palette: #systemMac, #id: "command: GOAWAY", #Active: 1]
+		[#member: "mom_speeka_anim0", #media: #bitmap, #locH: 559, #locV: 165, #ink: 36, #blend: 100, #width: 50, #height: 74, #palette: "Momba Speeka Palette", #locZ: 8950, #id: "speaker2", #Active: 0]
+		[#member: "mom_mixah_1_anim0", #media: #bitmap, #locH: 516, #locV: 208, #ink: 36, #blend: 100, #width: 43, #height: 28, #palette: "mombalawa", #locZ: 11950]
+		[#member: "mom_mixah_2_anim0", #media: #bitmap, #locH: 516, #locV: 208, #ink: 36, #blend: 100, #width: 62, #height: 52, #palette: "mombalawa", #locZ: 10950]
+		[#member: "mom_mixah_3_anim0", #media: #bitmap, #locH: 516, #locV: 208, #ink: 36, #blend: 100, #width: 43, #height: 36, #palette: "mombalawa", #locZ: 9950]
+		[#member: "mom_kaide3", #media: #bitmap, #locH: 155, #locV: 348, #ink: 8, #blend: 100, #width: 225, #height: 95, #palette: "mombasan väkisinmakuu#211A6 Palette", #locZ: 25500]
+		[#member: "mombassa_hiliter", #media: #bitmap, #locH: 502, #locV: 377, #ink: 36, #blend: 100, #width: 42, #height: 24, #palette: #systemMac, #type: "hiliter", #id: "hiliter"]
+	</elements>
+
+	<rect>
+		[0, 0, 760, 484]
+	</rect>
+
+	<roomdata>
+		[#offsetx: 389, #offsety: 187, #factorx: 48, #factory: 24, #factorh: 24]
+	</roomdata>
+
+</room>

@@ -1,0 +1,91 @@
+<Studio xOff="357" yOff="11" layoutType="1">
+
+<Background member="reykjavik_bg" x="380" y="260" ink="0" />
+
+<Hiliter member="reykjavik_hiliter" ink="36" />
+
+<Furniture castLib="Studio">
+
+<Item ink="36" dir="0" gridX="13" gridZ="19" imageBase="reykjavik_cokecase" Action="DRINK_DESPENSER" type="Default" />
+
+<Item ink="36" dir="4" gridX="12" gridZ="8" imageBase="reykjavik_cokecase" Action="DRINK_DESPENSER" type="Default" />
+
+<Item ink="8" dir="4" gridX="5" gridZ="6" imageBase="reykjavik_stonechair1a" Action="Default" type="Chair" />
+
+<Item ink="8" dir="4" gridX="4" gridZ="6" imageBase="reykjavik_stonechair1b" Action="Default" type="Chair" />
+
+<Item ink="8" dir="4" gridX="3" gridZ="6" imageBase="reykjavik_stonechair1c" Action="Default" type="Chair" />
+
+<Item ink="8" dir="2" gridX="4" gridZ="18" imageBase="reykjavik_stonechair2a" Action="Default" type="Chair" />
+
+<Item ink="8" dir="2" gridX="4" gridZ="17" imageBase="reykjavik_stonechair2b" Action="Default" type="Chair" />
+
+<Item ink="8" dir="2" gridX="4" gridZ="16" imageBase="reykjavik_stonechair2c" Action="Default" type="Chair" />
+
+<Item ink="8" dir="2" gridX="10" gridZ="21" imageBase="reykjavik_stonechair3a" Action="Default" type="Chair" />
+
+<Item ink="8" dir="2" gridX="10" gridZ="20" imageBase="reykjavik_stonechair3b" Action="Default" type="Chair" />
+
+<Item ink="8" dir="0" gridX="12" gridZ="22" imageBase="reykjavik_stonechair3c" Action="Default" type="Chair" />
+
+<Item ink="8" dir="0" gridX="11" gridZ="22" imageBase="reykjavik_stonechair3d" Action="Default" type="Chair" />
+
+<Item ink="8" dir="6" gridX="21" gridZ="13" imageBase="reykjavik_stonechair4a" Action="Default" type="Chair" />
+
+<Item ink="8" dir="6" gridX="21" gridZ="12" imageBase="reykjavik_stonechair4b" Action="Default" type="Chair" />
+
+</Furniture>
+
+<WallItems>
+
+</WallItems>
+
+<StaticItems castLib="Studio">
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="50" width="70" y="260" x="380" layer="1" col="13" row="3" member="reykjavik_turntables" />
+
+<Item Action="SpeakerAnim" skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="75" width="46" y="116" x="595" layer="1" col="11" row="1" member="reykjavik_loudspeaker_anim0" />
+
+<Item Action="SpeakerAnim" skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="75" width="46" y="164" x="691" layer="1" col="15" row="1" member="reykjavik_loudspeaker_anim0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="37" width="38" y="404" x="154" layer="1" col="10" row="24" member="reykjavik_stones1" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="32" width="101" y="404" x="154" layer="1" col="17" row="22" member="reykjavik_stones3" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="158" width="88" y="376" x="658" layer="1" col="24" row="14" member="reykjavik_stones4" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="21" width="74" y="404" x="154" layer="1" col="14" row="25" member="reykjavik_stones10" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="32" width="65" y="404" x="154" layer="1" col="14" row="24" member="reykjavik_stones9" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="34" width="62" y="404" x="154" layer="1" col="13" row="23" member="reykjavik_stones5" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="31" width="70" y="404" x="154" layer="1" col="14" row="22" member="reykjavik_stones6" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="28" width="60" y="404" x="154" layer="1" col="14" row="21" member="reykjavik_stones7" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="22" width="45" y="404" x="154" layer="1" col="14" row="20" member="reykjavik_stones8" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="18" width="31" y="140" x="515" layer="1" col="9" row="3" member="reykjavik_stones11" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="15" width="35" y="140" x="515" layer="1" col="9" row="2" member="reykjavik_stones12" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="101" width="85" y="162" x="180" layer="1" col="3" row="12" member="alaska_counter1" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="44" width="43" y="162" x="180" layer="1" col="3" row="11" member="alaska_counter2" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="43" width="42" y="162" x="180" layer="1" col="3" row="10" member="alaska_counter3" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="42" width="45" y="162" x="180" layer="1" col="3" row="9" member="alaska_counter4" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="34" width="39" y="162" x="180" layer="1" col="3" row="8" member="alaska_counter5" />
+
+</StaticItems>
+
+<Door col="15" row="22">
+
+<Exit blend="0" ink="8" member="alaska_exit" />
+
+</Door>
+
+</Studio>

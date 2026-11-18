@@ -1,166 +1,190 @@
-> Status note (2026-10-24): This runbook describes the existing Node-managed recovery environment and contains stale ports/version advice. It is not the target Go product architecture or a production-readiness guarantee. The Go module currently declares Go 1.26.0. Follow [RECREATION-PLAN.md](RECREATION-PLAN.md) Task 9 for the replacement runtime; preserve existing data during migration.
+# Debian Deployment & Server Guide for Coke Studios (Go Recreation)
 
-# Debian Deployment & Server Guide for Coke Studios Recovery
-
-This document outlines deployment, service configuration, and production hosting instructions specifically targeted for **Debian 12 (Bookworm)** and modern Linux distributions.
+This document provides production hosting, service configuration, and deployment instructions specifically targeted for **Debian 12 (Bookworm)** and Linux systems.
 
 ---
 
-## 1. Debian Package Installation
+## 1. System Requirements & Architecture
 
-Update your package index and install the required runtimes and tools:
+The authoritative Coke Studios server runs as a single, unified Go executable on Debian 12. It serves the 760px authentic website shell, hosts the Go/Ebitengine WebAssembly client (`main.wasm`), processes REST/AMF API endpoints, and terminates realtime WebSocket connections on port `24902`.
+
+- **Operating System:** Debian 12 (Bookworm) x86_64
+- **Primary Service Port:** `24902` (HTTP, WebAssembly, and WebSocket `/ws/realtime`)
+- **Server Executable:** `tools/bin/coke-server-linux` (pure Go, CGO-free, headless Linux ELF)
+- **Database Backend:** MariaDB 11 (production) or SQLite 3 (embedded fallback)
+- **Systemd Unit:** `/etc/systemd/system/coke-studios.service`
+
+---
+
+## 2. Package Installation on Debian 12
+
+Update package indices and install build tools and dependencies:
 ```bash
 sudo apt-get update
 sudo apt-get install -y \
-    nodejs \
-    npm \
     golang-go \
-    git \
+    mariadb-server \
     curl \
-    tar \
+    git \
     ca-certificates
 ```
 
-Verify your installed versions:
+Verify the Go toolchain version:
 ```bash
-node -v      # Recommended: v18+ or v20+ LTS
-go version   # Recommended: go 1.20+
-git --version
+go version   # Go 1.20+ recommended
 ```
 
 ---
 
-## 2. Directory Setup & Permissions
+## 3. Building from Source on Debian
 
-Navigate to the project root and run `setup.sh`:
+To compile the latest WebAssembly game client and native Linux server binary:
 ```bash
-cd /opt/coke-studios  # or your workspace directory
-chmod +x setup.sh start.sh stop.sh tools/bin/*
-./setup.sh
+cd /opt/coke-studios
+
+# Run the Debian build script
+chmod +x tools/build-go.sh
+./tools/build-go.sh
 ```
+
+This generates:
+- `sources/gocoke/web/main.wasm` (Go/Ebitengine WebAssembly client)
+- `tools/bin/coke-server-linux` (Debian Linux x86_64 executable)
 
 ---
 
-## 3. Running Services on Debian
+## 4. Production Service Management (Systemd)
 
-### Option A: Background Daemon via Shell Scripts
-```bash
-./start.sh
-```
-Outputs:
-```text
-  → Master Portal:  http://127.0.0.1:8000/
-  → GoCoke Client:  http://127.0.0.1:8080/
-  → CokePhase:      http://127.0.0.1:8081/
-  → Music Mixer:    http://127.0.0.1:8082/
-```
-To stop:
-```bash
-./stop.sh
+The project includes an authentic production systemd service definition in `coke-studios.service`:
+
+```ini
+[Unit]
+Description=Coke Music / Coke Studios Authoritative Go Server (Debian 12 First)
+After=network.target mariadb.service
+
+[Service]
+Type=simple
+User=coke
+WorkingDirectory=/opt/coke-studios
+ExecStart=/opt/coke-studios/tools/bin/coke-server-linux -addr 0.0.0.0:24902 -root /opt/coke-studios/sources/gocoke/web
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+Environment=PORT=24902
+Environment=DB_DRIVER=mysql
+Environment=DATABASE_URL=coke:coke_secret@tcp(127.0.0.1:3306)/coke_studios?parseTime=true
+
+[Install]
+WantedBy=multi-user.target
 ```
 
-### Option B: Systemd Service Unit (Recommended for Production)
-Install the provided `coke-studios.service` unit file into systemd:
+### Installation Steps
 ```bash
+# 1. Create service user if needed
+sudo useradd -r -s /bin/false coke || true
+sudo chown -R coke:coke /opt/coke-studios
+
+# 2. Install unit file
 sudo cp coke-studios.service /etc/systemd/system/
 sudo systemctl daemon-reload
+
+# 3. Enable and start service
 sudo systemctl enable --now coke-studios.service
-```
-Check service status:
-```bash
+
+# 4. Inspect status and logs
 sudo systemctl status coke-studios.service
 journalctl -u coke-studios.service -f
 ```
 
-### Option C: Docker & Docker Compose
-A Debian-based container setup is included in `Dockerfile` and `docker-compose.yml`:
+---
+
+## 5. Standalone Shell Controls
+
+For quick testing or maintenance without systemd:
+
 ```bash
-docker compose up -d
-```
-Inspect container logs:
-```bash
-docker compose logs -f
+# Start background daemon
+./start.sh
+
+# Start in foreground for debugging
+./start.sh -f
+
+# Stop server daemon
+./stop.sh
 ```
 
 ---
 
-## 4. Compiling GoCoke on Debian
+## 6. MariaDB Database Configuration
 
-GoCoke includes two native Linux binaries compiled for `linux/amd64` in `tools/bin/`:
-- `gocoke-serve-linux`
-- `gocoke-static-linux`
+Configure a local MariaDB instance for production durability:
 
-To recompile them natively from source on Debian:
-```bash
-cd sources/gocoke
-
-# Compile GoCoke static file server
-go build -o ../../tools/bin/gocoke-static-linux ./cmd/static
-
-# Compile GoCoke proxy server
-go build -o ../../tools/bin/gocoke-serve-linux ./cmd/serve
+```sql
+CREATE DATABASE IF NOT EXISTS coke_studios CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'coke'@'localhost' IDENTIFIED BY 'coke_secret';
+GRANT ALL PRIVILEGES ON coke_studios.* TO 'coke'@'localhost';
+FLUSH PRIVILEGES;
 ```
+
+The Go server automatically applies idempotent schema migrations (`s.migrate()`) on startup, establishing tables for:
+- `denizens` (accounts, password hashes, mission, figure defs, Decibels, V-Coins)
+- `studios` (rooms, layouts, wallpaper, floor, doorbell)
+- `backpack_items` (furniture inventory, CD items, mint properties)
+- `placed_furniture` (room coordinates $x, y, z$, rotation $0,2,4,6$, state, height $ho$)
+- `messenger_friends` & `messenger_messages` (social relationships and offline mail)
+- `user_songs` & `song_votes` (OddCast EDL compositions, performance records, Top 40 charts)
+- `vegosan_streaks` & `daily_minigame_earnings` (minigame caps and prize ladders)
 
 ---
 
-## 5. Nginx Reverse Proxy Configuration (Debian)
+## 7. Nginx Reverse Proxy (Optional SSL / Port 80/443 Termination)
 
-To serve all components on a standard single port (e.g. port 80/443) behind Nginx:
-```bash
-sudo apt-get install -y nginx
-```
+To terminate HTTPS and proxy to port `24902`:
 
-Create `/etc/nginx/sites-available/coke-studios`:
 ```nginx
 server {
     listen 80;
-    server_name cokemusic.local;
+    server_name cokemusic.example.com;
+    return 301 https://$host$request_uri;
+}
 
-    # Master Portal Dashboard
+server {
+    listen 443 ssl http2;
+    server_name cokemusic.example.com;
+
+    ssl_certificate /etc/letsencrypt/live/cokemusic.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/cokemusic.example.com/privkey.pem;
+
+    # Gzip / Brotli compression for WebAssembly
+    gzip on;
+    gzip_types application/wasm text/plain text/css application/json application/javascript;
+
     location / {
-        proxy_pass http://127.0.0.1:8000;
+        proxy_pass http://127.0.0.1:24902;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
-    }
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
 
-    # GoCoke WebAssembly Client
-    location /gocoke/ {
-        proxy_pass http://127.0.0.1:8080/;
-        proxy_set_header Host $host;
+        # WebSocket support for realtime game engine
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
-    }
-
-    # CokePhase HTML5 Engine
-    location /cokephase/ {
-        proxy_pass http://127.0.0.1:8081/;
-        proxy_set_header Host $host;
-    }
-
-    # Standalone Music Mixer
-    location /mixer/ {
-        proxy_pass http://127.0.0.1:8082/;
-        proxy_set_header Host $host;
+        proxy_read_timeout 86400s;
+        proxy_send_timeout 86400s;
     }
 }
 ```
 
-Enable the site and reload Nginx:
-```bash
-sudo ln -s /etc/nginx/sites-available/coke-studios /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl reload nginx
-```
-
 ---
 
-## 6. UFW Firewall Configuration
-If using UFW on Debian:
+## 8. UFW Firewall Configuration
+
+If UFW is enabled on Debian:
 ```bash
-sudo ufw allow 8000/tcp comment "Coke Studios Portal"
-sudo ufw allow 8080/tcp comment "GoCoke Client"
-sudo ufw allow 8081/tcp comment "CokePhase"
-sudo ufw allow 8082/tcp comment "Music Mixer"
+sudo ufw allow 24902/tcp comment "Coke Studios Game & Web Ingress"
+sudo ufw allow 80/tcp comment "HTTP Web"
+sudo ufw allow 443/tcp comment "HTTPS Secure"
 sudo ufw status
 ```

@@ -1,0 +1,45 @@
+<room>
+
+	<version>
+		1.0
+	</version>
+
+	<name>
+		"reykjavik"
+	</name>
+
+	<elements>
+		[#member: "reykjavik_bg", #media: #bitmap, #locH: 380, #locV: 260, #ink: 0, #blend: 100, #width: 760, #height: 478, #id: "floor", #Active: 1]
+		[#member: "reykjavik_exit", #media: #bitmap, #locH: 164, #locV: 443, #ink: 8, #blend: 0, #width: 134, #height: 43, #palette: #systemMac, #locZ: 39000, #id: "command: GOAWAY", #Active: 1]
+		[#member: "reykjavik_stones2", #media: #bitmap, #locH: 380, #locV: 260, #ink: 8, #blend: 100, #width: 36, #height: 26, #palette: "reykjavik_palette", #locZ: 20500]
+		[#member: "reykjavik_loudspeaker_anim1", #media: #bitmap, #locH: 595, #locV: 115, #ink: 36, #blend: 100, #width: 46, #height: 75, #palette: "reykjavik_palette", #id: "speaker1", #Active: 0, #locZ: 12000]
+		[#member: "reykjavik_turntables", #media: #bitmap, #locH: 380, #locV: 260, #ink: 36, #blend: 100, #width: 70, #height: 50, #palette: "reykjavik_palette", #locZ: 16000]
+		[#member: "reykjavik_stones1", #media: #bitmap, #locH: 154, #locV: 404, #ink: 8, #blend: 100, #width: 38, #height: 37, #palette: "reykjavik_palette", #locZ: 31000]
+		[#member: "reykjavik_stones5", #media: #bitmap, #locH: 154, #locV: 404, #ink: 8, #blend: 100, #width: 62, #height: 34, #palette: "reykjavik_palette", #locZ: 35000]
+		[#member: "reykjavik_stones6", #media: #bitmap, #locH: 154, #locV: 404, #ink: 8, #blend: 100, #width: 70, #height: 31, #palette: "reykjavik_palette", #locZ: 34000]
+		[#member: "reykjavik_stones7", #media: #bitmap, #locH: 154, #locV: 404, #ink: 8, #blend: 100, #width: 60, #height: 28, #palette: "reykjavik_palette", #locZ: 33000]
+		[#member: "reykjavik_stones8", #media: #bitmap, #locH: 154, #locV: 404, #ink: 8, #blend: 100, #width: 45, #height: 22, #palette: "reykjavik_palette", #locZ: 32000]
+		[#member: "reykjavik_stones9", #media: #bitmap, #locH: 154, #locV: 404, #ink: 8, #blend: 100, #width: 65, #height: 32, #palette: "reykjavik_palette", #locZ: 36000]
+		[#member: "reykjavik_stones10", #media: #bitmap, #locH: 154, #locV: 404, #ink: 8, #blend: 100, #width: 74, #height: 21, #palette: "reykjavik_palette", #locZ: 37000]
+		[#member: "reykjavik_stones3", #media: #bitmap, #locH: 154, #locV: 404, #ink: 8, #blend: 100, #width: 101, #height: 32, #palette: "reykjavik_palette", #locZ: 50000]
+		[#member: "reykjavik_stones4", #media: #bitmap, #locH: 658, #locV: 376, #ink: 8, #blend: 100, #width: 88, #height: 158, #palette: "reykjavik_palette", #locZ: 50000]
+		[#member: "reykjavik_loudspeaker_anim1", #media: #bitmap, #locH: 691, #locV: 163, #ink: 36, #blend: 100, #width: 46, #height: 75, #palette: "reykjavik_palette", #id: "speaker2", #Active: 0, #locZ: 18000]
+		[#member: "reykjavik_stones11", #media: #bitmap, #locH: 515, #locV: 140, #ink: 8, #blend: 100, #width: 31, #height: 18, #palette: "reykjavik_palette", #locZ: 9500]
+		[#member: "reykjavik_stones12", #media: #bitmap, #locH: 515, #locV: 140, #ink: 8, #blend: 100, #width: 35, #height: 15, #palette: "reykjavik_palette", #locZ: 10500]
+		[#member: "reykjavik_hiliter", #media: #bitmap, #locH: 386, #locV: 260, #ink: 36, #blend: 60, #width: 42, #height: 24, #palette: #systemMac, #type: "hiliter", #id: "hiliter"]
+		[#member: "alaska_counter1", #media: #bitmap, #locH: 180, #locV: 162, #ink: 8, #blend: 100, #width: 85, #height: 101, #palette: "reykjavik_palette", #locZ: 13000]
+		[#member: "alaska_counter2", #media: #bitmap, #locH: 180, #locV: 162, #ink: 8, #blend: 100, #width: 43, #height: 44, #palette: "reykjavik_palette", #locZ: 12000]
+		[#member: "alaska_counter3", #media: #bitmap, #locH: 180, #locV: 162, #ink: 8, #blend: 100, #width: 42, #height: 43, #palette: "reykjavik_palette", #locZ: 11000]
+		[#member: "alaska_counter4", #media: #bitmap, #locH: 180, #locV: 162, #ink: 8, #blend: 100, #width: 45, #height: 42, #palette: "reykjavik_palette", #locZ: 10000]
+		[#member: "alaska_counter5", #media: #bitmap, #locH: 180, #locV: 162, #ink: 8, #blend: 100, #width: 39, #height: 34, #palette: "reykjavik_palette", #locZ: 9000]
+	</elements>
+
+	<rect>
+		[0, 0, 760, 478]
+	</rect>
+
+	<roomdata>
+		[#offsetx: 357, #offsety: 35, #factorx: 48, #factory: 24, #factorh: 24]
+	</roomdata>
+
+</room>

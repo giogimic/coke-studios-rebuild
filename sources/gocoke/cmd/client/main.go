@@ -374,6 +374,16 @@ func (g *game) Update() error {
 			return fmt.Errorf("realtime client not available")
 		})
 
+		// Inject doorbell response sender once per scene instance
+		studioScene.SetDoorbellResponseSender(func(target string, allow bool) error {
+			if rc := session.GetRealtimeClient(); rc != nil {
+				if sender, ok := any(rc).(interface{ SendDoorbellResponse(string, bool) error }); ok {
+					return sender.SendDoorbellResponse(target, allow)
+				}
+			}
+			return fmt.Errorf("realtime client not available")
+		})
+
 		// Inject drink dispenser sender once per scene instance
 		studioScene.SetDrinkDispenserSender(func(roomID string) error {
 			log.Printf("Main: sending AV_DC for room %s (drink dispenser request)", roomID)
@@ -437,6 +447,17 @@ func (g *game) Update() error {
 			if rc := session.GetRealtimeClient(); rc != nil {
 				if sender, ok := any(rc).(interface{ SendCDEnd(string) error }); ok {
 					return sender.SendCDEnd(roomID)
+				}
+			}
+			return fmt.Errorf("realtime client not available")
+		})
+
+		// Inject CD burn (CD_BURN) sender once per scene instance
+		studioScene.SetCDBurnSender(func(title, edl string) error {
+			log.Printf("Main: sending in-game CD_BURN for %q", title)
+			if rc := session.GetRealtimeClient(); rc != nil {
+				if sender, ok := any(rc).(interface{ SendCDBurn(string, string) error }); ok {
+					return sender.SendCDBurn(title, edl)
 				}
 			}
 			return fmt.Errorf("realtime client not available")

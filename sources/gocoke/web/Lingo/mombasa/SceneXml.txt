@@ -1,0 +1,77 @@
+<Studio xOff="366" yOff="-43" layoutType="1">
+
+<Background member="mombassa991278" x="380" y="260" ink="0" />
+
+<Hiliter member="mombassa_hiliter" ink="36" />
+
+<Furniture castLib="Studio">
+
+<Item ink="36" dir="0" gridX="9" gridZ="21" imageBase="mom_bicy" Action="DRINK_DESPENSER" type="Default" />
+
+<Item ink="36" dir="0" gridX="14" gridZ="22" imageBase="mom_benchc" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="0" gridX="13" gridZ="22" imageBase="mom_benchb" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="0" gridX="12" gridZ="22" imageBase="mom_bencha" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="6" gridX="21" gridZ="16" imageBase="mom_benchc" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="6" gridX="21" gridZ="15" imageBase="mom_benchb" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="6" gridX="21" gridZ="14" imageBase="mom_bencha" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="2" gridX="8" gridZ="12" imageBase="mom_benchc" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="2" gridX="8" gridZ="11" imageBase="mom_benchb" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="2" gridX="8" gridZ="10" imageBase="mom_benchb" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="2" gridX="8" gridZ="9" imageBase="mom_benchb" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="2" gridX="8" gridZ="8" imageBase="mom_benchb" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="2" gridX="8" gridZ="7" imageBase="mom_bencha" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="6" gridX="10" gridZ="8" imageBase="mom_stool" Action="DEFAULT" type="Stool" />
+
+<Item ink="8" dir="2" gridX="9" gridZ="14" imageBase="mom_stool" Action="DEFAULT" type="Stool" />
+
+<Item ink="8" dir="0" gridX="10" gridZ="16" imageBase="mom_stool" Action="DEFAULT" type="Stool" />
+
+<Item ink="8" dir="4" gridX="15" gridZ="14" imageBase="mom_stool" Action="DEFAULT" type="Stool" />
+
+<Item ink="8" dir="0" gridX="15" gridZ="16" imageBase="mom_stool" Action="DEFAULT" type="Stool" />
+
+</Furniture>
+
+<WallItems>
+
+</WallItems>
+
+<StaticItems castLib="Studio">
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="47" width="87" y="348" x="155" layer="1" col="16" row="19" member="mom_kaide1" />
+
+<Item Action="SpeakerAnim" skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="74" width="50" y="165" x="559" layer="1" col="14" row="6" member="mom_speeka_anim0" />
+
+<Item Action="SpeakerAnim" skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="74" width="50" y="200" x="630" layer="1" col="17" row="6" member="mom_speeka_anim0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="18" width="29" y="208" x="516" layer="1" col="14" row="10" member="mom_mixah_1_anim0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="41" width="60" y="208" x="516" layer="1" col="14" row="9" member="mom_mixah_2_anim0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="30" width="37" y="208" x="516" layer="1" col="15" row="7" member="mom_mixah_3_anim0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="95" width="225" y="348" x="155" layer="1" col="15" row="23" member="mom_kaide3" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="187" width="356" y="377" x="502" layer="1" col="22" row="22" member="mom_kaide2" />
+
+</StaticItems>
+
+<Door col="19" row="22">
+
+<Exit blend="0" ink="8" member="mombah_exiter" />
+
+</Door>
+
+</Studio>

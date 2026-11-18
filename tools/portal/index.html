@@ -332,6 +332,7 @@
       justify-content: center;
       align-items: center;
     }
+    #gameFrame,
     #gameIframe {
       width: 100%;
       height: 100%;
@@ -382,7 +383,9 @@
       border-radius: 0;
       margin: 0;
     }
+    #sec-cokestudios #gameFrame,
     #sec-cokestudios #gameIframe,
+    #page-container.game-mode #gameFrame,
     #page-container.game-mode #gameIframe {
       width: 760px;
       height: 520px;
@@ -728,7 +731,7 @@
       </div>
 
       <div id="game-container-view">
-        <iframe id="gameIframe" src="/game/" allow="autoplay; fullscreen" tabindex="0"></iframe>
+        <iframe id="gameFrame" src="/game/" allow="autoplay; fullscreen" tabindex="0"></iframe>
       </div>
     </div>
 
@@ -1448,7 +1451,7 @@
     const pageContainer = document.getElementById('page-container');
     if (secId === 'cokestudios') {
       pageContainer.classList.add('game-mode');
-      const iframe = document.getElementById('gameIframe');
+      const iframe = document.getElementById('gameFrame') || document.getElementById('gameIframe');
       const user = localStorage.getItem('coke_user');
       if (iframe && (!iframe.src || iframe.src === 'about:blank' || iframe.src.endsWith('about:blank') || (user && !iframe.src.includes('user=')))) {
         reloadGameFrame();
@@ -1491,7 +1494,7 @@
     const user = localStorage.getItem('coke_user') || '';
     const secret = localStorage.getItem('coke_session') || '';
     const room = roomId || localStorage.getItem('coke_studioType') || '$SYSTEM$1';
-    const iframe = document.getElementById('gameIframe');
+    const iframe = document.getElementById('gameFrame') || document.getElementById('gameIframe');
     if (!iframe) return;
 
     let url = `/game/?room=${encodeURIComponent(room)}`;

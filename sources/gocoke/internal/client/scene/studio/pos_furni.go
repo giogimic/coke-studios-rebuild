@@ -182,10 +182,9 @@ func (ph *PlacementHelper) PlaceFromServer(posID, prodID string, serverX, server
 				ex.Height = ci.Height
 				ex.FPS = 8
 				ph.computeNumFrames(ex)
-				// Cache server-provided height offset (ho) for consistent usage
-				if serverHO > 0 {
-					ex.ServerHO = serverHO
-				}
+				// Apply authoritative server vertical stack level and height offset
+				ex.GridY = serverY * 10
+				ex.ServerHO = serverHO
 				// Preserve server IAOT flag for this item
 				ex.IAOT = iaot
 				ex.IAOTProvided = true
@@ -203,169 +202,9 @@ func (ph *PlacementHelper) PlaceFromServer(posID, prodID string, serverX, server
 				ph.scene.applyPinballSliceBoosts(*ex)
 				ph.scene.applyVanillaCokeTableSliceBoosts(*ex)
 
-				// Minimal delta offset parity (sofas)
-				isSofa := false
-				if ph.scene.catalog != nil {
-					if ci2 := ph.scene.catalog.GetItemByID(strings.TrimSpace(ex.ProdID)); ci2 != nil && strings.EqualFold(ci2.Type, "Sofa") {
-						isSofa = true
-					}
-				}
-				if !isSofa {
-					b := strings.ToLower(ex.Base)
-					isSofa = strings.Contains(b, "sofa") || strings.Contains(b, "couch")
-				}
-				hasDir0 := ph.scene.hasAssetsForDirection(ex, 0)
-				hasDir2 := ph.scene.hasAssetsForDirection(ex, 2)
-				hasDir4 := ph.scene.hasAssetsForDirection(ex, 4)
-				hasDir6 := ph.scene.hasAssetsForDirection(ex, 6)
-				fmt.Printf("[POS] ASSET CHECK: base=%s hasDir0=%t hasDir2=%t hasDir4=%t hasDir6=%t\n",
-					ex.Base, hasDir0, hasDir2, hasDir4, hasDir6)
-				stepOffset := func(od, nd int) (int, int) {
-					fmt.Printf("[POS] stepOffset check: od=%d nd=%d hasDir2=%t hasDir4=%t hasDir0=%t hasDir6=%t\n",
-						od, nd, hasDir2, hasDir4, hasDir0, hasDir6)
-					if (ex.Width == 2 || ex.Depth == 2) && isSofa {
-						switch {
-						case od == 2 && nd == 4:
-							return 72, 0
-						case od == 4 && nd == 6:
-							return 0, 0
-						case od == 6 && nd == 0:
-							return -72, 0
-						case od == 0 && nd == 2:
-							return 0, 0
-						}
-						return 0, 0
-					} else if ex.Width == 2 && ex.Depth == 2 {
-						switch {
-						case od == 2 && nd == 4:
-							return -72, 0
-						case od == 4 && nd == 6:
-							return 72, 0
-						case od == 6 && nd == 0:
-							return -72, 0
-						case od == 0 && nd == 2:
-							return 72, 0
-						}
-						return 0, 0
-					} else if hasDir0 && hasDir2 && hasDir4 && hasDir6 {
-						return 0, 0
-					} else if (ex.Width == 2 || ex.Depth == 2) && hasDir2 && hasDir0 && !hasDir6 {
-						// coke machine style (2,0 but not 6)
-						switch {
-						case od == 2 && nd == 4:
-							return 0, 0
-						case od == 4 && nd == 6:
-							return 72, 0
-						case od == 6 && nd == 0:
-							return -72, 0
-						case od == 0 && nd == 2:
-							return 0, 0
-						}
-						return 0, 0
-					} else if (ex.Width == 2 || ex.Depth == 2) && hasDir2 && hasDir6 && !hasDir0 {
-						// 2 & 6 but not 0
-						switch {
-						case od == 2 && nd == 4:
-							return 108, -18
-						case od == 4 && nd == 6:
-							return -108, 18
-						case od == 6 && nd == 0:
-							return 108, -18
-						case od == 0 && nd == 2:
-							return -108, 18
-						}
-						return 0, 0
-					} else if ex.Width == 3 && ex.Depth == 3 && ph.scene.isRugFurniture(*ex) {
-						switch {
-						case od == 0 && nd == 6:
-							return 144, -36
-						case od == 6 && nd == 0:
-							return -144, 36
-						}
-						return 0, 0
-					} else if hasDir0 && !hasDir6 {
-						// 1x1 has 2,0; hflip 2->4 and 0->6
-						switch {
-						case od == 2 && nd == 4:
-							return 72, 0
-						case od == 4 && nd == 6:
-							return 0, 0
-						case od == 6 && nd == 0:
-							return -72, 0
-						case od == 0 && nd == 2:
-							return 0, 0
-						}
-						return 0, 0
-					} else if hasDir6 && !hasDir0 {
-						// 1x1 has 2,6; hflip 2->4 and 6->0
-						switch {
-						case od == 2 && nd == 4:
-							return 72, 0
-						case od == 4 && nd == 6:
-							return -72, 0
-						case od == 6 && nd == 0:
-							return 72, 0
-						case od == 0 && nd == 2:
-							return -72, 0
-						}
-						return 0, 0
-					} else if (ex.Width == 2 || ex.Depth == 2) && hasDir2 && hasDir4 && !hasDir0 && !hasDir6 {
-						// only 2 and 4 assets - no offset needed for 2-unit furniture
-						return 0, 0
-					} else if hasDir2 && hasDir4 && !hasDir0 && !hasDir6 {
-						// 1x1 furniture with only dir 2 and dir 4 assets
-						switch {
-						case od == 2 && nd == 4:
-							return 72, 0
-						case od == 4 && nd == 2:
-							return -72, 0
-						}
-						return 0, 0
-					} else if hasDir2 && !hasDir0 && !hasDir6 && !hasDir4 {
-						// only dir 2 assets (hflipped for other directions)
-						switch {
-						case od == 2 && nd == 4:
-							return 72, 0
-						case od == 4 && nd == 2:
-							return -72, 0
-						}
-						return 0, 0
-					}
-					return 0, 0
-				}
-				if oldDir != ex.Dir {
-					accX, accY := 0, 0
-					curr := oldDir
-					fmt.Printf("[POS] offset calc: base=%s dir %d->%d hasDir0=%t hasDir2=%t hasDir4=%t hasDir6=%t\n",
-						ex.Base, oldDir, ex.Dir, hasDir0, hasDir2, hasDir4, hasDir6)
-
-					// Special case: direct 4->2 or 2->4 for items with only dir 2 assets
-					if hasDir2 && !hasDir0 && !hasDir4 && !hasDir6 {
-						if (oldDir == 4 && ex.Dir == 2) || (oldDir == 2 && ex.Dir == 4) {
-							dx, dy := stepOffset(oldDir, ex.Dir)
-							fmt.Printf("[POS] direct step %d->%d offset=(%d,%d)\n", oldDir, ex.Dir, dx, dy)
-							accX += dx
-							accY += dy
-						}
-					} else {
-						// Normal step-by-step rotation
-						for curr != ex.Dir {
-							next := (curr + 2) % 8
-							dx, dy := stepOffset(curr, next)
-							fmt.Printf("[POS] step %d->%d offset=(%d,%d)\n", curr, next, dx, dy)
-							accX += dx
-							accY += dy
-							curr = next
-						}
-					}
-					if accX != 0 || accY != 0 {
-						ex.PixelOffsetX += accX
-						ex.PixelOffsetY += accY
-						fmt.Printf("[POS] applied total offset (%d,%d) new total=(%d,%d)\n",
-							accX, accY, ex.PixelOffsetX, ex.PixelOffsetY)
-					} else {
-						fmt.Printf("[POS] no offset applied\n")
-					}
+				// Deterministic rotation offsets matching initial snapshot load
+				if oldDir != ex.Dir && ph.scene != nil {
+					ex.PixelOffsetX, ex.PixelOffsetY = ph.scene.CalculateDirectionOffset(ex, ex.Dir)
 				}
 
 				newCovered := ph.coverageSquares(ex.Row, ex.Col, ex.Width, ex.Depth, ex.Dir)
@@ -391,6 +230,11 @@ func (ph *PlacementHelper) PlaceFromServer(posID, prodID string, serverX, server
 		}
 	}
 
+	targetGridY := serverY * 10
+	if serverY == 0 && stackLevel > 0 {
+		targetGridY = stackLevel
+	}
+
 	pf := PlacedFurni{
 		ProdID:     strings.TrimSpace(prodID),
 		PosID:      strings.TrimSpace(posID),
@@ -400,7 +244,7 @@ func (ph *PlacementHelper) PlaceFromServer(posID, prodID string, serverX, server
 		Width:      width,
 		Depth:      depth,
 		Dir:        dir,
-		GridY:      stackLevel,
+		GridY:      targetGridY,
 		IsWallItem: ph.isWallItem(prodID),
 		State:      state,
 		Animate:    false,
@@ -414,7 +258,8 @@ func (ph *PlacementHelper) PlaceFromServer(posID, prodID string, serverX, server
 	}
 	pFHeight := ci.Height
 	pf.Height = pFHeight
-	if computedHO > 0 {
+	pf.ServerHO = serverHO
+	if serverHO == 0 && computedHO > 0 {
 		pf.ServerHO = computedHO
 	}
 	if strings.TrimSpace(pf.PosID) == "" {
@@ -439,10 +284,6 @@ func (ph *PlacementHelper) PlaceFromServer(posID, prodID string, serverX, server
 		ph.scene.applyInitialDirectionOffsets(&pf)
 	}
 
-	// Cache server-provided height offset (ho) for new items
-	if serverHO > 0 {
-		pf.ServerHO = serverHO
-	}
 	pf.IAOT = iaot
 	pf.IAOTProvided = true
 	fmt.Printf("[POS] place id=%s prod=%s base=%s server(%d,%d,%d,ho=%d) -> client(row=%d,col=%d) dir=%d state=%d\n",
@@ -458,22 +299,21 @@ func (ph *PlacementHelper) PlaceFromServer(posID, prodID string, serverX, server
 	return true
 }
 
-// applyInitialDirectionOffsets accumulates per-step rotation offsets starting from dir 2
-// to match rotation-time pixel corrections for items created at a non-2 direction.
-func (s *Scene) applyInitialDirectionOffsets(pf *PlacedFurni) {
+// CalculateDirectionOffset calculates the absolute (pixelOffsetX, pixelOffsetY) for a placed furniture item
+// relative to its canonical dir 2 orientation. This ensures identical positioning on initial room load and rotation updates.
+func (s *Scene) CalculateDirectionOffset(pf *PlacedFurni, targetDir int) (int, int) {
 	if pf == nil {
-		return
+		return 0, 0
 	}
-	target := pf.Dir
-	if target != 0 && target != 2 && target != 4 && target != 6 {
-		return
+	if targetDir != 0 && targetDir != 2 && targetDir != 4 && targetDir != 6 {
+		return 0, 0
 	}
-	if target == 2 {
-		return
+	if targetDir == 2 {
+		return 0, 0
 	}
 
 	isSofaType := false
-	if s.catalog != nil {
+	if s != nil && s.catalog != nil {
 		if ci := s.catalog.GetItemByID(strings.TrimSpace(pf.ProdID)); ci != nil && strings.EqualFold(ci.Type, "Sofa") {
 			isSofaType = true
 		}
@@ -483,10 +323,10 @@ func (s *Scene) applyInitialDirectionOffsets(pf *PlacedFurni) {
 		isSofaType = strings.Contains(b, "sofa") || strings.Contains(b, "couch")
 	}
 
-	hasDir0 := s.hasAssetsForDirection(pf, 0)
-	hasDir2 := s.hasAssetsForDirection(pf, 2)
-	hasDir4 := s.hasAssetsForDirection(pf, 4)
-	hasDir6 := s.hasAssetsForDirection(pf, 6)
+	hasDir0 := s != nil && s.hasAssetsForDirection(pf, 0)
+	hasDir2 := s != nil && s.hasAssetsForDirection(pf, 2)
+	hasDir4 := s != nil && s.hasAssetsForDirection(pf, 4)
+	hasDir6 := s != nil && s.hasAssetsForDirection(pf, 6)
 
 	stepOffset := func(od, nd int) (int, int) {
 		if (pf.Width == 2 || pf.Depth == 2) && isSofaType {
@@ -502,16 +342,7 @@ func (s *Scene) applyInitialDirectionOffsets(pf *PlacedFurni) {
 			}
 			return 0, 0
 		} else if pf.Width == 2 && pf.Depth == 2 {
-			switch {
-			case od == 2 && nd == 4:
-				return 0, 0
-			case od == 4 && nd == 6:
-				return 0, 0
-			case od == 6 && nd == 0:
-				return 0, 0
-			case od == 0 && nd == 2:
-				return 0, 0
-			}
+			// Symmetrical 2x2 footprint centered on origin tile
 			return 0, 0
 		} else if hasDir0 && hasDir2 && hasDir4 && hasDir6 {
 			return 0, 0
@@ -539,7 +370,7 @@ func (s *Scene) applyInitialDirectionOffsets(pf *PlacedFurni) {
 				return -108, 18
 			}
 			return 0, 0
-		} else if pf.Width == 3 && pf.Depth == 3 && s.isRugFurniture(*pf) {
+		} else if pf.Width == 3 && pf.Depth == 3 && s != nil && s.isRugFurniture(*pf) {
 			switch {
 			case od == 0 && nd == 6:
 				return 144, -36
@@ -572,10 +403,8 @@ func (s *Scene) applyInitialDirectionOffsets(pf *PlacedFurni) {
 			}
 			return 0, 0
 		} else if (pf.Width == 2 || pf.Depth == 2) && hasDir2 && hasDir4 && !hasDir0 && !hasDir6 {
-			// 2-unit furniture with only dir 2 and dir 4 assets - no offset needed
 			return 0, 0
 		} else if hasDir2 && hasDir4 && !hasDir0 && !hasDir6 {
-			// 1x1 furniture with only dir 2 and dir 4 assets
 			switch {
 			case od == 2 && nd == 4:
 				return 72, 0
@@ -584,7 +413,6 @@ func (s *Scene) applyInitialDirectionOffsets(pf *PlacedFurni) {
 			}
 			return 0, 0
 		} else if hasDir2 && !hasDir0 && !hasDir6 && !hasDir4 {
-			// only dir 2 assets (hflipped for other directions)
 			switch {
 			case od == 2 && nd == 4:
 				return 72, 0
@@ -596,17 +424,62 @@ func (s *Scene) applyInitialDirectionOffsets(pf *PlacedFurni) {
 		return 0, 0
 	}
 
-	accumX, accumY := 0, 0
+	if hasDir2 && !hasDir0 && !hasDir4 && !hasDir6 {
+		if targetDir == 4 {
+			return stepOffset(2, 4)
+		}
+	}
+
+	accX, accY := 0, 0
 	curr := 2
-	for curr != target {
+	for curr != targetDir {
 		next := (curr + 2) % 8
 		dx, dy := stepOffset(curr, next)
-		accumX += dx
-		accumY += dy
+		accX += dx
+		accY += dy
 		curr = next
 	}
-	if accumX != 0 || accumY != 0 {
-		pf.PixelOffsetX += accumX
-		pf.PixelOffsetY += accumY
+	return accX, accY
+}
+
+// applyInitialDirectionOffsets sets direction pixel offsets starting from canonical dir 2
+func (s *Scene) applyInitialDirectionOffsets(pf *PlacedFurni) {
+	if pf == nil {
+		return
+	}
+	pf.PixelOffsetX, pf.PixelOffsetY = s.CalculateDirectionOffset(pf, pf.Dir)
+}
+
+// RollbackPlacement reverts an unconfirmed or rejected placement.
+// Removes the item from the room, updates walkability, and returns it to the backpack.
+func (ph *PlacementHelper) RollbackPlacement(posID, prodID string) {
+	if ph == nil || ph.scene == nil {
+		return
+	}
+	trimPos := strings.TrimSpace(posID)
+	for i := range ph.scene.placedFurni {
+		pf := &ph.scene.placedFurni[i]
+		if strings.TrimSpace(pf.PosID) == trimPos {
+			removedItem := *pf
+			ph.scene.placedFurni = append(ph.scene.placedFurni[:i], ph.scene.placedFurni[i+1:]...)
+			covered := ph.coverageSquares(removedItem.Row, removedItem.Col, removedItem.Width, removedItem.Depth, removedItem.Dir)
+			for _, csq := range covered {
+				if csq != nil {
+					ph.updateSquareWalkability(csq.GetRow(), csq.GetCol())
+				}
+			}
+			if ph.scene.backpackManager != nil {
+				actualProdID := prodID
+				if actualProdID == "" {
+					actualProdID = removedItem.ProdID
+				}
+				ph.scene.backpackManager.InsertItemAtFront(BackpackItem{
+					ProdID: actualProdID,
+					PosID:  posID,
+				})
+			}
+			fmt.Printf("[RollbackPlacement] Reverted unconfirmed placement for posID=%s prodID=%s\n", posID, prodID)
+			break
+		}
 	}
 }

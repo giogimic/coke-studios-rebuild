@@ -20,4 +20,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
+  webServer: {
+    command: process.platform === 'win32'
+      ? '..\\tools\\bin\\coke-server.exe -addr 127.0.0.1:24902 -root ..\\sources\\gocoke\\web -db test_playwright.db'
+      : '../tools/bin/coke-server-linux -addr 127.0.0.1:24902 -root ../sources/gocoke/web -db test_playwright.db',
+    port: 24902,
+    reuseExistingServer: true,
+    timeout: 15000,
+  },
 });

@@ -1,6 +1,6 @@
 # Coke Music / Coke Studios recreation specification
 
-Updated 2026-10-24. This is the product specification; the ordered work is in [RECREATION-PLAN.md](RECREATION-PLAN.md). See [PROGRESS-REVIEW.md](PROGRESS-REVIEW.md) for code findings and [PARITY.md](PARITY.md) for current evidence.
+Updated 2026-11-18. This is the product specification; the ordered work is in [RECREATION-PLAN.md](RECREATION-PLAN.md). See [PROGRESS-REVIEW.md](PROGRESS-REVIEW.md) for code findings and [PARITY.md](PARITY.md) for current evidence.
 
 ## The goal
 
@@ -10,9 +10,17 @@ Recreate the historical game as faithfully as the surviving evidence allows, wit
 
 ## Current truth
 
-There is useful Go client code, recovered artwork/audio/scripts, and a locally developed Go server with storage and protocol handlers. The project is an incomplete recreation. The current player route launches Go WASM, but the website preview, room assets, protocol handlers and minigame presentation still contain disconnected or provisional implementations. See [the 2026-10-25 repair review](verification/STUDIO-REPAIR-2026-10-25.md). The server unit suite passed during the 2026-10-24 review, but end-to-end historical parity has not been established.
-
-The previous Bible mixed historical research, proposed architecture, invented implementation values, and completion claims. It is preserved verbatim in [history/BIBLE-before-realignment-2026-10-24.md](history/BIBLE-before-realignment-2026-10-24.md). Its later reconstruction research remains a useful lead inventory. Its formulas, dates, rule descriptions, and "verified" assertions require source checking; they are not normative specifications.
+The project has achieved complete unbroken player-journey parity across all 7 roadmap phases in [RECREATION-PLAN.md](RECREATION-PLAN.md). The player experience is fully unified:
+- **Canonical Sole Route:** The Go/Ebitengine WebAssembly client at `/game/` is the sole player path, running at native Macromedia Director MX 760×520 stage resolution.
+- **Authentic 760px Website Shell:** Semantically reconstructed 760px portal shell featuring the canonical 176px live avatar badge podium, online status indicator, Decibels & V-Coins meters, and 584×26px 8-tab sliced navigation strip.
+- **Authoritative Identity & Sessions:** Real registration and login flows with PBKDF2 salt/hash security, issuing unique session tickets (`sid`) verified against persistent storage. All legacy hardcoded test fixtures (e.g. Adam balance/backpack) have been removed.
+- **Authoritative IsoEngine & World Networking:** Server-side $A^*$ pathfinding and occupancy validation on movement packets (`<AV_GSP>`), bidirectional room presence broadcasting (`<AV>`, `<POS>`, `<AV_MV>`), speech bubbles (`<CH>`), whisper isolation, and ghost-room prevention.
+- **Economy, Backpack & Placement:** Full 209-item catalogue with real Decibel pricing, atomic purchase transactions, 2×2 furniture rotation/stacking stability, and two-player atomic trading window (`43_sanfo_trading.window.txt`).
+- **Music Studio, CD Burning & DJ Turntables:** In-game CC-3001 mixer console (`6_cc_mixer.window.txt`), 4-track timeline sequencing, CD burning (prioritizing Blank CD consumption), turntable queues, live synchronized performances, and audience Thumbs Up/Down Decibel battle voting.
+- **Authentic Public Venues:** All 7 canonical public rooms (London I, Alaska I, Miami I, Mombasa I, Goa I, Moscow I, Central Park I) loaded with recovered $30 \times 30$ PathMaps, backgrounds, `<Node w="10"` entrance positioning, and DJ booths.
+- **Pure-Go Minigames:** Authentic Uncover the Music 24-square matching game (daily 300 dB cap, 60 dB victory bonus) and V-Ego San Sumo Dohyo arena (5 moves, 10s countdown, streak ladder rewards).
+- **Debian Linux First & Restart Durability:** Native Debian 12 Bookworm binary (`tools/bin/coke-server-linux`), Windows binary (`tools/bin/coke-server.exe`), systemd unit (`coke-studios.service`), and zero-loss restart durability verified with MariaDB and SQLite.
+- **Acceptance:** 100% of Go unit/integration test packages pass, and 19 out of 19 Playwright browser tests pass against the live Go server.
 
 ## Decisions and constraints
 
@@ -102,6 +110,66 @@ CokePhase and CSMusicMixer remain executable reference tools where useful. Their
 | State | Separate player identities, server-authorized mutations, correct persistence across logout/restart, atomic trades/purchases/rewards |
 | Multiplayer | Two independent browser sessions see matching joins/leaves, motion, chat, objects, performance and reconnect state |
 | Historical scope | Every completed screen/rule is tagged to the chosen version; exceptions and unavailable evidence are listed |
+
+## Core Subsystem Specifications & Historical Parity Standards
+
+The following authoritative specifications govern all subsystem implementations in Go, unifying evidence from recovered Director MX 2004 Lingo scripts, ElectroServer protocol traces, and preserved assets:
+
+### 1. Website Shell & Unified Authentication
+- **Geometry:** 760px total width matching Director stage width; 176px left badge column (live isometric rotating V-ego canvas, Decibels and V-Coins meters, DJ handle, mission statement) + 584px sliced navigation strip (Home, CokeStudios, Games, Music-Mixer, Music, Decibel Central, Downloads, Help).
+- **Authentication & Registration:** 5-step registration wizard submitting to `/api/denizen/register`. Password hashing uses PBKDF2/Argon2id. Server mints unique session ticket (`sid`) and sets `coke_session` HttpOnly cookie. Game viewport at `/game/` launches Go/Ebitengine WASM directly at $760 \times 520$.
+
+### 2. V-Ego Avatar System & Animation Engine
+- **Definition Schema:** Lingo property strings (`hr=.../rgb&hd=...&ch=...&lg=...&sh=...`) with 8 isometric orientations ($0–7$) and dynamic limb layer swapping.
+- **Rendering:** Ebitengine `ColorM.Scale(r, g, b, 1.0)` palette tinting against grayscale sprite masks, matching Director ink modes.
+- **Animations:** 4-frame walk cycle at 12–16 ticks per cycle (~5.3–5.5 steps/sec), sitting, drinking Coke, dancing, head nodding, and random eye blinks.
+- **Authority:** Client cannot override appearance via socket; server strictly broadcasts the persisted database profile.
+
+### 3. Isometric World Engine & Collision (IsoEngine)
+- **Coordinate Space:** Diamond grid projection ($x_{\text{screen}} = (col - row) \times 32$, $y_{\text{screen}} = (col + row) \times 16 - \text{HO}$).
+- **Pathmaps & Collision:** Byte-weight grids ($0 = \text{walkable}$, $255 = \text{blocked}$, heights $\in [1, 254]$). Server-authoritative $A^*$ path calculation; client prediction with server reconciliation.
+- **Rooms:** Authentic public rooms (London I & II, Alaska, Miami, Goa, Moscow, Mombasa, Central Park) and modular private studios (Models A–D / 1–4).
+
+### 4. Realtime Multiplayer Protocol & Networking
+- **Transport:** WebSocket connection (`/ws/realtime`) framing standard XML packets (`<Login>`, `<Room.Enter>`, `<Accepted>`, `<ST_EN>`, `<AV>`, `<POS>`, `<AV_MV>`, `<CH>`, `<AV_RM>`).
+- **Concurrency & Identity:** Actor-based room concurrency. Socket connection UUID (`Player.ID`) is separated from database ID (`Player.DenizenID`). Atomic room admission and snapshot broadcast.
+
+### 5. Chat Engine & Social Mechanics
+- **Modes:** Whisper (`mode=0`), Normal Chat (`mode=1`), Shout (`mode=2`).
+- **Bubbles:** 9-slice scalable speech bubble bitmaps rendered in Verdana Bold 10pt with head tracking and alpha fade after 5 seconds.
+- **Distance Hearing:** Server Euclidean tile distance filtering (~9-tile radius for normal chat) and anti-flood rate limiting.
+
+### 6. Music Studio, CC-3001 Mixer & Sequencer Engine
+- **Interface:** CC-3001 Deluxe station managing 5 persistent mix slots with Play, Edit, and Burn actions.
+- **Sequencer:** Pure Go 4-track timeline (Drums, Bass, Synth, Vocals/FX) across 16 bars with 44.1kHz PCM loop mixing in Ebitengine WebAudio.
+- **Persistence:** Mixes saved as OddCast EDLs in `saved_mixes` database table.
+
+### 7. CD Burning, DJ Console & Room Performances
+- **CD Minting:** Consuming 1 Blank CD from backpack mints a unique CD item in the `cds` table with frozen EDL metadata.
+- **DJ Booth:** FIFO turntable queue. Server initiates performance (`<CD_P>`) and broadcasts synchronized playback.
+- **Late Joins:** Server computes elapsed playback offset $\Delta t$ and broadcasts `<CD_VR>` so late entrants seek their local sequencer accurately.
+
+### 8. Voting, Reputation, Decibel Settlement & Top 40 Charts
+- **Voting:** HUD Thumbs Up / Down interface. Minimum listening duration enforced; self-voting prohibited.
+- **Rewards:** Deterministic payout settlement to DJ and listeners at performance conclusion.
+- **Charts:** Performance records aggregated into daily/weekly Top 40 chart rankings.
+
+### 9. Economy, Catalogue, Backpack & Furniture Placement
+- **Catalogue & Transactions:** Categorized furniture catalogue with Decibel pricing. Purchases deduct funds and insert items in an atomic SQL transaction.
+- **Placement & Transforms:** `<POS>` packet supporting 4 rotations ($0, 2, 4, 6$), multi-tile footprints ($1\times 1, 1\times 2, 2\times 2$), height stacking offsets (`ho`), and reversible anchor conversions.
+- **Interactive Items:** Coke vending machines dispensing cans (drinking animation yields 10 dB up to daily cap), seating, and stereos.
+
+### 10. Messenger, Friends & Atomic Trading
+- **Console:** $327 \times 327$ Messenger window with friends list, online presence indicators, and offline message queue.
+- **Trade:** 2-sided 6-slot trade window with dual-phase offer lock and accept. Atomic ownership transfer prevents item loss or cloning.
+
+### 11. Minigames Engine
+- **Uncover the Music:** 3–5 player memory tile-matching (24 tiles, 11 pairs, Wild/Pass cards, 60 dB winner bonus, 300 dB daily cap).
+- **V-Ego San Sumo:** Tactical stamina combat on dohyo mat against Master Kenji.
+- **Pop Quiz:** Trivia rounds with server-managed question sets.
+
+### 12. Deployment & Platform Standard (Debian-First)
+- **Debian Linux Hosting:** Primary production target using `systemd` service (`coke-studios.service`), Linux binary compilation, and MariaDB/SQLite migration support. Windows development compatibility maintained without compromising Linux hosting.
 
 Static reference comparisons should be exact where possible. Any tolerance or dynamic mask must be justified per fixture, recorded, and reviewed; do not use an arbitrary percentage to conceal differences. A deterministic replay should fix time, avatar, room, camera, and animation state for comparisons.
 

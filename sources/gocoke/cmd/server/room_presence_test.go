@@ -198,3 +198,65 @@ func TestMultiplayerMovementAndChatExchange(t *testing.T) {
 		t.Fatalf("Bob did not receive Alice's exit packet: %v", bobWriter.GetMessages())
 	}
 }
+
+func TestDuplicateLoginDisconnectsOldSocketAndCleansPresence(t *testing.T) {
+	srv := presenceServer(t)
+	d, err := srv.store.RegisterDenizen("ReconnectingUser", "Password123!", "1", "hr=001/1", "Mission")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// 1. Initial login on socket 1
+	p1, w1 := createTestPlayer(srv, "socket_conn_1", "", "")
+	p1.Authenticated = false
+	srv.handlePlayerMessage(p1, fmt.Sprintf(`<Login username="ReconnectingUser" secret="%s"/>`, d.Secret))
+	if !p1.Authenticated {
+		t.Fatal("first login rejected")
+	}
+
+	// 2. p1 enters room
+	if err := srv.enterPlayerRoom(p1, "$SYSTEM$1", "1"); err != nil {
+		t.Fatal(err)
+	}
+
+	// 3. Bob enters same room
+	bob, bobWriter := loginPresencePlayer(t, srv, "BobObserver", "hr=002/2", "Bob Mission", "")
+	if err := srv.enterPlayerRoom(bob, "$SYSTEM$1", "2"); err != nil {
+		t.Fatal(err)
+	}
+
+	// 4. Duplicate login on socket 2 for the same denizen
+	p2, w2 := createTestPlayer(srv, "socket_conn_2", "", "")
+	p2.Authenticated = false
+	srv.handlePlayerMessage(p2, fmt.Sprintf(`<Login username="ReconnectingUser" secret="%s"/>`, d.Secret))
+	if !p2.Authenticated {
+		t.Fatal("second login rejected")
+	}
+
+	// 5. Old socket p1 must be disconnected / deauthenticated
+	if p1.Authenticated {
+		t.Fatal("expected old socket p1 to be deauthenticated")
+	}
+	if !w1.HasMessage("<Alert") {
+		t.Fatalf("expected old socket to receive alert message: %v", w1.GetMessages())
+	}
+	if !w1.IsClosed() {
+		t.Fatal("expected old socket p1 connection to be closed")
+	}
+
+	// 6. Old presence in room must be cleaned up, Bob receives AV_RM
+	if !bobWriter.HasMessage(`<AV_RM av="ReconnectingUser"/>`) {
+		t.Fatalf("expected Bob to receive AV_RM for old session: %v", bobWriter.GetMessages())
+	}
+
+	// 7. p2 enters room cleanly
+	if err := srv.enterPlayerRoom(p2, "$SYSTEM$1", "3"); err != nil {
+		t.Fatal(err)
+	}
+
+	// Bob should receive new AV presence for ReconnectingUser
+	if !bobWriter.HasMessage(`<AV av="ReconnectingUser"`) {
+		t.Fatalf("expected Bob to receive new AV presence packet: %v", bobWriter.GetMessages())
+	}
+	_ = w2
+}

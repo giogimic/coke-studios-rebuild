@@ -1271,6 +1271,8 @@ func (ph *PlacementHelper) placeWallItem() bool {
 		if err := ph.scene.sendFurnitureIfAvailable(ph.scene.studio.StudioID, pf.PosID, pf.ProdID,
 			px, py, pz, 0, pf.State, 0); err != nil {
 			log.Printf("Studio: failed to send wall item placement: %v", err)
+			ph.RollbackPlacement(pf.PosID, pf.ProdID)
+			return false
 		}
 	}
 
@@ -1479,6 +1481,8 @@ func (ph *PlacementHelper) PlaceHeldItem() bool {
 		if err := ph.scene.sendFurnitureIfAvailable(ph.scene.studio.StudioID, pf.PosID, pf.ProdID,
 			sendRow, sendCol, y, pf.Dir, pf.State, ho); err != nil {
 			log.Printf("Studio: failed to send furniture placement: %v", err)
+			ph.RollbackPlacement(pf.PosID, pf.ProdID)
+			return false
 		} else {
 			log.Printf("PlaceHeldItem: Successfully sent furniture placement packet")
 		}

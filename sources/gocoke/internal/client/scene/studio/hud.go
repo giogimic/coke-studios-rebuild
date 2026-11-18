@@ -1,9 +1,12 @@
 package studio
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"image/color"
+	"net/http"
+	"net/url"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -518,6 +521,147 @@ func (h *HUDManager) OpenPerformanceResultsDialog(thumbsUp, thumbsDown, decibels
 	}
 }
 
+// OpenDecisionDialog opens sanfo_decision_dialog with custom header, message, and OK/Cancel callbacks.
+func (h *HUDManager) OpenDecisionDialog(title, message, okLabel, cancelLabel string, onOk, onCancel func()) {
+	if h == nil || h.windowManager == nil || h.tm == nil {
+		return
+	}
+	if w := h.windowManager.GetWindow("sanfo_decision_dialog"); w != nil {
+		h.windowManager.CloseWindow("sanfo_decision_dialog")
+	}
+	defPath := filepath.Join("Lingo", "cc_interface[1]", "9_sanfo_decision_dialog.window.txt")
+	def, err := window.ParseFile(defPath)
+	if err != nil {
+		return
+	}
+	interfaceDir := filepath.Join("Lingo", "cc_interface[1]")
+	assets := lingoassets.LoadAssetsForDefinition(def, interfaceDir)
+	extra := lingoassets.LoadAssetsByNames([]string{
+		"button.e1.left.active", "button.e1.middle.active", "button.e1.right.active",
+		"button.e1.left.pressed", "button.e1.middle.pressed", "button.e1.right.pressed",
+	}, interfaceDir)
+	for k, v := range extra {
+		assets[k] = v
+	}
+
+	w := h.windowManager.OpenWindow("sanfo_decision_dialog", def, assets, h.tm)
+	if w == nil {
+		return
+	}
+	w.Rect = def.Rect
+	for i := range w.Definition.Elements {
+		el := &w.Definition.Elements[i]
+		if el.ID == "sanfo_decision_text_a" {
+			el.Key = title
+		} else if el.ID == "sanfo_decision_text_b" {
+			el.Key = message
+		}
+	}
+	if w.Interactive == nil {
+		w.Interactive = make(map[string]*ui.InteractiveElement)
+	}
+	for i := range w.Definition.Elements {
+		el := &w.Definition.Elements[i]
+		if el.ID == "sanfo_decision_ok" {
+			be := *el
+			be.Member = "button.e1"
+			ie := w.Renderer.CreateInteractiveElement(be)
+			ie.TextKey = okLabel
+			w.Interactive["sanfo_decision_ok"] = ie
+		} else if el.ID == "sanfo_decision_cancel" {
+			be := *el
+			be.Member = "button.e1"
+			ie := w.Renderer.CreateInteractiveElement(be)
+			ie.TextKey = cancelLabel
+			w.Interactive["sanfo_decision_cancel"] = ie
+		}
+	}
+	if w.TempVars == nil {
+		w.TempVars = make(map[string]interface{})
+	}
+	if onOk != nil {
+		w.TempVars["on_ok"] = onOk
+	}
+	if onCancel != nil {
+		w.TempVars["on_cancel"] = onCancel
+	}
+}
+
+// OpenDoorOpensDialog opens the authentic 19_nav_dooropens window while waiting for host response
+func (h *HUDManager) OpenDoorOpensDialog(studioName string) {
+	if h == nil || h.windowManager == nil || h.tm == nil {
+		return
+	}
+	if w := h.windowManager.GetWindow("nav_dooropens"); w != nil {
+		h.windowManager.CloseWindow("nav_dooropens")
+	}
+	defPath := filepath.Join("Lingo", "cc_navigator[1]", "19_nav_dooropens.window.txt")
+	def, err := window.ParseFile(defPath)
+	if err != nil {
+		return
+	}
+	navDir := filepath.Join("Lingo", "cc_navigator[1]")
+	ifaceDir := filepath.Join("Lingo", "cc_interface[1]")
+	assets := lingoassets.LoadAssetsForDefinition(def, navDir, ifaceDir)
+	w := h.windowManager.OpenWindow("nav_dooropens", def, assets, h.tm)
+	if w == nil {
+		return
+	}
+	w.Rect = def.Rect
+	for i := range w.Definition.Elements {
+		el := &w.Definition.Elements[i]
+		if el.ID == "nav_roomname_text" && studioName != "" {
+			el.Key = studioName
+		}
+	}
+}
+
+// OpenDoorNotOpensDialog opens the authentic 20_nav_doornotopens window when host declines or times out
+func (h *HUDManager) OpenDoorNotOpensDialog() {
+	if h == nil || h.windowManager == nil || h.tm == nil {
+		return
+	}
+	if w := h.windowManager.GetWindow("nav_dooropens"); w != nil {
+		h.windowManager.CloseWindow("nav_dooropens")
+	}
+	if w := h.windowManager.GetWindow("nav_doornotopens"); w != nil {
+		h.windowManager.CloseWindow("nav_doornotopens")
+	}
+	defPath := filepath.Join("Lingo", "cc_navigator[1]", "20_nav_doornotopens.window.txt")
+	def, err := window.ParseFile(defPath)
+	if err != nil {
+		return
+	}
+	navDir := filepath.Join("Lingo", "cc_navigator[1]")
+	ifaceDir := filepath.Join("Lingo", "cc_interface[1]")
+	assets := lingoassets.LoadAssetsForDefinition(def, navDir, ifaceDir)
+	extra := lingoassets.LoadAssetsByNames([]string{
+		"button.e1.left.active", "button.e1.middle.active", "button.e1.right.active",
+		"button.e1.left.pressed", "button.e1.middle.pressed", "button.e1.right.pressed",
+	}, ifaceDir)
+	for k, v := range extra {
+		assets[k] = v
+	}
+	w := h.windowManager.OpenWindow("nav_doornotopens", def, assets, h.tm)
+	if w == nil {
+		return
+	}
+	w.Rect = def.Rect
+	if w.Interactive == nil {
+		w.Interactive = make(map[string]*ui.InteractiveElement)
+	}
+	for i := range w.Definition.Elements {
+		el := &w.Definition.Elements[i]
+		if el.ID == "nav_noanswer_ok_button" {
+			be := *el
+			be.Member = "button.e1"
+			ie := w.Renderer.CreateInteractiveElement(be)
+			ie.TextKey = "OK"
+			w.Interactive["nav_noanswer_ok_button"] = ie
+		}
+	}
+}
+
 // OpenHelpWindow toggles the authentic Coke Studios Help window (20_cc_help.window.txt)
 func (h *HUDManager) OpenHelpWindow() {
 	if h == nil || h.windowManager == nil || h.tm == nil {
@@ -614,6 +758,317 @@ func (h *HUDManager) OpenJukeboxWindow() {
 		if ie != nil {
 			w.Interactive["cc.jukebox.catalog.close"] = ie
 		}
+	}
+}
+
+// MixerSlot represents a saved song entry in the CC-3001 mixer console
+type MixerSlot struct {
+	Slot   int
+	SongID int
+	Title  string
+	Artist string
+	EDL    string
+}
+
+// OpenMixerWindow toggles the authentic CC-3001 Mixer console window (6_cc_mixer.window.txt)
+func (h *HUDManager) OpenMixerWindow() {
+	if h == nil || h.windowManager == nil || h.tm == nil {
+		return
+	}
+	if w := h.windowManager.GetWindow("cc_mixer"); w != nil {
+		h.windowManager.BringToFront(w)
+		return
+	}
+	mixerDir := filepath.Join("Lingo", "mixer")
+	defPath := filepath.Join(mixerDir, "6_cc_mixer.window.txt")
+	def, err := window.ParseFile(defPath)
+	if err != nil {
+		log.Printf("HUDManager: failed to parse mixer window: %v", err)
+		return
+	}
+	assets := lingoassets.LoadAssetsForDefinition(def, mixerDir)
+	extra := lingoassets.LoadAssetsByNames([]string{
+		"cc.mixer.closebox.pressed",
+		"cc.mixer.playbutton.pressed", "cc.mixer.playbutton.on",
+		"cc.mixer.editbutton.pressed", "cc.mixer.editbutton.on",
+		"cc.mixer.burnbutton.pressed", "cc.mixer.burnbutton.on",
+		"cc.mixer.door.open",
+		"cc.mixer.cdanim1", "cc.mixer.cdanim2",
+	}, mixerDir)
+	for k, v := range extra {
+		assets[k] = v
+	}
+	// Also ensure rollover asset mappings exist for CreateInteractiveElement
+	if assets["cc.mixer.playbutton.on"] != nil {
+		assets["cc.mixer.playbutton.rollover"] = assets["cc.mixer.playbutton.on"]
+	}
+	if assets["cc.mixer.editbutton.on"] != nil {
+		assets["cc.mixer.editbutton.rollover"] = assets["cc.mixer.editbutton.on"]
+	}
+	if assets["cc.mixer.burnbutton.on"] != nil {
+		assets["cc.mixer.burnbutton.rollover"] = assets["cc.mixer.burnbutton.on"]
+	}
+	if assets["cc.mixer.closebox.active"] != nil {
+		assets["cc.mixer.closebox.rollover"] = assets["cc.mixer.closebox.active"]
+	}
+
+	w := h.windowManager.OpenWindow("cc_mixer", def, assets, h.tm)
+	if w == nil {
+		return
+	}
+	w.Rect = def.Rect
+	w.Draggable = false // Fixed modal overlay centered on stage
+
+	if w.Interactive == nil {
+		w.Interactive = make(map[string]*ui.InteractiveElement)
+	}
+
+	// Register interactive buttons from definition
+	for i := range w.Definition.Elements {
+		el := w.Definition.Elements[i]
+		if el.ID == "closemixer" || strings.HasPrefix(el.ID, "mixer_play_") ||
+			strings.HasPrefix(el.ID, "mixer_edit_") || strings.HasPrefix(el.ID, "mixer_burn_") {
+			ie := w.Renderer.CreateInteractiveElement(el)
+			if ie != nil {
+				w.Interactive[el.ID] = ie
+			}
+		}
+	}
+
+	slots := make([]*MixerSlot, 5)
+
+	// Gather songs from active scene backpack CDs (catalog item 89)
+	if sc := GetActiveScene(); sc != nil && sc.backpackManager != nil {
+		idx := 0
+		for _, bi := range sc.backpackManager.items {
+			if strings.TrimSpace(bi.ProdID) != "89" || bi.Attributes == nil {
+				continue
+			}
+			song := ""
+			artist := ""
+			edl := ""
+			songID := 0
+			if v, ok := bi.Attributes["songName"]; ok {
+				if s2, ok2 := v.(string); ok2 {
+					song = strings.TrimSpace(s2)
+				}
+			}
+			if v, ok := bi.Attributes["artist"]; ok {
+				if s2, ok2 := v.(string); ok2 {
+					artist = strings.TrimSpace(s2)
+				}
+			}
+			if v, ok := bi.Attributes["edl"]; ok {
+				if s2, ok2 := v.(string); ok2 {
+					edl = strings.TrimSpace(s2)
+				}
+			}
+			if v, ok := bi.Attributes["songId"]; ok {
+				if num, okNum := v.(float64); okNum {
+					songID = int(num)
+				}
+			}
+			if song != "" && idx < 5 {
+				slots[idx] = &MixerSlot{
+					Slot:   idx + 1,
+					SongID: songID,
+					Title:  song,
+					Artist: artist,
+					EDL:    edl,
+				}
+				idx++
+			}
+		}
+	}
+
+	if w.TempVars == nil {
+		w.TempVars = make(map[string]interface{})
+	}
+	w.TempVars["mixer_slots"] = slots
+
+	// Update text fields for slots 1..5 in the window definition
+	for i := range w.Definition.Elements {
+		el := &w.Definition.Elements[i]
+		for s := 1; s <= 5; s++ {
+			slotID := fmt.Sprintf("mixer_slot_%d", s)
+			if el.ID == slotID || el.Member == fmt.Sprintf("cc.mixer.slot.text%d", s) {
+				if slots[s-1] != nil && slots[s-1].Title != "" {
+					el.Key = fmt.Sprintf("Slot %d: %s", s, slots[s-1].Title)
+				} else {
+					el.Key = fmt.Sprintf("Slot %d: (Empty)", s)
+				}
+			}
+		}
+	}
+
+	// Wire button click handler
+	w.ButtonClick = func(buttonID string) {
+		h.handleMixerButtonClick(w, buttonID)
+	}
+
+	// Fetch server mixes in background if user is authenticated
+	if sc := GetActiveScene(); sc != nil && sc.currentUserName != "" {
+		go func(screenName, gatewayURL string) {
+			urlStr := "/api/mixer/mixes?user=" + url.QueryEscape(screenName)
+			if gatewayURL != "" {
+				urlStr = gatewayURL + urlStr
+			}
+			client := &http.Client{Timeout: 5 * time.Second}
+			resp, err := client.Get(urlStr)
+			if err != nil {
+				return
+			}
+			defer resp.Body.Close()
+			if resp.StatusCode != http.StatusOK {
+				return
+			}
+			var data struct {
+				Success bool `json:"success"`
+				Songs   []struct {
+					ID        int    `json:"id"`
+					Title     string `json:"title"`
+					Artist    string `json:"artist"`
+					EDLString string `json:"edl_string"`
+				} `json:"songs"`
+			}
+			if err := json.NewDecoder(resp.Body).Decode(&data); err != nil || !data.Success {
+				return
+			}
+			if len(data.Songs) == 0 {
+				return
+			}
+			// Update slots
+			for i, s := range data.Songs {
+				if i >= 5 {
+					break
+				}
+				slots[i] = &MixerSlot{
+					Slot:   i + 1,
+					SongID: s.ID,
+					Title:  s.Title,
+					Artist: s.Artist,
+					EDL:    s.EDLString,
+				}
+			}
+			w.TempVars["mixer_slots"] = slots
+			for i := range w.Definition.Elements {
+				el := &w.Definition.Elements[i]
+				for s := 1; s <= 5; s++ {
+					slotID := fmt.Sprintf("mixer_slot_%d", s)
+					if el.ID == slotID || el.Member == fmt.Sprintf("cc.mixer.slot.text%d", s) {
+						if slots[s-1] != nil && slots[s-1].Title != "" {
+							el.Key = fmt.Sprintf("Slot %d: %s", s, slots[s-1].Title)
+						} else {
+							el.Key = fmt.Sprintf("Slot %d: (Empty)", s)
+						}
+					}
+				}
+			}
+		}(sc.currentUserName, sc.userCredentials.gatewayURL)
+	}
+}
+
+func (h *HUDManager) handleMixerButtonClick(w *ui.Window, buttonID string) {
+	if buttonID == "closemixer" {
+		if sc := GetActiveScene(); sc != nil && sc.stereo != nil {
+			sc.stereo.Stop()
+		}
+		if h.windowManager != nil {
+			h.windowManager.CloseWindow("cc_mixer")
+		}
+		return
+	}
+
+	slots, _ := w.TempVars["mixer_slots"].([]*MixerSlot)
+	getSlot := func(idPrefix string) (*MixerSlot, int) {
+		numStr := strings.TrimPrefix(buttonID, idPrefix)
+		sNum, err := strconv.Atoi(numStr)
+		if err != nil || sNum < 1 || sNum > 5 {
+			return nil, -1
+		}
+		if sNum-1 < len(slots) {
+			return slots[sNum-1], sNum
+		}
+		return nil, sNum
+	}
+
+	if strings.HasPrefix(buttonID, "mixer_play_") {
+		slot, sNum := getSlot("mixer_play_")
+		if slot == nil || slot.EDL == "" {
+			h.OpenGeneralAlert("CC-3001 Mixer", fmt.Sprintf("Slot %d is empty.", sNum))
+			return
+		}
+		sc := GetActiveScene()
+		if sc != nil && sc.stereo != nil {
+			sc.stereo.PlayEDL(slot.Artist, slot.Title, slot.EDL)
+			h.OpenGeneralAlert("Now Previewing", fmt.Sprintf("Now previewing %q on CC-3001 stereo.", slot.Title))
+		}
+		return
+	}
+
+	if strings.HasPrefix(buttonID, "mixer_burn_") {
+		slot, sNum := getSlot("mixer_burn_")
+		if slot == nil || slot.EDL == "" {
+			h.OpenGeneralAlert("CC-3001 Mixer", fmt.Sprintf("Slot %d is empty. Nothing to burn!", sNum))
+			return
+		}
+		sc := GetActiveScene()
+		if sc == nil {
+			return
+		}
+
+		// First try realtime socket CD_BURN if available
+		if sc.sendCDBurnIfAvailable != nil {
+			if err := sc.SendCDBurn(slot.Title, slot.EDL); err == nil {
+				return
+			}
+		}
+
+		// Fallback to HTTP CD Burn API
+		go func(title, edl string) {
+			urlStr := "/api/mixer/burn"
+			if sc.userCredentials.gatewayURL != "" {
+				urlStr = sc.userCredentials.gatewayURL + "/api/mixer/burn"
+			}
+			reqURL := fmt.Sprintf("%s?user=%s&title=%s&edl=%s",
+				urlStr,
+				url.QueryEscape(sc.currentUserName),
+				url.QueryEscape(title),
+				url.QueryEscape(edl),
+			)
+			client := &http.Client{Timeout: 10 * time.Second}
+			resp, err := client.Post(reqURL, "application/json", nil)
+			if err != nil {
+				sc.hudManager.OpenGeneralAlert("Burn Error", "Failed to connect to mixer burn service.")
+				return
+			}
+			defer resp.Body.Close()
+			if resp.StatusCode == http.StatusPaymentRequired {
+				sc.hudManager.OpenGeneralAlert("Cannot Burn CD", "Not enough Decibels to burn CD! You need 10 Decibels or a Blank CD.")
+				return
+			}
+			if resp.StatusCode != http.StatusOK {
+				sc.hudManager.OpenGeneralAlert("Burn Error", "Server could not process CD burn.")
+				return
+			}
+			var result struct {
+				Success      bool   `json:"success"`
+				PossessionID int    `json:"possession_id"`
+				NewDecibels  int    `json:"new_decibels"`
+				Error        string `json:"error"`
+			}
+			if err := json.NewDecoder(resp.Body).Decode(&result); err == nil && result.Success {
+				sc.hudManager.SetBalance(result.NewDecibels)
+				sc.hudManager.OpenGeneralAlert("CD Burned!", fmt.Sprintf("Mix %q has been successfully burned to CD!", title))
+			}
+		}(slot.Title, slot.EDL)
+		return
+	}
+
+	if strings.HasPrefix(buttonID, "mixer_edit_") {
+		_, sNum := getSlot("mixer_edit_")
+		h.OpenGeneralAlert("CC-3001 Mixer", fmt.Sprintf("Timeline Editor for Slot %d. Compose beats in the Music Mixer.", sNum))
+		return
 	}
 }
 
@@ -827,6 +1282,44 @@ func (h *HUDManager) Update() error {
 					y := int(w.StageOffsetY) + w.Rect[1] + ie.Rect[1]
 					if mx, my := ebiten.CursorPosition(); mx >= x && mx < x+ie.Rect[2] && my >= y && my < y+ie.Rect[3] {
 						h.windowManager.CloseWindow("cc_jukebox.catalog")
+					}
+				}
+			}
+		}
+		// Decision dialog OK / Cancel clicks
+		if w := h.windowManager.GetWindow("sanfo_decision_dialog"); w != nil {
+			if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) {
+				mx, my := ebiten.CursorPosition()
+				if ie := w.Interactive["sanfo_decision_ok"]; ie != nil {
+					x := int(w.StageOffsetX) + w.Rect[0] + ie.Rect[0]
+					y := int(w.StageOffsetY) + w.Rect[1] + ie.Rect[1]
+					if mx >= x && mx < x+ie.Rect[2] && my >= y && my < y+ie.Rect[3] {
+						if fn, ok := w.TempVars["on_ok"].(func()); ok && fn != nil {
+							fn()
+						}
+						h.windowManager.CloseWindow("sanfo_decision_dialog")
+					}
+				}
+				if ie := w.Interactive["sanfo_decision_cancel"]; ie != nil {
+					x := int(w.StageOffsetX) + w.Rect[0] + ie.Rect[0]
+					y := int(w.StageOffsetY) + w.Rect[1] + ie.Rect[1]
+					if mx >= x && mx < x+ie.Rect[2] && my >= y && my < y+ie.Rect[3] {
+						if fn, ok := w.TempVars["on_cancel"].(func()); ok && fn != nil {
+							fn()
+						}
+						h.windowManager.CloseWindow("sanfo_decision_dialog")
+					}
+				}
+			}
+		}
+		// Door not opens dialog OK click
+		if w := h.windowManager.GetWindow("nav_doornotopens"); w != nil {
+			if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) {
+				if ie := w.Interactive["nav_noanswer_ok_button"]; ie != nil {
+					x := int(w.StageOffsetX) + w.Rect[0] + ie.Rect[0]
+					y := int(w.StageOffsetY) + w.Rect[1] + ie.Rect[1]
+					if mx, my := ebiten.CursorPosition(); mx >= x && mx < x+ie.Rect[2] && my >= y && my < y+ie.Rect[3] {
+						h.windowManager.CloseWindow("nav_doornotopens")
 					}
 				}
 			}

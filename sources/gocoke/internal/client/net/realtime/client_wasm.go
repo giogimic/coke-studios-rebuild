@@ -636,6 +636,47 @@ func (c *Client) Connect(ctx context.Context, host string, port string) error {
 				sc.ShowServerAlert(parseXMLAttrString(b, "msg"))
 			}
 		}
+		// If this is a studio kick notification (KICKED)
+		if containsSubstr(b, []byte("<KICKED")) {
+			by := parseXMLAttrString(b, "by")
+			if by == "" {
+				by = "the host"
+			}
+			if sc := studioscene.GetActiveScene(); sc != nil {
+				sc.ShowServerAlert(fmt.Sprintf("You were kicked from this studio by %s.", by))
+				sc.MarkKicked()
+			}
+		}
+		// If this is a doorbell knock notification (ST_KNOCK)
+		if containsSubstr(b, []byte("<ST_KNOCK")) {
+			av := parseXMLAttrString(b, "av")
+			if av != "" {
+				if sc := studioscene.GetActiveScene(); sc != nil {
+					sc.HandleDoorbellKnock(av)
+				}
+			}
+		}
+		if containsSubstr(b, []byte("<POS_REJECT")) {
+			posID := parseXMLAttrString(b, "id")
+			cidStr := parseXMLAttrString(b, "cid")
+			if sc := studioscene.GetActiveScene(); sc != nil {
+				sc.HandlePlacementRejected(posID, cidStr)
+			}
+		}
+		// If this is a minted CD inventory item (POS_MINT)
+		if containsSubstr(b, []byte("<POS_MINT")) {
+			posID := parseXMLAttrString(b, "id")
+			cidStr := parseXMLAttrString(b, "cid")
+			title := parseXMLAttrString(b, "title")
+			edl := parseXMLAttrString(b, "edl")
+			dbStr := parseXMLAttrString(b, "db")
+			if c.logger != nil {
+				c.logger.Printf("Realtime IN POS_MINT: id=%s cid=%s title=%q db=%s", posID, cidStr, title, dbStr)
+			}
+			if sc := studioscene.GetActiveScene(); sc != nil {
+				sc.HandleCDMinted(posID, cidStr, title, edl, dbStr)
+			}
+		}
 		// If this is a CD request accepted (CD_RA), open choose song window
 		if containsSubstr(b, []byte("<Room.Action")) && containsSubstr(b, []byte("<CD_RA")) {
 			if c.logger != nil {
@@ -1168,6 +1209,34 @@ func (c *Client) SendKickAvatar(roomID, target string) error {
 	return c.SendXML(b.String())
 }
 
+// SendDoorbellResponse sends a Room.Action DB_R packet admitting or denying a knocking visitor.
+func (c *Client) SendDoorbellResponse(target string, allow bool) error {
+	c.mu.Lock()
+	roomID := c.roomID
+	c.mu.Unlock()
+	if strings.TrimSpace(roomID) == "" {
+		return fmt.Errorf("roomID is empty")
+	}
+	allowVal := "0"
+	if allow {
+		allowVal = "1"
+	}
+	xml := fmt.Sprintf("<Room.Action roomID=\"%s\"><DB_R target=\"%s\" allow=\"%s\"/></Room.Action>", roomID, target, allowVal)
+	if c.logger != nil {
+		c.logger.Printf("Realtime OUT DB_R: room=%s target=%s allow=%s", roomID, target, allowVal)
+	}
+	return c.SendXML(xml)
+}
+
+// SendDoorbellKnock sends a Room.Action ST_KNOCK packet when ringing the doorbell of a studio.
+func (c *Client) SendDoorbellKnock(roomID string) error {
+	xml := fmt.Sprintf("<Room.Action roomID=\"%s\"><ST_KNOCK roomID=\"%s\"/></Room.Action>", roomID, roomID)
+	if c.logger != nil {
+		c.logger.Printf("Realtime OUT ST_KNOCK: room=%s", roomID)
+	}
+	return c.SendXML(xml)
+}
+
 // SendMovePathGSP sends a single Room.Action AV_GSP packet containing the full path
 // of points from start to end. The server expects a single packet with multiple P nodes.
 // The points slice should be ordered from start to end and expressed in client grid
@@ -1538,6 +1607,22 @@ func (c *Client) SendCDEnd(roomID string) error {
 
 	if c.logger != nil {
 		c.logger.Printf("Realtime OUT CD_E: room=%s", roomID)
+	}
+	return c.SendXML(b.String())
+}
+
+// SendCDBurn sends an in-game CD burning request: <CD_BURN title="..." edl="..."/>
+func (c *Client) SendCDBurn(title, edl string) error {
+	var b strings.Builder
+	b.Grow(len(title) + len(edl) + 64)
+	b.WriteString("<CD_BURN title=\"")
+	b.WriteString(html.EscapeString(title))
+	b.WriteString("\" edl=\"")
+	b.WriteString(html.EscapeString(edl))
+	b.WriteString("\"/>")
+
+	if c.logger != nil {
+		c.logger.Printf("Realtime OUT CD_BURN: title=%q", title)
 	}
 	return c.SendXML(b.String())
 }

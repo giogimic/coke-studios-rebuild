@@ -189,3 +189,4 @@ func GetRewardForStreak(streak int) *RewardTier {
 	}
 	return nil
 }
+

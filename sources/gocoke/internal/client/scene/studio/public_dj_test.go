@@ -49,3 +49,67 @@ func TestLondonDJClickUsesRenderedCastMember(t *testing.T) {
 		t.Fatal("click outside table consumed")
 	}
 }
+
+func TestHandleCDMintedAddsToBackpackAndUpdatesBalance(t *testing.T) {
+	s := &Scene{
+		backpackManager: &BackpackManager{},
+		hudManager:      &HUDManager{},
+	}
+
+	s.HandleCDMinted("9876", "89", "Summer Anthem", "^50,danceOne_bass00{4,0{^", "490")
+
+	if len(s.backpackManager.items) != 1 {
+		t.Fatalf("expected 1 backpack item, got %d", len(s.backpackManager.items))
+	}
+	item := s.backpackManager.items[0]
+	if item.PosID != "9876" || item.ProdID != "89" {
+		t.Errorf("unexpected minted item: %+v", item)
+	}
+	if s.hudManager.GetBalance() != 490 {
+		t.Errorf("expected balance 490, got %d", s.hudManager.GetBalance())
+	}
+}
+
+func TestPublicDJBoundsForVenues(t *testing.T) {
+	venues := []struct {
+		roomID   string
+		location int
+		member   string
+	}{
+		{"$SYSTEM$19", 10, "reykjavik_turntables"},
+		{"$SYSTEM$3", 2, "miami_mixer1"},
+		{"$SYSTEM$27", 14, "dj"},
+		{"$SYSTEM$17", 9, "goa_stage_pink"},
+		{"$SYSTEM$21", 11, "mosmixa"},
+		{"$SYSTEM$5", 3, "mom_mixah_1_anim0"},
+	}
+
+	dummyImg := ebiten.NewImage(32, 32)
+	for _, v := range venues {
+		s := &Scene{
+			studio: &studios.Studio{
+				StudioID: v.roomID,
+				Layout:   5,
+				Location: v.location,
+			},
+			studioXML: &isoengine.StudioXML{
+				StaticItems: isoengine.StaticItems{
+					Items: []isoengine.StaticItem{
+						{Member: v.member, X: 100, Y: 150},
+					},
+				},
+			},
+			assets: map[string]*ebiten.Image{
+				v.member: dummyImg,
+			},
+		}
+
+		bounds, ok := s.publicDJBounds()
+		if !ok || bounds.Empty() {
+			t.Fatalf("failed to find DJ booth bounds for venue %s member %s", v.roomID, v.member)
+		}
+		if bounds.Min.X != 100 || bounds.Min.Y != 150 {
+			t.Errorf("unexpected bounds for %s: got %v", v.roomID, bounds)
+		}
+	}
+}

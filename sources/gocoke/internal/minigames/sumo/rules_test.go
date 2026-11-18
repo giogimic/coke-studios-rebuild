@@ -134,3 +134,4 @@ func TestSumoStreakRewards(t *testing.T) {
 		t.Errorf("streak 7 expected Gong (87) and 300 dB, got %+v", tier7)
 	}
 }
+

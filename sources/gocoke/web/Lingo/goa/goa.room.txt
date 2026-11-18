@@ -1,0 +1,45 @@
+<room>
+
+	<version>
+		1.0
+	</version>
+
+	<name>
+		"goa"
+	</name>
+
+	<elements>
+		[#member: "goa-cut", #media: #bitmap, #locH: 0, #locV: 0, #ink: 0, #blend: 100, #width: 765, #height: 489, #id: "floor", #Active: 1]
+		[#member: "goalight", #media: #bitmap, #locH: 376, #locV: 211, #ink: 33, #blend: 100, #width: 289, #height: 179, #palette: "GoalightPalette1", #locZ: 9050, #id: "goa_light", #Active: 0]
+		[#member: "goa_hiliter", #media: #bitmap, #locH: 387, #locV: 267, #ink: 36, #blend: 100, #width: 42, #height: 24, #palette: #systemMac, #type: "hiliter", #id: "hiliter"]
+		[#member: "goa_exitshape", #media: #bitmap, #locH: 369, #locV: 335, #ink: 8, #blend: 1, #width: 142, #height: 91, #palette: "goa-cut-stuff Palette", #locZ: 23000, #id: "command: GOAWAY", #Active: 1]
+		[#member: "goa_stage_pink", #media: #bitmap, #locH: 367, #locV: 184, #ink: 8, #blend: 70, #width: 104, #height: 61, #palette: "goa-cut-stuff Palette", #locZ: 13000]
+		[#member: "goa_entrance_screen", #media: #bitmap, #locH: 359, #locV: 323, #ink: 8, #blend: 40, #width: 134, #height: 60, #palette: "goa-cut-stuff Palette", #locZ: 25000]
+		[#member: "goa_entrance-solid_hl", #media: #bitmap, #locH: 361, #locV: 320, #ink: 8, #blend: 60, #width: 127, #height: 57, #palette: "goa-cut-stuff Palette", #locZ: 25001]
+		[#member: "goa_entrance_mask1", #media: #bitmap, #locH: 401, #locV: 345, #ink: 8, #blend: 100, #width: 25, #height: 29, #palette: "goa-cut-stuff Palette", #locZ: 24500]
+		[#member: "goa_entrance_mask2", #media: #bitmap, #locH: 401, #locV: 345, #ink: 8, #blend: 100, #width: 48, #height: 41, #palette: "goa-cut-stuff Palette", #locZ: 24500]
+		[#member: "entrance_climbdownmask1", #media: #bitmap, #locH: 342, #locV: 375, #ink: 8, #blend: 100, #width: 62, #height: 72, #locZ: 24500]
+		[#member: "entrance_climbdownmask2", #media: #bitmap, #locH: 342, #locV: 375, #ink: 8, #blend: 100, #width: 28, #height: 89, #locZ: 23500]
+		[#member: "goa_fountain_mask", #media: #bitmap, #locH: 702, #locV: 279, #ink: 8, #blend: 100, #width: 97, #height: 112, #palette: "goa-cut-stuff Palette", #locZ: 19300]
+		[#member: "goa_backwallcut", #media: #bitmap, #locH: 60, #locV: 313, #ink: 8, #blend: 100, #width: 100, #height: 114, #palette: "goa-cut-stuff Palette", #locZ: 24000]
+		[#member: "goa_entrance_mask3", #media: #bitmap, #locH: 401, #locV: 345, #ink: 8, #blend: 100, #width: 40, #height: 80, #palette: "goa-cut-stuff Palette", #locZ: 26000]
+		[#member: "goa_entrance_mask4", #media: #bitmap, #locH: 401, #locV: 345, #ink: 8, #blend: 100, #width: 15, #height: 60, #palette: "goa-cut-stuff Palette", #locZ: 24000]
+		[#member: "goa_bardesk1", #media: #bitmap, #locH: 636, #locV: 210, #ink: 8, #blend: 100, #width: 26, #height: 40, #palette: "goa-cut-stuff Palette", #locZ: 9500]
+		[#member: "goa_bardesk2", #media: #bitmap, #locH: 636, #locV: 210, #ink: 8, #blend: 100, #width: 26, #height: 43, #palette: "goa-cut-stuff Palette", #locZ: 10500]
+		[#member: "goa_bardesk3", #media: #bitmap, #locH: 636, #locV: 210, #ink: 8, #blend: 100, #width: 26, #height: 43, #palette: "goa-cut-stuff Palette", #locZ: 11500]
+		[#member: "goa_bardesk4", #media: #bitmap, #locH: 636, #locV: 210, #ink: 8, #blend: 100, #width: 26, #height: 43, #palette: "goa-cut-stuff Palette", #locZ: 12500]
+		[#member: "goa_bardesk5", #media: #bitmap, #locH: 636, #locV: 210, #ink: 8, #blend: 100, #width: 26, #height: 43, #palette: "goa-cut-stuff Palette", #locZ: 13500]
+		[#member: "goa_bardesk6", #media: #bitmap, #locH: 636, #locV: 210, #ink: 8, #blend: 100, #width: 36, #height: 34, #palette: "goa-cut-stuff Palette", #locZ: 14500]
+		[#member: "goa_liteanim1", #media: #bitmap, #locH: 368, #locV: 127, #ink: 33, #blend: 100, #width: 145, #height: 116, #locZ: 15500, #id: "goa_lightanim", #Active: 0]
+		[#member: "GoaFountainAnimLoop", #media: #filmLoop, #locH: 710, #locV: 266, #ink: 0, #blend: 100, #width: 81, #height: 85, #locZ: 20000]
+	</elements>
+
+	<rect>
+		[-2, -7, 763, 482]
+	</rect>
+
+	<roomdata>
+		[#offsetx: 461, #offsety: 159, #factorx: 48, #factory: 24, #factorh: 24]
+	</roomdata>
+
+</room>

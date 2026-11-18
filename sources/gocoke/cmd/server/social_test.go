@@ -182,8 +182,9 @@ func TestHostPermissionsAndModeration(t *testing.T) {
 	// Charlie tries to respond to knock -> unauthorized
 	srv.handlePlayerMessage(pCharlie, `<ST_KNOCK_RES target="Dave" allow="1"/>`)
 
-	// Alice (host owner) responds to knock -> authorized
+	// Alice (host owner) responds to knock -> authorized (both ST_KNOCK_RES and DB_R supported)
 	srv.handlePlayerMessage(pAlice, `<ST_KNOCK_RES target="Dave" allow="1"/>`)
+	srv.handlePlayerMessage(pAlice, `<Room.Action roomID="studio_alice"><DB_R target="Dave" allow="1"/></Room.Action>`)
 
 	// 3. Host Decor Update:
 	// Charlie tries to update decor

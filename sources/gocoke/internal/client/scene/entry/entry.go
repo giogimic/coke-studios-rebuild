@@ -1911,6 +1911,7 @@ func (s *Scene) enterStudio(studioID string) {
 				log.Printf("GameServer: host=%s port=%s", host, port)
 
 				// Connect realtime socket, login, and enter room (prefer reusing boot-time session)
+				success := false
 				if sn, sec := session.GetCredentials(); sn != "" && sec != "" {
 					if rc := session.GetRealtimeClient(); rc != nil && session.IsRealtimeReady() {
 						sh, sp := session.GetRealtimeEndpoint()
@@ -1918,6 +1919,8 @@ func (s *Scene) enterStudio(studioID string) {
 							log.Printf("Realtime: reusing existing connection to %s:%s", host, port)
 							if err := rc.EnterRoom(studioID); err != nil {
 								log.Printf("Realtime enter room failed (reused client): %v", err)
+							} else {
+								success = true
 							}
 						} else {
 							log.Printf("Realtime: existing connection is to %s:%s (needs %s:%s) -> new connect", sh, sp, host, port)
@@ -1937,6 +1940,8 @@ func (s *Scene) enterStudio(studioID string) {
 									session.SetRealtimeReady(true)
 									if err := rc2.EnterRoom(studioID); err != nil {
 										log.Printf("Realtime enter room failed: %v", err)
+									} else {
+										success = true
 									}
 								}
 							}
@@ -1960,6 +1965,8 @@ func (s *Scene) enterStudio(studioID string) {
 								session.SetRealtimeReady(true)
 								if err := rc.EnterRoom(studioID); err != nil {
 									log.Printf("Realtime enter room failed: %v", err)
+								} else {
+									success = true
 								}
 							}
 						}
@@ -1967,13 +1974,14 @@ func (s *Scene) enterStudio(studioID string) {
 				} else {
 					log.Printf("Realtime: missing credentials; cannot login")
 				}
+				if success {
+					s.enterStudioID = studioID
+					return
+				}
 			}
 		} else {
 			log.Printf("Entry: getGameServerByStudioID failed: %v", err)
 		}
-
-		// Main creates and installs the scene once; room snapshots wait in its inbox.
-		s.enterStudioID = studioID
 		return
 	} else { // Public room ($SYSTEM$)
 		log.Printf("Entry: entering public room %s (layout %d)", studio.Name, studio.Layout)
@@ -1994,6 +2002,7 @@ func (s *Scene) enterStudio(studioID string) {
 				port := fmt.Sprint(m["port"])
 				log.Printf("GameServer: host=%s port=%s", host, port)
 
+				success := false
 				if sn, sec := session.GetCredentials(); sn != "" && sec != "" {
 					if rc := session.GetRealtimeClient(); rc != nil && session.IsRealtimeReady() {
 						sh, sp := session.GetRealtimeEndpoint()
@@ -2001,6 +2010,8 @@ func (s *Scene) enterStudio(studioID string) {
 							log.Printf("Realtime: reusing existing connection to %s:%s", host, port)
 							if err := rc.EnterRoom(studioID); err != nil {
 								log.Printf("Realtime enter room failed (reused client): %v", err)
+							} else {
+								success = true
 							}
 						} else {
 							log.Printf("Realtime: switching connection from %s:%s to %s:%s", sh, sp, host, port)
@@ -2020,6 +2031,8 @@ func (s *Scene) enterStudio(studioID string) {
 									session.SetRealtimeReady(true)
 									if err := rc2.EnterRoom(studioID); err != nil {
 										log.Printf("Realtime enter room failed: %v", err)
+									} else {
+										success = true
 									}
 								}
 							}
@@ -2042,6 +2055,8 @@ func (s *Scene) enterStudio(studioID string) {
 								session.SetRealtimeReady(true)
 								if err := rc.EnterRoom(studioID); err != nil {
 									log.Printf("Realtime enter room failed: %v", err)
+								} else {
+									success = true
 								}
 							}
 						}
@@ -2049,13 +2064,14 @@ func (s *Scene) enterStudio(studioID string) {
 				} else {
 					log.Printf("Realtime: missing credentials; cannot login")
 				}
+				if success {
+					s.enterStudioID = studioID
+					return
+				}
 			}
 		} else {
 			log.Printf("Entry: getGameServerByStudioID failed: %v", err)
 		}
-
-		// Main constructs and installs the requested room once.
-		s.enterStudioID = studioID
 		return
 	}
 }

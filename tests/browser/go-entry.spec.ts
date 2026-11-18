@@ -8,6 +8,12 @@ test.describe('Task 2: Go Client Sole Launch Path', () => {
     const engineSelector = page.locator('#engineSelector');
     await expect(engineSelector).toHaveCount(0);
 
+    // Switch to Coke Studios section if on homepage
+    const studiosNav = page.locator('.nav-cokestudios');
+    if (await studiosNav.isVisible()) {
+      await studiosNav.click();
+    }
+
     // 2. Verify game frame loads /game/ path
     const gameFrame = page.locator('#gameFrame');
     await expect(gameFrame).toBeVisible();

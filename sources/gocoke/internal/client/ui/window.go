@@ -951,6 +951,9 @@ func (wm *WindowManager) determineWindowStyle(windowName string) string {
 	if windowName == "purchase_info" || windowName == "burn_decision" {
 		return "sanfo_basic2.window"
 	}
+	if windowName == "cc_mixer" {
+		return ""
+	}
 	if windowName == "choose_song" {
 		// Choose song should use the same look as navigator (two content boxes)
 		return "sanfo_basic.window"
@@ -985,6 +988,9 @@ func (wm *WindowManager) determineWindowTitle(windowName string) string {
 	}
 	if windowName == "paused" {
 		return "PAUSED_TITLE"
+	}
+	if windowName == "cc_mixer" {
+		return ""
 	}
 	if windowName == "choose_song" {
 		return "CHOOSE_SONG_TITLE"
@@ -1566,7 +1572,7 @@ func (w *Window) handleInput(wm *WindowManager) error {
 	if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) && w.ButtonClick != nil {
 		for id, ie := range w.Interactive {
 			// Limit to known simple IDs to avoid overlap with navigator internals
-			if !(strings.HasPrefix(id, "catalog_") || strings.HasPrefix(id, "cat_") || strings.HasPrefix(id, "buy_") || id == "wall_ok" || id == "floor_ok" || id == "open_ranklist" || id == "purchase_decision_ok" || id == "sanfo_decision_cancel" || strings.HasPrefix(id, "nav_create") || strings.HasPrefix(id, "nav_studio") || id == "nav_gotoyourstudio" || strings.HasPrefix(id, "nav_delete") || strings.HasPrefix(id, "nav_modify")) {
+			if !(strings.HasPrefix(id, "catalog_") || strings.HasPrefix(id, "cat_") || strings.HasPrefix(id, "buy_") || id == "wall_ok" || id == "floor_ok" || id == "open_ranklist" || id == "purchase_decision_ok" || id == "sanfo_decision_cancel" || strings.HasPrefix(id, "nav_create") || strings.HasPrefix(id, "nav_studio") || id == "nav_gotoyourstudio" || strings.HasPrefix(id, "nav_delete") || strings.HasPrefix(id, "nav_modify") || strings.HasPrefix(id, "mixer_") || id == "closemixer") {
 				continue
 			}
 			x := int(offsetX) + ie.Rect[0]

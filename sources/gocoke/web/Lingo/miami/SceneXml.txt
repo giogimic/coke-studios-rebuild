@@ -1,0 +1,107 @@
+<Studio xOff="366" yOff="-43" layoutType="1">
+
+<Background member="miami_bass" x="0" y="0" ink="0" />
+
+<Hiliter member="miami_hiliter" ink="36" />
+
+<Furniture castLib="Studio">
+
+<Item ink="8" dir="0" gridX="17" gridZ="8" imageBase="miami_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="4" gridX="17" gridZ="6" imageBase="miami_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="4" gridX="20" gridZ="7" imageBase="miami_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="2" gridX="19" gridZ="8" imageBase="miami_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="0" gridX="20" gridZ="9" imageBase="miami_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="6" gridX="21" gridZ="8" imageBase="miami_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="4" gridX="18" gridZ="3" imageBase="miami_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="2" gridX="17" gridZ="4" imageBase="miami_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="6" gridX="19" gridZ="4" imageBase="miami_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="2" gridX="10" gridZ="9" imageBase="miami_fuchsia" Action="DEFAULT" type="Sofa" />
+
+<Item ink="8" dir="4" gridX="7" gridZ="12" imageBase="miami_fuchsia" Action="DEFAULT" type="Sofa" />
+
+<Item ink="8" dir="4" gridX="8" gridZ="19" imageBase="miami_fuchsia" Action="DEFAULT" type="Sofa" />
+
+<Item ink="8" dir="6" gridX="13" gridZ="7" imageBase="miami_stool" Action="DEFAULT" type="Stool" />
+
+<Item ink="8" dir="6" gridX="13" gridZ="5" imageBase="miami_stool" Action="DEFAULT" type="Stool" />
+
+<Item ink="8" dir="6" gridX="13" gridZ="3" imageBase="miami_stool" Action="DEFAULT" type="Stool" />
+
+<Item ink="8" dir="2" gridX="5" gridZ="14" imageBase="miami_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="6" gridX="7" gridZ="14" imageBase="miami_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="4" gridX="12" gridZ="7" imageBase="miami_cokecase" Action="DRINK_DESPENSER" type="Default" />
+
+<Item ink="36" dir="4" gridX="9" gridZ="12" imageBase="rio_cokecase" Action="DRINK_DESPENSER" type="Default" />
+
+<Item ink="36" dir="2" gridX="10" gridZ="11" imageBase="rio_cokecase" Action="DRINK_DESPENSER" type="Default" />
+
+</Furniture>
+
+<WallItems>
+
+</WallItems>
+
+<StaticItems castLib="Studio">
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="40" width="48" y="114" x="580" layer="8" col="12" row="2" member="miami_bar_a_0_5_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="41" width="52" y="127" x="553" layer="8" col="12" row="3" member="miami_bar_a_0_4_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="44" width="56" y="142" x="523" layer="8" col="12" row="4" member="miami_bar_a_0_3_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="44" width="55" y="157" x="493" layer="8" col="12" row="5" member="miami_bar_a_0_2_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="44" width="54" y="172" x="464" layer="1" col="12" row="6" member="miami_bar_a_0_1_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="50" width="59" y="174" x="460" layer="1" col="12" row="7" member="miami_bar_a_0_0_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="80" width="190" y="60" x="519" layer="8" col="9" row="4" member="miami_neonmask" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="31" width="33" y="232" x="580" layer="1" col="17" row="7" member="miami_table_a_0_1_1_0_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="31" width="33" y="283" x="629" layer="1" col="20" row="8" member="miami_table_a_0_1_1_0_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="31" width="33" y="211" x="677" layer="1" col="18" row="4" member="miami_table_a_0_1_1_0_0" />
+
+<Item Action="SpeakerAnim" skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="56" width="50" y="318" x="4" layer="8" col="10" row="24" member="miami_speeka1_anim0" />
+
+<Item Action="SpeakerAnim" skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="64" width="49" y="366" x="100" layer="8" col="15" row="25" member="miami_speeka2_anim0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="105" width="166" y="402" x="83" layer="8" col="16" row="25" member="miami_kaide" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="31" width="33" y="186" x="142" layer="1" col="6" row="14" member="miami_table_a_0_1_1_0_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="174" width="80" y="94" x="55" layer="8" col="6" row="16" member="miami_shipmask1" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="98" width="34" y="185" x="124" layer="8" col="9" row="18" member="miami_shipmask2" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="64" width="27" y="185" x="124" layer="8" col="10" row="18" member="miami_shipmask3" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="43" width="45" y="323" x="314" layer="8" col="15" row="17" member="ny_kaidemask22" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="40" width="43" y="327" x="53" layer="8" col="11" row="23" member="miami_mixer1" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="45" width="54" y="334" x="72" layer="8" col="12" row="23" member="miami_mixer2" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="215" width="336" y="251" x="424" layer="8" col="25" row="20" member="miami_palms" />
+
+</StaticItems>
+
+<Door col="20" row="19">
+
+<Exit blend="0" ink="8" member="miami_exiter" />
+
+</Door>
+
+</Studio>

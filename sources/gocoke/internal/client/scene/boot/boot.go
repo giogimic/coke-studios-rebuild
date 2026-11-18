@@ -335,16 +335,18 @@ func (s *Scene) startRealtimeLogin() {
 		log.Printf("Boot: realtime connect failed: %v", err)
 		return
 	}
-	// Send login without waiting for Accepted; some servers may not ack
-	if err := rc.SendLogin(sn, sec); err != nil {
-		log.Printf("Boot: realtime login send failed: %v", err)
+	loginCtx, loginCancel := context.WithTimeout(context.Background(), 8*time.Second)
+	defer loginCancel()
+	if err := rc.SendLoginAndWait(loginCtx, sn, sec); err != nil {
+		log.Printf("Boot: realtime login failed or timed out: %v", err)
+		_ = rc.Close()
 		return
 	}
-	// Expose client immediately for reuse on room entry
+	// Expose client after login acceptance for reuse on room entry
 	session.SetRealtimeClient(rc)
 	session.SetRealtimeEndpoint(host, port)
 	session.SetRealtimeReady(true)
-	log.Printf("Boot: realtime login sent (ready)")
+	log.Printf("Boot: realtime login accepted and ready")
 }
 
 func (s *Scene) loadTip() {

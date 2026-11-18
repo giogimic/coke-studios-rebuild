@@ -251,3 +251,25 @@ func (c *Client) SendFriendReject(fromUser string) error {
 	xml := fmt.Sprintf("<Room.Action roomID=\"$LOBBY$\"><MMS_REJ from=\"%s\"/></Room.Action>", fromUser)
 	return c.SendXML(xml)
 }
+
+// SendKickAvatar stubs kick avatar for non-wasm
+func (c *Client) SendKickAvatar(roomID, target string) error {
+	xml := fmt.Sprintf("<Room.Action roomID=\"%s\"><ST_KICK target=\"%s\"/></Room.Action>", roomID, target)
+	return c.SendXML(xml)
+}
+
+// SendDoorbellResponse stubs doorbell response for non-wasm
+func (c *Client) SendDoorbellResponse(target string, allow bool) error {
+	allowVal := "0"
+	if allow {
+		allowVal = "1"
+	}
+	xml := fmt.Sprintf("<Room.Action roomID=\"$LOBBY$\"><DB_R target=\"%s\" allow=\"%s\"/></Room.Action>", target, allowVal)
+	return c.SendXML(xml)
+}
+
+// SendDoorbellKnock stubs doorbell knock for non-wasm
+func (c *Client) SendDoorbellKnock(roomID string) error {
+	xml := fmt.Sprintf("<Room.Action roomID=\"%s\"><ST_KNOCK roomID=\"%s\"/></Room.Action>", roomID, roomID)
+	return c.SendXML(xml)
+}

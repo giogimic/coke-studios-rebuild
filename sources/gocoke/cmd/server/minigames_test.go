@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"gocoke/internal/client/minigames/sumo"
+	"gocoke/internal/minigames/sumo"
 )
 
 func TestSumoMatchProgressionAndRewards(t *testing.T) {

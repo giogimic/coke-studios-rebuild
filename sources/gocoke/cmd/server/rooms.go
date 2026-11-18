@@ -19,6 +19,7 @@ type Room struct {
 	ID             string
 	Name           string
 	Layout         int
+	Location       int
 	OwnerName      string
 	Wallpaper      int
 	Floor          int
@@ -47,7 +48,23 @@ func NewRoom(id, name string, layout int) *Room {
 	case 4:
 		entX, entZ = 8, 4
 	case 5:
-		entX, entZ = 11, 2
+		lower := strings.ToLower(id + " " + name)
+		switch {
+		case strings.Contains(lower, "alaska"):
+			entX, entZ = 15, 24
+		case strings.Contains(lower, "miami"):
+			entX, entZ = 22, 22
+		case strings.Contains(lower, "mombasa"):
+			entX, entZ = 19, 25
+		case strings.Contains(lower, "goa"):
+			entX, entZ = 13, 14
+		case strings.Contains(lower, "moscow"):
+			entX, entZ = 12, 25
+		case strings.Contains(lower, "central") || id == "VIS$0" || id == "cc_room" || id == "studio_model_b":
+			entX, entZ = 16, 25
+		default:
+			entX, entZ = 11, 2
+		}
 	}
 	return &Room{
 		ID:             id,
@@ -81,13 +98,32 @@ func (r *Room) Broadcast(msg string, excludeID string) {
 }
 
 func (r *Room) SetFurnitureSolid(posID string, x, z int, solid bool) {
+	r.SetFurnitureFootprint(posID, x, z, 1, 1, 2, solid)
+}
+
+func (r *Room) SetFurnitureFootprint(posID string, x, z, width, depth, dir int, solid bool) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	key := [2]int{x, z}
-	if solid {
-		r.furnitureSolid[key] = posID
-	} else {
-		delete(r.furnitureSolid, key)
+	if width <= 0 {
+		width = 1
+	}
+	if depth <= 0 {
+		depth = 1
+	}
+	if width != depth && (dir == 4 || dir == 0) {
+		width, depth = depth, width
+	}
+	for dx := 0; dx < width; dx++ {
+		for dz := 0; dz < depth; dz++ {
+			key := [2]int{x + dx, z + dz}
+			if solid {
+				r.furnitureSolid[key] = posID
+			} else {
+				if r.furnitureSolid[key] == posID {
+					delete(r.furnitureSolid, key)
+				}
+			}
+		}
 	}
 }
 
@@ -138,7 +174,7 @@ type pathMapXML struct {
 
 var (
 	pathMapCacheMu sync.RWMutex
-	pathMapCache   = make(map[int]map[[2]int]bool)
+	pathMapCache   = make(map[string]map[[2]int]bool)
 )
 
 func (r *Room) LoadPathMap(webRoot string) {
@@ -146,8 +182,48 @@ func (r *Room) LoadPathMap(webRoot string) {
 		return
 	}
 
+	var relPath string
+	if r.Layout == 5 {
+		lower := strings.ToLower(r.ID + " " + r.Name)
+		switch {
+		case r.Location == 10 || strings.Contains(lower, "alaska"):
+			relPath = filepath.Join("Lingo", "alaska", "MapXml.txt")
+		case r.Location == 2 || strings.Contains(lower, "miami"):
+			relPath = filepath.Join("Lingo", "miami", "MapXml.txt")
+		case r.Location == 3 || strings.Contains(lower, "mombasa"):
+			relPath = filepath.Join("Lingo", "mombasa", "MapXml.txt")
+		case r.Location == 9 || strings.Contains(lower, "goa"):
+			relPath = filepath.Join("Lingo", "goa", "MapXml.txt")
+		case r.Location == 11 || strings.Contains(lower, "moscow"):
+			relPath = filepath.Join("Lingo", "moscow", "MapXml.txt")
+		case r.Location == 14 || strings.Contains(lower, "central") || r.ID == "VIS$0" || r.ID == "cc_room" || r.ID == "studio_model_b":
+			relPath = filepath.Join("Lingo", "centralpark", "MapXml.txt")
+		default:
+			relPath = filepath.Join("Lingo", "london", "59_MapXml.txt")
+		}
+	} else {
+		switch r.Layout {
+		case 1:
+			relPath = filepath.Join("Lingo", "isoengine", "142_Studio_A_MapXml.txt")
+		case 2:
+			relPath = filepath.Join("Lingo", "isoengine", "143_Studio_B_MapXml.txt")
+		case 3:
+			relPath = filepath.Join("Lingo", "isoengine", "144_Studio_C_MapXml.txt")
+		case 4:
+			relPath = filepath.Join("Lingo", "isoengine", "145_Studio_D_MapXml.txt")
+		case 6:
+			relPath = filepath.Join("Lingo", "isoengine", "157_Studio_E_MapXml.txt")
+		case 7:
+			relPath = filepath.Join("Lingo", "isoengine", "159_Studio_F_MapXml.txt")
+		case 8:
+			relPath = filepath.Join("Lingo", "isoengine", "161_Studio_G_MapXml.txt")
+		default:
+			relPath = filepath.Join("Lingo", "isoengine", "144_Studio_C_MapXml.txt")
+		}
+	}
+
 	pathMapCacheMu.RLock()
-	cached, ok := pathMapCache[r.Layout]
+	cached, ok := pathMapCache[relPath]
 	pathMapCacheMu.RUnlock()
 
 	if ok {
@@ -158,22 +234,6 @@ func (r *Room) LoadPathMap(webRoot string) {
 		}
 		r.mu.Unlock()
 		return
-	}
-
-	var relPath string
-	switch r.Layout {
-	case 1:
-		relPath = filepath.Join("Lingo", "isoengine", "142_Studio_A_MapXml.txt")
-	case 2:
-		relPath = filepath.Join("Lingo", "isoengine", "143_Studio_B_MapXml.txt")
-	case 3:
-		relPath = filepath.Join("Lingo", "isoengine", "144_Studio_C_MapXml.txt")
-	case 4:
-		relPath = filepath.Join("Lingo", "isoengine", "145_Studio_D_MapXml.txt")
-	case 5:
-		relPath = filepath.Join("Lingo", "london", "59_MapXml.txt")
-	default:
-		relPath = filepath.Join("Lingo", "isoengine", "144_Studio_C_MapXml.txt")
 	}
 
 	fullPath := filepath.Join(webRoot, relPath)
@@ -218,7 +278,7 @@ func (r *Room) LoadPathMap(webRoot string) {
 	}
 
 	pathMapCacheMu.Lock()
-	pathMapCache[r.Layout] = walkable
+	pathMapCache[relPath] = walkable
 	pathMapCacheMu.Unlock()
 
 	r.mu.Lock()
@@ -232,90 +292,91 @@ func (r *Room) LoadPathMap(webRoot string) {
 // HistoricalPublicStudios maps all 44 authentic Coke Studios public rooms and aliases
 // as defined in PublicStudios_English.xml (Director 10.0 baseline).
 var HistoricalPublicStudios = map[string]struct {
-	Name   string
-	Layout int
+	Name     string
+	Layout   int
+	Location int
 }{
 	// System Rooms 1..44
-	"$SYSTEM$1":  {Name: "London I", Layout: 5},
-	"$SYSTEM$2":  {Name: "London II", Layout: 5},
-	"$SYSTEM$3":  {Name: "Miami I", Layout: 5},
-	"$SYSTEM$4":  {Name: "Miami II", Layout: 5},
-	"$SYSTEM$5":  {Name: "Mombasa I", Layout: 5},
-	"$SYSTEM$6":  {Name: "Mombasa II", Layout: 5},
-	"$SYSTEM$7":  {Name: "New York I", Layout: 5},
-	"$SYSTEM$8":  {Name: "New York II", Layout: 5},
-	"$SYSTEM$9":  {Name: "Rio de Janeiro I", Layout: 5},
-	"$SYSTEM$10": {Name: "Rio de Janeiro II", Layout: 5},
-	"$SYSTEM$11": {Name: "Seattle I", Layout: 5},
-	"$SYSTEM$12": {Name: "Seattle II", Layout: 5},
-	"$SYSTEM$13": {Name: "Sydney I", Layout: 5},
-	"$SYSTEM$14": {Name: "Sydney II", Layout: 5},
-	"$SYSTEM$15": {Name: "Tokyo I", Layout: 5},
-	"$SYSTEM$16": {Name: "Tokyo II", Layout: 5},
-	"$SYSTEM$17": {Name: "Goa I", Layout: 5},
-	"$SYSTEM$18": {Name: "Goa II", Layout: 5},
-	"$SYSTEM$19": {Name: "Alaska I", Layout: 5},
-	"$SYSTEM$20": {Name: "Alaska II", Layout: 5},
-	"$SYSTEM$21": {Name: "Moscow I", Layout: 5},
-	"$SYSTEM$22": {Name: "Moscow II", Layout: 5},
-	"$SYSTEM$23": {Name: "Coca-Cola Red Room I", Layout: 5},
-	"$SYSTEM$24": {Name: "Coca-Cola Red Room II", Layout: 5},
-	"$SYSTEM$25": {Name: "San Francisco I", Layout: 3},
-	"$SYSTEM$26": {Name: "San Francisco II", Layout: 3},
-	"$SYSTEM$27": {Name: "Central Park I", Layout: 5},
-	"$SYSTEM$28": {Name: "Central Park II", Layout: 5},
-	"$SYSTEM$29": {Name: "New Orleans I", Layout: 5},
-	"$SYSTEM$30": {Name: "New Orleans II", Layout: 5},
-	"$SYSTEM$31": {Name: "Mexico I", Layout: 5},
-	"$SYSTEM$32": {Name: "Mexico II", Layout: 5},
-	"$SYSTEM$33": {Name: "Neptune I", Layout: 5},
-	"$SYSTEM$34": {Name: "Neptune II", Layout: 5},
-	"$SYSTEM$35": {Name: "Casting Call Room I", Layout: 5},
-	"$SYSTEM$36": {Name: "Casting Call Room II", Layout: 5},
-	"$SYSTEM$37": {Name: "Casting Call Room III", Layout: 5},
-	"$SYSTEM$38": {Name: "Casting Call Room IV", Layout: 5},
-	"$SYSTEM$39": {Name: "Whale wash", Layout: 5},
-	"$SYSTEM$40": {Name: "Audition gold", Layout: 5},
-	"$SYSTEM$41": {Name: "mycoke Arena", Layout: 5},
-	"$SYSTEM$42": {Name: "Club Cherry", Layout: 5},
-	"$SYSTEM$43": {Name: "Ray's Rooftop Party", Layout: 5},
-	"$SYSTEM$44": {Name: "Audition red", Layout: 5},
+	"$SYSTEM$1":  {Name: "London I", Layout: 5, Location: 1},
+	"$SYSTEM$2":  {Name: "London II", Layout: 5, Location: 1},
+	"$SYSTEM$3":  {Name: "Miami I", Layout: 5, Location: 2},
+	"$SYSTEM$4":  {Name: "Miami II", Layout: 5, Location: 2},
+	"$SYSTEM$5":  {Name: "Mombasa I", Layout: 5, Location: 3},
+	"$SYSTEM$6":  {Name: "Mombasa II", Layout: 5, Location: 3},
+	"$SYSTEM$7":  {Name: "New York I", Layout: 5, Location: 4},
+	"$SYSTEM$8":  {Name: "New York II", Layout: 5, Location: 4},
+	"$SYSTEM$9":  {Name: "Rio de Janeiro I", Layout: 5, Location: 5},
+	"$SYSTEM$10": {Name: "Rio de Janeiro II", Layout: 5, Location: 5},
+	"$SYSTEM$11": {Name: "Seattle I", Layout: 5, Location: 6},
+	"$SYSTEM$12": {Name: "Seattle II", Layout: 5, Location: 6},
+	"$SYSTEM$13": {Name: "Sydney I", Layout: 5, Location: 7},
+	"$SYSTEM$14": {Name: "Sydney II", Layout: 5, Location: 7},
+	"$SYSTEM$15": {Name: "Tokyo I", Layout: 5, Location: 8},
+	"$SYSTEM$16": {Name: "Tokyo II", Layout: 5, Location: 8},
+	"$SYSTEM$17": {Name: "Goa I", Layout: 5, Location: 9},
+	"$SYSTEM$18": {Name: "Goa II", Layout: 5, Location: 9},
+	"$SYSTEM$19": {Name: "Alaska I", Layout: 5, Location: 10},
+	"$SYSTEM$20": {Name: "Alaska II", Layout: 5, Location: 10},
+	"$SYSTEM$21": {Name: "Moscow I", Layout: 5, Location: 11},
+	"$SYSTEM$22": {Name: "Moscow II", Layout: 5, Location: 11},
+	"$SYSTEM$23": {Name: "Coca-Cola Red Room I", Layout: 5, Location: 30},
+	"$SYSTEM$24": {Name: "Coca-Cola Red Room II", Layout: 5, Location: 12},
+	"$SYSTEM$25": {Name: "San Francisco I", Layout: 3, Location: 13},
+	"$SYSTEM$26": {Name: "San Francisco II", Layout: 3, Location: 13},
+	"$SYSTEM$27": {Name: "Central Park I", Layout: 5, Location: 14},
+	"$SYSTEM$28": {Name: "Central Park II", Layout: 5, Location: 14},
+	"$SYSTEM$29": {Name: "New Orleans I", Layout: 5, Location: 15},
+	"$SYSTEM$30": {Name: "New Orleans II", Layout: 5, Location: 15},
+	"$SYSTEM$31": {Name: "Mexico I", Layout: 5, Location: 16},
+	"$SYSTEM$32": {Name: "Mexico II", Layout: 5, Location: 16},
+	"$SYSTEM$33": {Name: "Neptune I", Layout: 5, Location: 17},
+	"$SYSTEM$34": {Name: "Neptune II", Layout: 5, Location: 29},
+	"$SYSTEM$35": {Name: "Casting Call Room I", Layout: 5, Location: 19},
+	"$SYSTEM$36": {Name: "Casting Call Room II", Layout: 5, Location: 19},
+	"$SYSTEM$37": {Name: "Casting Call Room III", Layout: 5, Location: 19},
+	"$SYSTEM$38": {Name: "Casting Call Room IV", Layout: 5, Location: 19},
+	"$SYSTEM$39": {Name: "Whale wash", Layout: 5, Location: 18},
+	"$SYSTEM$40": {Name: "Audition gold", Layout: 5, Location: 20},
+	"$SYSTEM$41": {Name: "mycoke Arena", Layout: 5, Location: 22},
+	"$SYSTEM$42": {Name: "Club Cherry", Layout: 5, Location: 23},
+	"$SYSTEM$43": {Name: "Ray's Rooftop Party", Layout: 5, Location: 26},
+	"$SYSTEM$44": {Name: "Audition red", Layout: 5, Location: 27},
 
 	// Web / Vis aliases
-	"VIS$0":                {Name: "Central Park Studio", Layout: 5},
-	"VIS$1":                {Name: "San Francisco Studio", Layout: 3},
-	"VIS$2":                {Name: "London Studio", Layout: 5},
-	"studio_model_a":       {Name: "San Francisco Studio", Layout: 3},
-	"studio_model_b":       {Name: "Central Park Studio", Layout: 5},
-	"studio_model_c":       {Name: "London Studio", Layout: 5},
-	"studio_model_d":       {Name: "Private Studio #1", Layout: 4},
-	"studio_model_rooftop": {Name: "Ray's Rooftop Party", Layout: 5},
-	"studio_wayne":         {Name: "Studio Wayne", Layout: 2},
-	"studio_1":             {Name: "Private Studio #1", Layout: 4},
+	"VIS$0":                {Name: "Central Park Studio", Layout: 5, Location: 14},
+	"VIS$1":                {Name: "San Francisco Studio", Layout: 3, Location: 13},
+	"VIS$2":                {Name: "London Studio", Layout: 5, Location: 1},
+	"studio_model_a":       {Name: "San Francisco Studio", Layout: 3, Location: 13},
+	"studio_model_b":       {Name: "Central Park Studio", Layout: 5, Location: 14},
+	"studio_model_c":       {Name: "London Studio", Layout: 5, Location: 1},
+	"studio_model_d":       {Name: "Private Studio #1", Layout: 4, Location: 1},
+	"studio_model_rooftop": {Name: "Ray's Rooftop Party", Layout: 5, Location: 26},
+	"studio_wayne":         {Name: "Studio Wayne", Layout: 2, Location: 1},
+	"studio_1":             {Name: "Private Studio #1", Layout: 4, Location: 1},
 
 	// 21 Preserved Public Room CCT Slugs
-	"alaska":           {Name: "Alaska I", Layout: 5},
-	"atlantis":         {Name: "Neptune I", Layout: 5},
-	"auditiongold":     {Name: "Audition gold", Layout: 5},
-	"auditionred":      {Name: "Audition red", Layout: 5},
-	"castingcallroom":  {Name: "Casting Call Room I", Layout: 5},
-	"cc_room":          {Name: "Central Park I", Layout: 5},
-	"centralpark":      {Name: "Central Park I", Layout: 5},
-	"goa":              {Name: "Goa I", Layout: 5},
-	"london":           {Name: "London I", Layout: 5},
-	"mexico":           {Name: "Mexico I", Layout: 5},
-	"miami":            {Name: "Miami I", Layout: 5},
-	"mombasa":          {Name: "Mombasa I", Layout: 5},
-	"moscow":           {Name: "Moscow I", Layout: 5},
-	"neworleans":       {Name: "New Orleans I", Layout: 5},
-	"newyork":          {Name: "New York I", Layout: 5},
-	"raysrooftopparty": {Name: "Ray's Rooftop Party", Layout: 5},
-	"redroom":          {Name: "Coca-Cola Red Room I", Layout: 5},
-	"rio":              {Name: "Rio de Janeiro I", Layout: 5},
-	"sanfrancisco":     {Name: "San Francisco I", Layout: 3},
-	"seattle":          {Name: "Seattle I", Layout: 5},
-	"sydney":           {Name: "Sydney I", Layout: 5},
-	"tokyo":            {Name: "Tokyo I", Layout: 5},
+	"alaska":           {Name: "Alaska I", Layout: 5, Location: 10},
+	"atlantis":         {Name: "Neptune I", Layout: 5, Location: 17},
+	"auditiongold":     {Name: "Audition gold", Layout: 5, Location: 20},
+	"auditionred":      {Name: "Audition red", Layout: 5, Location: 27},
+	"castingcallroom":  {Name: "Casting Call Room I", Layout: 5, Location: 19},
+	"cc_room":          {Name: "Central Park I", Layout: 5, Location: 14},
+	"centralpark":      {Name: "Central Park I", Layout: 5, Location: 14},
+	"goa":              {Name: "Goa I", Layout: 5, Location: 9},
+	"london":           {Name: "London I", Layout: 5, Location: 1},
+	"mexico":           {Name: "Mexico I", Layout: 5, Location: 16},
+	"miami":            {Name: "Miami I", Layout: 5, Location: 2},
+	"mombasa":          {Name: "Mombasa I", Layout: 5, Location: 3},
+	"moscow":           {Name: "Moscow I", Layout: 5, Location: 11},
+	"neworleans":       {Name: "New Orleans I", Layout: 5, Location: 15},
+	"newyork":          {Name: "New York I", Layout: 5, Location: 4},
+	"raysrooftopparty": {Name: "Ray's Rooftop Party", Layout: 5, Location: 26},
+	"redroom":          {Name: "Coca-Cola Red Room I", Layout: 5, Location: 30},
+	"rio":              {Name: "Rio de Janeiro I", Layout: 5, Location: 5},
+	"sanfrancisco":     {Name: "San Francisco I", Layout: 3, Location: 13},
+	"seattle":          {Name: "Seattle I", Layout: 5, Location: 6},
+	"sydney":           {Name: "Sydney I", Layout: 5, Location: 7},
+	"tokyo":            {Name: "Tokyo I", Layout: 5, Location: 8},
 }
 
 // isItemSolid reports whether a catalogue item acts as a path-blocking obstacle.
@@ -362,6 +423,7 @@ func (s *Server) GetRoom(roomID string) (*Room, error) {
 
 	if def, ok := HistoricalPublicStudios[roomID]; ok {
 		rm := NewRoom(roomID, def.Name, def.Layout)
+		rm.Location = def.Location
 		rm.OwnerName = "Coke Studios"
 		rm.LoadPathMap(s.webRoot)
 		s.Rooms[roomID] = rm
@@ -387,7 +449,11 @@ func (s *Server) GetRoom(roomID string) (*Room, error) {
 			furniList, _ := s.store.GetRoomFurniture(rm.ID)
 			for _, pf := range furniList {
 				if s.isItemSolid(pf.CatalogItemID) {
-					rm.SetFurnitureSolid(pf.PosID, pf.X, pf.Z, true)
+					w, d := 1, 1
+					if catItem, err := s.GetCatalogItem(pf.CatalogItemID); err == nil && catItem != nil {
+						w, d = catItem.Width, catItem.Depth
+					}
+					rm.SetFurnitureFootprint(pf.PosID, pf.X, pf.Z, w, d, pf.Dir, true)
 				}
 			}
 

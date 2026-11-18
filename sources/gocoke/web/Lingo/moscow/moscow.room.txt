@@ -1,0 +1,38 @@
+<room>
+
+	<name>
+		"moscow"
+	</name>
+
+	<date>
+		26.3.2003 / 13:12 
+	</date>
+
+	<version>
+		1.0
+	</version>
+
+	<elements>
+		[#member: "mos_cow_split", #media: #bitmap, #locH: 0, #locV: -6, #ink: 0, #blend: 100, #width: 769, #height: 490, #id: "floor", #Active: 1]
+		[#member: "mosmixa", #media: #bitmap, #locH: 578, #locV: 266, #ink: 8, #blend: 100, #width: 54, #height: 32, #palette: "mosmixer", #locZ: 15000]
+		[#member: "mos_plant", #media: #bitmap, #locH: 384, #locV: 270, #ink: 8, #blend: 100, #width: 138, #height: 140, #palette: "mos_plant Palette", #locZ: 16000]
+		[#member: "moscova_hiliter", #media: #bitmap, #locH: 369, #locV: 266, #ink: 36, #blend: 100, #width: 42, #height: 24, #palette: #systemMac, #type: "hiliter", #id: "hiliter"]
+		[#member: "mos_plantation", #media: #bitmap, #locH: 391, #locV: 348, #ink: 8, #blend: 100, #width: 295, #height: 140, #palette: "mos_plant Palette", #locZ: 30000]
+		[#member: "mos_door1mask", #media: #bitmap, #locH: 637, #locV: 304, #ink: 8, #blend: 100, #width: 144, #height: 98, #palette: "mos_furny Palette", #locZ: 20000]
+		[#member: "mos_plant2", #media: #bitmap, #locH: 384, #locV: 270, #ink: 8, #blend: 100, #width: 45, #height: 50, #palette: "mos_plant Palette", #locZ: 17000]
+		[#member: "moscow1896204", #media: #bitmap, #locH: 93, #locV: 446, #ink: 8, #blend: 0, #width: 174, #height: 92, #id: "command: GOAWAY", #Active: 1]
+	</elements>
+
+	<rect>
+		[-8, -8, 761, 484]
+	</rect>
+
+	<border>
+		[0, 0, 0, 0]
+	</border>
+
+	<roomdata>
+		[#offsetx: 454, #offsety: 138, #factorx: 48, #factory: 24, #factorh: 24]
+	</roomdata>
+
+</room>

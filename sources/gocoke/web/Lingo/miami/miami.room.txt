@@ -1,0 +1,36 @@
+<room>
+
+	<version>
+		1.0
+	</version>
+
+	<name>
+		"miami"
+	</name>
+
+	<elements>
+		[#member: "miami_bass", #media: #bitmap, #locH: 0, #locV: 0, #ink: 0, #blend: 100, #width: 760, #height: 474, #id: "floor"]
+		[#member: "miami_hiliter", #media: #bitmap, #locH: 380, #locV: 260, #ink: 36, #blend: 100, #width: 42, #height: 24, #palette: #systemMac, #type: "hiliter", #id: "hiliter"]
+		[#member: "miami_mixer1", #media: #bitmap, #locH: 53, #locV: 327, #ink: 8, #blend: 100, #width: 43, #height: 40, #palette: "Miami Neu Palette", #locZ: 31000]
+		[#member: "miami_mixer2", #media: #bitmap, #locH: 72, #locV: 334, #ink: 8, #blend: 100, #width: 54, #height: 45, #palette: "Miami Neu Palette", #locZ: 32000]
+		[#member: "miami_speeka1_anim0", #media: #bitmap, #locH: 4, #locV: 318, #ink: 8, #blend: 100, #width: 50, #height: 56, #palette: "Miami Bass Speeka Palette", #locZ: 31000, #id: "speaker1", #Active: 0]
+		[#member: "miami_speeka2_anim0", #media: #bitmap, #locH: 100, #locV: 366, #ink: 8, #blend: 100, #width: 49, #height: 64, #palette: "Miami Bass Speeka Palette", #locZ: 36000, #id: "speaker2", #Active: 0]
+		[#member: "miami_shipmask1", #media: #bitmap, #locH: 55, #locV: 94, #ink: 36, #blend: 100, #width: 80, #height: 174, #palette: "Miami Neu Palette", #locZ: 20000]
+		[#member: "miami_shipmask2", #media: #bitmap, #locH: 124, #locV: 185, #ink: 36, #blend: 100, #width: 34, #height: 98, #palette: "Miami Neu Palette", #locZ: 20000]
+		[#member: "miami_palms", #media: #bitmap, #locH: 424, #locV: 251, #ink: 36, #blend: 100, #width: 336, #height: 215, #palette: "miami palm colors", #locZ: 70000]
+		[#member: "miami_exiter", #media: #bitmap, #locH: 270, #locV: 513, #ink: 8, #blend: 0, #width: 166, #height: 100, #palette: "miami colors", #locZ: 36000, #id: "command: GOAWAY", #Active: 1]
+		[#member: "miami_kaide", #media: #bitmap, #locH: 83, #locV: 402, #ink: 36, #blend: 100, #width: 166, #height: 105, #palette: "Kaide Palette", #locZ: 46000]
+		[#member: "miami_shipmask3", #media: #bitmap, #locH: 124, #locV: 185, #ink: 36, #blend: 100, #width: 27, #height: 64, #palette: "Miami Neu Palette", #locZ: 21000]
+		[#member: "miami_neonmask", #media: #bitmap, #locH: 519, #locV: 60, #ink: 8, #blend: 100, #width: 190, #height: 80, #locZ: 21000]
+		[#member: "ny_kaidemask22", #media: #bitmap, #locH: 314, #locV: 323, #ink: 36, #blend: 100, #width: 45, #height: 43, #locZ: 26000]
+	</elements>
+
+	<rect>
+		[0, 0, 760, 517]
+	</rect>
+
+	<roomdata>
+		[#offsetx: 388, #offsety: 18, #factorx: 48, #factory: 24, #factorh: 24]
+	</roomdata>
+
+</room>

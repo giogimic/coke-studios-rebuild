@@ -58,8 +58,12 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/api/studio/decor", s.handleStudioDecor)
 	mux.HandleFunc("/api/studio/create", s.handleCreateStudio)
 
-	// 8. In-Game CD Burning API
+	// 8. In-Game CD Burning & Mixes API
 	mux.HandleFunc("/api/mixer/burn", s.handleMixerBurn)
+	mux.HandleFunc("/api/mixer/save", s.handleMixerSave)
+	mux.HandleFunc("/api/music/save", s.handleMixerSave)
+	mux.HandleFunc("/api/mixer/mixes", s.handleMixerList)
+	mux.HandleFunc("/api/music/mixes", s.handleMixerList)
 
 	// 9. Health endpoint
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {

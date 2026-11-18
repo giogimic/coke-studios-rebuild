@@ -1,0 +1,85 @@
+<Studio xOff="383" yOff="-37" layoutType="1">
+
+<Background member="backgroundflatspeakerwire" x="380" y="235" ink="0" />
+
+<Hiliter member="centralpark_hiliter" ink="36" />
+
+<Furniture castLib="Studio">
+
+<Item ink="36" dir="2" gridX="6" gridZ="2" imageBase="centralparksofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="2" gridX="6" gridZ="6" imageBase="centralparksofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="4" gridX="9" gridZ="1" imageBase="centralparksofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="4" gridX="13" gridZ="1" imageBase="centralparksofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="4" gridX="18" gridZ="9" imageBase="drinkstand" Action="DRINK_DESPENSER" type="Default" />
+
+<Item ink="36" dir="4" gridX="19" gridZ="9" imageBase="drinkstand2" Action="DRINK_DESPENSER" type="Default" />
+
+</Furniture>
+
+<WallItems>
+
+</WallItems>
+
+<StaticItems castLib="Studio">
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="134" width="194" y="403" x="663" layer="1" col="25" row="18" member="tree1" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="248" width="198" y="346" x="99" layer="1" col="18" row="25" member="tree2" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="84" width="95" y="42" x="712" layer="1" col="15" row="1" member="tree3" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="23" width="35" y="109" x="142" layer="1" col="2" row="11" member="basket" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="23" width="35" y="422" x="486" layer="1" col="22" row="17" member="basket" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="75" width="90" y="368" x="232" layer="1" col="15" row="20" member="bridge" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="75" width="90" y="400" x="293" layer="1" col="17" row="22" member="bridge" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="40" width="86" y="231" x="312" layer="1" col="11" row="14" member="dj" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="80" width="48" y="178" x="406" layer="1" col="10" row="10" member="leftwall_1" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="80" width="48" y="163" x="382" layer="1" col="10" row="10" member="leftwall_2" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="80" width="48" y="151" x="358" layer="1" col="9" row="10" member="leftwall_3" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="81" width="50" y="139" x="334" layer="1" col="8" row="10" member="leftwall_4" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="82" width="53" y="127" x="310" layer="1" col="7" row="10" member="leftwall_5" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="80" width="50" y="115" x="285" layer="1" col="6" row="10" member="leftwall_6" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="112" width="82" y="202" x="443" layer="1" col="13" row="10" member="wallcorner" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="24" width="48" y="179" x="646" layer="1" col="15" row="6" member="rightwall_1" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="24" width="48" y="167" x="622" layer="1" col="14" row="6" member="rightwall_2" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="24" width="48" y="155" x="598" layer="1" col="13" row="6" member="rightwall_3" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="24" width="48" y="143" x="574" layer="1" col="12" row="6" member="rightwall_4" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="36" width="48" y="137" x="550" layer="1" col="11" row="6" member="rightwall_5" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="136" width="111" y="211" x="706" layer="1" col="19" row="7" member="rightwall" />
+
+<Item Action="SpeakerAnim" skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="68" width="46" y="179" x="287" layer="1" col="8" row="11" member="speakerstandsleft1" />
+
+<Item Action="SpeakerAnim" skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="69" width="46" y="215" x="359" layer="1" col="11" row="11" member="speakerstandsright1" />
+
+<Item Action="SquirrelAnimator" skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="38" width="71" y="62" x="711" layer="1" col="1" row="1" member="squirrelanim" />
+
+</StaticItems>
+
+<Door col="18" row="25">
+
+<Exit blend="0" ink="8" member="centralpark_exit" />
+
+</Door>
+
+</Studio>

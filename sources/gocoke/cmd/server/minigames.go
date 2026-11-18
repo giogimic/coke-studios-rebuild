@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"gocoke/internal/client/minigames/sumo"
+	"gocoke/internal/minigames/sumo"
 )
 
 // SumoMatchSession manages an active 1v1 Sumo match between two players in the dojo.

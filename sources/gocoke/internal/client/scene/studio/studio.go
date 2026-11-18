@@ -184,6 +184,9 @@ type Scene struct {
 	// Optional hook to send CD_E (end performance)
 	sendCDEndIfAvailable func(roomID string) error
 
+	// Optional hook to send CD_BURN (in-game mixer CD burn)
+	sendCDBurnIfAvailable func(title, edl string) error
+
 	// Decibels display state
 	decibelsWindow    *DecibelsWindow
 	showingDecibels   bool
@@ -265,6 +268,7 @@ type Scene struct {
 	// Network senders for whispers and moderation
 	sendWhisperIfAvailable func(roomID, target, message string) error
 	sendKickIfAvailable    func(roomID, target string) error
+	sendDoorbellResponseIfAvailable func(target string, allow bool) error
 }
 
 // GetCurrentUserName returns the local player's screen name.
@@ -372,6 +376,50 @@ func (s *Scene) SetKickSender(fn func(roomID, target string) error) {
 	}
 }
 
+// SetDoorbellResponseSender allows the app to inject a network sender for DB_R doorbell responses.
+func (s *Scene) SetDoorbellResponseSender(fn func(target string, allow bool) error) {
+	if s != nil {
+		s.sendDoorbellResponseIfAvailable = fn
+	}
+}
+
+// HandleDoorbellKnock prompts the studio host when a visitor knocks at the door.
+func (s *Scene) HandleDoorbellKnock(visitorName string) {
+	if !s.IsRoomOwner() || strings.TrimSpace(visitorName) == "" {
+		return
+	}
+	if s.hudManager != nil {
+		title := "Visitor at Door"
+		msg := fmt.Sprintf("%s is knocking on your studio door. Let them in?", visitorName)
+		s.hudManager.OpenDecisionDialog(title, msg, "Let In", "Deny",
+			func() {
+				if s.sendDoorbellResponseIfAvailable != nil {
+					_ = s.sendDoorbellResponseIfAvailable(visitorName, true)
+				}
+			},
+			func() {
+				if s.sendDoorbellResponseIfAvailable != nil {
+					_ = s.sendDoorbellResponseIfAvailable(visitorName, false)
+				}
+			},
+		)
+	}
+}
+
+// OpenDoorOpensDialog opens the door opening window while waiting for host response.
+func (s *Scene) OpenDoorOpensDialog(studioName string) {
+	if s != nil && s.hudManager != nil {
+		s.hudManager.OpenDoorOpensDialog(studioName)
+	}
+}
+
+// OpenDoorNotOpensDialog opens the door declined window.
+func (s *Scene) OpenDoorNotOpensDialog() {
+	if s != nil && s.hudManager != nil {
+		s.hudManager.OpenDoorNotOpensDialog()
+	}
+}
+
 // SendAvatarAction applies an action locally and transmits AV_ACT to the room.
 func (s *Scene) SendAvatarAction(act string) {
 	if s == nil {
@@ -433,6 +481,19 @@ func (s *Scene) SetThumbSender(fn func(up bool) error) {
 	if s != nil {
 		s.sendThumbIfAvailable = fn
 	}
+}
+
+func (s *Scene) SetCDBurnSender(fn func(title, edl string) error) {
+	if s != nil {
+		s.sendCDBurnIfAvailable = fn
+	}
+}
+
+func (s *Scene) SendCDBurn(title, edl string) error {
+	if s != nil && s.sendCDBurnIfAvailable != nil {
+		return s.sendCDBurnIfAvailable(title, edl)
+	}
+	return nil
 }
 
 // EmitThumbOverlay shows a transient thumbs icon 10px above the named avatar's head.
@@ -1464,8 +1525,12 @@ func (s *Scene) GetWallPatternColorCount(patternName string) int {
 
 // initIsoEngine initializes the isometric engine for this studio
 func (s *Scene) initIsoEngine(dataDir string) error {
+	loc := 1
+	if s.studio != nil {
+		loc = s.studio.Location
+	}
 	// Load studio XML and PathMap data first (supports public layout 5)
-	studioXML, pathMapXML, err := isoengine.LoadStudioData(dataDir, s.studio.Layout)
+	studioXML, pathMapXML, err := isoengine.LoadStudioDataForStudio(dataDir, s.studio.Layout, loc)
 	if err != nil {
 		return fmt.Errorf("failed to load studio data: %w", err)
 	}
@@ -1529,13 +1594,49 @@ func (s *Scene) initIsoEngine(dataDir string) error {
 	return nil
 }
 
+func (s *Scene) publicRoomDir() string {
+	if s.studio == nil {
+		return filepath.Join("Lingo", "london")
+	}
+	switch s.studio.Location {
+	case 10:
+		return filepath.Join("Lingo", "alaska")
+	case 2:
+		return filepath.Join("Lingo", "miami")
+	case 3:
+		return filepath.Join("Lingo", "mombasa")
+	case 9:
+		return filepath.Join("Lingo", "goa")
+	case 11:
+		return filepath.Join("Lingo", "moscow")
+	case 14:
+		return filepath.Join("Lingo", "centralpark")
+	default:
+		id := strings.ToLower(s.studio.StudioID)
+		if strings.Contains(id, "alaska") {
+			return filepath.Join("Lingo", "alaska")
+		} else if strings.Contains(id, "miami") {
+			return filepath.Join("Lingo", "miami")
+		} else if strings.Contains(id, "mombasa") {
+			return filepath.Join("Lingo", "mombasa")
+		} else if strings.Contains(id, "goa") {
+			return filepath.Join("Lingo", "goa")
+		} else if strings.Contains(id, "moscow") {
+			return filepath.Join("Lingo", "moscow")
+		} else if strings.Contains(id, "central") || id == "vis$0" || id == "cc_room" {
+			return filepath.Join("Lingo", "centralpark")
+		}
+		return filepath.Join("Lingo", "london")
+	}
+}
+
 // loadStudioBackground loads the room background image and position from Studio XML (preferred)
 // and falls back to PathMap bgimage if needed.
 func (s *Scene) loadStudioBackground() error {
 	// Determine asset directory based on layout
 	studioDir := filepath.Join("Lingo", "cc_studio")
 	if s.studio != nil && s.studio.Layout == 5 {
-		studioDir = filepath.Join("Lingo", "london")
+		studioDir = s.publicRoomDir()
 	}
 
 	// Prefer Studio XML Background member (maps via Members.csv to e.g., 3_cc.london.bg.png)
@@ -1545,7 +1646,17 @@ func (s *Scene) loadStudioBackground() error {
 			if p, ok := mm.PathFor(member); ok {
 				if img, err2 := lingoassets.LoadImage(p); err2 == nil {
 					s.backgroundImg = img
-					s.bgPos = [2]int{s.studioXML.Background.X, s.studioXML.Background.Y}
+					bgX := s.studioXML.Background.X
+					bgY := s.studioXML.Background.Y
+					if s.studio != nil && s.studio.Layout == 5 {
+						if bgX >= 350 && img.Bounds().Dx() >= 700 {
+							bgX = 0
+						}
+						if bgY >= 200 && img.Bounds().Dy() >= 450 {
+							bgY = 0
+						}
+					}
+					s.bgPos = [2]int{bgX, bgY}
 					return nil
 				}
 			}
@@ -1557,7 +1668,17 @@ func (s *Scene) loadStudioBackground() error {
 		p := filepath.Join(studioDir, strings.TrimSpace(s.pathMapXML.BGImage))
 		if img, err := lingoassets.LoadImage(p); err == nil {
 			s.backgroundImg = img
-			s.bgPos = [2]int{s.pathMapXML.BGX, s.pathMapXML.BGY}
+			bgX := s.pathMapXML.BGX
+			bgY := s.pathMapXML.BGY
+			if s.studio != nil && s.studio.Layout == 5 {
+				if bgX >= 350 && img.Bounds().Dx() >= 700 {
+					bgX = 0
+				}
+				if bgY >= 200 && img.Bounds().Dy() >= 450 {
+					bgY = 0
+				}
+			}
+			s.bgPos = [2]int{bgX, bgY}
 			return nil
 		}
 	}
@@ -1710,7 +1831,23 @@ func (s *Scene) loadRoomDefinition(dataDir string) error {
 	// Public rooms (layout 5) use location-specific room files
 	var roomPath string
 	if s.studio != nil && s.studio.Layout == 5 {
-		roomPath = filepath.Join("Lingo", "london", "1_london.room.txt")
+		dir := s.publicRoomDir()
+		switch {
+		case strings.Contains(dir, "alaska"):
+			roomPath = filepath.Join(dir, "alaska.room.txt")
+		case strings.Contains(dir, "miami"):
+			roomPath = filepath.Join(dir, "miami.room.txt")
+		case strings.Contains(dir, "mombasa"):
+			roomPath = filepath.Join(dir, "mombasa.room.txt")
+		case strings.Contains(dir, "goa"):
+			roomPath = filepath.Join(dir, "goa.room.txt")
+		case strings.Contains(dir, "moscow"):
+			roomPath = filepath.Join(dir, "moscow.room.txt")
+		case strings.Contains(dir, "centralpark"):
+			roomPath = "" // Uses SceneXml directly
+		default:
+			roomPath = filepath.Join("Lingo", "london", "1_london.room.txt")
+		}
 	} else {
 		// Map layout numbers to model letters for private studios
 		layoutMap := map[int]string{
@@ -1729,9 +1866,20 @@ func (s *Scene) loadRoomDefinition(dataDir string) error {
 		roomPath = filepath.Join("Lingo", "cc_studio", roomFile)
 	}
 
-	roomDef, err := studioroom.ParseRoomFile(roomPath)
-	if err != nil {
-		return fmt.Errorf("failed to parse room file %s: %w", roomPath, err)
+	var roomDef *studioroom.RoomDefinition
+	var err error
+	if roomPath != "" {
+		roomDef, err = studioroom.ParseRoomFile(roomPath)
+	}
+	if err != nil || roomPath == "" {
+		if s.studio != nil && s.studio.Layout == 5 {
+			roomDef = &studioroom.RoomDefinition{
+				Name: "public_room",
+				Rect: [4]int{0, 0, 760, 520},
+			}
+		} else {
+			return fmt.Errorf("failed to parse room file %s: %w", roomPath, err)
+		}
 	}
 
 	s.roomDef = roomDef
@@ -1746,7 +1894,7 @@ func (s *Scene) loadRoomDefinition(dataDir string) error {
 func (s *Scene) loadMemberRegistry(dataDir string) error {
 	membersPath := filepath.Join("Lingo", "cc_studio", "Members.csv")
 	if s.studio != nil && s.studio.Layout == 5 {
-		membersPath = filepath.Join("Lingo", "london", "Members.csv")
+		membersPath = filepath.Join(s.publicRoomDir(), "Members.csv")
 	}
 
 	memberReg, err := studioroom.LoadMemberRegistry(membersPath)
@@ -1762,7 +1910,7 @@ func (s *Scene) loadMemberRegistry(dataDir string) error {
 func (s *Scene) loadRoomAssets(dataDir string) error {
 	studioDir := filepath.Join("Lingo", "cc_studio")
 	if s.studio != nil && s.studio.Layout == 5 {
-		studioDir = filepath.Join("Lingo", "london")
+		studioDir = s.publicRoomDir()
 	}
 
 	// Track unique assets to load
@@ -2309,8 +2457,16 @@ func (s *Scene) Update() error {
 							} else if ci.Action == "STEREO" {
 								// Move adjacent to the stereo and, upon arrival, send CD_R with PosID
 								s.startStereoApproach(hit)
+							} else if ci.Action == "MIXER" || ci.Type == "MIXER" || strings.TrimSpace(hit.ProdID) == "88" {
+								if s.hudManager != nil {
+									s.hudManager.OpenMixerWindow()
+								}
 							} else if s.isSeatableFurniture(*hit) {
 								s.startSeatApproach(hit)
+							}
+						} else if strings.TrimSpace(hit.ProdID) == "88" {
+							if s.hudManager != nil {
+								s.hudManager.OpenMixerWindow()
 							}
 						} else if s.isSeatableFurniture(*hit) {
 							s.startSeatApproach(hit)
@@ -4283,7 +4439,7 @@ func (s *Scene) GetStudio() *studios.Studio {
 
 // ShouldExit returns true if the scene should exit (e.g., user clicked exit)
 func (s *Scene) ShouldExit() bool {
-	if s == nil || s.isoScene == nil {
+	if s == nil {
 		return false
 	}
 	// Exit if kicked
@@ -4293,6 +4449,9 @@ func (s *Scene) ShouldExit() bool {
 			s.tradeManager.CancelIfPending()
 		}
 		return true
+	}
+	if s.isoScene == nil {
+		return false
 	}
 	// Do not allow exit click-through when any window is under mouse (nav, backpack, catalog, etc.)
 	if s.hudManager != nil && s.hudManager.GetWindowManager() != nil && s.hudManager.GetWindowManager().IsMouseOverAnyWindow() {

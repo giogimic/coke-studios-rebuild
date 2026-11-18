@@ -16,7 +16,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	_ "modernc.org/sqlite"
 
-	"gocoke/internal/client/minigames/sumo"
+	"gocoke/internal/minigames/sumo"
 )
 
 var denizenSeq int64
@@ -1854,6 +1854,86 @@ type SongRecord struct {
 	Artist    string
 	EDLString string
 	CreatedAt string
+}
+
+// GetBlankCDCount returns the total number of blank CDs (catalog item 26) owned in backpack.
+func (s *Store) GetBlankCDCount(screenName string) (int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var denizenID string
+	err := s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&denizenID)
+	if err != nil {
+		return 0, err
+	}
+
+	rows, err := s.db.Query("SELECT properties_json FROM backpack_items WHERE denizen_id = ? AND catalog_item_id = 26", denizenID)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+
+	total := 0
+	for rows.Next() {
+		var pJson string
+		if err := rows.Scan(&pJson); err == nil {
+			count := 1
+			if pJson != "" {
+				var props map[string]any
+				if err := json.Unmarshal([]byte(pJson), &props); err == nil {
+					if cVal, ok := props["count"]; ok {
+						if cNum, okNum := cVal.(float64); okNum && cNum > 0 {
+							count = int(cNum)
+						}
+					}
+				}
+			}
+			total += count
+		}
+	}
+	return total, nil
+}
+
+// ConsumeBlankCD atomically consumes 1 Blank CD from the player's backpack.
+// Returns true if a Blank CD was consumed, false if none were owned.
+func (s *Store) ConsumeBlankCD(screenName string) (bool, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var denizenID string
+	err := s.db.QueryRow("SELECT id FROM denizens WHERE LOWER(screen_name) = LOWER(?)", strings.TrimSpace(screenName)).Scan(&denizenID)
+	if err != nil {
+		return false, err
+	}
+
+	var posID int
+	var pJson string
+	err = s.db.QueryRow("SELECT id, properties_json FROM backpack_items WHERE denizen_id = ? AND catalog_item_id = 26 LIMIT 1", denizenID).Scan(&posID, &pJson)
+	if err == nil && posID > 0 {
+		count := 1
+		var props map[string]any
+		if pJson != "" {
+			if err := json.Unmarshal([]byte(pJson), &props); err == nil {
+				if cVal, ok := props["count"]; ok {
+					if cNum, okNum := cVal.(float64); okNum && cNum > 0 {
+						count = int(cNum)
+					}
+				}
+			}
+		}
+		if count > 1 {
+			if props == nil {
+				props = make(map[string]any)
+			}
+			props["count"] = count - 1
+			newJson, _ := json.Marshal(props)
+			_, _ = s.db.Exec("UPDATE backpack_items SET properties_json = ? WHERE id = ?", string(newJson), posID)
+		} else {
+			_, _ = s.db.Exec("DELETE FROM backpack_items WHERE id = ?", posID)
+		}
+		return true, nil
+	}
+	return false, nil
 }
 
 func (s *Store) SaveSong(screenName, title, edl string) (int, error) {

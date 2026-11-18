@@ -92,25 +92,15 @@ test.describe('Task 3: Real Accounts, Sessions, and Per-Player Identity', () => 
     // 1. Visit portal as a guest / fresh visitor
     await page.goto('/');
 
-    // Check that game access gate overlay is visible and quick travel / viewport headers are hidden
-    const gate = page.locator('#gameAccessGate');
-    await expect(gate).toBeVisible();
+    // Check that unauthenticated visitor sees guest state in avatar badge and login controls
+    const badgeName = page.locator('#badgeScreenName');
+    await expect(badgeName).toHaveText('GUEST');
 
-    const viewportHeader = page.locator('#viewportHeader');
-    await expect(viewportHeader).toBeHidden();
+    const loggedOutBtns = page.locator('#loggedOutButtons');
+    await expect(loggedOutBtns).toBeVisible();
 
-    const quickTravel = page.locator('#quickTravelStrip');
-    await expect(quickTravel).toBeHidden();
-
-    // Check guest balances are marked as '--'
-    const balanceDB = page.locator('#sidebarBalanceDB');
-    await expect(balanceDB).toHaveText('--');
-
-    // Check nav and badge prompt sign in
-    const navGuestBtn = page.locator('#navGuestBtn');
-    await expect(navGuestBtn).toBeVisible();
-    const btnBadgeAuth = page.locator('#btnBadgeAuth');
-    await expect(btnBadgeAuth).toContainText('Sign In / Register');
+    const loggedInBtns = page.locator('#loggedInButtons');
+    await expect(loggedInBtns).toBeHidden();
 
     // Game frame is loaded without user credentials initially
     const gameFrame = page.locator('#gameFrame');
@@ -118,35 +108,18 @@ test.describe('Task 3: Real Accounts, Sessions, and Per-Player Identity', () => 
     expect(initialSrc).toContain('/game/');
     expect(initialSrc).not.toContain('user=');
 
-    // 2. Open login modal via the gate button
-    const btnGateSignIn = page.locator('#btnGateSignIn');
-    await btnGateSignIn.click();
-
-    const modal = page.locator('#registerModal');
-    await expect(modal).toBeVisible();
-
-    // Fill registered credentials
-    await page.locator('#loginScreenName').fill(gateUser);
-    await page.locator('#loginPassword').fill(gatePass);
-    await page.locator('#btnSubmitLogin').click();
+    // 2. Log in using screenName and password via the badge controls
+    await page.locator('#badgeScreenNameInput').fill(gateUser);
+    await page.locator('#badgePasswordInput').fill(gatePass);
+    await page.locator('#loggedOutButtons button:has-text("Sign In")').click();
 
     // 3. Verify successful authentication flow:
-    // Modal closes and user is placed into Play tab
-    await expect(modal).toBeHidden({ timeout: 5000 });
+    // Logged in buttons are now visible and logged out buttons are hidden
+    await expect(loggedInBtns).toBeVisible({ timeout: 5000 });
+    await expect(loggedOutBtns).toBeHidden();
 
-    // Gate is now hidden, revealing the game client
-    await expect(gate).toBeHidden();
-
-    // Viewport header and quick-travel lounges are visible with user's screen name
-    await expect(viewportHeader).toBeVisible();
-    const viewportUserTag = page.locator('#viewportUserTag');
-    await expect(viewportUserTag).toContainText(gateUser);
-    await expect(quickTravel).toBeVisible();
-
-    // Nav bar and badge show logged-in DJ name
-    const navUserText = page.locator('#navUserScreenName');
-    await expect(navUserText).toContainText(gateUser);
-    await expect(btnBadgeAuth).toContainText('Enter Studio');
+    // Badge shows logged-in DJ handle
+    await expect(badgeName).toHaveText(gateUser);
 
     // Authoritative session tokens and credentials connected to game iframe src
     await page.waitForFunction(() => {
@@ -158,19 +131,14 @@ test.describe('Task 3: Real Accounts, Sessions, and Per-Player Identity', () => 
     expect(authFrameSrc).toContain('sw1=');
     expect(authFrameSrc).toContain('sw2=');
 
-    // 4. Sign Out resets site presentation to gated guest state
-    const btnSignOut = page.locator('#btnBadgeSignOut');
+    // 4. Sign Out resets site presentation to guest state
+    const btnSignOut = loggedInBtns.locator('button:has-text("Sign Out")');
     await expect(btnSignOut).toBeVisible();
     await btnSignOut.click();
 
-    // User is returned to Home tab; guest nav is restored and balances reset
-    await expect(navGuestBtn).toBeVisible();
-    await expect(balanceDB).toHaveText('--');
-
-    // Switch back to Play tab: game access gate is active and viewport headers hidden
-    await page.locator('[data-tab="play"]').click();
-    await expect(gate).toBeVisible();
-    await expect(viewportHeader).toBeHidden();
-    await expect(quickTravel).toBeHidden();
+    // Guest state is restored
+    await expect(badgeName).toHaveText('GUEST');
+    await expect(loggedOutBtns).toBeVisible();
+    await expect(loggedInBtns).toBeHidden();
   });
 });

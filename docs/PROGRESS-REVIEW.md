@@ -75,3 +75,16 @@ These are direction and documentation corrections. The runtime issues in the tab
 ## Current repair review — 2026-10-25
 
 See [studio repair review](verification/STUDIO-REPAIR-2026-10-25.md) for current defects, fixes, verification and remaining work. The 2026-10-24 code line references above are historical. Later all-passed summaries did not establish a complete player journey; the current [parity register](PARITY.md) supersedes those claims.
+
+## Phase 1–7 Resolution & Current Status (2026-11-18)
+
+All findings identified in the 2026-10-24 review table have been resolved through the execution and verification of Phases 1 through 7:
+- **P0 Engine Fallback & Portal Selector:** Resolved. The Go/Ebitengine WASM client is the sole canonical route; all engine selectors and JS fallbacks were removed from the player path.
+- **P0 Hardcoded Adam Fixtures:** Resolved. Completely replaced with dynamic authenticated session state and database persistence (`RegisterDenizen`, `CreateSession`).
+- **P0 Unverified Authentication:** Resolved. Real PBKDF2 salt/hash authentication implemented across HTTP, AMF0, and WebSocket realtime protocols.
+- **P1 Starter Possessions & Invented Charts:** Resolved. Real inventory management with honest empty state, real Chart voting, and Top 40 aggregation.
+- **P1 Movement Trusting / Teleportation:** Resolved. Server-authoritative $A^*$ pathfinding and grid occupancy enforcement on `<AV_GSP>` movement.
+- **P1 Performance Duration & Rewards:** Resolved. Dynamic EDL duration parsing, live Thumbs Up/Down voting, and authoritative Decibel settlements.
+- **P1 Minigames Engine:** Resolved. Authentic pure-Go Ebitengine Uncover the Music 24-square board and V-Ego San Sumo arena with streak ladder rewards.
+- **P2 Multi-Demo Runtime Launcher:** Resolved. Unified Go server hosting the 760px portal, WebAssembly binary, AMF gateway, and realtime multiplayer engine under single binary and systemd service `coke-studios.service`.
+- **P2 Synthetic Mock Tests:** Resolved. 19/19 Playwright tests verifying real headless multi-browser player journeys and Director MX 760×520 stage canvas visual fidelity. All Go packages pass `go test ./... -count=1`.

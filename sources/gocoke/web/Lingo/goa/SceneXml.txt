@@ -1,0 +1,123 @@
+<Studio xOff="393" yOff="34" layoutType="1">
+
+<Background member="goa-cut" x="0" y="0" ink="0" />
+
+<Hiliter member="goa_hiliter" ink="36" />
+
+<Furniture castLib="Studio">
+
+<Item ink="36" dir="4" gridX="12" gridZ="3" imageBase="goa_cokecase" Action="DRINK_DESPENSER" type="Default" />
+
+<Item ink="36" dir="4" gridX="15" gridZ="3" imageBase="goa_cokecase" Action="DRINK_DESPENSER" type="Default" />
+
+<Item ink="36" dir="2" gridX="7" gridZ="16" imageBase="goa_sofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="6" gridX="9" gridZ="16" imageBase="goa_sofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="2" gridX="10" gridZ="16" imageBase="goa_sofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="6" gridX="12" gridZ="16" imageBase="goa_sofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="6" gridX="15" gridZ="16" imageBase="goa_sofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="2" gridX="13" gridZ="16" imageBase="goa_sofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="2" gridX="9" gridZ="22" imageBase="goa_sofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="6" gridX="11" gridZ="22" imageBase="goa_sofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="2" gridX="12" gridZ="22" imageBase="goa_sofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="6" gridX="14" gridZ="22" imageBase="goa_sofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="0" gridX="19" gridZ="14" imageBase="goa_sofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="4" gridX="19" gridZ="12" imageBase="goa_sofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="0" gridX="19" gridZ="11" imageBase="goa_sofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="4" gridX="19" gridZ="9" imageBase="goa_sofa" Action="DEFAULT" type="Sofa" />
+
+<Item ink="36" dir="4" gridX="5" gridZ="16" imageBase="goa_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="0" gridX="5" gridZ="18" imageBase="goa_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="2" gridX="18" gridZ="7" imageBase="goa_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="6" gridX="20" gridZ="7" imageBase="goa_chair" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="0" gridX="19" gridZ="7" imageBase="goa_tablesmall" Action="DEFAULT" type="Table" />
+
+<Item ink="36" dir="0" gridX="5" gridZ="17" imageBase="goa_tablesmall" Action="DEFAULT" type="Table" />
+
+<Item ink="8" dir="2" gridX="8" gridZ="16" imageBase="goa_table" Action="DEFAULT" type="Table" />
+
+<Item ink="8" dir="2" gridX="11" gridZ="16" imageBase="goa_table" Action="DEFAULT" type="Table" />
+
+<Item ink="8" dir="2" gridX="14" gridZ="16" imageBase="goa_table" Action="DEFAULT" type="Table" />
+
+<Item ink="8" dir="2" gridX="10" gridZ="22" imageBase="goa_table" Action="DEFAULT" type="Table" />
+
+<Item ink="8" dir="2" gridX="13" gridZ="22" imageBase="goa_table" Action="DEFAULT" type="Table" />
+
+<Item ink="8" dir="0" gridX="19" gridZ="13" imageBase="goa_table" Action="DEFAULT" type="Table" />
+
+<Item ink="8" dir="0" gridX="19" gridZ="10" imageBase="goa_table" Action="DEFAULT" type="Table" />
+
+</Furniture>
+
+<WallItems>
+
+</WallItems>
+
+<StaticItems castLib="Studio">
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="50" ink="8" height="61" width="104" y="184" x="367" layer="1" col="7" row="8" member="goa_stage_pink" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="60" ink="8" height="60" width="134" y="323" x="359" layer="1" col="15" row="15" member="goa_entrance_screen" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="57" width="127" y="320" x="361" layer="2" col="15" row="15" member="goa_entrance-solid_hl" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="114" width="100" y="313" x="60" layer="1" col="8" row="21" member="goa_backwallcut" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="29" width="25" y="345" x="401" layer="1" col="13" row="15" member="goa_entrance_mask1" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="41" width="48" y="345" x="401" layer="1" col="14" row="15" member="goa_entrance_mask2" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="72" width="62" y="375" x="342" layer="3" col="15" row="14" member="entrance_climbdownmask1" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="89" width="28" y="375" x="342" layer="2" col="13" row="15" member="entrance_climbdownmask2" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="112" width="97" y="279" x="702" layer="1" col="17" row="5" member="goa_fountain_mask" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="80" width="40" y="345" x="401" layer="1" col="15" row="15" member="goa_entrance_mask3" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="60" width="15" y="345" x="401" layer="1" col="15" row="13" member="goa_entrance_mask4" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="40" width="26" y="210" x="636" layer="6" col="11" row="3" member="goa_bardesk1" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="43" width="26" y="210" x="636" layer="6" col="12" row="3" member="goa_bardesk2" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="43" width="26" y="210" x="636" layer="6" col="13" row="3" member="goa_bardesk3" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="43" width="26" y="210" x="636" layer="6" col="14" row="3" member="goa_bardesk4" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="43" width="26" y="210" x="636" layer="6" col="15" row="3" member="goa_bardesk5" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="34" width="36" y="210" x="636" layer="6" col="16" row="3" member="goa_bardesk6" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="0" height="85" width="81" y="266" x="709" layer="2" col="20" row="5" member="GoaFountainAnimLoop" />
+
+<Item Action="GenericLightAnimation" skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="33" height="116" width="145" y="128" x="368" layer="1" col="7" row="8" member="goa_liteanim1" />
+
+<Item Action="PaletteAnimator" skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="37" height="179" width="289" y="212" x="375" layer="1" col="8" row="9" member="goalight" />
+
+</StaticItems>
+
+<Door col="15" row="14">
+
+<Exit blend="0" ink="8" member="goa_exitshape" />
+
+</Door>
+
+</Studio>

@@ -499,53 +499,59 @@ test.describe('Task 8: Authentic Gameplay Mechanics & Gestures', () => {
     const regData = await regRes.json();
     expect(regData.success).toBe(true);
 
-    // 2. Open portal and log in
+    // 2. Open portal and navigate to Games lounge
     await page.goto('/');
-    await page.locator('#btnGateSignIn').click();
-    await page.locator('#loginScreenName').fill(arcadeUser);
-    await page.locator('#loginPassword').fill(password);
-    await page.locator('#btnSubmitLogin').click();
-    await expect(page.locator('#gameAccessGate')).toBeHidden({ timeout: 5000 });
+    const gamesNav = page.locator('.nav-games');
+    await expect(gamesNav).toBeVisible();
+    await gamesNav.click();
 
-    // 3. Verify dark loft portal styling
-    const bodyLayout = page.locator('.portal-body-layout');
-    await expect(bodyLayout).toBeVisible();
-    const bodyBg = await bodyLayout.evaluate((el) => window.getComputedStyle(el).backgroundColor);
-    expect(bodyBg).toBe('rgb(24, 21, 22)'); // #181516
+    const gamesSection = page.locator('#sec-games');
+    await expect(gamesSection).toBeVisible();
 
-    // 4. Switch to Games & Arcade tab
-    await page.locator('div[data-tab="popquiz"]').click();
-    await expect(page.locator('#tab-popquiz')).toBeVisible();
+    // 3. Test Uncover the Music authoritative match and rewards
+    const uncoverRes = await page.request.post('/api/minigames/uncover/play', {
+      data: { player: arcadeUser, tile1: 0, tile2: 1, game_over: false },
+    });
+    expect(uncoverRes.status()).toBe(200);
+    const uncoverData = await uncoverRes.json();
+    expect(uncoverData.status).toBe('success');
+    expect(uncoverData.daily_earned).toBeGreaterThanOrEqual(1);
 
-    // 5. Test Uncover the Music minigame
-    await page.locator('#subtabBtn-uncover').click();
-    const uncoverPane = page.locator('#arcadePane-uncover');
-    await expect(uncoverPane).toBeVisible();
+    // Test stage completion bonus (+60 dB)
+    const uncoverWinRes = await page.request.post('/api/minigames/uncover/play', {
+      data: { player: arcadeUser, tile1: 2, tile2: 3, game_over: true },
+    });
+    const winData = await uncoverWinRes.json();
+    expect(winData.status).toBe('success');
+    expect(winData.balance).toBeGreaterThanOrEqual(5061);
 
-    // Verify 24 cards rendered
-    const cards = page.locator('#uncoverCardsGrid .uncover-card');
-    await expect(cards).toHaveCount(24);
+    // 4. Test V-Ego San Sumo Arena authoritative match
+    const sumoRes = await page.request.post('/api/minigames/sumo/match', {
+      data: { player1: arcadeUser, player2: 'Master Kenji', p1_move: 1, p2_move: 2 },
+    });
+    expect(sumoRes.status()).toBe(200);
+    const sumoData = await sumoRes.json();
+    expect([0, 1, 2]).toContain(sumoData.result);
+    expect(sumoData.round).toBeGreaterThanOrEqual(1);
 
-    // Click first card
-    const firstCard = cards.nth(0);
-    await firstCard.click();
-    await expect(firstCard).toHaveClass(/flipped/);
+    // Verify Director Shockwave legacy prize endpoint /sumo.do
+    const legacySumoRes = await page.request.post('/sumo.do', {
+      form: { player: arcadeUser, win: '1' },
+    });
+    expect(legacySumoRes.status()).toBe(200);
 
-    // 6. Test Pop Quiz Trivia
-    await page.locator('#subtabBtn-quiz').click();
-    await expect(page.locator('#arcadePane-quiz')).toBeVisible();
-    // Answer the quiz question
-    const firstOptionBtn = page.locator('#quizOptionsContainer button').first();
-    await firstOptionBtn.click();
-    const quizFeedback = page.locator('#quizFeedback');
-    await expect(quizFeedback).toBeVisible();
+    // 5. Test Pop Quiz Trivia authoritative question & answer
+    const quizQRes = await page.request.get('/api/minigames/quiz/question');
+    expect(quizQRes.status()).toBe(200);
+    const quizQData = await quizQRes.json();
+    expect(quizQData.question).toBeTruthy();
+    expect(quizQData.options.length).toBeGreaterThan(0);
 
-    // 7. Test V-Ego San Sumo Arena
-    await page.locator('#subtabBtn-sumo').click();
-    await expect(page.locator('#arcadePane-sumo')).toBeVisible();
-    // Select Head Hit move
-    await page.locator('button:has-text("Head Hit")').click();
-    const commentary = page.locator('#sumoCommentaryBox');
-    await expect(commentary).not.toHaveText('Select your opening stance to engage Master Kenji in combat!');
+    const quizAnsRes = await page.request.post('/api/minigames/quiz/answer', {
+      data: { player: arcadeUser, id: quizQData.id, choice: 0 },
+    });
+    expect(quizAnsRes.status()).toBe(200);
+    const quizAnsData = await quizAnsRes.json();
+    expect(quizAnsData).toHaveProperty('correct');
   });
 });

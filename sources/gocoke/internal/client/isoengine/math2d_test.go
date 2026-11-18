@@ -81,3 +81,4 @@ func TestMath2d_ParityWithLingo(t *testing.T) {
 		t.Errorf("Outside point (100, 100) incorrectly considered inside square [1, 1]")
 	}
 }
+

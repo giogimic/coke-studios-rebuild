@@ -25,7 +25,7 @@ import (
 	"sync"
 	"time"
 
-	"gocoke/internal/client/minigames/sumo"
+	"gocoke/internal/minigames/sumo"
 	"gocoke/internal/client/net/amf"
 )
 
@@ -1289,12 +1289,25 @@ func (s *Server) handleAMFGateway(w http.ResponseWriter, r *http.Request) {
 			responseValue = map[string]any{"__amf_error_type": "MusicException", "__amf_error_message": "Empty EDL sequence"}
 			break
 		}
+
+		consumed, _ := s.store.ConsumeBlankCD(screenName)
+		newDB := 0
+		if !consumed {
+			curDB, _, _ := s.store.GetBalance(screenName)
+			if curDB < 10 {
+				responseValue = map[string]any{"__amf_error_type": "PurchaseException", "__amf_error_message": "Not enough Decibels to burn CD"}
+				break
+			}
+			newDB, _ = s.store.AdjustBalance(screenName, -10, 0)
+		} else {
+			newDB, _, _ = s.store.GetBalance(screenName)
+		}
+
 		songID, err := s.store.SaveSong(screenName, title, edl)
 		if err != nil {
 			responseValue = map[string]any{"__amf_error_type": "DatabaseException", "__amf_error_message": err.Error()}
 			break
 		}
-		newDB, _ := s.store.AdjustBalance(screenName, -10, 0)
 		cdProps := map[string]any{
 			"songId":    float64(songID),
 			"songName":  title,
@@ -1907,6 +1920,30 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 			return
 		}
 
+		// Disconnect any existing session for this denizen (duplicate login prevention)
+		var toDisconnect []*Player
+		s.mu.Lock()
+		for oldID, oldP := range s.Players {
+			if oldID != player.ID && oldP.Authenticated && (oldP.DenizenID == denizen.ID || strings.EqualFold(oldP.ScreenName, denizen.ScreenName)) {
+				toDisconnect = append(toDisconnect, oldP)
+			}
+		}
+		s.mu.Unlock()
+
+		for _, oldP := range toDisconnect {
+			log.Printf("[WS] Disconnecting old socket %s for player %s due to new login", oldP.ID, denizen.ScreenName)
+			oldP.Authenticated = false
+			oldRoom := oldP.RoomID
+			oldP.RoomID = ""
+			if oldRoom != "" && oldRoom != "$LOBBY$" {
+				s.removePlayerFromRoom(oldP, oldRoom)
+			}
+			_ = oldP.Send("<Alert msg=\"You have logged in from another location.\"/>")
+			if oldP.Conn != nil {
+				_ = oldP.Conn.Close()
+			}
+		}
+
 		player.ScreenName = denizen.ScreenName
 		player.DenizenID = denizen.ID
 		player.Gender = denizen.Gender
@@ -2146,10 +2183,17 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 				// Authoritatively place or move/rotate furniture from backpack
 				if err := s.store.PlaceBackpackItem(rm.ID, player.ScreenName, posID, cid, x, y, z, ho, d, st, false, nil); err != nil {
 					log.Printf("[WS] Player %s unauthorized or failed to place %s in %s: %v", player.ScreenName, posID, rm.ID, err)
+					_ = player.Send(fmt.Sprintf("<Alert msg=\"%s\"/>", html.EscapeString(err.Error())))
+					_ = player.Send(fmt.Sprintf("<Room.Action roomID=\"%s\"><POS_REJECT id=\"%s\" cid=\"%d\"/></Room.Action>", rm.ID, posID, cid))
 					return
 				}
+				rm.RemoveFurnitureSolid(posID)
 				if s.isItemSolid(cid) {
-					rm.SetFurnitureSolid(posID, x, z, true)
+					w, dDepth := 1, 1
+					if catItem, err := s.GetCatalogItem(cid); err == nil && catItem != nil {
+						w, dDepth = catItem.Width, catItem.Depth
+					}
+					rm.SetFurnitureFootprint(posID, x, z, w, dDepth, d, true)
 				}
 
 				posXML := fmt.Sprintf("<POS id=\"%s\" cid=\"%d\" x=\"%d\" y=\"%d\" z=\"%d\" ho=\"%d\" d=\"%d\" st=\"%d\" iaot=\"false\"/>",
@@ -2229,8 +2273,13 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 
 				// Update collision solidity
 				rm.RemoveFurnitureSolid(posID)
+				rm.RemoveFurnitureSolid(posID)
 				if s.isItemSolid(cid) {
-					rm.SetFurnitureSolid(posID, x, z, true)
+					w, dDepth := 1, 1
+					if catItem, err := s.GetCatalogItem(cid); err == nil && catItem != nil {
+						w, dDepth = catItem.Width, catItem.Depth
+					}
+					rm.SetFurnitureFootprint(posID, x, z, w, dDepth, d, true)
 				}
 
 				posXML := fmt.Sprintf("<POS id=\"%s\" cid=\"%d\" x=\"%d\" y=\"%d\" z=\"%d\" ho=\"%d\" d=\"%d\" st=\"%d\" iaot=\"false\"/>",
@@ -2317,22 +2366,37 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 		}
 		edl := extractAttr(xml, "edl")
 		if edl != "" {
-			songID, _ := s.store.SaveSong(player.ScreenName, title, edl)
-			newDB, err := s.store.AdjustBalance(player.ScreenName, -10, 0)
-			if err == nil {
-				cdProps := map[string]any{
-					"songId":    float64(songID),
-					"songName":  title,
-					"ownerName": player.ScreenName,
-					"artist":    player.ScreenName,
-					"edl":       edl,
+			consumed, _ := s.store.ConsumeBlankCD(player.ScreenName)
+			newDB := 0
+			if !consumed {
+				curDB, _, _ := s.store.GetBalance(player.ScreenName)
+				if curDB < 10 {
+					_ = player.Send(`<Alert msg="Not enough Decibels to burn CD! You need 10 Decibels or a Blank CD."/>`)
+					return
 				}
-				newID, _ := s.store.AddBackpackItem(player.ScreenName, 89, cdProps)
-				mintXML := fmt.Sprintf("<POS_MINT id=\"%d\" cid=\"89\" title=\"%s\" edl=\"%s\" db=\"%d\"/>",
-					newID, title, edl, newDB)
-				_ = player.Send(mintXML)
-				log.Printf("[MIXER] Player %s burned CD #%d (%q)", player.ScreenName, newID, title)
+				var err error
+				newDB, err = s.store.AdjustBalance(player.ScreenName, -10, 0)
+				if err != nil {
+					_ = player.Send(`<Alert msg="Failed to burn CD due to internal balance error."/>`)
+					return
+				}
+			} else {
+				newDB, _, _ = s.store.GetBalance(player.ScreenName)
 			}
+
+			songID, _ := s.store.SaveSong(player.ScreenName, title, edl)
+			cdProps := map[string]any{
+				"songId":    float64(songID),
+				"songName":  title,
+				"ownerName": player.ScreenName,
+				"artist":    player.ScreenName,
+				"edl":       edl,
+			}
+			newID, _ := s.store.AddBackpackItem(player.ScreenName, 89, cdProps)
+			mintXML := fmt.Sprintf("<POS_MINT id=\"%d\" cid=\"89\" title=\"%s\" edl=\"%s\" db=\"%d\"/>",
+				newID, title, edl, newDB)
+			_ = player.Send(mintXML)
+			log.Printf("[MIXER] Player %s burned CD #%d (%q)", player.ScreenName, newID, title)
 		}
 		return
 	}
@@ -2345,7 +2409,7 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 	}
 
 	// --- Studio Doorbell Response (Admit / Deny) ---
-	if strings.Contains(xml, "<ST_KNOCK_RES") {
+	if strings.Contains(xml, "<ST_KNOCK_RES") || strings.Contains(xml, "<DB_R") {
 		target := extractAttr(xml, "target")
 		allow := extractAttr(xml, "allow")
 		s.handleDoorbellResponse(player, target, allow == "1" || allow == "true")
@@ -2461,6 +2525,55 @@ func (s *Server) handlePlayerMessage(player *Player, xml string) {
 	}
 }
 
+func (s *Server) handleMixerSave(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	user := r.FormValue("user")
+	if user == "" {
+		user = r.URL.Query().Get("user")
+	}
+	if user == "" {
+		if d, _ := s.authenticatedDenizen(r); d != nil {
+			user = d.ScreenName
+		}
+	}
+	if user == "" {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "user identity required"})
+		return
+	}
+	title := r.FormValue("title")
+	if title == "" {
+		title = r.URL.Query().Get("title")
+	}
+	if title == "" {
+		title = "My Coke Mix"
+	}
+	edl := r.FormValue("edl")
+	if edl == "" {
+		edl = r.URL.Query().Get("edl")
+	}
+	if edl == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "EDL sequence required"})
+		return
+	}
+
+	songID, err := s.store.SaveSong(user, title, edl)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]any{
+		"success":   true,
+		"song_id":   songID,
+		"song_name": title,
+		"artist":    user,
+		"edl":       edl,
+	})
+}
+
 func (s *Server) handleMixerBurn(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	user := r.FormValue("user")
@@ -2501,11 +2614,24 @@ func (s *Server) handleMixerBurn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newDB, err := s.store.AdjustBalance(user, -10, 0)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
-		return
+	consumed, _ := s.store.ConsumeBlankCD(user)
+	newDB := 0
+	if !consumed {
+		curDB, _, _ := s.store.GetBalance(user)
+		if curDB < 10 {
+			w.WriteHeader(http.StatusPaymentRequired)
+			json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "Not enough Decibels to burn CD"})
+			return
+		}
+		var err error
+		newDB, err = s.store.AdjustBalance(user, -10, 0)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+			return
+		}
+	} else {
+		newDB, _, _ = s.store.GetBalance(user)
 	}
 
 	cdProps := map[string]any{
@@ -2543,6 +2669,42 @@ func (s *Server) handleMixerBurn(w http.ResponseWriter, r *http.Request) {
 		"artist":        user,
 		"edl":           edl,
 		"new_decibels":  newDB,
+	})
+}
+
+func (s *Server) handleMixerList(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	user := r.FormValue("user")
+	if user == "" {
+		user = r.URL.Query().Get("user")
+	}
+	if user == "" {
+		if d, _ := s.authenticatedDenizen(r); d != nil {
+			user = d.ScreenName
+		}
+	}
+	if user == "" {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "user identity required"})
+		return
+	}
+
+	songs, err := s.store.GetSongsByArtist(user)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	blankCDs, _ := s.store.GetBlankCDCount(user)
+	db, vc, _ := s.store.GetBalance(user)
+
+	json.NewEncoder(w).Encode(map[string]any{
+		"success":   true,
+		"user":      user,
+		"songs":     songs,
+		"blank_cds": blankCDs,
+		"decibels":  db,
+		"vcoins":    vc,
 	})
 }
 

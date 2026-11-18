@@ -90,11 +90,33 @@ func ParseFile(path string) (*Definition, error) {
 	inElements := false
 	inRect := false
 	inClientRect := false
+	inName := false
 
 	var currentElementBuffer string
 
 	for _, line := range lines {
 		trimmedLine := strings.TrimSpace(line)
+
+		if strings.HasPrefix(trimmedLine, "<name>") {
+			inName = true
+			if strings.Contains(trimmedLine, "</name>") {
+				parts := strings.Split(trimmedLine, "<name>")
+				if len(parts) > 1 {
+					sub := strings.Split(parts[1], "</name>")[0]
+					def.Name = strings.Trim(strings.TrimSpace(sub), "\"")
+				}
+				inName = false
+			}
+			continue
+		}
+		if strings.HasPrefix(trimmedLine, "</name>") {
+			inName = false
+			continue
+		}
+		if inName {
+			def.Name = strings.Trim(strings.TrimSpace(trimmedLine), "\"")
+			continue
+		}
 
 		if strings.HasPrefix(trimmedLine, "<elements>") {
 			inElements = true

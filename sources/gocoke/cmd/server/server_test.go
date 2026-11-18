@@ -394,6 +394,51 @@ func TestCDBurnAndModeration(t *testing.T) {
 		t.Errorf("expected catalog item 89 with songName Neon Drive in backpack")
 	}
 
+	// 1b. Test CD Burning with Blank CD (consumes Blank CD, charges 0 Decibels)
+	_, _ = srv.store.AddBackpackItem("DJMaster", 26, map[string]any{"count": float64(1)})
+	blankCountBefore, _ := srv.store.GetBlankCDCount("DJMaster")
+	if blankCountBefore != 1 {
+		t.Fatalf("expected 1 blank CD, got %d", blankCountBefore)
+	}
+	dbBeforeBlankBurn, _, _ := srv.store.GetBalance("DJMaster")
+
+	reqBlankBurn := httptest.NewRequest("POST", "/api/mixer/burn?user=DJMaster&title=Electro+Chill&edl=^60,funk_bass01{4,0{^", nil)
+	wBlankBurn := httptest.NewRecorder()
+	srv.handleMixerBurn(wBlankBurn, reqBlankBurn)
+	if wBlankBurn.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d: %s", wBlankBurn.Code, wBlankBurn.Body.String())
+	}
+	blankCountAfter, _ := srv.store.GetBlankCDCount("DJMaster")
+	if blankCountAfter != 0 {
+		t.Errorf("expected 0 blank CDs after burn, got %d", blankCountAfter)
+	}
+	dbAfterBlankBurn, _, _ := srv.store.GetBalance("DJMaster")
+	if dbAfterBlankBurn != dbBeforeBlankBurn {
+		t.Errorf("expected balance unchanged (%d), got %d", dbBeforeBlankBurn, dbAfterBlankBurn)
+	}
+
+	// 1c. Test Mixes List endpoint
+	reqList := httptest.NewRequest("GET", "/api/mixer/mixes?user=DJMaster", nil)
+	wList := httptest.NewRecorder()
+	srv.handleMixerList(wList, reqList)
+	if wList.Code != http.StatusOK {
+		t.Fatalf("expected 200 for mixes list, got %d", wList.Code)
+	}
+	listBody := wList.Body.String()
+	if !strings.Contains(listBody, "Neon Drive") || !strings.Contains(listBody, "Electro Chill") {
+		t.Errorf("expected Neon Drive and Electro Chill in mixes list: %s", listBody)
+	}
+
+	// 1d. Test CD Burning rejection when insufficient balance and no blank CD
+	_, _ = srv.store.GetOrCreateDenizen("BrokeDJ", "M", "def", "Broke")
+	_, _ = srv.store.AdjustBalance("BrokeDJ", -10000, 0)
+	reqBroke := httptest.NewRequest("POST", "/api/mixer/burn?user=BrokeDJ&title=No+Money&edl=^50,beat{1,0{^", nil)
+	wBroke := httptest.NewRecorder()
+	srv.handleMixerBurn(wBroke, reqBroke)
+	if wBroke.Code != http.StatusPaymentRequired {
+		t.Errorf("expected 402 Payment Required, got %d", wBroke.Code)
+	}
+
 	// 2. Test Studio Moderation Kick
 	_, _ = srv.store.CreateStudio("studio_test", "u_owner", "OwnerUser", "Owner Studio", "studio_model_c", 3)
 	p1 := &Player{ID: "p_owner", ScreenName: "OwnerUser", RoomID: "studio_test", Authenticated: true}

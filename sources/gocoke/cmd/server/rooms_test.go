@@ -10,6 +10,7 @@ import (
 type testPacketWriter struct {
 	mu       sync.Mutex
 	messages []string
+	closed   bool
 }
 
 func newTestPacketWriter() *testPacketWriter {
@@ -25,7 +26,16 @@ func (w *testPacketWriter) WriteBinary(p []byte) error {
 }
 
 func (w *testPacketWriter) Close() error {
+	w.mu.Lock()
+	defer w.mu.Unlock()
+	w.closed = true
 	return nil
+}
+
+func (w *testPacketWriter) IsClosed() bool {
+	w.mu.Lock()
+	defer w.mu.Unlock()
+	return w.closed
 }
 
 func (w *testPacketWriter) GetMessages() []string {
@@ -213,5 +223,121 @@ func TestReconnectRestoresRoomState(t *testing.T) {
 	}
 	if !bob2Writer.HasMessage(`av="Alice"`) {
 		t.Fatalf("Bob did not receive present avatar Alice: %v", bob2Writer.GetMessages())
+	}
+}
+
+func TestMultiTileFurnitureFootprintCollision(t *testing.T) {
+	rm := NewRoom("test_footprint", "Footprint Test Room", 2)
+	rm.EntranceX = 0
+	rm.EntranceZ = 0
+
+	// 1. Initially (5, 5), (5, 6), (6, 5), (6, 6) are walkable
+	for _, pt := range [][2]int{{5, 5}, {5, 6}, {6, 5}, {6, 6}} {
+		if !rm.IsWalkable(pt[0], pt[1]) {
+			t.Fatalf("expected (%d,%d) to be initially walkable", pt[0], pt[1])
+		}
+	}
+
+	// 2. Place a 2x2 solid item at (5, 5) with dir=2
+	rm.SetFurnitureFootprint("furni_2x2", 5, 5, 2, 2, 2, true)
+
+	// All 4 tiles must now be blocked
+	for _, pt := range [][2]int{{5, 5}, {5, 6}, {6, 5}, {6, 6}} {
+		if rm.IsWalkable(pt[0], pt[1]) {
+			t.Fatalf("expected (%d,%d) to be blocked by 2x2 furniture", pt[0], pt[1])
+		}
+	}
+
+	// 3. Remove the furniture
+	rm.RemoveFurnitureSolid("furni_2x2")
+
+	// All 4 tiles must be walkable again
+	for _, pt := range [][2]int{{5, 5}, {5, 6}, {6, 5}, {6, 6}} {
+		if !rm.IsWalkable(pt[0], pt[1]) {
+			t.Fatalf("expected (%d,%d) to be walkable after furniture removal", pt[0], pt[1])
+		}
+	}
+
+	// 4. Test 1x2 item with orientation swap
+	// dir=2: width=1, depth=2 -> occupies (10, 10) and (10, 11)
+	rm.SetFurnitureFootprint("furni_1x2", 10, 10, 1, 2, 2, true)
+	if rm.IsWalkable(10, 10) || rm.IsWalkable(10, 11) {
+		t.Fatalf("expected (10,10) and (10,11) to be blocked for dir 2")
+	}
+	if !rm.IsWalkable(11, 10) {
+		t.Fatalf("expected (11,10) to remain walkable for dir 2")
+	}
+
+	// Rotate to dir=0: dimensions swap to width=2, depth=1 -> occupies (10, 10) and (11, 10)
+	rm.RemoveFurnitureSolid("furni_1x2")
+	rm.SetFurnitureFootprint("furni_1x2", 10, 10, 1, 2, 0, true)
+	if rm.IsWalkable(10, 10) || rm.IsWalkable(11, 10) {
+		t.Fatalf("expected (10,10) and (11,10) to be blocked for dir 0")
+	}
+	if !rm.IsWalkable(10, 11) {
+		t.Fatalf("expected (10,11) to be walkable for dir 0")
+	}
+}
+
+// 5. TestFurniturePlacementRejectionSendsPOSReject verifies that when an unauthorized or
+// unowned furniture placement is attempted, the server rejects with both <Alert and <POS_REJECT.
+func TestFurniturePlacementRejectionSendsPOSReject(t *testing.T) {
+	srv := NewServer("./web", "127.0.0.1", "8080", nil)
+	_, _ = srv.store.CreateStudio("room_alice", "u1", "Alice", "Alice Studio", "studio_model_a", 1)
+
+	// Bob enters Alice's room and tries to place furniture
+	bob, bobWriter := createTestPlayer(srv, "p_bob", "Bob", "")
+	srv.handlePlayerMessage(bob, `<Room.Enter msgID="2" roomID="room_alice"/>`)
+
+	// Bob attempts POS_STD in Alice's room (Bob is not the owner)
+	srv.handlePlayerMessage(bob, `<Room.Action roomID="room_alice"><POS_STD id="9999" cid="10" x="5" y="0" z="5" ho="0" d="2" st="0"/></Room.Action>`)
+
+	if !bobWriter.HasMessage("<POS_REJECT") {
+		t.Fatalf("expected Bob to receive <POS_REJECT on unauthorized placement, got: %v", bobWriter.GetMessages())
+	}
+	if !bobWriter.HasMessage("<Alert") {
+		t.Fatalf("expected Bob to receive <Alert on unauthorized placement, got: %v", bobWriter.GetMessages())
+	}
+}
+
+func TestPublicVenuesEntranceAndPathMap(t *testing.T) {
+	srv := NewServer("../../web", "127.0.0.1", "8080", nil)
+
+	venues := []struct {
+		roomID   string
+		name     string
+		entX     int
+		entZ     int
+		location int
+	}{
+		{"$SYSTEM$1", "London I", 11, 2, 1},
+		{"$SYSTEM$19", "Alaska I", 15, 24, 10},
+		{"$SYSTEM$3", "Miami I", 22, 22, 2},
+		{"$SYSTEM$5", "Mombasa I", 19, 25, 3},
+		{"$SYSTEM$17", "Goa I", 13, 14, 9},
+		{"$SYSTEM$21", "Moscow I", 12, 25, 11},
+		{"$SYSTEM$27", "Central Park I", 16, 25, 14},
+	}
+
+	for _, v := range venues {
+		t.Run(v.name, func(t *testing.T) {
+			rm, err := srv.GetRoom(v.roomID)
+			if err != nil {
+				t.Fatalf("failed to get room %s: %v", v.roomID, err)
+			}
+			if rm.Location != v.location {
+				t.Errorf("expected location %d for %s, got %d", v.location, v.name, rm.Location)
+			}
+			if rm.EntranceX != v.entX || rm.EntranceZ != v.entZ {
+				t.Errorf("expected entrance (%d,%d) for %s, got (%d,%d)", v.entX, v.entZ, v.name, rm.EntranceX, rm.EntranceZ)
+			}
+			if len(rm.walkableGrid) == 0 {
+				t.Errorf("expected non-empty walkable grid for %s", v.name)
+			}
+			// The entrance tile must be walkable
+			if !rm.IsWalkable(v.entX, v.entZ) {
+				t.Errorf("entrance tile (%d,%d) should be walkable for %s", v.entX, v.entZ, v.name)
+			}
+		})
 	}
 }

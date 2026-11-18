@@ -667,6 +667,55 @@ func OpenCreateStudioDialog(wm *ui.WindowManager, tm *textmgr.Manager, current *
 
 	newW.ButtonClick = func(elementID string) {
 		switch elementID {
+		case "nav_createstudio_radio_1", "nav_createstudio_radio_2", "nav_createstudio_radio_3", "nav_createstudio_radio_4":
+			var selectedLayout int
+			switch elementID {
+			case "nav_createstudio_radio_1":
+				selectedLayout = 1
+			case "nav_createstudio_radio_2":
+				selectedLayout = 2
+			case "nav_createstudio_radio_3":
+				selectedLayout = 3
+			case "nav_createstudio_radio_4":
+				selectedLayout = 4
+			}
+			newW.TempVars["selected_layout"] = selectedLayout
+			layoutRadios := map[int]string{
+				1: "nav_createstudio_radio_1",
+				2: "nav_createstudio_radio_2",
+				3: "nav_createstudio_radio_3",
+				4: "nav_createstudio_radio_4",
+			}
+			for lNum, rID := range layoutRadios {
+				member := "cc.radiobutton.active.off"
+				if lNum == selectedLayout {
+					member = "cc.radiobutton.active.on"
+				}
+				for i := range newW.Definition.Elements {
+					if newW.Definition.Elements[i].ID == rID {
+						newW.Definition.Elements[i].Member = member
+					}
+				}
+			}
+		case "nav_studiolocation_radio_1", "nav_studiolocation_radio_2", "nav_studiolocation_radio_3", "nav_studiolocation_radio_4",
+			"nav_studiolocation_radio_5", "nav_studiolocation_radio_6", "nav_studiolocation_radio_7", "nav_studiolocation_radio_8":
+			var selectedLoc int
+			fmt.Sscanf(strings.TrimPrefix(elementID, "nav_studiolocation_radio_"), "%d", &selectedLoc)
+			if selectedLoc > 0 {
+				newW.TempVars["selected_location"] = selectedLoc
+				for locNum := 1; locNum <= 8; locNum++ {
+					rID := fmt.Sprintf("nav_studiolocation_radio_%d", locNum)
+					member := "cc.radiobutton.active.off"
+					if locNum == selectedLoc {
+						member = "cc.radiobutton.active.on"
+					}
+					for i := range newW.Definition.Elements {
+						if newW.Definition.Elements[i].ID == rID {
+							newW.Definition.Elements[i].Member = member
+						}
+					}
+				}
+			}
 		case "nav_createstudio_cancel":
 			handleTabTransition(wm, tm, newW, 2, 2, opts)
 		case "nav_createstudio_ok":

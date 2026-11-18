@@ -1,0 +1,97 @@
+<Studio xOff="343" yOff="27" layoutType="1">
+
+<Background member="mos_cow_split" x="0" y="-11" ink="0" />
+
+<Hiliter member="moscova_hiliter" ink="36" />
+
+<Furniture castLib="Studio">
+
+<Item ink="8" dir="0" gridX="10" gridZ="18" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="2" gridX="9" gridZ="17" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="4" gridX="10" gridZ="16" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="6" gridX="11" gridZ="17" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="0" gridX="10" gridZ="13" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="2" gridX="9" gridZ="12" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="4" gridX="10" gridZ="11" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="6" gridX="11" gridZ="12" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="4" gridX="7" gridZ="18" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="0" gridX="7" gridZ="20" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="4" gridX="7" gridZ="13" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="0" gridX="7" gridZ="15" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="4" gridX="7" gridZ="9" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="0" gridX="7" gridZ="11" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="2" gridX="15" gridZ="9" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="8" dir="6" gridX="17" gridZ="9" imageBase="mos_seat" Action="DEFAULT" type="Chair" />
+
+<Item ink="36" dir="6" gridX="16" gridZ="19" imageBase="moscow_cokecase" Action="DRINK_DESPENSER" type="Default" />
+
+<Item ink="36" dir="0" gridX="18" gridZ="17" imageBase="moscow_cokecase" Action="DRINK_DESPENSER" type="Default" />
+
+</Furniture>
+
+<WallItems>
+
+</WallItems>
+
+<StaticItems castLib="Studio">
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="36" height="140" width="295" y="337" x="391" layer="1" col="23" row="16" member="mos_plantation" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="139" width="96" y="259" x="384" layer="1" col="15" row="8" member="mos_plant" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="50" width="45" y="259" x="383" layer="1" col="16" row="6" member="mos_plant2" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="98" width="144" y="293" x="637" layer="1" col="19" row="8" member="mos_door1mask" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="48" width="48" y="447" x="222" layer="1" col="16" row="20" member="mos_bardesk_a_0_0_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="49" width="51" y="435" x="246" layer="1" col="16" row="19" member="mos_bardesk_a_0_1_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="49" width="51" y="422" x="272" layer="1" col="16" row="18" member="mos_bardesk_a_0_2_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="50" width="58" y="411" x="294" layer="1" col="16" row="17" member="mos_bardesk_a_0_3_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="47" width="49" y="423" x="318" layer="1" col="17" row="17" member="mos_bardesk_a_0_4_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="47" width="52" y="435" x="342" layer="1" col="18" row="17" member="mos_bardesk_a_0_5_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="49" width="55" y="445" x="362" layer="1" col="19" row="17" member="mos_bardesk_a_0_6_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="34" width="40" y="339" x="150" layer="1" col="10" row="17" member="mos_table_a_0_0_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="34" width="40" y="279" x="270" layer="1" col="10" row="12" member="mos_table_a_0_0_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="34" width="40" y="327" x="30" layer="1" col="7" row="19" member="mos_table_a_0_0_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="34" width="40" y="267" x="150" layer="1" col="7" row="14" member="mos_table_a_0_0_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="34" width="40" y="219" x="246" layer="1" col="7" row="10" member="mos_table_a_0_0_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="34" width="40" y="315" x="486" layer="1" col="16" row="9" member="mos_table_a_0_0_0" />
+
+<Item skew="0" rotation="0" flipV="0" flipH="0" blend="100" ink="8" height="32" width="54" y="255" x="578" layer="1" col="16" row="6" member="mosmixa" />
+
+</StaticItems>
+
+<Door col="11" row="21">
+
+<Exit blend="0" ink="8" member="moscow1896204" />
+
+</Door>
+
+</Studio>
