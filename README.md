@@ -66,11 +66,26 @@ docker compose up -d --build
 
 ## Running the test suite
 
+### 1. Pure Go Unit, Durability & Benchmark Suite
 From `sources/gocoke`:
 ```bash
+# Run all unit and integration tests
 go test ./...
+
+# Run restart durability and MariaDB migration tests
+go test -v ./cmd/server -run Durability
+
+# Run high-concurrency server benchmarks (walkability, broadcast, transactions)
+go test -bench=. -benchmem ./cmd/server
 ```
-All server units (authentication, room state, collision, economy, possessions, music, trade, social, and minigames) and client game rules are tested.
+
+### 2. Multi-Browser End-to-End Playwright Suite
+From `tests`:
+```bash
+# Run all 19 browser journey, visual parity, and mechanics tests
+npm test
+```
+The browser suite spins up isolated temporary test databases (`test_playwright.db`), verifying concurrent multi-client sessions, 760px website shell geometry, and $760 \times 520$ Macromedia Director stage resolution without touching persistent player data.
 
 ## Scope and completion
 
