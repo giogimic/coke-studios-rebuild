@@ -79,7 +79,15 @@ Environment=DATABASE_URL=coke:coke_secret@tcp(127.0.0.1:3306)/coke_studios?parse
 WantedBy=multi-user.target
 ```
 
-### Installation Steps
+### Automated Turnkey Deployment
+You can run the automated deployment script to perform packages installation, MariaDB user creation, binary and asset synchronization, and systemd service installation in a single step:
+
+```bash
+sudo chmod +x tools/deploy-debian.sh
+sudo ./tools/deploy-debian.sh
+```
+
+### Manual Installation Steps
 ```bash
 # 1. Create service user if needed
 sudo useradd -r -s /bin/false coke || true
