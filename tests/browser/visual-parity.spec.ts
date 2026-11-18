@@ -53,29 +53,42 @@ test.describe('Sub-task 7.2: Frame-Accurate Visual Parity & Resolution Fidelity'
     expect(fs.statSync(snapshotPath).size).toBeGreaterThan(1000);
   });
 
-  test('Macromedia Director MX 760x520 stage canvas resolution and aspect ratio', async ({ page }) => {
+  test('Macromedia Director MX 760x520 stage canvas resolution and aspect ratio across public venues', async ({ page }) => {
     // Open Go WASM game client in standalone stage viewport
     await page.setViewportSize({ width: 760, height: 520 });
-    await page.goto('/game/?room=$SYSTEM$1&user=VisualVerifier&sw1=VmlzdWFsVmVyaWZpZXI%3D');
 
-    // 1. Ensure canvas element is present and sized to the stage
-    const canvas = page.locator('#canvas');
-    await expect(canvas).toBeVisible();
+    const venues = [
+      { id: '$SYSTEM$1', name: 'london-1' },
+      { id: '$SYSTEM$2', name: 'alaska-1' },
+      { id: '$SYSTEM$3', name: 'miami-1' },
+      { id: '$SYSTEM$4', name: 'mombasa-1' },
+      { id: '$SYSTEM$5', name: 'goa-1' },
+      { id: '$SYSTEM$6', name: 'moscow-1' },
+      { id: '$SYSTEM$7', name: 'centralpark-1' },
+    ];
 
-    const canvasBox = await canvas.boundingBox();
-    expect(canvasBox).not.toBeNull();
-    expect(Math.round(canvasBox!.width)).toBe(760);
-    expect(Math.round(canvasBox!.height)).toBe(520);
+    for (const v of venues) {
+      await page.goto(`/game/?room=${encodeURIComponent(v.id)}&user=VisualVerifier&sw1=VmlzdWFsVmVyaWZpZXI%3D`);
 
-    // Verify exact Director MX 760:520 stage ratio (1.4615)
-    const aspectRatio = canvasBox!.width / canvasBox!.height;
-    expect(aspectRatio).toBeCloseTo(760 / 520, 2);
+      // 1. Ensure canvas element is present and sized to the stage
+      const canvas = page.locator('#canvas');
+      await expect(canvas).toBeVisible();
 
-    // Capture visual snapshot of London I stage
-    const londonSnapshot = path.join(screenshotsDir, 'stage-london-1.png');
-    await page.screenshot({ path: londonSnapshot });
-    expect(fs.existsSync(londonSnapshot)).toBe(true);
-    expect(fs.statSync(londonSnapshot).size).toBeGreaterThan(1000);
+      const canvasBox = await canvas.boundingBox();
+      expect(canvasBox).not.toBeNull();
+      expect(Math.round(canvasBox!.width)).toBe(760);
+      expect(Math.round(canvasBox!.height)).toBe(520);
+
+      // Verify exact Director MX 760:520 stage ratio (1.4615)
+      const aspectRatio = canvasBox!.width / canvasBox!.height;
+      expect(aspectRatio).toBeCloseTo(760 / 520, 2);
+
+      // Capture visual snapshot of the stage
+      const snapshotPath = path.join(screenshotsDir, `stage-${v.name}.png`);
+      await page.screenshot({ path: snapshotPath });
+      expect(fs.existsSync(snapshotPath)).toBe(true);
+      expect(fs.statSync(snapshotPath).size).toBeGreaterThan(1000);
+    }
   });
 
   test('Public venue background raster layers and Director cast descriptors load cleanly', async ({ request }) => {
