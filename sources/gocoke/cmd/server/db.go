@@ -869,6 +869,26 @@ func (s *Store) AdjustBalance(screenName string, decibelsDelta, vcoinsDelta int)
 	return newDB, nil
 }
 
+func (s *Store) CreateRedCap(pinCode string, rewardVCoins, rewardItemID int) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	cleanCode := strings.ToUpper(strings.TrimSpace(pinCode))
+	if cleanCode == "" {
+		return fmt.Errorf("pinCode cannot be empty")
+	}
+	if rewardVCoins <= 0 {
+		rewardVCoins = 100
+	}
+
+	query := "INSERT OR REPLACE INTO red_caps (pin_code, reward_vcoins, reward_item_id, redeemed_by, redeemed_at) VALUES (?, ?, ?, NULL, NULL)"
+	if s.driver == "mysql" {
+		query = "REPLACE INTO red_caps (pin_code, reward_vcoins, reward_item_id, redeemed_by, redeemed_at) VALUES (?, ?, ?, NULL, NULL)"
+	}
+	_, err := s.db.Exec(query, cleanCode, rewardVCoins, rewardItemID)
+	return err
+}
+
 func (s *Store) RedeemRedCap(screenName, pinCode string) (int, int, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()

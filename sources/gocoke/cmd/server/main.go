@@ -813,6 +813,31 @@ func (s *Server) handleRedeemCap(w http.ResponseWriter, r *http.Request) {
 		rewardVC, rewardItem, newVC, user)
 }
 
+func (s *Server) handleCreateCap(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	_ = r.ParseForm()
+	pin := strings.ToUpper(strings.TrimSpace(r.FormValue("pin")))
+	if pin == "" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": "pin code is required"})
+		return
+	}
+	vcoins, _ := strconv.Atoi(r.FormValue("vcoins"))
+	item, _ := strconv.Atoi(r.FormValue("item"))
+	if err := s.store.CreateRedCap(pin, vcoins, item); err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		_ = json.NewEncoder(w).Encode(map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(map[string]any{"success": true, "pin": pin, "reward_vcoins": vcoins, "reward_item": item})
+}
+
 func (s *Server) handleShopPurchase(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	_ = r.ParseForm()

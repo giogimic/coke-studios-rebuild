@@ -232,3 +232,64 @@ func TestPrePurchaseReturnsEvidencedPriceAndBalance(t *testing.T) {
 		t.Errorf("expected catalogItemId 13, got %v", pre["catalogItemId"])
 	}
 }
+
+func TestBottleCapCreationAndRedemption(t *testing.T) {
+	tmpDir := t.TempDir()
+	dbPath := filepath.Join(tmpDir, "redcap_test.db")
+	store, err := OpenStore(dbPath)
+	if err != nil {
+		t.Fatalf("failed to open store: %v", err)
+	}
+	defer store.Close()
+
+	d, err := store.RegisterDenizen("CapTester", "CapPass123!", "1", "ch=01/01/01", "Testing Caps")
+	if err != nil {
+		t.Fatalf("failed to register denizen: %v", err)
+	}
+
+	pin := "PROMO-TEST-CAP-1234"
+	if err := store.CreateRedCap(pin, 150, 52); err != nil {
+		t.Fatalf("failed to create red cap: %v", err)
+	}
+
+	// 1. Invalid pin fails
+	if _, _, err := store.RedeemRedCap(d.ScreenName, "NON-EXISTENT"); err == nil {
+		t.Fatalf("expected error for non-existent PIN code")
+	}
+
+	// 2. Valid pin succeeds
+	vc, item, err := store.RedeemRedCap(d.ScreenName, pin)
+	if err != nil {
+		t.Fatalf("failed to redeem valid red cap: %v", err)
+	}
+	if vc != 150 {
+		t.Errorf("expected 150 V-Coins, got %d", vc)
+	}
+	if item != 52 {
+		t.Errorf("expected item ID 52, got %d", item)
+	}
+
+	// Verify balance credited
+	_, balanceVC, err := store.GetBalance(d.ScreenName)
+	if err != nil {
+		t.Fatalf("failed to get balance: %v", err)
+	}
+	// Initial vcoins = 500 + 150 = 650
+	if balanceVC != 650 {
+		t.Errorf("expected 650 V-Coins, got %d", balanceVC)
+	}
+
+	// Verify furniture item in backpack
+	bp, err := store.GetBackpack(d.ScreenName)
+	if err != nil {
+		t.Fatalf("failed to get backpack: %v", err)
+	}
+	if len(bp) != 1 || bp[0].CatalogItemID != 52 {
+		t.Errorf("expected 1 item with catalog_item_id 52 in backpack, got %+v", bp)
+	}
+
+	// 3. Second redemption fails
+	if _, _, err := store.RedeemRedCap("AnotherUser", pin); err == nil {
+		t.Fatalf("expected error on duplicate redemption of same PIN code")
+	}
+}

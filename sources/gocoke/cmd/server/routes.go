@@ -30,6 +30,7 @@ func (s *Server) Handler() http.Handler {
 
 	// 4. Red Cap PIN code redemption HTTP API
 	mux.HandleFunc("/sf/ssldocs/redeemCap.jsp", s.handleRedeemCap)
+	mux.HandleFunc("/api/caps/create", s.handleCreateCap)
 	mux.HandleFunc("/api/shop/purchase", s.handleShopPurchase)
 	mux.HandleFunc("/api/catalogue/purchase", s.handleShopPurchase)
 

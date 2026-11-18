@@ -141,4 +141,50 @@ test.describe('Task 3: Real Accounts, Sessions, and Per-Player Identity', () => 
     await expect(loggedOutBtns).toBeVisible();
     await expect(loggedInBtns).toBeHidden();
   });
+
+  test('redemption of promotional Coca-Cola bottle cap PIN credits V-Coins and furniture to backpack', async ({ page }) => {
+    const pinUser = `CapUser_${Date.now()}`;
+    const pinPass = 'CapPass123!';
+    const dynamicPin = `TEST-CAP-${Date.now()}`;
+
+    // Register user
+    const regRes = await page.request.post('/api/denizen/register', {
+      form: { screenName: pinUser, password: pinPass, gender: '1' },
+    });
+    expect(regRes.status()).toBe(200);
+
+    // Seed dynamic promotional PIN code for idempotent test runs
+    const seedRes = await page.request.post('/api/caps/create', {
+      form: { pin: dynamicPin, vcoins: '100', item: '52' },
+    });
+    expect(seedRes.status()).toBe(200);
+
+    // 1. Invalid PIN code fails
+    const failRes = await page.request.post('/sf/ssldocs/redeemCap.jsp', {
+      form: { user: pinUser, pin: 'INVALID-CODE-999' },
+    });
+    expect(failRes.status()).toBe(400);
+    const failJson = await failRes.json();
+    expect(failJson.success).toBe(false);
+    expect(failJson.error).toContain('invalid or non-existent');
+
+    // 2. Valid promotional PIN code succeeds
+    const okRes = await page.request.post('/sf/ssldocs/redeemCap.jsp', {
+      form: { user: pinUser, pin: dynamicPin },
+    });
+    expect(okRes.status()).toBe(200);
+    const okJson = await okRes.json();
+    expect(okJson.success).toBe(true);
+    expect(okJson.reward_vcoins).toBe(100);
+    expect(okJson.reward_item).toBe(52); // Coke Neon Sign
+
+    // 3. Second redemption of same PIN fails
+    const dupRes = await page.request.post('/sf/ssldocs/redeemCap.jsp', {
+      form: { user: pinUser, pin: dynamicPin },
+    });
+    expect(dupRes.status()).toBe(400);
+    const dupJson = await dupRes.json();
+    expect(dupJson.success).toBe(false);
+    expect(dupJson.error).toContain('already been redeemed');
+  });
 });
