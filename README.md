@@ -82,7 +82,7 @@ go test -bench=. -benchmem ./cmd/server
 ### 2. Multi-Browser End-to-End Playwright Suite
 From `tests`:
 ```bash
-# Run all 19 browser journey, visual parity, and mechanics tests
+# Run all 20 browser journey, visual parity, and mechanics tests
 npm test
 ```
 The browser suite spins up isolated temporary test databases (`test_playwright.db`), verifying concurrent multi-client sessions, 760px website shell geometry, and $760 \times 520$ Macromedia Director stage resolution without touching persistent player data.
