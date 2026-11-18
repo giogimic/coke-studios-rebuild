@@ -398,6 +398,48 @@ var HistoricalPopQuizQuestions = []PopQuizQuestion{
 		CorrectIndex: 2, // Flying Punch
 		RewardDB:     25,
 	},
+	{
+		ID:           5,
+		Question:     "What is the maximum number of mix slots you can save in the CC-3001 Music Studio?",
+		Options:      []string{"3 Slots", "5 Slots", "8 Slots", "10 Slots"},
+		CorrectIndex: 1, // 5 Slots
+		RewardDB:     15,
+	},
+	{
+		ID:           6,
+		Question:     "How many Decibels does an audience Cheer award to the performing DJ in Coke Studios?",
+		Options:      []string{"+1 dB", "+2 dB", "+5 dB", "+10 dB"},
+		CorrectIndex: 1, // +2 dB
+		RewardDB:     15,
+	},
+	{
+		ID:           7,
+		Question:     "What is the name of the Master you battle against on the Dohyo in V-Ego San Sumo?",
+		Options:      []string{"Master Kenji", "Sensei Ryu", "Master Hiro", "Sensei Dan"},
+		CorrectIndex: 0, // Master Kenji
+		RewardDB:     20,
+	},
+	{
+		ID:           8,
+		Question:     "Which rare tile card in Uncover the Music skips your turn when revealed?",
+		Options:      []string{"Totem Mask", "Snake (Pass Card)", "Frog (Wild Card)", "Thunderbolt"},
+		CorrectIndex: 1, // Snake
+		RewardDB:     20,
+	},
+	{
+		ID:           9,
+		Question:     "How many tiles make up the memory matching grid in Uncover the Music?",
+		Options:      []string{"16 Tiles", "20 Tiles", "24 Tiles", "32 Tiles"},
+		CorrectIndex: 2, // 24 Tiles
+		RewardDB:     15,
+	},
+	{
+		ID:           10,
+		Question:     "What item is consumed from your backpack to burn a CD without paying a Decibel fee?",
+		Options:      []string{"Blank CD", "Music Cassette", "Floppy Disk", "Vinyl Record"},
+		CorrectIndex: 0, // Blank CD
+		RewardDB:     20,
+	},
 }
 
 // handlePopQuizQuestion handles GET /api/minigames/quiz/question
