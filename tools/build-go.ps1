@@ -46,6 +46,7 @@ try {
 Write-Host "==> 3. Building Authoritative Server for Debian Linux (coke-server-linux)..."
 Push-Location $gocokeDir
 try {
+    $env:CGO_ENABLED = "0"
     $env:GOOS = "linux"
     $env:GOARCH = "amd64"
     go build -trimpath -ldflags "-s -w" -o "$binDir\coke-server-linux" ./cmd/server
@@ -58,6 +59,7 @@ try {
 Write-Host "==> 4. Building Authoritative Server for Windows (coke-server.exe)..."
 Push-Location $gocokeDir
 try {
+    $env:CGO_ENABLED = "0"
     $env:GOOS = "windows"
     $env:GOARCH = "amd64"
     go build -trimpath -ldflags "-s -w" -o "$binDir\coke-server.exe" ./cmd/server
@@ -68,6 +70,7 @@ try {
 }
 
 # Reset environment
+$env:CGO_ENABLED = ""
 $env:GOOS = ""
 $env:GOARCH = ""
 

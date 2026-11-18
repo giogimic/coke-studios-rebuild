@@ -190,6 +190,10 @@ func (s *Store) Close() error {
 	return s.db.Close()
 }
 
+func (s *Store) Driver() string {
+	return s.driver
+}
+
 func (s *Store) migrate() error {
 	var queries []string
 

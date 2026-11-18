@@ -38,14 +38,14 @@ echo "==> 2. Building Go WebAssembly client (main.wasm)..."
 echo "==> 3. Building Authoritative Server for Debian Linux (coke-server-linux)..."
 (
     cd "${GOCOKE_DIR}"
-    GOOS=linux GOARCH=amd64 go build -trimpath -ldflags "-s -w" -o "${BIN_DIR}/coke-server-linux" ./cmd/server
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags "-s -w" -o "${BIN_DIR}/coke-server-linux" ./cmd/server
     echo "    Successfully built ${BIN_DIR}/coke-server-linux (Debian/Linux x64)"
 )
 
 echo "==> 4. Building Authoritative Server for Windows (coke-server.exe)..."
 (
     cd "${GOCOKE_DIR}"
-    GOOS=windows GOARCH=amd64 go build -trimpath -ldflags "-s -w" -o "${BIN_DIR}/coke-server.exe" ./cmd/server
+    CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -trimpath -ldflags "-s -w" -o "${BIN_DIR}/coke-server.exe" ./cmd/server
     echo "    Successfully built ${BIN_DIR}/coke-server.exe (Windows x64)"
 )
 

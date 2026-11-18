@@ -201,7 +201,11 @@ func main() {
 	log.Printf("==========================================================")
 	log.Printf(" Coke Studios Authoritative Server (Debian / Linux First)")
 	log.Printf(" Listening on http://%s (Serving %s)", *addr, *root)
-	log.Printf(" SQLite Store:              %s", *dbPath)
+	if store.Driver() == "mysql" {
+		log.Printf(" Database Store (MariaDB):  %s", *dbPath)
+	} else {
+		log.Printf(" Database Store (SQLite):   %s", *dbPath)
+	}
 	log.Printf(" WebSocket Realtime Bridge: ws://%s/ws/realtime", *addr)
 	log.Printf(" AMF0 Flash Gateway:        http://%s/sf/gateway", *addr)
 	log.Printf("==========================================================")
