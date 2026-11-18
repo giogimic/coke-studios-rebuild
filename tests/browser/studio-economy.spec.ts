@@ -147,4 +147,114 @@ test.describe('Task 5: Catalogue, possessions and player studios', () => {
     await ctxAlice.close();
     await ctxBob.close();
   });
+
+  test('live studio decor update (wallpaper and flooring) updates database and broadcasts to room visitors', async ({ browser, baseURL }) => {
+    const ownerName = `Owner_Decor_${Date.now()}`;
+    const visitorName = `Visitor_Decor_${Date.now()}`;
+    const password = 'DecorPassword123!';
+
+    // 1. Register owner and visitor
+    const ctxOwner = await browser.newContext();
+    const pageOwner = await ctxOwner.newPage();
+    const resOwner = await pageOwner.request.post('/api/denizen/register', {
+      form: { screenName: ownerName, password: password, gender: '1' },
+    });
+    const ownerData = await resOwner.json();
+    expect(ownerData.success).toBe(true);
+    const studioID = ownerData.studioId;
+    expect(studioID).toBeTruthy();
+
+    const ctxVisitor = await browser.newContext();
+    const pageVisitor = await ctxVisitor.newPage();
+    const resVisitor = await pageVisitor.request.post('/api/denizen/register', {
+      form: { screenName: visitorName, password: password, gender: '2' },
+    });
+    const visitorData = await resVisitor.json();
+    expect(visitorData.success).toBe(true);
+
+    const wsUrl = (baseURL || 'http://localhost:8080').replace('http://', 'ws://').replace('https://', 'wss://') + '/ws/realtime';
+
+    // 2. Connect owner to WebSocket and enter studio
+    await pageOwner.evaluate(
+      ({ wsUrl, user, secret, studioID }) => {
+        return new Promise<void>((resolve, reject) => {
+          const ws = new WebSocket(wsUrl);
+          (window as any).testWS = ws;
+          (window as any).wsMessages = [];
+          ws.binaryType = 'arraybuffer';
+          ws.onmessage = (event) => {
+            const dec = new TextDecoder();
+            (window as any).wsMessages.push(dec.decode(new Uint8Array(event.data)).replace(/\0/g, ''));
+          };
+          ws.onopen = () => {
+            const encUser = Array.from(new TextEncoder().encode(user)).map((b) => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+            const encPass = Array.from(new TextEncoder().encode(secret)).map((b) => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+            ws.send(new TextEncoder().encode(`<Auth.SecretKey key="${secret}"><DENIZEN_AUTH u="${encUser}" p="${encPass}"/></Auth.SecretKey>\0`));
+            setTimeout(() => {
+              ws.send(new TextEncoder().encode(`<Room.Enter roomID="${studioID}"/>\0`));
+              setTimeout(resolve, 300);
+            }, 300);
+          };
+          ws.onerror = reject;
+        });
+      },
+      { wsUrl, user: ownerName, secret: ownerData.secret, studioID }
+    );
+
+    // 4. Connect visitor to WebSocket and enter owner's studio
+    await pageVisitor.evaluate(
+      ({ wsUrl, user, secret, studioID }) => {
+        return new Promise<void>((resolve, reject) => {
+          const ws = new WebSocket(wsUrl);
+          (window as any).testWS = ws;
+          (window as any).wsMessages = [];
+          ws.binaryType = 'arraybuffer';
+          ws.onmessage = (event) => {
+            const dec = new TextDecoder();
+            (window as any).wsMessages.push(dec.decode(new Uint8Array(event.data)).replace(/\0/g, ''));
+          };
+          ws.onopen = () => {
+            const encUser = Array.from(new TextEncoder().encode(user)).map((b) => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+            const encPass = Array.from(new TextEncoder().encode(secret)).map((b) => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+            ws.send(new TextEncoder().encode(`<Auth.SecretKey key="${secret}"><DENIZEN_AUTH u="${encUser}" p="${encPass}"/></Auth.SecretKey>\0`));
+            setTimeout(() => {
+              ws.send(new TextEncoder().encode(`<Room.Enter roomID="${studioID}"/>\0`));
+              setTimeout(resolve, 300);
+            }, 300);
+          };
+          ws.onerror = reject;
+        });
+      },
+      { wsUrl, user: visitorName, secret: visitorData.secret, studioID }
+    );
+
+    // 5. Owner updates room decor via ST_DECOR
+    await pageOwner.evaluate(({ studioID }) => {
+      (window as any).testWS.send(
+        new TextEncoder().encode(`<Room.Action roomID="${studioID}"><ST_DECOR wp="3" fl="2" db="1"/></Room.Action>\0`)
+      );
+    }, { studioID });
+    await pageOwner.waitForTimeout(400);
+
+    // 6. Verify visitor receives the broadcasted ST_DECOR packet
+    const visitorMsgs = await pageVisitor.evaluate(() => (window as any).wsMessages as string[]);
+    const hasDecorBroadcast = visitorMsgs.some((m) => m.includes('<ST_DECOR') && m.includes('wp="3"') && m.includes('fl="2"'));
+    expect(hasDecorBroadcast).toBe(true);
+
+    // 7. Visitor attempts unauthorized decor change
+    await pageVisitor.evaluate(({ studioID }) => {
+      (window as any).testWS.send(
+        new TextEncoder().encode(`<Room.Action roomID="${studioID}"><ST_DECOR wp="99" fl="99" db="99"/></Room.Action>\0`)
+      );
+    }, { studioID });
+    await pageVisitor.waitForTimeout(400);
+
+    // Owner should NOT receive any broadcast with wp="99"
+    const ownerMsgs = await pageOwner.evaluate(() => (window as any).wsMessages as string[]);
+    const hasUnauthorizedDecor = ownerMsgs.some((m) => m.includes('wp="99"'));
+    expect(hasUnauthorizedDecor).toBe(false);
+
+    await ctxOwner.close();
+    await ctxVisitor.close();
+  });
 });
