@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"crypto/sha1"
 	"encoding/base64"
 	"encoding/hex"
@@ -18,11 +19,13 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	"gocoke/internal/minigames/sumo"
@@ -156,6 +159,22 @@ func NewServer(webRoot, host, port string, store *Store) *Server {
 	return s
 }
 
+// Shutdown gracefully notifies connected players and terminates connections.
+func (s *Server) Shutdown() {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	alertMsg := `<Alert text="Server is shutting down for maintenance. Please reconnect shortly."/>`
+	for _, p := range s.Players {
+		_ = p.Send(alertMsg)
+		if p.Conn != nil {
+			_ = p.Conn.Close()
+		}
+	}
+	s.Players = make(map[string]*Player)
+	log.Printf("[Server] Broadcast shutdown alert and disconnected active players.")
+}
+
 func main() {
 	_ = mime.AddExtensionType(".wasm", "application/wasm")
 	_ = mime.AddExtensionType(".br", "application/x-brotli")
@@ -210,7 +229,34 @@ func main() {
 	log.Printf(" AMF0 Flash Gateway:        http://%s/sf/gateway", *addr)
 	log.Printf("==========================================================")
 
-	if err := http.ListenAndServe(*addr, srv.Handler()); err != nil {
+	httpServer := &http.Server{
+		Addr:    *addr,
+		Handler: srv.Handler(),
+	}
+
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
+
+	serverErr := make(chan error, 1)
+	go func() {
+		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			serverErr <- err
+		}
+	}()
+
+	select {
+	case sig := <-sigChan:
+		log.Printf("[Server] Received %v signal, initiating graceful shutdown...", sig)
+		srv.Shutdown()
+
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+
+		if err := httpServer.Shutdown(ctx); err != nil {
+			log.Printf("[Server] HTTP shutdown error: %v", err)
+		}
+		log.Printf("[Server] Graceful shutdown completed cleanly.")
+	case err := <-serverErr:
 		log.Fatalf("Server error: %v", err)
 	}
 }
