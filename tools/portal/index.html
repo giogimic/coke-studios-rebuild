@@ -800,17 +800,21 @@
       </div>
       <div class="coke-card">
         <h4>Weekly Top 40 Charts</h4>
-        <table style="width: 100%; font-size: 9px; text-align: left; margin-top: 6px;">
-          <tr style="background: #e8d8c0; font-weight: bold;">
-            <th style="padding: 3px;">#</th>
-            <th>Track Title</th>
-            <th>Artist / DJ</th>
-            <th>Votes</th>
-          </tr>
-          <tr><td style="padding: 2px;">1</td><td>Electric Sunset</td><td>DJ_SonicPulse</td><td>1,420</td></tr>
-          <tr><td style="padding: 2px;">2</td><td>Red Cap Anthem</td><td>RedCapRuler</td><td>1,215</td></tr>
-          <tr><td style="padding: 2px;">3</td><td>London Loft Groove</td><td>GrooveMaster</td><td>980</td></tr>
-          <tr><td style="padding: 2px;">4</td><td>Alaska Midnight</td><td>FrostByte</td><td>840</td></tr>
+        <table id="top40Table" style="width: 100%; font-size: 9px; text-align: left; margin-top: 6px;">
+          <thead>
+            <tr style="background: #e8d8c0; font-weight: bold;">
+              <th style="padding: 3px;">#</th>
+              <th>Track Title</th>
+              <th>Artist / DJ</th>
+              <th>Votes</th>
+            </tr>
+          </thead>
+          <tbody id="top40Body">
+            <tr><td style="padding: 2px;">1</td><td>Electric Sunset</td><td>DJ_SonicPulse</td><td>1,420</td></tr>
+            <tr><td style="padding: 2px;">2</td><td>Red Cap Anthem</td><td>RedCapRuler</td><td>1,215</td></tr>
+            <tr><td style="padding: 2px;">3</td><td>London Loft Groove</td><td>GrooveMaster</td><td>980</td></tr>
+            <tr><td style="padding: 2px;">4</td><td>Alaska Midnight</td><td>FrostByte</td><td>840</td></tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -1465,6 +1469,32 @@
 
     const navItem = document.querySelector(`.nav-${secId}`);
     if (navItem) navItem.classList.add('active');
+
+    if (secId === 'music') {
+      loadTop40Charts();
+    }
+  }
+
+  async function loadTop40Charts() {
+    try {
+      const res = await fetch('/api/music/top40?period=weekly');
+      if (!res.ok) return;
+      const list = await res.json();
+      if (Array.isArray(list) && list.length > 0) {
+        const tbody = document.getElementById('top40Body');
+        if (!tbody) return;
+        tbody.innerHTML = list.map(item => `
+          <tr>
+            <td style="padding: 2px;">${item.rank}</td>
+            <td>${escapeHtml(item.title)} ${item.award ? '🏆' : ''}</td>
+            <td>${escapeHtml(item.creator)}</td>
+            <td>${Number(item.votes).toLocaleString()}</td>
+          </tr>
+        `).join('');
+      }
+    } catch (e) {
+      console.warn('Failed to load Top 40 charts:', e);
+    }
   }
 
   function goToMyStudio() {
