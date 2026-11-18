@@ -63,13 +63,41 @@ DB_USER="$(clean_val "${DB_USER:-coke}")"
 DB_PASS="$(clean_val "${DB_PASS:-coke_secret}")"
 DB_ROOT_PASSWORD="$(clean_val "${DB_ROOT_PASSWORD:-coke_root_secret}")"
 
-# Check for update argument in any position (--update, -update, update, -- update, -u)
+# Check for update/nuke arguments
 IS_UPDATE=0
+IS_NUKE=0
+FORCE_CONFIRM=0
+DO_PULL=0
+WIPE_CACHE=0
+WIPE_DB=0
+
 for arg in "$@"; do
     case "$arg" in
+        --nuke|-nuke|nuke|--reset|-reset|reset)
+            IS_NUKE=1
+            IS_UPDATE=1
+            WIPE_CACHE=1
+            WIPE_DB=1
+            DO_PULL=1
+            ;;
         --update|-update|update|-u)
             IS_UPDATE=1
-            break
+            ;;
+        --pull|-pull|pull|-p)
+            DO_PULL=1
+            ;;
+        --wipe-cache)
+            WIPE_CACHE=1
+            ;;
+        --wipe-db|--reset-db)
+            WIPE_DB=1
+            ;;
+        --wipe-all|--reset-all)
+            WIPE_CACHE=1
+            WIPE_DB=1
+            ;;
+        -y|--yes|-f|--force)
+            FORCE_CONFIRM=1
             ;;
     esac
 done
@@ -77,7 +105,13 @@ done
 echo "===================================================================="
 echo "    COKE STUDIOS & COKE MUSIC 1:1 REBUILD - DEBIAN DOCKER SETUP"
 echo "===================================================================="
-echo " Mode: $( [ ${IS_UPDATE} -eq 1 ] && echo "UPDATE & REBUILD" || echo "FRESH LAUNCH" )"
+if [ ${IS_NUKE} -eq 1 ]; then
+    echo " Mode:         NUKE & COMPLETE RESETUP (Wipe Caches, Repull, Rebuild)"
+elif [ ${IS_UPDATE} -eq 1 ]; then
+    echo " Mode:         UPDATE & REBUILD (Preserve Player Data)"
+else
+    echo " Mode:         FRESH LAUNCH"
+fi
 echo " Database:     MariaDB 11 (Scalable Docker Cluster)"
 echo " Workspace:    ${SCRIPT_DIR}"
 echo "===================================================================="
@@ -123,7 +157,7 @@ check_docker() {
 check_docker
 
 # Interactive Port Configuration (asks user for ports and checks for conflicts)
-if [ ${IS_UPDATE} -eq 0 ]; then
+if [ ${IS_UPDATE} -eq 0 ] && [ ${IS_NUKE} -eq 0 ]; then
     if [ -t 0 ]; then
         echo ""
         echo "--------------------------------------------------------------------"
@@ -211,8 +245,94 @@ sed -i -e 's/\r$//' .env 2>/dev/null || true
 # Ensure Linux binaries have executable permissions
 chmod +x start.sh stop.sh tools/bin/* 2>/dev/null || true
 
-# Handle --update / update argument
-if [ ${IS_UPDATE} -eq 1 ]; then
+# Handle --nuke / --update argument
+if [ ${IS_NUKE} -eq 1 ]; then
+    # Confirmation prompt if interactive
+    if [ ${FORCE_CONFIRM} -eq 0 ]; then
+        if [ -t 0 ] || [ -e /dev/tty ]; then
+            TTY_IN="/dev/tty"
+            [ -e /dev/tty ] || TTY_IN="/dev/stdin"
+            echo ""
+            echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+            echo "                   WARNING: NUKE OPTION SELECTED"
+            echo "  This will:"
+            echo "   1. Stop all active Coke Studios containers and processes"
+            echo "   2. Wipe all local databases (coke.db, MariaDB container volume)"
+            echo "   3. Wipe all Docker builder and image caches"
+            echo "   4. Wipe precompiled binaries and Go build caches"
+            echo "   5. Discard local modifications and repull latest from Git"
+            echo "   6. Recompile Go binaries and rebuild containers from scratch"
+            echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+            read -r -p "  Are you sure you want to completely NUKE and resetup? [y/N]: " REPLY_NUKE < "${TTY_IN}" || REPLY_NUKE="n"
+            case "${REPLY_NUKE}" in
+                [yY]|[yY][eE][sS])
+                    echo "[*] Nuke confirmed. Proceeding with full resetup..."
+                    ;;
+                *)
+                    echo "[*] Nuke aborted by user. Exiting."
+                    exit 0
+                    ;;
+            esac
+        fi
+    fi
+
+    echo ""
+    echo "[*] NUKE STEP 1/6: Stopping all running containers and background services..."
+    if [ -f "./stop.sh" ]; then
+        bash ./stop.sh >/dev/null 2>&1 || true
+    fi
+    ${DOCKER_COMPOSE} down -v --remove-orphans >/dev/null 2>&1 || true
+    docker volume rm -f coke_mariadb_data 2>/dev/null || true
+
+    echo ""
+    echo "[*] NUKE STEP 2/6: Wiping build caches, compiled binaries, and databases..."
+    docker builder prune -a -f 2>/dev/null || true
+    docker image prune -f 2>/dev/null || true
+    if command -v go >/dev/null 2>&1; then
+        echo "    Wiping Go build and test cache..."
+        go clean -cache -testcache 2>/dev/null || true
+    fi
+    rm -f tools/bin/coke-server-linux* tools/bin/coke-server.exe* sources/gocoke/web/main.wasm* sources/gocoke/web/wasm_exec.js 2>/dev/null || true
+    rm -f coke.db coke.db-shm coke.db-wal sources/gocoke/coke.db* tools/bin/coke.db* data/coke.db* 2>/dev/null || true
+
+    echo ""
+    echo "[*] NUKE STEP 3/6: Cleaning git working tree and repulling latest code from Git..."
+    if [ -d .git ]; then
+        echo "    Current commit: $(git rev-parse --short HEAD 2>/dev/null || echo 'unknown')"
+        git fetch origin master || git fetch || echo "[WARN] Git fetch skipped."
+        git reset --hard origin/master 2>/dev/null || git reset --hard HEAD || echo "[WARN] Git reset skipped."
+        git clean -fd -e .env 2>/dev/null || true
+        echo "    Reset and synced to: $(git rev-parse --short HEAD 2>/dev/null || echo 'unknown')"
+    else
+        echo "[WARN] No .git directory found; skipping git repull."
+    fi
+
+    chmod +x start.sh stop.sh setup.sh tools/deploy-debian.sh tools/build-go.sh tools/bin/* 2>/dev/null || true
+
+    echo ""
+    echo "[*] NUKE STEP 4/6: Compiling fresh Go binaries and WebAssembly client..."
+    if command -v go >/dev/null 2>&1; then
+        ./tools/build-go.sh || echo "[WARN] Host Go build skipped."
+    fi
+
+    echo ""
+    echo "[*] NUKE STEP 5/6: Building Docker images from scratch (--no-cache)..."
+    ${DOCKER_COMPOSE} build --no-cache --pull --progress=plain
+
+    echo ""
+    echo "[*] NUKE STEP 6/6: Launching fresh containers and MariaDB cluster..."
+    ${DOCKER_COMPOSE} up -d
+
+    if systemctl is-active --quiet coke-studios.service 2>/dev/null || [ -f "/etc/systemd/system/coke-studios.service" ]; then
+        echo "[*] Detected native Debian systemd service (coke-studios.service)."
+        echo "    Resetting and deploying fresh to /opt/coke-studios..."
+        if [ "$(id -u)" -eq 0 ]; then
+            ./tools/deploy-debian.sh --nuke -y || echo "[WARN] Native deploy-debian nuke encountered warnings."
+        else
+            sudo ./tools/deploy-debian.sh --nuke -y || echo "[WARN] Native deploy-debian nuke encountered warnings."
+        fi
+    fi
+elif [ ${IS_UPDATE} -eq 1 ]; then
     WIPE_CACHE=0
     WIPE_DB=0
 
@@ -348,15 +468,22 @@ echo ""
 if [ ${READY} -eq 1 ]; then
     HEALTH_DATA=$(curl -s "http://127.0.0.1:${PORT}/health" || echo "{}")
     echo "===================================================================="
-    echo "  SUCCESS: COKE STUDIOS IS LIVE AND HEALTHY!"
+    if [ ${IS_NUKE} -eq 1 ]; then
+        echo "  SUCCESS: COKE STUDIOS NUKED & RESETUP FRESH!"
+    elif [ ${IS_UPDATE} -eq 1 ]; then
+        echo "  SUCCESS: COKE STUDIOS UPDATED WITH ZERO DATA LOSS!"
+    else
+        echo "  SUCCESS: COKE STUDIOS IS LIVE AND HEALTHY!"
+    fi
     echo "===================================================================="
     echo "  Official MyCoke Game Portal: http://127.0.0.1:${PORT}/"
     echo "  Direct Game Client:         http://127.0.0.1:${PORT}/game/"
     echo "  Music Mixer Studio:         http://127.0.0.1:${PORT}/mixer/"
     echo "  Health Status:              ${HEALTH_DATA}"
     echo "===================================================================="
-    echo "  To update at any time with zero data loss, simply run:"
-    echo "  ./setup.sh --update"
+    echo "  Useful Commands:"
+    echo "  - Update server (zero data loss): ./setup.sh --update"
+    echo "  - Total reset & cache wipe:       ./setup.sh --nuke (or ./nuke.sh)"
     echo "===================================================================="
 else
     echo "[WARN] Server is starting up. Check logs with:"

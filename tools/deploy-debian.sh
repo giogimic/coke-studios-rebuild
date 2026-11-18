@@ -17,10 +17,19 @@ PORT="${PORT:-24902}"
 IS_UPDATE=0
 DO_PULL=0
 FORCE_BUILD=0
+IS_NUKE=0
+FORCE_CONFIRM=0
 
 # Parse CLI arguments
 while [[ $# -gt 0 ]]; do
     case "$1" in
+        --nuke|-nuke|nuke|--reset|-reset|reset)
+            IS_NUKE=1
+            IS_UPDATE=1
+            FORCE_BUILD=1
+            DO_PULL=1
+            shift
+            ;;
         --update|-update|update|-u)
             IS_UPDATE=1
             shift
@@ -32,6 +41,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --build|-build|build|-b)
             FORCE_BUILD=1
+            shift
+            ;;
+        -y|--yes|-f|--force)
+            FORCE_CONFIRM=1
             shift
             ;;
         --port)
@@ -46,8 +59,10 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "Options:"
             echo "  --update, -u       Update existing server with zero data loss"
+            echo "  --nuke             Wipe all caches, databases, repull git, and re-setup"
             echo "  --pull, -p         Git pull latest changes from origin master before updating"
             echo "  --build, -b        Force recompile of Go binaries (coke-server-linux & main.wasm)"
+            echo "  -y, --yes          Bypass interactive confirmation prompts"
             echo "  --port <PORT>      Specify listening port (default: 24902)"
             echo "  --help, -h         Show this help message"
             echo ""
@@ -66,13 +81,21 @@ if [ -f "${INSTALL_DIR}/tools/bin/coke-server-linux" ] || systemctl list-unit-fi
 fi
 
 echo "===================================================================="
-if [ "${IS_UPDATE}" -eq 1 ]; then
+if [ "${IS_NUKE}" -eq 1 ]; then
+    echo "    COKE STUDIOS - DEBIAN 12 HOST NUKE & RESETUP"
+elif [ "${IS_UPDATE}" -eq 1 ]; then
     echo "    COKE STUDIOS - DEBIAN 12 HOST UPDATE & RECOMPILE"
 else
     echo "    COKE STUDIOS - DEBIAN 12 (BOOKWORM) HOST DEPLOYMENT SETUP"
 fi
 echo "===================================================================="
-echo " Mode:             $( [ "${IS_UPDATE}" -eq 1 ] && echo "UPDATE (Zero Data Loss)" || echo "FRESH INSTALLATION" )"
+if [ "${IS_NUKE}" -eq 1 ]; then
+    echo " Mode:             NUKE & RESETUP (Wipe Caches & Database)"
+elif [ "${IS_UPDATE}" -eq 1 ]; then
+    echo " Mode:             UPDATE (Zero Data Loss)"
+else
+    echo " Mode:             FRESH INSTALLATION"
+fi
 echo " Target Directory: ${INSTALL_DIR}"
 echo " Service Name:     ${SERVICE_NAME}"
 echo " Ingress Port:     ${PORT}"
@@ -84,8 +107,70 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-# Step 0: Git pull if requested and available
-if [ "${DO_PULL}" -eq 1 ]; then
+# Confirmation prompt if NUKE is requested
+if [ "${IS_NUKE}" -eq 1 ] && [ "${FORCE_CONFIRM}" -eq 0 ]; then
+    if [ -t 0 ] || [ -e /dev/tty ]; then
+        TTY_IN="/dev/tty"
+        [ -e /dev/tty ] || TTY_IN="/dev/stdin"
+        echo ""
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        echo "               WARNING: DEBIAN HOST NUKE SELECTED"
+        echo "  This will:"
+        echo "   1. Stop active ${SERVICE_NAME}"
+        echo "   2. DROP MariaDB database '${DB_NAME}' (ALL PLAYER DATA WILL BE ERASED)"
+        echo "   3. Clean ${INSTALL_DIR} binaries, web assets, and runtime caches"
+        echo "   4. Wipe Go build caches"
+        echo "   5. Discard local git modifications and repull origin master"
+        echo "   6. Recompile Go server and WASM client fresh from source"
+        echo "   7. Re-initialize MariaDB database and restart ${SERVICE_NAME}"
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        read -r -p "  Are you sure you want to completely NUKE the host install? [y/N]: " REPLY_NUKE < "${TTY_IN}" || REPLY_NUKE="n"
+        case "${REPLY_NUKE}" in
+            [yY]|[yY][eE][sS])
+                echo "[*] Nuke confirmed. Proceeding..."
+                ;;
+            *)
+                echo "[*] Nuke aborted by user. Exiting."
+                exit 0
+                ;;
+        esac
+    fi
+fi
+
+# If nuke or update, stop active service first to drain connections
+if systemctl is-active --quiet "${SERVICE_NAME}" 2>/dev/null; then
+    echo "      Stopping active ${SERVICE_NAME} to drain connections..."
+    systemctl stop "${SERVICE_NAME}" || true
+fi
+
+# Wipe existing database and installation directories if NUKE
+if [ "${IS_NUKE}" -eq 1 ]; then
+    echo "      [!] NUKING MariaDB database '${DB_NAME}'..."
+    mariadb -e "DROP DATABASE IF EXISTS \`${DB_NAME}\`;" 2>/dev/null || mysql -e "DROP DATABASE IF EXISTS \`${DB_NAME}\`;" || true
+
+    echo "      [!] Wiping existing files in ${INSTALL_DIR}..."
+    rm -rf "${INSTALL_DIR}/tools/bin"/* "${INSTALL_DIR}/sources/gocoke/web"/* "${INSTALL_DIR}/tools/portal"/* "${INSTALL_DIR}/.runtime"/* 2>/dev/null || true
+
+    if command -v go >/dev/null 2>&1; then
+        echo "      [!] Wiping Go build and test caches..."
+        go clean -cache -testcache 2>/dev/null || true
+    fi
+fi
+
+# Step 0: Git pull or reset if requested and available
+if [ "${IS_NUKE}" -eq 1 ]; then
+    echo "[*] Cleaning git working tree and repulling latest code from Git..."
+    if [ -d "${REPO_ROOT}/.git" ]; then
+        cd "${REPO_ROOT}"
+        echo "    Current commit: $(git rev-parse --short HEAD 2>/dev/null || echo 'unknown')"
+        git fetch origin master || git fetch || echo "[WARN] Git fetch skipped."
+        git reset --hard origin/master 2>/dev/null || git reset --hard HEAD || echo "[WARN] Git reset skipped."
+        git clean -fd -e .env 2>/dev/null || true
+        echo "    Reset and synced to: $(git rev-parse --short HEAD 2>/dev/null || echo 'unknown')"
+    else
+        echo "[WARN] No .git directory found at ${REPO_ROOT}; skipping git pull."
+    fi
+elif [ "${DO_PULL}" -eq 1 ]; then
     echo "[*] Pulling latest repository changes from Git..."
     if [ -d "${REPO_ROOT}/.git" ]; then
         cd "${REPO_ROOT}"
@@ -208,7 +293,9 @@ echo ""
 if [ "$READY" -eq 1 ]; then
     HEALTH=$(curl -s "http://127.0.0.1:${PORT}/health" || echo "{}")
     echo "===================================================================="
-    if [ "${IS_UPDATE}" -eq 1 ]; then
+    if [ "${IS_NUKE}" -eq 1 ]; then
+        echo "  NUKE & RESETUP SUCCESSFUL! Coke Studios is running from scratch."
+    elif [ "${IS_UPDATE}" -eq 1 ]; then
         echo "  UPDATE SUCCESSFUL! Coke Studios is running the latest build."
     else
         echo "  DEPLOYMENT SUCCESSFUL! Coke Studios is running on Debian 12."
@@ -219,8 +306,10 @@ if [ "$READY" -eq 1 ]; then
     echo "  Systemd Unit:  systemctl status ${SERVICE_NAME}"
     echo "  Live Logs:     journalctl -u ${SERVICE_NAME} -f"
     echo "===================================================================="
-    echo "  To update again in the future with latest git changes, run:"
-    echo "  sudo ./tools/deploy-debian.sh --pull"
+    echo "  Useful Commands:"
+    echo "  - Update server (zero data loss): sudo ./tools/deploy-debian.sh --update"
+    echo "  - Git pull & update:              sudo ./tools/deploy-debian.sh --pull"
+    echo "  - Total reset & nuke:             sudo ./tools/deploy-debian.sh --nuke"
     echo "===================================================================="
 else
     echo "===================================================================="

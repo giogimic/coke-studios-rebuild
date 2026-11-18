@@ -1,4 +1,4 @@
-﻿# ==============================================================================
+# ==============================================================================
 # Coke Studios 1:1 Complete Rebuild - Windows Docker Setup & Auto-Updater
 # Target OS: Windows (Compatibility) / Docker Desktop
 # Default Launch Port: 24902
@@ -6,6 +6,8 @@
 # ==============================================================================
 param (
     [switch]$Update,
+    [switch]$Nuke,
+    [switch]$Force,
     [switch]$WipeCache,
     [switch]$WipeDb,
     [switch]$WipeAll,
@@ -15,6 +17,16 @@ param (
 
 if ($RemainingArgs) {
     foreach ($arg in $RemainingArgs) {
+        if ($arg -match '(?i)^(--|-)?(nuke|reset)$') {
+            $Nuke = $true
+            $Update = $true
+            $WipeCache = $true
+            $WipeDb = $true
+            $WipeAll = $true
+        }
+        if ($arg -match '(?i)^(--|-)?(force|yes|y)$') {
+            $Force = $true
+        }
         if ($arg -match '(?i)^(--|-)?update$') {
             $Update = $true
         }
@@ -87,7 +99,7 @@ if (Test-Path ".env") {
     }
 }
 
-$Mode = if ($Update) { "UPDATE & REBUILD" } else { "FRESH LAUNCH" }
+$Mode = if ($Nuke) { "NUKE & COMPLETE RESETUP" } elseif ($Update) { "UPDATE & REBUILD" } else { "FRESH LAUNCH" }
 
 Write-Host "====================================================================" -ForegroundColor Cyan
 Write-Host "    COKE STUDIOS & COKE MUSIC 1:1 REBUILD - DOCKER SETUP" -ForegroundColor Red
@@ -104,7 +116,7 @@ if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
 }
 
 # Interactive Port Prompt (checks for conflicts on 8080, 3306, etc.)
-if (-not $Update) {
+if (-not $Update -and -not $Nuke) {
     if ([Environment]::UserInteractive -and -not [Console]::IsInputRedirected) {
         Write-Host "`n--------------------------------------------------------------------" -ForegroundColor Gray
         Write-Host "                     PORT SELECTION & CHECK" -ForegroundColor Cyan
@@ -186,7 +198,57 @@ DB_ROOT_PASSWORD=coke_root_secret
 DATABASE_URL=coke:coke_secret@tcp(mariadb:3306)/coke_studios?parseTime=true
 "@ | Out-File -FilePath ".env" -Encoding utf8
 
-if ($Update) {
+if ($Nuke) {
+    if (-not $Force -and [Environment]::UserInteractive -and -not [Console]::IsInputRedirected) {
+        Write-Host "`n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" -ForegroundColor Red
+        Write-Host "                   WARNING: NUKE OPTION SELECTED" -ForegroundColor Yellow
+        Write-Host "  This will:" -ForegroundColor Yellow
+        Write-Host "   1. Stop all active Coke Studios containers and processes" -ForegroundColor Yellow
+        Write-Host "   2. Wipe all local databases (coke.db, MariaDB Docker volume)" -ForegroundColor Yellow
+        Write-Host "   3. Wipe all Docker builder and image caches" -ForegroundColor Yellow
+        Write-Host "   4. Wipe precompiled binaries and Go build caches" -ForegroundColor Yellow
+        Write-Host "   5. Discard local modifications and repull latest from Git" -ForegroundColor Yellow
+        Write-Host "   6. Recompile Go binaries and rebuild containers from scratch" -ForegroundColor Yellow
+        Write-Host "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" -ForegroundColor Red
+        $ansNuke = Read-Host "  Are you sure you want to completely NUKE and resetup? [y/N]"
+        if ($ansNuke -notmatch '^(y|yes)$') {
+            Write-Host "[*] Nuke aborted by user. Exiting." -ForegroundColor Gray
+            exit 0
+        }
+    }
+
+    Write-Host "`n[*] NUKE STEP 1/6: Stopping all running containers..." -ForegroundColor Cyan
+    docker compose down -v --remove-orphans
+    docker volume rm -f coke_mariadb_data 2>$null
+
+    Write-Host "`n[*] NUKE STEP 2/6: Wiping build caches, compiled binaries, and databases..." -ForegroundColor Cyan
+    docker builder prune -a -f
+    docker image prune -f
+    if (Get-Command go -ErrorAction SilentlyContinue) {
+        Write-Host "    Wiping Go build and test cache..." -ForegroundColor Gray
+        go clean -cache -testcache
+    }
+    Remove-Item -Path "tools/bin/coke-server*","sources/gocoke/web/main.wasm*","sources/gocoke/web/wasm_exec.js" -Force -ErrorAction SilentlyContinue
+    Remove-Item -Path "coke.db*","sources/gocoke/coke.db*","tools/bin/coke.db*","data/coke.db*" -Force -ErrorAction SilentlyContinue
+
+    Write-Host "`n[*] NUKE STEP 3/6: Cleaning git working tree and repulling latest code..." -ForegroundColor Cyan
+    if (Test-Path ".git") {
+        git fetch origin master
+        git reset --hard origin/master
+        git clean -fd -e .env
+    }
+
+    Write-Host "`n[*] NUKE STEP 4/6: Compiling fresh Go binaries and WebAssembly client..." -ForegroundColor Cyan
+    if (Get-Command go -ErrorAction SilentlyContinue) {
+        & (Join-Path $ScriptDir 'tools\build-go.ps1')
+    }
+
+    Write-Host "`n[*] NUKE STEP 5/6: Building Docker images from scratch (--no-cache)..." -ForegroundColor Cyan
+    docker compose build --no-cache --pull
+
+    Write-Host "`n[*] NUKE STEP 6/6: Launching fresh containers..." -ForegroundColor Cyan
+    docker compose up -d
+} elseif ($Update) {
     if (-not $WipeCache -and -not $WipeDb -and -not $WipeAll) {
         if ([Environment]::UserInteractive -and -not [Console]::IsInputRedirected) {
             Write-Host "`n--------------------------------------------------------------------" -ForegroundColor Gray
@@ -252,14 +314,21 @@ Write-Host ""
 
 if ($Ready) {
     Write-Host "====================================================================" -ForegroundColor Green
-    Write-Host "  SUCCESS: COKE STUDIOS IS LIVE AND HEALTHY!" -ForegroundColor Green
+    if ($Nuke) {
+        Write-Host "  SUCCESS: COKE STUDIOS NUKED & RESETUP FRESH!" -ForegroundColor Green
+    } elseif ($Update) {
+        Write-Host "  SUCCESS: COKE STUDIOS UPDATED WITH ZERO DATA LOSS!" -ForegroundColor Green
+    } else {
+        Write-Host "  SUCCESS: COKE STUDIOS IS LIVE AND HEALTHY!" -ForegroundColor Green
+    }
     Write-Host "====================================================================" -ForegroundColor Green
     Write-Host "  Official MyCoke Game Portal: http://127.0.0.1:$Port/" -ForegroundColor White
     Write-Host "  Direct Game Client:         http://127.0.0.1:$Port/game/" -ForegroundColor White
     Write-Host "  Health Status:              http://127.0.0.1:$Port/health" -ForegroundColor White
     Write-Host "====================================================================" -ForegroundColor Green
-    Write-Host "  To update at any time with zero data loss, run:" -ForegroundColor Cyan
-    Write-Host "  .\setup.ps1 -Update" -ForegroundColor Yellow
+    Write-Host "  Useful Commands:" -ForegroundColor Gray
+    Write-Host "  - Update server (zero data loss): .\setup.ps1 -Update" -ForegroundColor Yellow
+    Write-Host "  - Total reset & cache wipe:       .\setup.ps1 -Nuke (or .\nuke.cmd)" -ForegroundColor Yellow
     Write-Host "====================================================================" -ForegroundColor Green
 } else {
     Write-Host "[*] Containers are initializing in the background. Check logs with 'docker compose logs -f'." -ForegroundColor Yellow

@@ -73,6 +73,22 @@ sudo ./tools/deploy-debian.sh --pull      # Pulls latest git commits before upda
 .\setup.ps1 -Update
 ```
 
+### Complete Nuke & Resetup (Wipe Caches & Repull)
+To completely wipe all caches (Docker builder and images, Go compiler cache), erase database volumes, clean working tree, repull latest commits from `origin/master`, and rebuild everything from scratch:
+```bash
+# Debian / Linux (Container environment)
+./nuke.sh             # Interactive confirmation prompt
+./setup.sh --nuke     # Equivalent setup flag
+./setup.sh --nuke -y  # Non-interactive / bypass confirmation prompt
+
+# Debian 12 Host (Native systemd)
+sudo ./tools/deploy-debian.sh --nuke
+
+# Windows (Compatibility)
+.\nuke.cmd
+.\setup.ps1 -Nuke
+```
+
 ### URLs
 - **Game Portal & Website:** [http://127.0.0.1:24902/](http://127.0.0.1:24902/)
 - **Go WebAssembly Client:** [http://127.0.0.1:24902/game/](http://127.0.0.1:24902/game/)

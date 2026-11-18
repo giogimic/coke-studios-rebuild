@@ -92,9 +92,18 @@ sudo ./tools/deploy-debian.sh --update
 
 # Update running server and pull latest changes from git
 sudo ./tools/deploy-debian.sh --pull
+
+# Total Reset / Nuke (wipes caches, databases, repulls git, rebuilds from scratch)
+sudo ./tools/deploy-debian.sh --nuke
 ```
 
-The updater gracefully stops the service (alerting connected players and draining active sockets), backs up the existing binary, recompiles the latest Go server and WebAssembly client, replaces files without `ETXTBSY` text file busy errors, restarts the service, and verifies health status. If a health check fails, it automatically rolls back to the previous stable binary.
+For containerized environments on Debian:
+```bash
+./nuke.sh             # Full wipe and rebuild with confirmation prompt
+./setup.sh --nuke -y  # Full wipe and rebuild non-interactive
+```
+
+The updater gracefully stops the service (alerting connected players and draining active sockets), backs up the existing binary, recompiles the latest Go server and WebAssembly client, replaces files without `ETXTBSY` text file busy errors, restarts the service, and verifies health status. If a health check fails, it automatically rolls back to the previous stable binary. In `--nuke` mode, it cleanly drains services, drops existing database schemas, prunes builder/image and Go caches, performs a hard git reset to origin master, and recompiles from a clean slate.
 
 ### Manual Installation Steps
 ```bash
